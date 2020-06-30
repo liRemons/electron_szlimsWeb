@@ -1,0 +1,357 @@
+<template>
+  <div id="app">
+    <div class="control">
+      <div style="float:left">
+        <span style="line-height: 24px;padding-left:20px" @click="delDir"
+          >深圳市瑞达智能检测系统用户端V1.0.2</span
+        >
+      </div>
+      <div class="action">
+        <img
+          @click="mini"
+          style="width: 23px; padding-left: 4px;"
+          src="@/assets/icon/mini.png"
+        />
+        <img @click="close" src="@/assets/icon/close.png" />
+      </div>
+    </div>
+    <div style="height:30px"></div>
+    <div class="content">
+      <router-view />
+    </div>
+  </div>
+</template>
+
+<script>
+import store from "@/store";
+import Vue from "vue";
+import { add, addValue, addNengPuValue } from "@/api/task";
+import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
+import moment from "moment";
+// import { resolve } from "upath";
+// import { resolve } from "../../../vuework/roms300bak/roms300_web/node_modules1/_uri-js@4.2.2@uri-js/src";
+export default {
+  name: "App",
+  methods: {
+    mini() {
+      this.$ipcRenderer.send("mini", true);
+    },
+    close() {
+      this.$ipcRenderer.send("close", true);
+    }
+  },
+  watch: {
+    $route() {
+      sessionStorage.setItem("routerPath", this.$route.path);
+    }
+  },
+  computed: {
+    taskId() {
+      return this.$store.state.app.taskId;
+    }
+  },
+  mounted() {},
+  created() {
+    // 写入文件
+    Vue.prototype.whrite = function(arr) {
+      this.$ipcRenderer.send("writeFile", arr);
+    };
+    // 接收写入文件信息状态
+    Vue.prototype.writeFileEvent = function() {
+      return new Promise(reslove => {
+        this.$ipcRenderer.on("writeFileEvent", function(event, arg) {
+          reslove(arg);
+        });
+      });
+    };
+    // 读取文件
+    Vue.prototype.readFile = function(id) {
+      this.$ipcRenderer.send("readFile", { taskId: id });
+    };
+    // 接收读取文件信息状态
+    Vue.prototype.readFileEvent = function() {
+      return new Promise(resolve => {
+        this.$ipcRenderer.on("readFileEvent", function(event, arg) {
+          resolve(arg);
+        });
+      });
+    };
+    // 读取文件夹
+    Vue.prototype.readDir = function() {
+      this.$ipcRenderer.send("readDir");
+    };
+    // 接收读取文件夹状态
+    Vue.prototype.readDirEvent = function() {
+      return new Promise(resolve => {
+        this.$ipcRenderer.on("readDirEvent", function(event, arg) {
+          resolve(arg);
+        });
+      });
+    };
+    Vue.prototype.delDir = function() {
+      this.$ipcRenderer.send("delDir");
+    };
+    // 删除文件
+    Vue.prototype.delFile = function(id) {
+      this.$ipcRenderer.send("delFile", { taskId: id });
+    };
+    let this_ = this;
+    document.onkeydown = function(e) {
+      if (e.keyCode == 123) {
+        // 控制台
+        this_.$ipcRenderer.send("openDevTools");
+      }
+      if (e.keyCode == 116) {
+        // 刷新页面
+        this_.$ipcRenderer.send("reload");
+      }
+    };
+
+    this.$ipcRenderer.on("Finger_MSG", (event, arg) => {
+      this.$store.dispatch("CHANGE_FINGER_MUTATIONS", arg);
+    });
+
+    let _this = this;
+    // _this.userIsLogin();
+    Array.prototype.flat = function() {
+      let arr = [];
+
+      //定义hanle函数方便递归
+      function hanle(s) {
+        for (let i = 0, j = s.length; i < j; i++) {
+          //历遍数组
+          if (Object.prototype.toString.call(s[i]) == "[object Array]") {
+            //判断是否为数组
+            hanle(s[i]); //递归调用
+          } else {
+            arr.push(s[i]); //添加进新数组
+          }
+        }
+      }
+
+      hanle(this); //this指向Array
+      return arr;
+    };
+    sessionStorage["setItem"] = function(key, value) {
+      _this.remote.getGlobal("shareObject")[key] = value;
+    };
+    sessionStorage["getItem"] = function(key) {
+      return _this.remote.getGlobal("shareObject")[key] ||
+        _this.remote.getGlobal("shareObject")[key] == 0
+        ? _this.remote.getGlobal("shareObject")[key]
+        : null;
+    };
+    sessionStorage["removeItem"] = function(key) {
+      _this.remote.getGlobal("shareObject")[key] = null;
+    };
+    // Number.prototype.toFixed46 = function (decimalPlaces, Judge = false) {
+    //   let num = this;
+    //   let numStr = this + ''; //将调用该方法的数字转为字符串
+    //   if (numStr.includes('.')) {
+    //     let splitArr = numStr.split(".");
+    //     let after = splitArr[1].slice(0, 20);
+    //     if (Judge && [...splitArr[0]][0] > 0) {
+    //       decimalPlaces = decimalPlaces - splitArr[0].length;
+    //       decimalPlaces = decimalPlaces >= 0 ? decimalPlaces : 0
+    //     }
+    //     if (decimalPlaces > 0) {
+    //       for (let i = 0; i < after; i++) {
+    //         if (after[i] == 0) {
+    //           decimalPlaces++
+    //         } else {
+    //           break;
+    //         }
+    //       }
+    //     }
+    //   }
+    //   let d = decimalPlaces || 0;
+    //   let m = Math.pow(10, d);
+    //   let n = +(d ? num * m : num).toFixed(8); // Avoid rounding errors
+    //   let i = Math.floor(n), f = n - i;
+    //   let e = 1e-8; // Allow for rounding errors in f
+    //   let r = (f > 0.5 - e && f < 0.5 + e) ?
+    //           ((i % 2 == 0) ? i : i + 1) : Math.round(n);
+    //   return d ? r / m : r;
+    // };
+
+    Number.prototype.toFixed46 = function(
+      decimalPlaces,
+      Judge = false,
+      revision = false
+    ) {
+      let num = this; //将调用该方法的数字转为字符串
+      let numStr = this + "";
+      if (numStr.includes(".")) {
+        let splitArr = numStr.split(".");
+        if (Judge) {
+          if ([...splitArr[0]][0] > 0) {
+            if (splitArr[0].length >= decimalPlaces) {
+              decimalPlaces = 0;
+            } else if (splitArr[0].length < decimalPlaces) {
+              decimalPlaces = decimalPlaces - splitArr[0].length;
+            }
+          } else {
+            let index = [...splitArr[1]].findIndex((item, index) => item > 0);
+            decimalPlaces = decimalPlaces + index;
+          }
+          decimalPlaces = decimalPlaces >= 0 ? decimalPlaces : 0;
+        }
+      }
+      let d = decimalPlaces || 0;
+      let m = Math.pow(10, d);
+      let n = +(d ? num * m : num).toFixed(8); // Avoid rounding errors
+      let i = Math.floor(n),
+        f = n - i;
+      let e = 1e-8; // Allow for rounding errors in f
+      let r =
+        f > 0.5 - e && f < 0.5 + e ? (i % 2 == 0 ? i : i + 1) : Math.round(n);
+      let result = d ? r / m : r;
+
+      if (revision) {
+        let surplus = 0;
+        let resultArr = (result + "").split(".");
+        if (resultArr.length > 1 && resultArr[1].length < d) {
+          surplus = d - resultArr[1].length;
+          for (let k = 0; k < surplus; k++) {
+            result = result + "" + 0;
+          }
+        } else if (resultArr.length === 1) {
+          surplus = d;
+          let zero = "";
+          if (surplus > 0) {
+            for (let k = 0; k < surplus; k++) {
+              zero += "0";
+            }
+            result = result + "." + zero;
+          }
+        }
+      }
+      return result;
+    };
+
+    // 100 以上转科学计数法
+    Number.prototype.num2e = function() {
+      let p = Math.floor(Math.log(this) / Math.LN10);
+      let n = this * Math.pow(10, -p);
+      let subArr = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
+      return (
+        (Math.round(n.toFixed46(1)) === n.toFixed46(1)
+          ? n.toFixed46(1) + ".0"
+          : n.toFixed46(1)) +
+        " x 10" +
+        subArr[p]
+      );
+    };
+
+    // 微生物使用，小于检出值
+    Number.prototype.checkValue = function(value) {
+      console.log("微生物使用，小于检出值", this, value);
+      return this < value ? "<" + value : this;
+    };
+
+    Date.prototype.format = function(fmt) {
+      //author: meizz
+      var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        S: this.getMilliseconds() //毫秒
+      };
+      if (/(y+)/.test(fmt))
+        fmt = fmt.replace(
+          RegExp.$1,
+          (this.getFullYear() + "").substr(4 - RegExp.$1.length)
+        );
+      for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length == 1
+              ? o[k]
+              : ("00" + o[k]).substr(("" + o[k]).length)
+          );
+      return fmt;
+    };
+
+    window.sampleNum = "";
+    window.sampleNum2 = "";
+    window.sampleNum3 = "";
+    window.sampleNum4 = "";
+    JSON.myParse = function(value) {
+      try {
+        value = value.replace(/[\r\n]/g, "");
+        let obj = this.parse(value);
+        return obj;
+      } catch (e) {
+        let obj = this.parse(value);
+        return obj;
+      }
+    };
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+#app {
+  height: 100%;
+  overflow: hidden;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  .control {
+    background: #373942;
+    color: #fff;
+    padding: 4px 0;
+    height: 24px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    .action {
+      float: right;
+      padding: 0 10px;
+      img {
+        width: 24px;
+      }
+      img:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .content {
+    height: 100%;
+    overflow: auto;
+  }
+  // .sider {
+  //   box-shadow: rgb(213, 213, 213) 0px 0px 6px;
+  // }
+  .content::-webkit-scrollbar {
+    /*滚动条整体样式*/
+    width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+    height: 4px;
+    // scrollbar-arrow-color: red;
+  }
+  .content::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    /*滚动条里面小方块*/
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #d1e8ff;
+
+    // scrollbar-arrow-color: red;
+  }
+  .content::-webkit-scrollbar-thumb:hover {
+    background: #abd5ff;
+  }
+  .content::-webkit-scrollbar-track {
+    /*滚动条里面轨道*/
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0);
+  }
+}
+</style>

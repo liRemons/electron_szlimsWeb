@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>深圳市瑞达智能检测系统用户端</title>
+  <% if (htmlWebpackPlugin.options.nodeModules) { %>
+  <!-- Add `node_modules/` to global paths so `require` works properly in development -->
+  <script>
+    require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g) %>')
+    
+        //生成uuid
+
+  </script>
+  <% } %>
+  <!-- <script src="./renderer/public/js/UM-1.0.0.js"></script> -->
+  <style>
+    body,
+    ol,
+    ul,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    th,
+    td,
+    dl,
+    dd,
+    form,
+    fieldset,
+    legend,
+    input,
+    textarea,
+    select {
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font: 12px "宋体", "Arial Narrow", HELVETICA;
+      background: #fff;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    a {
+      color: #2d374b;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #cd0200;
+      text-decoration: underline
+    }
+
+    em {
+      font-style: normal
+    }
+
+    li {
+      list-style: none
+    }
+
+    img {
+      border: 0;
+      vertical-align: middle
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0
+    }
+
+    p {
+      word-wrap: break-word
+    }
+
+    .el-table__expanded-cell {
+      width: 100% !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- Set `__static` path to static files in production -->
+  <script>
+    if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\');
+    window.uuid = function () {
+      let s = [];
+      let hexDigits = "0123456789abcdef";
+      for (let i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+      let uuid = s.join("");
+      return uuid;
+    };
+    window._dateFormat = function (dateValue, string) {          //格式化日期
+      var dateObj = dateValue === 'now' ? new Date() : new Date(dateValue);
+      var json_inf = {
+        'Y+': dateObj.getFullYear(),
+        'M+': dateObj.getMonth() + 1 > 9 ? dateObj.getMonth() + 1 : '0' + (dateObj.getMonth() + 1),
+        'D+': dateObj.getDate() > 9 ? dateObj.getDate() : '0' + dateObj.getDate(),
+        'h+': dateObj.getHours() > 9 ? dateObj.getHours() : '0' + dateObj.getHours(),
+        'm+': dateObj.getMinutes() > 9 ? dateObj.getMinutes() : '0' + dateObj.getMinutes(),
+        's+': dateObj.getSeconds() > 9 ? dateObj.getSeconds() : '0' + dateObj.getSeconds(),
+        'q+': Math.floor((dateObj.getMonth() + 3) / 3),
+        'w+': dateObj.getDay(),
+        'S+': function () {
+          if (dateObj.getMilliseconds() < 10) {
+            return '00' + dateObj.getMilliseconds();
+          } else if (dateObj.getMilliseconds() > 9 && dateObj.getMilliseconds() < 100) {
+            return '0' + dateObj.getMilliseconds();
+          } else {
+            return dateObj.getMilliseconds();
+          }
+        }
+      };
+      for (var key in json_inf) {
+        var re = new RegExp(key);
+        if (re.test(string)) {
+          string = string.replace(re, (json_inf[key]));
+        }
+      }
+      return string;
+    };
+  </script>
+
+  <!-- <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=73e64yjn0FdoLvfypCyfoZLUlUmRGvRd"></script> -->
+  <!-- <script type="text/javascript" src="http://xtroms.com:1302/dist/AgoraRTCSDK-2.2.0.js"></script> -->
+  <!-- webpack builds are automatically injected -->
+</body>
+
+</html>
