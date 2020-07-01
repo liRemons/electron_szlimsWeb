@@ -307,7 +307,6 @@ export default {
             message: "生成成功"
           });
           this.$store.dispatch("actionsWindowArr", completeArr);
-           this.$emit("redefinition");
         }
       } else {
         this.err("名称不能为空");

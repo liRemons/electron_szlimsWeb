@@ -238,16 +238,15 @@ export default {
       } catch (e) {}
     },
     modularShow() {
-			return true
-      // if (this.surgeon || this.target != 0) {
-      //   this.data.height._normal.carried = true;
-      //   this.data.valueData.isObtain = true;
-      //   return true;
-      // } else {
-      //   this.data.height._normal.carried = false;
-      //   this.data.valueData.isObtain = false;
-      //   return false;
-      // }
+      if (this.surgeon || this.target != 0) {
+        this.data.height._normal.carried = true;
+        this.data.valueData.isObtain = true;
+        return true;
+      } else {
+        this.data.height._normal.carried = false;
+        this.data.valueData.isObtain = false;
+        return false;
+      }
     },
 
     //给同一组的projcet_szwjcjlmknr设置id
@@ -267,7 +266,7 @@ export default {
       }
     },
     judgeDevice() {
-      if (this.target === "0") {
+      if (this.target == 0) {
         if (
           this.jsonString.some((item, index) => {
             return item.to.includes("_ct_");
@@ -290,7 +289,6 @@ export default {
     }
   },
   mounted() {
-		console.log(121212)
     this.modularShow();
     this.setMultipleId();
     this.judgeDevice();

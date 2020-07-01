@@ -263,7 +263,8 @@ export default {
       reasonMsgArr: [],
       contentArray: [],
       SampleNumJudge: true,
-      requestNo: 0
+      requestNo: 0,
+      remonsFlag: true
     };
   },
   props: {
@@ -311,12 +312,12 @@ export default {
         }
         let classificationIndex = "";
         if (findIndex == -1) {
-          obj = JSON.myParse(JSON.stringify(item));
+          obj = this.deepCopy(item);
           obj.data.height = this.jsonString[index].data.height;
           redefinitionArr.push(obj);
           classificationIndex = redefinitionArr.length - 1;
         } else {
-          let point = JSON.myParse(JSON.stringify(item.data.valueData.point));
+          let point = this.deepCopy(item.data.valueData.point);
           redefinitionArr[findIndex].data.valueData.point = [
             ...redefinitionArr[findIndex].data.valueData.point,
             ...point
@@ -336,7 +337,7 @@ export default {
         let projcet = {
           to: item.to,
           type: null,
-          data: JSON.myParse(JSON.stringify(item.data))
+          data: this.deepCopy(item.data)
         };
 
         let surplusPoint = [];
@@ -410,7 +411,7 @@ export default {
           itemHeight = item.data.height._normal.itemHeight;
         }
         if (item.data.height._normal.confirm) {
-          projcet.data.valueData.point = JSON.myParse(JSON.stringify(point));
+          projcet.data.valueData.point = this.deepCopy(point);
           decompose.push(projcet);
           decompose[decompose.length - 1].data.height = item.data.height;
         } else if (
@@ -424,21 +425,21 @@ export default {
             several -= 2;
           }
           if (point.length > several) {
-            projcet.data.valueData.point = JSON.myParse(
-              JSON.stringify(point.slice(0, several))
+            projcet.data.valueData.point = this.deepCopy(
+              point.slice(0, several)
             );
             decompose.push(projcet);
             decompose[decompose.length - 1].data.height = item.data.height;
-            surplusPoint = JSON.myParse(JSON.stringify(point.slice(several)));
+            surplusPoint = this.deepCopy(point.slice(several));
             surplusPoint[0].multi = true;
             surplusPoint[0].multiIndex = several;
           } else {
-            projcet.data.valueData.point = JSON.myParse(JSON.stringify(point));
+            projcet.data.valueData.point = this.deepCopy(point);
             decompose.push(projcet);
             decompose[decompose.length - 1].data.height = item.data.height;
           }
         } else {
-          surplusPoint = JSON.myParse(JSON.stringify(point));
+          surplusPoint = this.deepCopy(point);
         }
 
         let totalSubsidiary = Math.ceil(
@@ -450,25 +451,30 @@ export default {
 
         let fatherData = [];
         let sonData = [];
-        surplusPoint.forEach((val, num) => {
-          sonData.push(val);
-          if (
-            sonData.length == totalSubsidiary ||
-            surplusPoint.length - 1 == num
-          ) {
-            fatherData.push(sonData);
-            sonData = [];
-          }
-        });
-        fatherData.forEach((val, num) => {
-          let projcetSubsidiary = JSON.myParse(JSON.stringify(projcet));
-          projcetSubsidiary.data.valueData.point = val;
-          decompose.push(projcetSubsidiary);
-          decompose[decompose.length - 1].data.height = item.data.height;
-        });
+        if (surplusPoint.length) {
+          surplusPoint.forEach((val, num) => {
+            sonData.push(val);
+            if (
+              sonData.length == totalSubsidiary ||
+              surplusPoint.length - 1 == num
+            ) {
+              fatherData.push(sonData);
+              sonData = [];
+            }
+          });
+        }
+
+        if (fatherData.length) {
+          fatherData.forEach((val, num) => {
+            let projcetSubsidiary = this.deepCopy(projcet);
+            projcetSubsidiary.data.valueData.point = val;
+            decompose.push(projcetSubsidiary);
+            decompose[decompose.length - 1].data.height = item.data.height;
+          });
+        }
       });
+      this.jsonString = [];
       this.jsonString = decompose;
-      console.log(this.jsonString, "jsonString");
       this.$forceUpdate();
       this.Reset();
       //给组件设置index
@@ -482,7 +488,7 @@ export default {
       }, 100);
 
       this.jsonString.forEach(item => {
-        if (this.target != "0" && item.data.toBeShow) {
+        if (this.target != 0 && item.data.toBeShow) {
           setTimeout(() => {
             item.data.height._normal.carried = true;
           }, 100);
@@ -518,7 +524,6 @@ export default {
 
     // 确认上传
     toConfirmUpload() {
-      let _that = this;
       let midArray = [...this.taskData.showing];
       let templateArr = [];
       midArray.forEach(cld => {
@@ -527,22 +532,19 @@ export default {
         });
       });
       let url = "";
-      if (_that.taskData.disWs == "4") {
-        url = _that.winAppUrl + "/addGwCyTaskData";
+      if (this.taskData.disWs == "4") {
+        url = this.winAppUrl + "/addGwCyTaskData";
       } else {
-        url = _that.winAppUrl + "/updateTask";
+        url = this.winAppUrl + "/updateTask";
       }
       this.$http
-        .post(url, { taskId: _that.task.id, data: JSON.stringify(templateArr) })
-        .then(function(res) {
+        .post(url, { taskId: this.task.id, data: JSON.stringify(templateArr) })
+        .then(res => {
           if (res.data.success) {
-            _that.success(res.data.msg);
+            this.success(res.data.msg);
           } else {
-            _that.err(res.data.msg);
+            this.err(res.data.msg);
           }
-        })
-        .catch(function(error) {
-          console.log(error);
         });
     },
     // 仪器查询    单位ID
@@ -593,31 +595,28 @@ export default {
     },
     // 显示这个示例
     showExample() {
-      // console.log(this.task)
-      let _that = this;
-      // console.log("外层组件传过来的数据：", _that.task);
       //0 不可修改 1 只能修改头数据 3可以修改所有数据
-      _that.InstrumentQuery(_that.task.id, _that.task.subCompanyId);
-      _that.pass = _that.task.pass;
-      _that.taskData.disWs = _that.task.deviceMainId;
-      _that.taskData.id = _that.task.id;
-      if (_that.pass == 1 || _that.pass == 3) {
+      this.InstrumentQuery(this.task.id, this.task.subCompanyId);
+      this.pass = this.task.pass;
+      this.taskData.disWs = this.task.deviceMainId;
+      this.taskData.id = this.task.id;
+      if (this.pass == 1 || this.pass == 3) {
         // 0是未审核，1是未通过，2是通过，3是未上传
-        if (_that.pass == 1) {
-          if (_that.android == "hide") {
-            _that.headInput = true;
-            _that.isTemplate = false;
-            _that.ableInput = true;
+        if (this.pass == 1) {
+          if (this.android == "hide") {
+            this.headInput = true;
+            this.isTemplate = false;
+            this.ableInput = true;
           } else {
-            _that.ipdEdit = "ipdEdit";
+            this.ipdEdit = "ipdEdit";
           }
         } else {
-          if (_that.android == "hide") {
-            _that.ableInput = true;
-            _that.headInput = true;
-            _that.isTemplate = false;
+          if (this.android == "hide") {
+            this.ableInput = true;
+            this.headInput = true;
+            this.isTemplate = false;
           } else {
-            _that.ipdEdit = "ipdEdit";
+            this.ipdEdit = "ipdEdit";
           }
         }
       }
@@ -625,16 +624,15 @@ export default {
       let projectLength = "";
       let projectData = "";
       let contentArray = [];
-      if (_that.task.data != null) {
-        projectLength = JSON.myParse(_that.task.data).length;
-        projectData = JSON.myParse(_that.task.data);
+      if (this.task.data != null) {
+        projectLength = JSON.myParse(this.task.data).length;
+        projectData = JSON.myParse(this.task.data);
         for (let i = 0; i < projectLength; i++) {
           contentArray.push(projectData[i].testProject);
         }
       } else {
-        contentArray = JSON.myParse(_that.task.testProjectList);
+        contentArray = JSON.myParse(this.task.testProjectList);
         contentArray.forEach((item, index) => {
-          // item.isSelect = true;
           if (
             item.testProjectArr != null &&
             item.testProjectArr &&
@@ -643,10 +641,7 @@ export default {
           ) {
             let preservationArr = [];
             item.testProjectArr.forEach(val => {
-              let newObj = Object.assign(
-                JSON.myParse(JSON.stringify(item)),
-                val
-              );
+              let newObj = Object.assign(this.deepCopy(item), val);
               preservationArr.push(newObj);
             });
             contentArray.splice(index, 1, preservationArr);
@@ -656,13 +651,13 @@ export default {
         });
         contentArray = contentArray.flat();
         contentArray.splice(0, 0, { name: this.task.headTestProjectName });
-        if (this.task.deviceMainId === "1") {
+        if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
           let index = contentArray.findIndex(
             item => item.name === "project_fs_fh"
           );
           if (index !== -1) {
-            let obj = JSON.myParse(JSON.stringify(contentArray[index]));
+            let obj = this.deepCopy(contentArray[index]);
             let testProjectArr = contentArray[index].testProjectArr;
             contentArray.splice(index, 1);
             let index2 = index;
@@ -674,10 +669,7 @@ export default {
                 item.name !== "project_jbxx" ||
                 item.name !== "project_jcxcxx"
               ) {
-                let newObj = Object.assign(
-                  JSON.myParse(JSON.stringify(obj)),
-                  item
-                );
+                let newObj = Object.assign(this.deepCopy(obj), item);
                 contentArray.splice(index2, 0, newObj);
                 index2 += 1;
               }
@@ -685,29 +677,27 @@ export default {
             index2 = 0;
           }
         }
-        if (this.task.deviceMainId === "4") {
+        if (this.task.deviceMainId == 4) {
           contentArray = this.addBlankComponet(contentArray);
         }
         contentArray.push({ name: "project_deleteReason" });
       }
 
       let obj = [];
-      _that.taskData.showing = [];
-      _that.jsonString = [];
+      this.taskData.showing = [];
+
+      this.jsonString = [];
       for (let i = 0; i < contentArray.length; i++) {
         // 获取模块
-        let result1 = _that.modules.find(
+        let result1 = this.modules.find(
           mod =>
             mod.name ==
-            (_that.task.data != null ? contentArray[i] : contentArray[i].name)
+            (this.task.data != null ? contentArray[i] : contentArray[i].name)
         );
-        // console.log("各模块的数据", result1);
         if (result1) {
           // 获取到模块了
-          result1 = _that.deepCopy(result1);
-          //result1 = JSON.myParse(JSON.stringify(result1));
-          if (_that.task.data != null) {
-            // console.log("_that.task.data != null", projectData[i]);
+          result1 = this.deepCopy(result1);
+          if (this.task.data != null) {
             result1.valueData = projectData[i];
           } else {
             result1.valueData.testProjectId = contentArray[i].testProjectId;
@@ -748,36 +738,29 @@ export default {
           obj.push(result1);
         } else {
           //头模块
-          let result2 = _that.heads.find(
+          let result2 = this.heads.find(
             mod =>
               mod.name ==
-              (_that.task.data != null ? contentArray[i] : contentArray[i].name)
+              (this.task.data != null ? contentArray[i] : contentArray[i].name)
           );
           if (result2) {
-            result2 = _that.deepCopy(result2);
-            if (_that.task.data != null) {
+            result2 = this.deepCopy(result2);
+            if (this.task.data != null) {
               result2.valueData = projectData[i];
             } else {
-              // console.log('设置数据为null时候的头数据！', result2)
-              result2.valueData = _that.headData(
-                _that.task,
+              result2.valueData = this.headData(
+                this.task,
                 contentArray[i].name
               );
-              // console.log('设置数据为null时候的头数据！result2.valueData', result2.valueData)
               this.dataFormat(result2, contentArray[i], this.task);
             }
-            // console.log('结果头数据：', result2)
             obj.push(result2);
           } else {
-            console.log("实例中的模块名字有误!", contentArray[i]);
+            console.log("实例中的模块名字有误!");
           }
         }
       }
-
-      // console.log("数据缓存问题222:", obj);
-
-      let middleArr = JSON.myParse(JSON.stringify(obj));
-
+      let middleArr = this.deepCopy(obj);
       middleArr.forEach((val, i) => {
         val.height._normal.value = obj[i].height._normal.value;
         if (obj[i].height._short)
@@ -790,30 +773,34 @@ export default {
           type: null,
           data: val
         };
-        _that.jsonString.push(json);
+        this.jsonString.push(json);
       });
-      if (!_that.jsonString[0].data.valueData.hasOwnProperty("todayDate")) {
-        _that.jsonString[0].data.valueData.todayDate = _dateFormat(
+      if (!this.jsonString[0].data.valueData.hasOwnProperty("todayDate")) {
+        this.jsonString[0].data.valueData.todayDate = _dateFormat(
           "now",
           "Y年M月D日  h时m分"
         );
       }
-      _that.todayDate = _that.jsonString[0].data.valueData.todayDate;
-      _that.operation();
-      _that.redefinition();
-      _that.Reset();
+      this.todayDate = this.jsonString[0].data.valueData.todayDate;
+      this.operation();
+      this.redefinition();
+
+      // this.Reset();
     },
     changeJson(data) {
       this.jsonString = data;
       // this.Reset();
-      this.redefinition();
+      console.log('changeJson')
+      // this.redefinition();
     },
     Reset() {
       let arr = Adaptive(
         this.jsonString,
         this.jsonString[0].data.switch ? 1010 : 670
       );
-      this.taskData.showing = arr[0].length > 0 ? arr : arr.slice(1);
+      arr[0].length == 0 ? (arr = arr.slice(1)) : "";
+      console.log(arr, "arr");
+      this.taskData.showing = arr;
     },
     operation() {
       this.testContentArray = JSON.myParse(this.task.testProjectList);
@@ -837,201 +824,6 @@ export default {
         contentArray.splice(1, 0, { name: "project_blankSample" });
       }
       return contentArray;
-    },
-    testShow() {
-      this.ableInput = true;
-      let contentArray = [
-        // 'project_jbxx',
-        // 'project_jcxcxx',
-        // 'projcet_gzwyzwtgxdk',
-        // 'projcet_jfcsl',
-        // 'projcet_jcjg',
-        // 'projcet_szpbt',
-        // 'projcet_jflslxgzdqk',
-        // 'projcet_gzltj',
-        // 'projcet_szwjcjlmkt',
-        // 'projcet_szwjcjlmknr',
-        // 'projcet_jcbt',
-        // 'projcet_jcbnr',
-        // 'projcet_jgyst',
-        // 'projcet_jgysnr',
-        // 'project_fs_xn_gdy',
-        // 'project_fs_xn_gdypl',
-        // 'project_fs_xn_scl',
-        // 'project_fs_xn_jzsj',    /*性能*/
-        // 'project_fs_xn_yyxj',
-        // 'project_fs_xn_gdb',
-        // 'project_fs_xn_gdyddbfbl',
-        // 'projcet_azs',
-        // 'projcet_tcqjlzs',
-        // 'projcet_xhcdtx',
-        // 'projcet_jxkjfbl',
-        // 'projcet_AEClmd',
-        // 'projcet_AECdlszjyzx',
-        // 'projcet_AECgdyzjyzx',
-        // 'projcet_gdyzsdpl',
-        // 'projcet_sclcfx',
-        // 'projcet_yyxsbzc',
-        // 'projcet_bgsjzsdpl',
-        // 'projcet_yyxsczdpl',
-        // 'projcet_gyyzsysbdpl',
-        // 'project_bgcsxz',
-        // 'projcet_cjwc',
-        // 'project_cy',
-        // 'projcet_wy',
-        // 'projcet_ddbdxjjc',
-        // 'projcet_tszlkz',
-        // 'projcet_tssjzrstbkqxsdnldxz',
-        // 'project_tssjzrstbkqbsdnlzdz',
-        // 'projcet_tsygplmd',
-        // 'projcet_kjfbl',
-        // 'projcet_ddbfbl',
-        // 'projcet_yxjsqrspqkqxsdnl',
-        // 'projcet_zdldkz',
-        // 'projcet_zsyyyxjsqzxpc',
-        // 'projcet_zdzsyyptygpncxtsdtpj',
-        // 'projcet_fhjcxg',
-        // 'projcet_bg_sz',
-        // 'projcet_bg_hb',
-        // 'projcet_bg_jc1',
-        // 'projcet_bg_jc2',
-        // 'projcet_zlkz',
-        // 'projcet_xnjcjg',
-        // 'projcet_bg_bz',
-        // 'project_dr_gdyzsdpl',
-        // 'project_dr_sclcfx',
-        // 'project_dr_yyxsbzc',
-        // 'project_fs_xn_jzsj',
-        // 'project_dr_yyxsczdpl',
-        // 'projcet_gyyzsysbdpl',
-        // 'project_dr_gyyzssbdpl',
-        // 'project_dr_tcq',
-        // 'project_dr_kszs',
-        // 'project_dr_tcqjlzs',
-        // 'project_dr_xhcttx',
-        // 'project_dr_xyjyx',
-        // 'project_dr_cjwc',
-        // 'project_dr_cy',
-        // 'project_dr_wy',
-        // 'project_dr_ddbdxjjc',
-        // 'project_dr_aeclmd',
-        // 'project_dr_aecdlszjyzx',
-        // 'project_dr_aecgdyzjyzx',
-        // 'project_dr_jxkjfbl',
-        // 'project_dr_xhcttx',
-        // 'project_cy_kqlhcy',
-        // 'project_cy_ljskcyq',
-        // 'project_cy_kqwswcy',
-        // 'project_cy_ypcymj',
-        // 'project_cy_ypcycy',
-        // 'projcet_AECgdyzjyzx',
-        // 'project_dr_bgsjzsdpl',
-        // 'project_dr_sclcfx',
-        // 'project_dr_yyxsbzc',
-        // 'project_dr_yyxsczdpl',
-        // 'project_dr_gyyzssbdpl',
-        // 'project_dr_yyxsczdpl',
-        // 'project_dr_tcq',
-        // 'project_dr_kszs',
-        // 'project_dr_tcq',
-        // 'project_dr_kszs',
-        // 'project_dr_tcqjlzs',
-        // 'project_dr_xhcttx',
-        // 'project_dr_cjwc',
-        // 'project_dr_cy',
-        // 'project_dr_jxkjfbl',
-        // 'project_dr_ddbdxjjc',
-        // 'project_dr_aeclmd',
-        // 'project_dr_aecdlszjyzx',
-        // 'project_dr_aecgdyzjyzx',
-        // "project_cyhj",
-        // "project_dr_aecgdyzjyzx",
-        // "project_dr_jxkjfbl",
-        // "projcet_xhcdtx",
-        // "project_dr_jxkjfbl",
-        // 'project_jc_xczd1',
-        // 'project_jc_xczd3',
-        // 'project_jc_xczd5',
-        // 'project_jc_xflrs',
-        // 'project_jc_xflmj',
-        // 'project_jc_xflcs',
-        // 'project_jc_fwdzs',
-        // 'project_jc_dqy',
-        // 'project_jc_cgxs',
-        // 'project_dc_jcxx',
-        // 'project_dc_yqsb',
-        // 'project_dc_hjtj',
-        // 'project_dc_jcdxxx',
-        // 'project_dc_xcdc',
-        // 'project_dc_dchjcl',
-        // 'project_dc_dchjxpcl',
-        // "project_dc_dchjxpclbg",
-        // 'project_dc_dctj',
-        // 'project_dc_yysmc',
-        // CT
-        // 'project_ct_zdcdwjd',
-        // 'project_ct_dwgjd',
-        // 'project_ct_smjqjjd',
-        // 'project_ct_cjcgpc',
-        // 'project_ct_ctdi',
-        // 'project_ct_ctzs',
-        // 'project_ct_jyx',
-        // 'project_ct_zs',
-        // 'project_ct_gdbfbl',
-        // 'project_ct_ddbktcnl',
-        // 'project_ct_ctzxx',
-        //透视
-        // 'project_ts_tssjzrstbkqbsdnldxz1',
-        // 'project_ts_tssjzrstbkqbsdnldxz2',
-        // 'project_ts_tssjzrstbkqbsdnlzdz1',
-        // 'project_ts_tssjzrstbkqbsdnlzdz2',
-        // 'project_ts_tsygplmd1',
-        // 'project_ts_tsygplmd2',
-        // 'projcet_ts_kjfbl1',
-        // 'projcet_ts_kjfbl2',
-        // 'project_ts_ddbfbl1',
-        // 'project_ts_ddbfbl2',
-        // 'project_ts_yxjsqrspqkqbsdnl1',
-        // 'project_ts_yxjsqrspqkqbsdnl2',
-        // 'project_ts_zdldkz1',
-        // 'project_ts_zdldkz2',
-        // 'project_ts_zsyyyxjsqzxpc',
-        // 'project_ts_zdzsyyptygccxtsdhpj'
-        //消杀
-        // 'project_xs_xdylqcjlzs',
-        // 'project_xs_xdhnjjlzs',
-        // 'project_xs_xdhnjxjzsxdjsgf',
-        // 'project_xs_xdyrjlxdjsgf',
-        // 'project_xs_xdyrjl',
-        // 'project_xs_ycxwsypjlzs',
-        // 'project_xs_grsbmxjjlzs',
-        // 'project_xs_wtgzhbmjlzs',
-        // 'project_xs_syjlzs'
-      ];
-
-      let obj = [];
-      for (let i = 0; i < contentArray.length; i++) {
-        let result1 = this.modules.find(mod => mod.name === contentArray[i]);
-        if (result1) {
-          obj.push(result1);
-        }
-      }
-      this.InstrumentQuery();
-      let middleArr = JSON.myParse(JSON.stringify(obj));
-
-      middleArr.forEach((val, i) => {
-        val.height._normal.value = obj[i].height._normal.value;
-        if (obj[i].height._short)
-          val.height._short.value = obj[i].height._short.value;
-        let json = {
-          to: val.name,
-          type: null,
-          data: val
-        };
-        this.jsonString.push(json);
-      });
-      this.Reset();
-      this.redefinition();
     },
 
     changeModule(obj, index) {
@@ -1080,7 +872,7 @@ export default {
               });
             }
             this.setReasonToModule();
-            this.Reset();
+            // this.Reset();
             this.redefinition();
           })
           .catch(() => {
@@ -1118,7 +910,7 @@ export default {
             modelObj.push(result);
           }
         });
-        let middleArr = JSON.myParse(JSON.stringify(modelObj));
+        let middleArr = this.deepCopy(modelObj);
         middleArr.forEach((val, i) => {
           val.height._normal.value = modelObj[i].height._normal.value;
           if (modelObj[i].height._short)
@@ -1173,10 +965,9 @@ export default {
         item => item.to === "project_deleteReason"
       );
       if (deleteModule) {
-        deleteModule.data.valueData.point = JSON.parse(
-          JSON.stringify(this.reasonMsgArr)
-        );
+        deleteModule.data.valueData.point = this.deepCopy(this.reasonMsgArr);
       }
+      
       this.redefinition();
     },
     headData(data, name) {
@@ -1413,7 +1204,7 @@ export default {
         this.isDelete = true;
         this.testProjectMsgBox = false;
         bus.$emit("getDeleteArr", this.reasonMsgArr);
-        this.Reset();
+        // this.Reset();
         this.redefinition();
       }
     },
@@ -1445,33 +1236,6 @@ export default {
         return cur;
       }, []); //设置cur默认类型为数组，并且初始值为空的数组
       this.aObjects = peon;
-    },
-    deepCopy(target) {
-      let copyed_objs = []; //此数组解决了循环引用和相同引用的问题，它存放已经递归到的目标对象
-      function _deepCopy(target) {
-        if (typeof target !== "object" || !target) {
-          return target;
-        }
-        for (let i = 0; i < copyed_objs.length; i++) {
-          if (copyed_objs[i].target === target) {
-            return copyed_objs[i].copyTarget;
-          }
-        }
-        let obj = {};
-        if (Array.isArray(target)) {
-          obj = []; //处理target是数组的情况
-        }
-        copyed_objs.push({ target: target, copyTarget: obj });
-        Object.keys(target).forEach(key => {
-          if (obj[key]) {
-            return;
-          }
-          obj[key] = _deepCopy(target[key]);
-        });
-        return obj;
-      }
-
-      return _deepCopy(target);
     },
     temporary() {
       const data = {
@@ -1608,7 +1372,7 @@ export default {
                   let point = val.data.valueData.point.filter(
                     (v, n) => v.sampleNum !== item.sampleNum
                   );
-                  point = JSON.parse(JSON.stringify(point));
+                  point = this.deepCopy(point);
                   val.data.valueData.point = [...point];
                 }
               });
@@ -1708,22 +1472,21 @@ export default {
     saveData() {
       let templateArr = [];
       this.taskData.showing.forEach(item => {
-        item.forEach(item => {
-          if (item.data.isHead) {
-            item.data.valueData.delRowReasonArr = this.delRowReasonArr;
-            item.data.valueData.deleteArr = this.reasonMsgArr;
-            item.data.valueData.sampleNum = window.sampleNum;
-            item.data.valueData.sampleNum2 = window.sampleNum2;
-            item.data.valueData.sampleNum3 = window.sampleNum3;
+        item.forEach(a => {
+          if (a.data.isHead) {
+            a.data.valueData.delRowReasonArr = this.delRowReasonArr;
+            a.data.valueData.deleteArr = this.reasonMsgArr;
+            a.data.valueData.sampleNum = window.sampleNum;
+            a.data.valueData.sampleNum2 = window.sampleNum2;
+            a.data.valueData.sampleNum3 = window.sampleNum3;
           } else {
-            item.data.valueData.carried = item.data.height._normal.carried;
+            a.data.valueData.carried = a.data.height._normal.carried;
           }
-          if (item.data.height._normal.carried) {
-            templateArr.push(item.data.valueData);
+          if (a.data.height._normal.carried) {
+            templateArr.push(a.data.valueData);
           }
         });
       });
-      // console.log("暂存的数据", templateArr);
       return JSON.stringify(templateArr);
     }
   },
@@ -1817,7 +1580,6 @@ export default {
     //     "imgBase64Three"
     //   ] = sessionStorage.getItem("uploadBase64");
     // } catch (e) {}
-    // this.testShow();
 
     if (this.target == 0) {
       this.generateTestprojectId();
@@ -1857,10 +1619,6 @@ export default {
         this.oldTestArr2.push(item.valueData.testProjectId);
       }
     });
-    console.log(this.taskData.showing, "bbb");
-    setTimeout(() => {
-      console.log(this.taskData.showing, "aaa");
-    }, 1000);
 
     // if (this.taskData.showing[0].length <= 0) {
     //     let arr = [];
@@ -1883,16 +1641,16 @@ export default {
     if (this.target == 0 && window.location.href.indexOf("localhost") === -1) {
       this.timeId = setInterval(() => {
         if (this.saveData !== "") {
-          let arr = JSON.parse(JSON.stringify(this.importData));
+          let arr = this.deepCopy(this.importData);
           arr.taskId = this.task.id;
           arr.tasks.tasks[0].data = this.saveData;
 
           this.whrite(arr);
           this.writeFileEvent().then(res => {
             bus.$emit("showSave", true);
-            // this.timeId2 = setTimeout(() => {
-            //   bus.$emit("showSave", false);
-            // }, 1500);
+            this.timeId2 = setTimeout(() => {
+              bus.$emit("showSave", false);
+            }, 1500);
           });
         }
       }, 8500);

@@ -318,6 +318,7 @@
       },
 
       sureSampleNum() {
+        
         if (this.selectItem.sampleNum == "") {
           this.$notify({
             type: "warning",

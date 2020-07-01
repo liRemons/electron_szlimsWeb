@@ -462,7 +462,6 @@
           row.foreverId = window.uuid();
 
           row.SampleAddress = this.data.valueData.point[index].SampleAddress;
-          console.log('添加的行', row)
           this.data.valueData.point.splice(num, 0, row);
           this.data.valueData.point[num].heBingId = id + "-" + (subscript + 1);
         }

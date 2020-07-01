@@ -271,7 +271,6 @@ export default {
     getNewData() {
       this.getList();
       this.localDataFenYe = [];
-      console.log(this.flag);
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -368,7 +367,6 @@ export default {
       let ids = this.multipleSelection.map(item => {
         return item.taskId;
       });
-      console.log(this.multipleSelection);
       this.multipleSelection.map(item => {
         if (item.isDocImg !== 0) {
           item.pointUrl ? "" : (flag = 0);
@@ -376,7 +374,6 @@ export default {
         item.unitUrl ? "" : (flag = 0);
       });
       if (!flag) {
-       
         this.$notify({
           type: "warning",
           message: "签名或点位图未上传"

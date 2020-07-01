@@ -681,7 +681,6 @@ export default {
       }
       setTimeout(() => {
         this.$store.dispatch("actionsResolvingPower", data);
-        this.$emit("redefinition");
       }, 1500);
     },
 
@@ -732,7 +731,7 @@ export default {
           item.to === "projcet_jgyst" ||
           item.to === "projcet_jgysnr"
         ) {
-          this.jsonString.splice(index, 1);
+          // this.jsonString.splice(index, 1);
         } else {
           usedData.push(item);
         }

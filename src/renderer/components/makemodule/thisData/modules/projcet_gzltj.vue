@@ -107,7 +107,6 @@
         },
         watch:{
             JudgePhotography(val){
-                console.log(val);
                 let gzltjs = this.jsonString.filter(item => item.to === 'projcet_gzltj');
                 if(val){
                     gzltjs.forEach(item => {

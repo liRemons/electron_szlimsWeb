@@ -869,6 +869,7 @@ export default {
 
     //上传
     toUpload(signature) {
+      let flag=false
       let result = this.tasks.some(item => {
         if (item.deviceMainId == 4) {
           return false;
@@ -880,12 +881,17 @@ export default {
         item => item.unitUrl === "" || item.unitUrl === null
       );
       // console.log(result, result2);
-      if (result || result2) {
+      this.tasks.forEach(item=>{
+        item.isDocImg!==0?flag=true:""
+      })
+      if(flag){
+        if (result || result2) {
         this.$notify({
           type: "error",
           message: "签名照或点位图未上传！"
         });
         return;
+      }
       }
       let uploadStaffId = JSON.myParse(getToken()).id;
       updateTaskUpload(this.ids.toString(), uploadStaffId)

@@ -284,8 +284,8 @@
                   class="tc Full borderRight ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[2].split("+")[0] }}<br />{{
-                      item.rows[2].split("+")[1]
+                    {{ item.rows[2] && item.rows[2].split("+")[0] }}<br />{{
+                      item.rows[2] && item.rows[2].split("+")[1]
                     }}
                   </div>
                 </div>
@@ -294,8 +294,8 @@
                   class="tc Full borderRight ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[3].split("+")[0] }}<br />{{
-                      item.rows[3].split("+")[1]
+                    {{ item.rows[3] && item.rows[3].split("+")[0] }}<br />{{
+                      item.rows[3] && item.rows[3].split("+")[1]
                     }}
                   </div>
                 </div>
@@ -304,8 +304,9 @@
                   class="tc Full ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[4].split("+")[0] | filterTime }}<br />{{
-                      item.rows[4].split("+")[1] | filterTime
+                    {{ item.rows[4] && item.rows[4].split("+")[0] | filterTime
+                    }}<br />{{
+                      item.rows[4] && item.rows[4].split("+")[1] | filterTime
                     }}
                   </div>
                 </div>

@@ -123,7 +123,6 @@
         }
       },
       changeNum(kv) {
-				console.log(this.deviceFactor,'kv')
         try {
           if (this.isNumber(kv)) {
             this.data.valueData.calibrationFactor = this.getFactor(kv, this.deviceFactor)

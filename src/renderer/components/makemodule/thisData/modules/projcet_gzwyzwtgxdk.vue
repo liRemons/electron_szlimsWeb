@@ -260,7 +260,6 @@ export default {
         message: "生成成功"
       });
       this.$store.dispatch("actionsWorkArr", completeArr);
-       this.$emit("redefinition");
     },
     returnVal(val, obj, special) {
       if (special == 1) {

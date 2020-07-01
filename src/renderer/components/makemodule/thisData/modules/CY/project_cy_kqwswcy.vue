@@ -195,6 +195,9 @@ export default {
       row.foreverId = window.uuid();
       this.data.valueData.point.splice(index + 1, 0, row);
       this.$emit("redefinition");
+
+
+      
     },
     returnVal(showText, receive, special) {
       this.data.valueData.point[special][receive] = showText;
