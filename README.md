@@ -58,8 +58,11 @@ Mac: [app release](https://github.com/PanJiaChen/electron-vue-admin/releases/tag
 
    npm install --save-dev electron-rebuild
 
-# 每次运行"npm install"时，也运行这条命令
+### 每次运行"npm install"时，也运行这条命令
 ./node_modules/.bin/electron-rebuild
 
-# 在windows下如果上述命令遇到了问题，尝试这个：
+### 在windows下如果上述命令遇到了问题，尝试这个：
 .\node_modules\.bin\electron-rebuild.cmd
+
+### 有指纹验证
+finger 支持Node 32位版本，请将Node 安装32位版本，注意：打包命令 `npm run build` 会在dist文件夹下生成main.js文件，请在其他文件生成之前将main.js文件夹下的路径改为.\\finger\\finger
