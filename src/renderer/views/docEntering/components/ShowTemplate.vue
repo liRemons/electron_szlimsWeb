@@ -318,6 +318,7 @@ export default {
           classificationIndex = redefinitionArr.length - 1;
         } else {
           let point = this.deepCopy(item.data.valueData.point);
+          
           redefinitionArr[findIndex].data.valueData.point = [
             ...redefinitionArr[findIndex].data.valueData.point,
             ...point
@@ -332,7 +333,6 @@ export default {
       });
       let decompose = [];
       let height = redefinitionArr[0].data.switch ? 1010 : 670;
-
       redefinitionArr.forEach((item, index) => {
         let projcet = {
           to: item.to,
@@ -424,6 +424,7 @@ export default {
           if (several > 2) {
             several -= 2;
           }
+          
           if (point.length > several) {
             projcet.data.valueData.point = this.deepCopy(
               point.slice(0, several)
@@ -441,7 +442,6 @@ export default {
         } else {
           surplusPoint = this.deepCopy(point);
         }
-
         let totalSubsidiary = Math.ceil(
           (height - projcet.data.height._normal.fixed) / itemHeight
         );
@@ -463,11 +463,10 @@ export default {
             }
           });
         }
-
         if (fatherData.length) {
+          let projcetSubsidiary = this.deepCopy(projcet);
           fatherData.forEach((val, num) => {
-            let projcetSubsidiary = this.deepCopy(projcet);
-            projcetSubsidiary.data.valueData.point = val;
+            projcetSubsidiary.data.valueData.point = this.deepCopy(val);
             decompose.push(projcetSubsidiary);
             decompose[decompose.length - 1].data.height = item.data.height;
           });
@@ -790,7 +789,6 @@ export default {
     changeJson(data) {
       this.jsonString = data;
       // this.Reset();
-      console.log('changeJson')
       // this.redefinition();
     },
     Reset() {
@@ -799,7 +797,6 @@ export default {
         this.jsonString[0].data.switch ? 1010 : 670
       );
       arr[0].length == 0 ? (arr = arr.slice(1)) : "";
-      console.log(arr, "arr");
       this.taskData.showing = arr;
     },
     operation() {
@@ -1256,9 +1253,11 @@ export default {
         // }
         // console.log(this.task.id)
         // return
+        // console.log(JSON.parse(this.importData.tasks.tasks[0].data),'importData')
+        // console.log(JSON.parse(this.saveData) ,'this.saveData ')
         let data = this.deepCopy(this.importData);
         let this_ = this;
-        // data.tasks.tasks[0].data = this.saveData;
+        data.tasks.tasks[0].data = this.saveData;
         // this.$ipcRenderer.send("writeFile", data);
         this.whrite(data);
         this.writeFileEvent().then(res => {
@@ -1574,7 +1573,6 @@ export default {
         ] = res;
       });
     }
-
     // try {
     //   this.taskData.showing[0][0]["data"]["valueData"][
     //     "imgBase64Three"
@@ -1589,7 +1587,6 @@ export default {
       this.taskData.showing[0][0]["data"]["valueData"]["imgBase64Two"] = "";
       this.taskData.showing[0][0]["data"]["valueData"]["imgBase64Three"] = "";
     }
-
     if (this.task.deviceMainId == 4) {
       try {
         if (

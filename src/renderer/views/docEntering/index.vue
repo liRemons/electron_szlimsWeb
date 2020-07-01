@@ -17,7 +17,10 @@
         @click="TemporaryStorage(false)"
         size="mini"
         type="primary"
-        v-if="target == 1 && (nowAnalysis === '待分析' || nowAnalysis === '正在分析')"
+        v-if="
+          target == 1 &&
+            (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
+        "
       >
         保存
       </el-button>
@@ -72,7 +75,10 @@
         @click="toShowSongShen"
         size="mini"
         type="primary"
-        v-else-if="target == 1 &&(nowAnalysis === '待分析' || nowAnalysis === '正在分析')"
+        v-else-if="
+          target == 1 &&
+            (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
+        "
       >
         送审
       </el-button>
@@ -252,7 +258,7 @@
           @fingerResult="toSongshen"
           :person="allPerson"
           fingerprintBox="2"
-           v-if="showFingerprintThree"
+          v-if="showFingerprintThree"
           :showFingerprintFlag="showFingerprintThree"
         ></fingerprint>
       </el-dialog>
@@ -260,7 +266,7 @@
       <!-- 现场校核员指纹验证 -->
       <el-dialog :visible.sync="showFingerprintTwo">
         <fingerprint
-         v-if="showFingerprintTwo"
+          v-if="showFingerprintTwo"
           @fingerResult="toReview"
           :person="allPerson"
           fingerprintBox="1"
@@ -277,7 +283,7 @@
       <!-- 实验室审核 -->
       <el-dialog :visible.sync="showFingerprintFour">
         <fingerprint
-           v-if="showFingerprintFour"
+          v-if="showFingerprintFour"
           @fingerResult="toShiYanReview"
           :person="allPerson"
           fingerprintBox="3"
@@ -290,7 +296,7 @@
       <el-dialog :visible.sync="showFingerprintNopass">
         <fingerprint
           :button="'确定'"
-           v-if="showFingerprintNopass"
+          v-if="showFingerprintNopass"
           @fingerResult="toNoPass"
           :person="allPerson"
           :tasksArrCheck="tasksArrCheck"
@@ -387,7 +393,7 @@ export default {
   data() {
     return {
       inputFlag: true,
-      tasksArrCheck:[],
+      tasksArrCheck: [],
       tasks: [],
       currentTab: 0,
       tabArray: [],
@@ -445,7 +451,7 @@ export default {
         flag: false
       },
       importData: {},
-      unitUrl:[]
+      unitUrl: []
     };
   },
 
@@ -489,7 +495,7 @@ export default {
       }
       Promise.all(promiseArr)
         .then(values => {
-          this.tasksArrCheck=values
+          this.tasksArrCheck = values;
           this.numObj.sampleNum_lh = values[0].sampleNum_lh;
           this.numObj.sampleNum_wsw = values[0].sampleNum_wsw;
           this.numObj.sampleNum_xczd = values[0].sampleNum_xczd;
@@ -632,7 +638,7 @@ export default {
     },
     // 返回录入列表页面
     back() {
-      this.templateArr=[]
+      this.templateArr = [];
       if (this.target == 5 && !this.showSave) {
         this.$router.push("/laboratory/curve");
         return;
@@ -658,81 +664,78 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          let taskLen = this.taskDatas.length;
-          let taskArr = [];
-          let arr = {};
-          let that = this;
-          if (that.target == 1) {
-            this.TemporaryStorage(true)
-            
-            return;
-          }
-          if (that.target == 2) {
-            that.$router.push("/local/review");
-            return;
-          }
-          if (that.target == 3) {
-            that.$router.push("/local/upload");
-            return;
-          }
-          if (that.target == 4) {
-            
-            if (this.nowAnalysis !== "已分析") {
-              that.$router.push("/laboratory/upload");
-              return;
-            } else {
-              that.$router.push("/laboratory/analysis");
-              return;
-            }
-          }
-          if (that.target == 5) {
-            that.$router.push("/laboratory/curve");
-            return;
-          }
-          arr = JSON.parse(JSON.stringify(this.importData));
-          for (let i = 0; i < taskLen; i++) {
-            this.taskDatas[i].showing.flat().forEach((item, index) => {
-              this.templateArr.push(item.data.valueData);
-            });
-            arr.tasks.tasks[0].data = JSON.stringify(this.templateArr);
-            this.readFile("enteringList");
-            this.readFileEvent().then(res => {
-              let arrList = JSON.parse(res);
-              arrList.list.map(item => {
-                item.taskId == arr.taskId
-                  ? (item.data = JSON.stringify(this.templateArr))
-                  : "";
-              });
-              this.whrite(arrList);
-            });
-            this.whrite(arr);
-            this.writeFileEvent().then(res => {
-              if (res) {
-                if (that.target == 0) {
-                  that.entryStartTime = "";
-                  that.$router.push("/local/entering");
-                }
-              }
-            });
+      }).then(() => {
+        let taskLen = this.taskDatas.length;
+        let taskArr = [];
+        let arr = {};
+        let that = this;
+        if (that.target == 1) {
+          this.TemporaryStorage(true);
 
-            // taskArr.push(
-            //   updateTaskData(
-            //     this.taskDatas[i].id,
-            //     JSON.stringify(this.templateArr)
-            //   )
-            // );
+          return;
+        }
+        if (that.target == 2) {
+          that.$router.push("/local/review");
+          return;
+        }
+        if (that.target == 3) {
+          that.$router.push("/local/upload");
+          return;
+        }
+        if (that.target == 4) {
+          if (this.nowAnalysis !== "已分析") {
+            that.$router.push("/laboratory/upload");
+            return;
+          } else {
+            that.$router.push("/laboratory/analysis");
+            return;
           }
-          // let that = this;
-          // return;
-          // Promise.all(taskArr)
-          //   .then(resultsArr => {
-          //     console.log(resultsArr);
-          //   })
-          //   .catch(() => {});
-        })
-        .catch(() => {});
+        }
+        if (that.target == 5) {
+          that.$router.push("/laboratory/curve");
+          return;
+        }
+        arr = JSON.parse(JSON.stringify(this.importData));
+        for (let i = 0; i < taskLen; i++) {
+          this.taskDatas[i].showing.flat().forEach((item, index) => {
+            this.templateArr.push(item.data.valueData);
+          });
+          arr.tasks.tasks[0].data = JSON.stringify(this.templateArr);
+          this.readFile("enteringList");
+          this.readFileEvent().then(res => {
+            let arrList = JSON.parse(res);
+            arrList.list.map(item => {
+              item.taskId == arr.taskId
+                ? (item.data = JSON.stringify(this.templateArr))
+                : "";
+            });
+            this.whrite(arrList);
+          });
+          this.whrite(arr);
+          this.writeFileEvent().then(res => {
+            if (res) {
+              if (that.target == 0) {
+                that.entryStartTime = "";
+                that.$router.push("/local/entering");
+              }
+            }
+          });
+
+          // taskArr.push(
+          //   updateTaskData(
+          //     this.taskDatas[i].id,
+          //     JSON.stringify(this.templateArr)
+          //   )
+          // );
+        }
+        // let that = this;
+        // return;
+        // Promise.all(taskArr)
+        //   .then(resultsArr => {
+        //     console.log(resultsArr);
+        //   })
+        //   .catch(() => {});
+      });
     },
 
     // 录入
@@ -869,7 +872,7 @@ export default {
 
     //上传
     toUpload(signature) {
-      let flag=false
+      let flag = false;
       let result = this.tasks.some(item => {
         if (item.deviceMainId == 4) {
           return false;
@@ -881,17 +884,17 @@ export default {
         item => item.unitUrl === "" || item.unitUrl === null
       );
       // console.log(result, result2);
-      this.tasks.forEach(item=>{
-        item.isDocImg!==0?flag=true:""
-      })
-      if(flag){
+      this.tasks.forEach(item => {
+        item.isDocImg !== 0 ? (flag = true) : "";
+      });
+      if (flag) {
         if (result || result2) {
-        this.$notify({
-          type: "error",
-          message: "签名照或点位图未上传！"
-        });
-        return;
-      }
+          this.$notify({
+            type: "error",
+            message: "签名照或点位图未上传！"
+          });
+          return;
+        }
       }
       let uploadStaffId = JSON.myParse(getToken()).id;
       updateTaskUpload(this.ids.toString(), uploadStaffId)
@@ -1022,7 +1025,7 @@ export default {
     //实验室更新data数据
     toUpdateSampleData(isReview = false, id) {
       let valueDatas = [];
-      
+
       this.sampleDatas.forEach(item => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {
@@ -1359,7 +1362,7 @@ export default {
 
     //暂存数据
     TemporaryStorage(isbut = false) {
-     let valueDatas = [];
+      let valueDatas = [];
       this.sampleDatas.forEach(item => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {
@@ -1411,19 +1414,20 @@ export default {
       }
       toTemporaryStorageSampleData(JSON.stringify(valueDatas))
         .then(res => {
-          
-            if (res.success) {if (isbut) {
-              this.$router.push("/laboratory/analysis");}
-              this.$notify({
-                type: "success",
-                message: res.msg
-              });
-            } else {
-              this.$notify({
-                type: "warning",
-                message: res.msg
-              });
+          if (res.success) {
+            if (isbut) {
+              this.$router.push("/laboratory/analysis");
             }
+            this.$notify({
+              type: "success",
+              message: res.msg
+            });
+          } else {
+            this.$notify({
+              type: "warning",
+              message: res.msg
+            });
+          }
         })
         .catch(error => {});
     },

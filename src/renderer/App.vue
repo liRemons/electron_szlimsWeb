@@ -3,7 +3,7 @@
     <div class="control">
       <div style="float:left">
         <span style="line-height: 24px;padding-left:20px" @click="delDir"
-          >深圳市瑞达智能检测系统用户端V1.0.2</span
+          >深圳市瑞达智能检测系统用户端V1.0.3</span
         >
       </div>
       <div class="action">
