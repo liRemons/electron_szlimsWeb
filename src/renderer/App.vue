@@ -26,7 +26,11 @@
       :apkUrl="apkUrl"
       :updateMain="updateMain"
       :updateVersion="updateVersion"
+      @download="download"
     ></update>
+    <el-dialog :visible.sync="dialogVisible">
+      <el-progress type="circle" :percentage="percentage"></el-progress>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,41 +50,64 @@ export default {
   data() {
     return {
       updateflag: false,
+      dialogVisible: false,
       version: "0.1",
       updateMain: "",
       apkUrl: "",
-      updateVersion: ""
+      updateVersion: "",
+      percentage: 0
     };
   },
   mounted() {
-    let data = { projectName: "SZ_LIMS_RD" };
-    const loading = this.$loading({
-      lock: true,
-      text: "检查更新中，请稍后......",
-      spinner: "el-icon-loading",
-      background: "rgba(0, 0, 0, 0.7)"
-    });
-    this.$updateAxios.post("/getOnlineApk", data).then(res => {
-      loading.close();
-      let apkVersion = JSON.parse(res.data.data[0].apkVersion);
-      this.updateMain = apkVersion.update;
-      this.updateVersion = apkVersion.code;
-
-      if (
-        Number(this.updateVersion.split(".")[0]) >
-        Number(this.version.split(".")[0])
-      ) {
-        this.updateflag = true;
-      } else if (
-        Number(this.updateVersion.split(".")[1]) >
-        Number(this.version.split(".")[1])
-      ) {
-        this.updateflag = true;
+    setTimeout(() => {
+      if (this.$route.path == "/login") {
+        // this.getUpdateVersion();
       }
-      this.apkUrl = res.data.data[0].apkUrl;
-    });
+    }, 500);
   },
   methods: {
+    download() {
+      this.updateflag = false;
+      this.dialogVisible = true;
+      let timer = setInterval(() => {
+        this.getSchedule();
+        this.getScheduleEvent().then(res => {
+          this.percentage = Number(res[0]);
+          if (this.percentage >= 100) {
+            clearInterval(timer);
+            console.log(res[1]);
+          }
+        });
+      }, 1000);
+    },
+    getUpdateVersion() {
+      let data = { projectName: "SZ_LIMS_RD" };
+      const loading = this.$loading({
+        lock: true,
+        text: "检查更新中，请稍后......",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
+      this.$updateAxios.post("/getOnlineApk", data).then(res => {
+        loading.close();
+        let apkVersion = JSON.parse(res.data.data[0].apkVersion);
+        this.updateMain = apkVersion.update;
+        this.updateVersion = apkVersion.code;
+
+        if (
+          Number(this.updateVersion.split(".")[0]) >
+          Number(this.version.split(".")[0])
+        ) {
+          this.updateflag = true;
+        } else if (
+          Number(this.updateVersion.split(".")[1]) >
+          Number(this.version.split(".")[1])
+        ) {
+          this.updateflag = true;
+        }
+        this.apkUrl = res.data.data[0].apkUrl;
+      });
+    },
     mini() {
       this.$ipcRenderer.send("mini", true);
     },
@@ -115,13 +142,13 @@ export default {
     Vue.prototype.getSchedule = function() {
       this.$ipcRenderer.send("getSchedule");
     };
-    Vue.prototype.getScheduleEvent=function(){
+    Vue.prototype.getScheduleEvent = function() {
       return new Promise(resolve => {
         this.$ipcRenderer.on("getScheduleEvent", function(event, arg) {
           resolve(arg);
         });
       });
-    }
+    };
     // 读取文件
     Vue.prototype.readFile = function(id) {
       this.$ipcRenderer.send("readFile", { taskId: id });

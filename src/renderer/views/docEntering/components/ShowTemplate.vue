@@ -310,6 +310,7 @@ export default {
         if (item.data.valueData.heBingJudge) {
           item.data.valueData.heBingChange = !item.data.valueData.heBingChange;
         }
+        console.log(item.data.valueData.factorArr,item.to)
         let classificationIndex = "";
         if (findIndex == -1) {
           obj = this.deepCopy(item);
@@ -318,7 +319,7 @@ export default {
           classificationIndex = redefinitionArr.length - 1;
         } else {
           let point = this.deepCopy(item.data.valueData.point);
-          
+
           redefinitionArr[findIndex].data.valueData.point = [
             ...redefinitionArr[findIndex].data.valueData.point,
             ...point
@@ -424,7 +425,7 @@ export default {
           if (several > 2) {
             several -= 2;
           }
-          
+
           if (point.length > several) {
             projcet.data.valueData.point = this.deepCopy(
               point.slice(0, several)
@@ -964,7 +965,7 @@ export default {
       if (deleteModule) {
         deleteModule.data.valueData.point = this.deepCopy(this.reasonMsgArr);
       }
-      
+
       this.redefinition();
     },
     headData(data, name) {
@@ -1659,12 +1660,14 @@ export default {
   },
 
   beforeMount() {
+    // console.log(this.task.detectionTime)
     this.refre = true;
-
     //获取任务开始录入时间
+    console.log(this.task.startTime)
     if (this.task.startTime == null) {
       let entryStartTime = _dateFormat("now", "Y-M-D h:m:s");
       this.task.startTime = entryStartTime;
+      this.importData.tasks.tasks[0].startTime = entryStartTime;
     }
     this.taskData.startTime = this.task.startTime;
   },

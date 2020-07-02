@@ -17,7 +17,9 @@
         </div>
         <div class="text" v-html="updateMain.replace(/\n|\r\n/g, '<br>')"></div>
         <div class="download">
-          <a @click="download" :href="apkUrl" :download="apkUrl">下载更新</a>
+          <a @click="$emit('download')" :href="apkUrl" :download="apkUrl"
+            >下载更新</a
+          >
           <p>为防止数据丢失，请安装前先将本地数据同步上传</p>
         </div>
       </div>
@@ -28,21 +30,7 @@
 <script>
 export default {
   props: ["updateMain", "apkUrl", "updateVersion"],
-  data() {
-    return {};
-  },
-  methods: {
-    download() {
-      let timer = setInterval(() => {
-        this.getSchedule();
-        this.getScheduleEvent().then(res => {
-          if (res == "100%") {
-            clearInterval(timer);
-          }
-        });
-      }, 500);
-    }
-  }
+  methods: {}
 };
 </script>
 

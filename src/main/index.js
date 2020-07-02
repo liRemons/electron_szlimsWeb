@@ -54,15 +54,14 @@ function createWindow() {
   mainWindow.webContents.session.on(
     "will-download",
     (event, item, webContents) => {
-      // item.setSavePath();
+      const filePath = path.join(app.getPath('downloads'), item.getFilename());
+      item.setSavePath(filePath);
       item.on("updated", (event, state) => {
         if (state === "progressing") {
           ipcMain.on("getSchedule", (event, arg) => {
             event.sender.send(
               "getScheduleEvent",
-              ((item.getReceivedBytes() / item.getTotalBytes()) * 100).toFixed(
-                2
-              ) + "%"
+              [((item.getReceivedBytes() / item.getTotalBytes()) * 100).toFixed(2),filePath]
             );
           });
           if (item.isPaused()) {

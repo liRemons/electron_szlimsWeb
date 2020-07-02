@@ -284,8 +284,8 @@
                   class="tc Full borderRight ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[2] && item.rows[2].split("+")[0] }}<br />{{
-                      item.rows[2] && item.rows[2].split("+")[1]
+                    {{ item.rows[2] && item.rows[2][0] }}<br />{{
+                      item.rows[2] && item.rows[2][1]
                     }}
                   </div>
                 </div>
@@ -294,8 +294,8 @@
                   class="tc Full borderRight ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[3] && item.rows[3].split("+")[0] }}<br />{{
-                      item.rows[3] && item.rows[3].split("+")[1]
+                    {{ item.rows[3] && item.rows[3][0] }}<br />{{
+                      item.rows[3] && item.rows[3][1]
                     }}
                   </div>
                 </div>
@@ -304,9 +304,8 @@
                   class="tc Full ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[4] && item.rows[4].split("+")[0] | filterTime
-                    }}<br />{{
-                      item.rows[4] && item.rows[4].split("+")[1] | filterTime
+                    {{ item.rows[4] && item.rows[4][0] | filterTime }}<br />{{
+                      item.rows[4] && item.rows[4][1] | filterTime
                     }}
                   </div>
                 </div>
@@ -479,18 +478,16 @@ export default {
       }
       this.nowItem.rows[0] = rowObj.deviceName;
       this.nowItem.rows[1] = rowObj.deviceModel;
-      this.nowItem.rows[2] = rowObj.probeNum
-        ? rowObj.probeNum + "+" + rowObj.deviceNum
-        : rowObj.deviceNum;
-      this.nowItem.rows[3] = rowObj.correctNum + "+" + rowObj.correctNum1;
-      this.nowItem.rows[4] =
+      this.nowItem.rows[2] = [rowObj.probeNum, rowObj.deviceNum];
+      this.nowItem.rows[3] = [rowObj.correctNum, rowObj.correctNum1];
+      this.nowItem.rows[4] = [
         new Date(rowObj.correctTime.replace(/-/g, "/")).format(
           "yyyy/MM/dd hh:mm:ss"
-        ) +
-        "+" +
+        ),
         new Date(rowObj.correctTime1.replace(/-/g, "/")).format(
           "yyyy/MM/dd hh:mm:ss"
-        );
+        )
+      ];
       this.nowItem.rows[5] = rowObj.id;
       this.nowItem.deviceFactor = rowObj.deviceFactor;
       this.nowItem.deviceObj = rowObj;
@@ -523,6 +520,9 @@ export default {
       item.rows[3] = "";
       item.rows[4] = "";
       item.deviceObj = {};
+      this.$store.dispatch("actionsDeviceFactor", '');
+      this.$store.dispatch("actionsDeviceFactorObj", '');
+      this.$store.dispatch("actionsDeviceFactor2", '');
       this.$forceUpdate();
     }
   },

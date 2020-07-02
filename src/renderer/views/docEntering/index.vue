@@ -228,6 +228,7 @@
           v-show="key == currentTab"
         >
           <show-template
+          ref="templateHTML"
             :imgBase64Two="imgBase64Two"
             :task="item"
             :taskData="taskDatas[key]"
@@ -369,7 +370,8 @@ import {
   updateIsDone,
   updateTaskUpload,
   getMan,
-  getAllMan
+  getAllMan,
+  generateMeasure
 } from "@/api/local";
 import {
   updateSampleData,
@@ -872,6 +874,10 @@ export default {
 
     //上传
     toUpload(signature) {
+      // generateMeasure(this.ids[0],this.$refs.templateHTML[0].$el.innerHTML).then(response=>{
+      //   console.log(response)
+      // })
+      // return
       let flag = false;
       let result = this.tasks.some(item => {
         if (item.deviceMainId == 4) {
@@ -900,6 +906,7 @@ export default {
       updateTaskUpload(this.ids.toString(), uploadStaffId)
         .then(res => {
           if (res.success) {
+            
             this.$notify({
               type: "success",
               message: res.msg
