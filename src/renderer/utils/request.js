@@ -13,6 +13,11 @@ const requestImg = axios.create({
   timeout: 20000, // 请求超时时间
 });
 
+const updateAxios=axios.create({
+  baseURL: "http://xtroms.com:5013", // api 的 base_url
+  timeout: 20000, // 请求超时时间
+})
+
 let globalLoading;
 let hint = true; //是否全局提示
 // request拦截器
@@ -87,4 +92,4 @@ service.interceptors.response.use(
   }
 );
 
-export default { service, requestImg };
+export default { service, requestImg,updateAxios };

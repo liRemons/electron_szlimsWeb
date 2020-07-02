@@ -161,8 +161,6 @@
                   data.valueData.valueOption == 1
               "
               style="text-align: center ;width: 70%"
-              
-              @change.native="changeNum(data.valueData, 'f')"
               v-model="data.valueData.f"
               :defaultValue="data.valueData.f"
             ></myInput>

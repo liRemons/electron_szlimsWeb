@@ -12,6 +12,7 @@ import Module from "./components/makemodule/thisData/modules/out_module.js";
 import computes from "./utils/computes.js";
 import { ipcRenderer, remote } from "electron";
 import "viewerjs/dist/viewer.css";
+import axios from './utils/request'
 import Viewer from "v-viewer";
 Vue.use(Viewer, {
   defaultOptions: {
@@ -70,10 +71,13 @@ import {
   Autocomplete,
   TimePicker,
   Upload,
+  Avatar
 } from "element-ui";
 import "./public/css/Css.css";
 import "./public/css/curve.css";
+import Axios from "axios";
 Vue.use(Checkbox);
+Vue.use(Avatar);
 Vue.use(Tooltip);
 Vue.use(Popover);
 Vue.use(Scrollbar);
@@ -134,6 +138,7 @@ Vue.prototype.$ipcRenderer = ipcRenderer;
 Vue.prototype.computeObj = computes;
 Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
+Vue.prototype.$updateAxios=axios.updateAxios
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
   let index = "";

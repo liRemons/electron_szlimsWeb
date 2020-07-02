@@ -1,6 +1,6 @@
 {
     "name": "szlims-winapp",
-    "version": "1.0.3",
+    "version": "0.2.0",
     "author": "",
     "description": "An szlims-winapp project",
     "license": "MIT",
@@ -48,6 +48,7 @@
         },
         "win": {
             "icon": "build/icons/icon.ico",
+            "artifactName": "${productName}-${version}.exe",
             "extraResources": {
                 "from": "./static/finger",
                 "to": "../finger"

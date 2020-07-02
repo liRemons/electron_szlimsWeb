@@ -523,16 +523,16 @@ export default {
       }
     },
     radio() {
-      console.log(this.deviceData.types)
-      this.exposureModeList = this.deviceData.types.filter(
+      this.exposureModeList = this.deviceData.types.find(
         v => v.name === this.data.valueData.deviceType
-      )
-      if (this.data.valueData.point.length > this.exposureModeList.length) {
+      ).exposures;
+      // if (this.data.valueData.point.length > this.exposureModeList.length) {
+      if ( this.exposureModeList.length==0) {
         let obj = {
           exposureMode: "",
           harnessDirection: ""
         };
-        // this.data.valueData.point = [obj];
+        this.data.valueData.point = [obj];
       }
       this.$store.commit("UPDATE_DEVICETYPE", this.data.valueData.deviceType);
       this.$forceUpdate();
@@ -998,10 +998,11 @@ export default {
     setTimeout(() => {
       if (this.deviceType.length == 1) {
         this.data.valueData.deviceType = this.deviceType[0];
-        this.exposureModeList = this.deviceData.types.filter(
+        this.exposureModeList = this.deviceData.types.find(
           v => v.name === this.data.valueData.deviceType
-        )
-        if (this.data.valueData.point.length > this.exposureModeList.length) {
+        ).exposures;
+        // if (this.data.valueData.point.length > this.exposureModeList.length) {
+        if ( this.exposureModeList.length==0) {
           let obj = {
             exposureMode: "",
             harnessDirection: ""

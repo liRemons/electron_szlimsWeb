@@ -3,7 +3,7 @@
     <div class="control">
       <div style="float:left">
         <span style="line-height: 24px;padding-left:20px" @click="delDir"
-          >深圳市瑞达智能检测系统用户端V1.0.3</span
+          >深圳市瑞达智能检测系统用户端V{{ version }}</span
         >
       </div>
       <div class="action">
@@ -16,22 +16,70 @@
       </div>
     </div>
     <div style="height:30px"></div>
+
     <div class="content">
       <router-view />
     </div>
+    <update
+      @close="updateflag = false"
+      v-if="updateflag"
+      :apkUrl="apkUrl"
+      :updateMain="updateMain"
+      :updateVersion="updateVersion"
+    ></update>
   </div>
 </template>
 
 <script>
 import store from "@/store";
 import Vue from "vue";
+import update from "./components/update";
 import { add, addValue, addNengPuValue } from "@/api/task";
 import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
 import moment from "moment";
+import bus from "e:/vuework/lims_shenzhen/szlims8002_test/src/assets/js/bus";
 // import { resolve } from "upath";
 // import { resolve } from "../../../vuework/roms300bak/roms300_web/node_modules1/_uri-js@4.2.2@uri-js/src";
 export default {
   name: "App",
+  components: { update },
+  data() {
+    return {
+      updateflag: false,
+      version: "0.1",
+      updateMain: "",
+      apkUrl: "",
+      updateVersion: ""
+    };
+  },
+  mounted() {
+    let data = { projectName: "SZ_LIMS_RD" };
+    const loading = this.$loading({
+      lock: true,
+      text: "检查更新中，请稍后......",
+      spinner: "el-icon-loading",
+      background: "rgba(0, 0, 0, 0.7)"
+    });
+    this.$updateAxios.post("/getOnlineApk", data).then(res => {
+      loading.close();
+      let apkVersion = JSON.parse(res.data.data[0].apkVersion);
+      this.updateMain = apkVersion.update;
+      this.updateVersion = apkVersion.code;
+
+      if (
+        Number(this.updateVersion.split(".")[0]) >
+        Number(this.version.split(".")[0])
+      ) {
+        this.updateflag = true;
+      } else if (
+        Number(this.updateVersion.split(".")[1]) >
+        Number(this.version.split(".")[1])
+      ) {
+        this.updateflag = true;
+      }
+      this.apkUrl = res.data.data[0].apkUrl;
+    });
+  },
   methods: {
     mini() {
       this.$ipcRenderer.send("mini", true);
@@ -50,7 +98,6 @@ export default {
       return this.$store.state.app.taskId;
     }
   },
-  mounted() {},
   created() {
     // 写入文件
     Vue.prototype.whrite = function(arr) {
@@ -64,6 +111,17 @@ export default {
         });
       });
     };
+    // 获取下载进度
+    Vue.prototype.getSchedule = function() {
+      this.$ipcRenderer.send("getSchedule");
+    };
+    Vue.prototype.getScheduleEvent=function(){
+      return new Promise(resolve => {
+        this.$ipcRenderer.on("getScheduleEvent", function(event, arg) {
+          resolve(arg);
+        });
+      });
+    }
     // 读取文件
     Vue.prototype.readFile = function(id) {
       this.$ipcRenderer.send("readFile", { taskId: id });

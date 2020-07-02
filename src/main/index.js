@@ -51,6 +51,40 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+  mainWindow.webContents.session.on(
+    "will-download",
+    (event, item, webContents) => {
+      // item.setSavePath();
+      item.on("updated", (event, state) => {
+        if (state === "progressing") {
+          ipcMain.on("getSchedule", (event, arg) => {
+            event.sender.send(
+              "getScheduleEvent",
+              ((item.getReceivedBytes() / item.getTotalBytes()) * 100).toFixed(
+                2
+              ) + "%"
+            );
+          });
+          if (item.isPaused()) {
+          } else {
+            //这里是主战场
+          }
+        } else if (state === "interrupted") {
+          console.log("终止下载");
+        } else if (state === "completed") {
+        }
+      });
+      item.once("done", (event, state) => {
+        if (state === "completed") {
+          console.log("下载完成");
+        } else if (state == "cancelled") {
+          console.log("取消下载");
+        } else {
+          //...
+        }
+      });
+    }
+  );
 }
 
 app.on("ready", () => {
@@ -161,7 +195,6 @@ ipcMain.on("delDir", function(event, arg) {
         fs.unlinkSync(curPath); //删除文件
       }
     });
-   
   }
   fs.exists("./data", function(e) {
     if (e) {
