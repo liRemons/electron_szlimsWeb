@@ -111,6 +111,7 @@
                   @refre="showExample"
                   @changeJson="changeJson"
                   :importData="importData"
+                  :btnFlag="btnFlag"
                 ></component>
               </div>
             </div>
@@ -146,6 +147,7 @@
             受检单位(签字) :
             <div :class="{ nameContainer3: true, mainContentBox_debug: debug }">
               <img
+              v-if="taskData.showing[0][0]['data']['valueData']['imgBase64Three']"
                 class="jianceImg"
                 :src="
                   taskData.showing[0][0]['data']['valueData']['imgBase64Three']
@@ -211,6 +213,7 @@ export default {
   data() {
     return {
       heads,
+      btnFlag:true,
       modules,
       aObjectsIndex: "",
       testProjectMsgBox: false,
@@ -264,7 +267,6 @@ export default {
       contentArray: [],
       SampleNumJudge: true,
       requestNo: 0,
-      remonsFlag: true
     };
   },
   props: {
@@ -310,7 +312,6 @@ export default {
         if (item.data.valueData.heBingJudge) {
           item.data.valueData.heBingChange = !item.data.valueData.heBingChange;
         }
-        console.log(item.data.valueData.factorArr,item.to)
         let classificationIndex = "";
         if (findIndex == -1) {
           obj = this.deepCopy(item);
@@ -1503,6 +1504,11 @@ export default {
     }
   },
   mounted() {
+    if(this.$route.params.target==3){
+      this.btnFlag=false
+    }else{
+      this.btnFlag=true
+    }
     function getImageBase64Data(imgSrc) {
       function getBase64(img) {
         var canvas = document.createElement("canvas");
@@ -1691,7 +1697,7 @@ export default {
   text-align: left;
 }
 
-.__functionBox {
+#showTemplateBox .__functionBox {
   width: 56px;
   height: 27px;
   user-select: none;
@@ -1702,7 +1708,7 @@ export default {
   bottom: 1px;
 }
 
-.__functionBox2 {
+#showTemplateBox .__functionBox2 {
   width: 98px;
   height: 27px;
   user-select: none;
@@ -1713,22 +1719,22 @@ export default {
   bottom: 1px;
 }
 
-.box_warpper {
+#showTemplateBox .box_warpper {
   bottom: 0;
   right: 0;
   z-index: 9999;
   overflow: scroll;
 }
 
-.isTemplate {
+#showTemplateBox .isTemplate {
   background: #fffff4;
 }
 
-.ableInput {
+#showTemplateBox .ableInput {
   background: #f9ffff;
 }
 
-.returnBtn {
+#showTemplateBox .returnBtn {
   width: 50px;
   height: 25px;
   line-height: 25px;
@@ -1743,12 +1749,12 @@ export default {
   z-index: 100;
 }
 
-.returnBtn:hover {
+#showTemplateBox .returnBtn:hover {
   border: 1px solid #20a0ff;
   color: red;
 }
 
-.uploadBtn {
+#showTemplateBox .uploadBtn {
   width: 100px;
   height: 40px;
   line-height: 40px;
@@ -1764,11 +1770,11 @@ export default {
   z-index: 100;
 }
 
-.uploadBtn:hover {
+#showTemplateBox .uploadBtn:hover {
   background: #0656ff;
 }
 
-.confirmUploadCover {
+#showTemplateBox .confirmUploadCover {
   width: 100px;
   height: 40px;
   line-height: 40px;
@@ -1784,7 +1790,7 @@ export default {
   z-index: 200;
 }
 
-.confirmUpload {
+#showTemplateBox .confirmUpload {
   width: 100px;
   height: 40px;
   line-height: 40px;
@@ -1800,29 +1806,29 @@ export default {
   z-index: 100;
 }
 
-.confirmUpload:hover {
+#showTemplateBox .confirmUpload:hover {
   background: #0656ff;
 }
 
-.pageFoot_1 {
+#showTemplateBox .pageFoot_1 {
   margin-left: 20px;
 }
 
-.jianceImg {
+#showTemplateBox .jianceImg {
   width: 80px;
   height: 50px;
 }
 
-.btnBox {
+#showTemplateBox .btnBox {
   margin-top: 3%;
   text-align: right;
 }
 
-.delClass {
+#showTemplateBox .delClass {
   margin-top: 10px;
 }
 
-.contents2 {
+#showTemplateBox .contents2 {
   position: fixed;
   font-size: 16px;
   width: 20vw;
@@ -1837,7 +1843,7 @@ export default {
   overflow-y: auto;
 }
 
-.contents {
+#showTemplateBox .contents {
   position: fixed;
   font-size: 16px;
   width: 20vw;
@@ -1852,13 +1858,13 @@ export default {
   overflow-y: auto;
 }
 
-.closeContent {
+#showTemplateBox .closeContent {
   margin-left: 18.5vw;
   font-size: 18px;
   cursor: pointer;
 }
 
-.closeContent:hover {
+#showTemplateBox .closeContent:hover {
   color: red;
 }
 </style>

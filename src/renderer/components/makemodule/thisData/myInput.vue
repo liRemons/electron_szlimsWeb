@@ -1,5 +1,5 @@
 <template>
-	<input class="box" ref="myBox" :placeholder="placeholder" @change="toInput" @blur="limit"
+	<input  class="box" style="border:none;width:95%" ref="myBox" :placeholder="placeholder" @change="toInput" @blur="limit"
 				 :style="disable ? {background: '#FFCCFF'} : {}"></input>
 </template>
 

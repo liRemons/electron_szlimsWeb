@@ -90,7 +90,7 @@
 					</td>
 					<td class="___relative tc">
 						<myInput style="text-align: center" v-model="item.rows[10]" :defaultValue="item.rows[10]"></myInput>
-						<div class="___absolute toolBar" style="left: 165px;top:0; width: 180px;" v-if="target === '0'">
+						<div class="___absolute toolBar" style="left: 165px;top:0; width: 180px;" v-if="target ==0">
 							<div title="往指定行后面增加一行" class="___absolute tc" @click="addRow(index,2,item.heBingId)">+</div>
 							<div title="删除当前行"
 									 class="___absolute tc"

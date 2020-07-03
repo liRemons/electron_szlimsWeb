@@ -875,8 +875,12 @@ export default {
     //上传
     toUpload(signature) {
       // generateMeasure(this.ids[0],this.$refs.templateHTML[0].$el.innerHTML).then(response=>{
-      //   console.log(response)
+      //   // const a = document.createElement("a"); // 创建a标签
+      //   // a.setAttribute("download", response.url); // download属性
+      //   // a.setAttribute("href",  response.url); // href链接
+      //   // a.click(); // 自执行点击事件
       // })
+
       // return
       let flag = false;
       let result = this.tasks.some(item => {

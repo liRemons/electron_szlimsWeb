@@ -165,7 +165,7 @@
               @returnVal="changeCompany"
               :Judge="true"
               class="___absolute"
-              style="top: 0px; left: 20px;"
+              style="width:100px;top: 0px; left: 80px;"
               :special="1"
               :receive="''"
               :single="true"
@@ -455,7 +455,6 @@ export default {
   },
   mounted() {
     this.init(this.data.valueData.point);
-    console.log(this.data.valueData.point);
   }
 };
 </script>

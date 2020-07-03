@@ -85,7 +85,7 @@
 									<div class="___absolute btnHover" title="生成新的空白编号" :style="{width: '30px', cursor: 'pointer', left: '90px'}" @click="generateSampleNum(item)">B</div>
 							</div>
 					</div>-->
-          <div class="___absolute" style="left: 905px;">
+          <div class="___absolute" style="left: 905px;" v-if="btnFlag">
             <utilBar
               :data="data"
               :index="index"
@@ -133,7 +133,7 @@ import { querySameDayBlankSample, querySampleNum } from "@/api/local";
 
 export default {
   name: "project_blankSample",
-  props: ["data", "jsonString", "target"],
+  props: ["data", "jsonString", "target",'btnFlag'],
   data() {
     return {
       selectTestProjectArr: [],

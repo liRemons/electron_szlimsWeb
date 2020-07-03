@@ -8,6 +8,12 @@
       </div>
       <div class="action">
         <img
+          src="@/assets/icon/upload.png"
+          @click="getUpdateVersion"
+          style="width: 24px;padding-top:2px"
+          alt=""
+        />
+        <img
           @click="mini"
           style="width: 23px; padding-left: 4px;"
           src="@/assets/icon/mini.png"
@@ -28,8 +34,38 @@
       :updateVersion="updateVersion"
       @download="download"
     ></update>
-    <el-dialog :visible.sync="dialogVisible">
-      <el-progress type="circle" :percentage="percentage"></el-progress>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      width="400px"
+      :close-on-click-modal="false"
+      :show-close="false"
+    >
+      <p style="margin-bottom:10px" v-if="!downloadState">
+        {{ downloadText }}
+        <i class="el-icon-loading"></i>
+      </p>
+      <el-progress
+        type="circle"
+        :percentage="percentage"
+        :status="downloadState"
+        :stroke-width="10"
+      ></el-progress>
+      <div v-if="downloadState" style="margin-top:20px">
+        {{ downloadText }}
+        <i class="el-icon-check"></i><br />
+        <p style="margin-top:20px">
+          <span>文件保存在：</span
+          ><el-tag class="el_tag" type="success">{{ filePath }}</el-tag
+          ><br />
+          <el-tag type="danger" class="el_tag"
+            ><i class="el-icon-warning"></i>
+            重要提醒：安装包已下载完成，请在安装前务必将本地数据同步上传，否则数据有丢失风险！！！</el-tag
+          >
+          <el-button type="primary" round @click="dialogVisible = false"
+            >我知道了</el-button
+          >
+        </p>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -41,7 +77,6 @@ import update from "./components/update";
 import { add, addValue, addNengPuValue } from "@/api/task";
 import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
 import moment from "moment";
-import bus from "e:/vuework/lims_shenzhen/szlims8002_test/src/assets/js/bus";
 // import { resolve } from "upath";
 // import { resolve } from "../../../vuework/roms300bak/roms300_web/node_modules1/_uri-js@4.2.2@uri-js/src";
 export default {
@@ -51,34 +86,39 @@ export default {
     return {
       updateflag: false,
       dialogVisible: false,
-      version: "0.1",
+      version: "0.2",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
-      percentage: 0
+      percentage: 0,
+      downloadState: "",
+      downloadText: "正在下载，请稍后",
+      filePath: ""
     };
   },
   mounted() {
     setTimeout(() => {
       if (this.$route.path == "/login") {
-        // this.getUpdateVersion();
+        this.getUpdateVersion();
       }
-    }, 500);
+    }, 1000);
+  },
+  watch: {
+    percentage() {}
   },
   methods: {
     download() {
       this.updateflag = false;
       this.dialogVisible = true;
-      let timer = setInterval(() => {
-        this.getSchedule();
-        this.getScheduleEvent().then(res => {
-          this.percentage = Number(res[0]);
-          if (this.percentage >= 100) {
-            clearInterval(timer);
-            console.log(res[1]);
-          }
-        });
-      }, 1000);
+      let this_ = this;
+      this.$ipcRenderer.on("getScheduleEvent", function(event, arg) {
+        this_.percentage = Number(arg[0]);
+        if (this_.percentage >= 100) {
+          this_.downloadState = "success";
+          this_.downloadText = "下载完成";
+          this_.filePath = arg[1];
+        }
+      });
     },
     getUpdateVersion() {
       let data = { projectName: "SZ_LIMS_RD" };
@@ -104,8 +144,10 @@ export default {
           Number(this.version.split(".")[1])
         ) {
           this.updateflag = true;
+          this.apkUrl = res.data.data[0].apkUrl;
+        } else {
+          this.$message.warning("暂无最新版本");
         }
-        this.apkUrl = res.data.data[0].apkUrl;
       });
     },
     mini() {
@@ -135,17 +177,6 @@ export default {
       return new Promise(reslove => {
         this.$ipcRenderer.on("writeFileEvent", function(event, arg) {
           reslove(arg);
-        });
-      });
-    };
-    // 获取下载进度
-    Vue.prototype.getSchedule = function() {
-      this.$ipcRenderer.send("getSchedule");
-    };
-    Vue.prototype.getScheduleEvent = function() {
-      return new Promise(resolve => {
-        this.$ipcRenderer.on("getScheduleEvent", function(event, arg) {
-          resolve(arg);
         });
       });
     };
@@ -438,5 +469,12 @@ export default {
     border-radius: 5px;
     background: rgba(0, 0, 0, 0);
   }
+}
+.el_tag {
+  white-space: normal !important;
+  line-height: 20px !important;
+  height: auto !important;
+  text-align: left !important;
+  margin: 10px 0 !important;
 }
 </style>

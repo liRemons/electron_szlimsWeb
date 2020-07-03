@@ -79,6 +79,7 @@
 												 :list="['有','无']" :Obj="''">
 						</selectModel>
 						<utilBar
+            v-if="btnFlag"
 										:data="data"
 										:index="index"
 										:barNum="[0, item.isPrototype ? 1: '', 3, 4, item.isPrototype ? 5: '']"
@@ -106,7 +107,7 @@
         showInput: false,
       }
     },
-    props: ['ipdTemplate', 'pageNumber', 'data', 'thisPageIndex', 'jsonString', 'showing', 'watchSign', 'isTemplate', 'ableInput', 'task', 'target', 'deviceData'],
+    props: ['ipdTemplate','btnFlag', 'pageNumber', 'data', 'thisPageIndex', 'jsonString', 'showing', 'watchSign', 'isTemplate', 'ableInput', 'task', 'target', 'deviceData'],
     filters: {},
     methods: {
       limit() {

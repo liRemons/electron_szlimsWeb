@@ -60,6 +60,7 @@
 							<span style="margin-left:50px;">mm</span>
 						</div>
 						<utilBar
+						v-if="btnFlag"
 										:data="data"
 										:index="index"
 										:barNum="[limit(), item.isPrototype ? 1: '', 3, 4, item.isPrototype ? 5: '']"
@@ -84,7 +85,7 @@
         showInput: false,
       }
     },
-    props: ['ipdTemplate', 'pageNumber', 'data', 'thisPageIndex', 'jsonString', 'showing', 'watchSign', 'isTemplate', 'ableInput', 'task', 'target', 'deviceData'],
+    props: ['ipdTemplate', 'btnFlag','pageNumber', 'data', 'thisPageIndex', 'jsonString', 'showing', 'watchSign', 'isTemplate', 'ableInput', 'task', 'target', 'deviceData'],
     filters: {},
     methods: {
       returnVal(val, name, index) {

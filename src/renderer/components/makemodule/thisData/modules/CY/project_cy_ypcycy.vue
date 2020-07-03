@@ -61,7 +61,7 @@
 				</td>
 				<td>
 					<myInput v-model="item.Remarks"></myInput>
-					<div class="___relative" v-if="target === '0'">
+					<div class="___relative" v-if="target ==0">
 						<!-- <div class="___absolute toolBar" style="left: 245px;top: -28px; width: 180px;">
 														<div title="往指定行后面增加一行" class="___absolute" @click="addRow(index)">+</div>
 														<div title="删除当前行"  class="___absolute"  style="left: 30px;"  @click="deleteRow(index)">-</div>

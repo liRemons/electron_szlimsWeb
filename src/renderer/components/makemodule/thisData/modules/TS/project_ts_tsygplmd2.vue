@@ -58,6 +58,7 @@
           <td class="___relative">
             <span>{{ item.result }}</span>
             <utilBar
+            v-if="btnFlag"
               :data="data"
               :index="index"
               :barNum="[
@@ -108,7 +109,8 @@ export default {
     "ableInput",
     "task",
     "target",
-    "deviceData"
+    "deviceData",
+    "btnFlag"
   ],
   filters: {},
   methods: {

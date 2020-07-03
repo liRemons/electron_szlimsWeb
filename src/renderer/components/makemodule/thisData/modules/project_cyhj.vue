@@ -116,7 +116,7 @@
 					<td>
 						<myInput v-model="item.Remarks" style="text-align: center" v-if="target === '0'"></myInput>
 						<div v-else>{{item.Remarks}}</div>
-						<div class="___relative" v-if="target === '0'">
+						<div class="___relative" v-if="target ==0">
 							<utilBar
 											:data="data"
 											:index="index"

@@ -107,7 +107,7 @@
 						<div v-else>
 							{{item.deviceNum}}
 						</div>
-						<div class="___absolute toolBar" style="left: 230px;top:0; width: 180px;">
+						<div class="___absolute toolBar" style="left: 230px;top:0; width: 180px;"  v-if="target ==0">
 							<div title="往指定行后面增加一行" class="___absolute tc" @click="addRow(index,2,item.heBingId)">+</div>
 							<div title="删除当前行"
 									 class="___absolute tc"

@@ -13,13 +13,13 @@
         <p>机房窗数量</p>
       </div>
       <div
-        v-show="show"
+        v-show="show&&btnFlag"
         class="___absolute  el-icon-arrow-down"
         style="left: 760px; top: 0px; color:gray; font-size: 28px; cursor: pointer; width: 50px; height: 50px;"
         @click="toFold"
       ></div>
       <div
-        v-show="!show"
+        v-show="!show&&btnFlag"
         class="___absolute el-icon-arrow-right"
         style="left: 760px; top: 0px; color:gray; font-size: 28px; cursor: pointer; width: 50px; height: 50px;"
         @click="toNoFold"
@@ -210,7 +210,8 @@ export default {
     "isTemplate",
     "ableInput",
     "target",
-    "importData"
+    "importData",
+    "btnFlag"
   ],
   methods: {
     reduce(index) {

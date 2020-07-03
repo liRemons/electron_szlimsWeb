@@ -61,7 +61,7 @@
 				</td>
 				<td>
 					<myInput v-model="item.Remarkvs"></myInput>
-					<div class="___relative" v-if="target === '0'">
+					<div class="___relative" v-if="target ==0">
 						<utilBar
 										:data="data"
 										:index="index"

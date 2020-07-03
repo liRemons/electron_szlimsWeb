@@ -51,19 +51,20 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+  let num;
   mainWindow.webContents.session.on(
     "will-download",
     (event, item, webContents) => {
-      const filePath = path.join(app.getPath('downloads'), item.getFilename());
-      item.setSavePath(filePath);
+      // const filePath = path.join(app.getPath("downloads"), item.getFilename());
+      // item.setSavePath(filePath);
+
       item.on("updated", (event, state) => {
+        num = ((item.getReceivedBytes() / item.getTotalBytes()) * 100).toFixed(
+          2
+        );
+
         if (state === "progressing") {
-          ipcMain.on("getSchedule", (event, arg) => {
-            event.sender.send(
-              "getScheduleEvent",
-              [((item.getReceivedBytes() / item.getTotalBytes()) * 100).toFixed(2),filePath]
-            );
-          });
+          mainWindow.webContents.send("getScheduleEvent", [num, item.getSavePath()]);
           if (item.isPaused()) {
           } else {
             //这里是主战场

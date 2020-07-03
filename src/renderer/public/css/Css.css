@@ -4,6 +4,69 @@ html {
   padding: 0;
   margin: 0;
 }
+body,
+ol,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+th,
+td,
+dl,
+dd,
+form,
+fieldset,
+legend,
+input,
+textarea,
+select {
+  margin: 0;
+  padding: 0;
+}
+table{
+  font-size: 14px;
+}
+body {
+  font: 12px "宋体", "Arial Narrow", HELVETICA;
+  background: #fff;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: #2d374b;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #cd0200;
+  text-decoration: underline;
+}
+
+em {
+  font-style: normal;
+}
+
+li {
+  list-style: none;
+}
+
+img {
+  border: 0;
+  vertical-align: middle;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+p {
+  word-wrap: break-word;
+}
 
 body {
   width: 100%;
@@ -11,9 +74,8 @@ body {
   padding: 0;
   margin: 0;
   font-size: 14px;
-  font-family: '微软雅黑';
+  font-family: "微软雅黑";
 }
-
 
 /* --------------------------- app页面样式  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓  ------------------------------ */
 
@@ -91,7 +153,7 @@ body {
 .templateContentBox1_text {
   margin-bottom: 5px;
   line-height: 20px;
-  color: #FF8040;
+  color: #ff8040;
   margin-left: 20px;
   cursor: pointer;
 }
@@ -107,7 +169,7 @@ body {
 }
 
 .titleText2 {
-  color: #C9EDE6;
+  color: #c9ede6;
   position: absolute;
   left: 30px;
   top: 0;
@@ -129,7 +191,7 @@ body {
 .templateContentBox2_text {
   margin-bottom: 5px;
   line-height: 20px;
-  color: #FF8040;
+  color: #ff8040;
   margin-left: 35px;
   cursor: pointer;
 }
@@ -297,9 +359,8 @@ body {
 }
 
 .mainContentBox_debug {
-  background: #ECECEC;
+  background: #ececec;
 }
-
 
 /* 全局模块公用CSS --- 右侧功能块               ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ */
 
@@ -416,7 +477,7 @@ body {
 }
 
 .__functionButton6 {
-  color: #DEDEDE;
+  color: #dedede;
   width: 18px;
   height: 25px;
   font-size: 25px;
@@ -444,7 +505,7 @@ body {
 }
 
 .__functionButton7 {
-  color: #DEDEDE;
+  color: #dedede;
   width: 18px;
   height: 25px;
   font-size: 25px;
@@ -461,9 +522,8 @@ body {
   top: -3px;
 }
 
-
 .__functionButton6_2 {
-  color: #DEDEDE;
+  color: #dedede;
   width: 18px;
   height: 25px;
   font-size: 25px;
@@ -481,7 +541,7 @@ body {
 }
 
 .__functionButton7_2 {
-  color: #DEDEDE;
+  color: #dedede;
   width: 18px;
   height: 25px;
   font-size: 25px;
@@ -499,7 +559,7 @@ body {
 }
 
 .__functionButton8 {
-  color: #DEDEDE;
+  color: #dedede;
   width: 18px;
   height: 25px;
   font-size: 25px;
@@ -517,7 +577,7 @@ body {
 }
 
 .__functionButton9 {
-  color: #DEDEDE;
+  color: #dedede;
   width: 18px;
   height: 25px;
   font-size: 25px;
@@ -560,19 +620,19 @@ body {
 }
 
 .__functionButton6:hover {
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .__functionButton7:hover {
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .__functionButton8:hover {
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .__functionButton9:hover {
-  background: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, 0.5);
 }
 
 /* 全局模块公用CSS --- input               ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ */
@@ -615,9 +675,8 @@ body {
 ._normalInput_:focus,
 ._shortInput_,
 .focusBg:focus {
-  background: #FDF7E1;
+  background: #fdf7e1;
 }
-
 
 /* 全局模块公用CSS --- div               ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ */
 
@@ -625,14 +684,12 @@ body {
   display: table;
 }
 
-
 /*定义元素为 table 类型*/
 
 .___table-cell {
   display: table-cell;
   vertical-align: middle;
 }
-
 
 /*定义元素为 table-cell 类型  使字体可以垂直居中显示*/
 
@@ -645,7 +702,6 @@ body {
   font-weight: 900;
 }
 
-
 /*头模块专用 大标题的样式*/
 
 .___head_sampleNumberBox {
@@ -653,7 +709,6 @@ body {
   height: 24px;
   line-height: 16px;
 }
-
 
 /*头模块专用 项目编号的样式*/
 
@@ -665,20 +720,17 @@ body {
   white-space: nowrap;
 }
 
-
 /*模块的最外框体 --- 非每页第一个模块*/
 
 .___absolute {
   position: absolute;
 }
 
-
 /*绝对定位*/
 
 .___relative {
   position: relative;
 }
-
 
 /*相对定位*/
 
@@ -687,7 +739,6 @@ body {
   border-right: 1px solid black;
   text-align: center;
 }
-
 
 /*表身左边主体*/
 
@@ -699,7 +750,6 @@ body {
   top: 0;
 }
 
-
 /*表身中间主体  需要'___absolute'或'___relative'来配合定位*/
 
 .___nodule_frame_grid_right {
@@ -708,7 +758,6 @@ body {
   left: 810px;
   top: 0;
 }
-
 
 /*表身右边主体  需要'___absolute'或'___relative'来配合定位*/
 
@@ -719,7 +768,6 @@ body {
   position: relative;
 }
 
-
 /*表身中间主体   只设定ralative 没有位置  专用于需要撑开div高度*/
 
 .___module_frame_grid_relative_right {
@@ -727,7 +775,6 @@ body {
   text-align: center;
   position: relative;
 }
-
 
 /*表身右边主体   只设定ralative 没有位置  专用于需要撑开div高度*/
 
@@ -741,7 +788,6 @@ body {
   margin-right: 5px;
 }
 
-
 /*单元格中的小input框样式*/
 
 .___shadowBottom {
@@ -749,9 +795,7 @@ body {
   border-bottom: 1px solid black;
 }
 
-
 /*单纯加底边*/
-
 
 /* 打印专用css --- 全局 */
 
@@ -766,7 +810,6 @@ body {
     page-break-after: always;
   }
 }
-
 
 /* ------------       自定义插件样式    ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓      ------------- */
 
@@ -818,7 +861,6 @@ body {
   z-index: 10;
 }
 
-
 /* ------------       头模块样式    ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓      ------------- */
 
 #head_1 {
@@ -828,7 +870,7 @@ body {
 
 .head_1_tableBox {
   width: 100%;
-  border: 1px solid black
+  border: 1px solid black;
 }
 
 .modules_1_tableBox {
@@ -1046,7 +1088,6 @@ body {
   left: 900px;
   top: 0;
 }
-
 
 /* ------------       项目模块样式    ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓      ------------- */
 
@@ -1623,7 +1664,7 @@ body {
   z-index: 99999999999999;
   position: absolute;
   top: 65px;
-  background: #FFF;
+  background: #fff;
   width: 158px;
   left: -1px;
   margin: 0;
@@ -1633,7 +1674,7 @@ body {
 .instrumentSelcet2 {
   z-index: 1000;
   position: absolute;
-  background: #FFF;
+  background: #fff;
   left: -1px;
   margin: 0;
   border: 1px solid black;
@@ -1851,7 +1892,7 @@ body {
   -webkit-box-pack: center;
   -webkit-box-align: center;
   -webkit-box-orient: vertical;
-  text-align: center
+  text-align: center;
 }
 
 .warp {
@@ -1862,7 +1903,6 @@ body {
   word-break: break-all;
   white-space: normal;
 }
-
 
 .warp2 {
   word-wrap: break-word;
@@ -1940,7 +1980,7 @@ body {
   width: 1180px;
   height: 800px;
   position: relative;
-  box-shadow: rgba(0, 0, 0, .2) 0 1px 5px 0px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 5px 0px;
 }
 
 .myTableReset {
@@ -1955,7 +1995,6 @@ body {
   border-right: 1px solid white;
   border-bottom: 1px solid white;
 }
-
 
 .toolBar {
   left: 1152px;
@@ -2007,10 +2046,10 @@ body {
   cursor: pointer;
 }
 
-.delLine td, .delLine th {
+.delLine td,
+.delLine th {
   border-top: none !important;
 }
-
 
 .p20 {
   padding: 0 20px;
@@ -2062,7 +2101,6 @@ body {
   padding: 10px;
 }
 
-
 .rowHeight2 div {
   height: 50px;
   padding: 10px;
@@ -2077,6 +2115,186 @@ body {
   color: red !important;
 }
 
-.tl{
+.tl {
   text-align: left !important;
+}
+
+
+.el-table__expanded-cell {
+  width: 100% !important;
+}
+#showTemplateBox {
+  position: relative !important;
+  text-align: left;
+}
+
+.__functionBox {
+  width: 56px;
+  height: 27px;
+  user-select: none;
+  box-shadow: 1px 1px black;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  right: -109px;
+  bottom: 1px;
+}
+
+.__functionBox2 {
+  width: 98px;
+  height: 27px;
+  user-select: none;
+  box-shadow: 1px 1px black;
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  right: -148px;
+  bottom: 1px;
+}
+
+.box_warpper {
+  bottom: 0;
+  right: 0;
+  z-index: 9999;
+  overflow: scroll;
+}
+
+.isTemplate {
+  background: #fffff4;
+}
+
+.ableInput {
+  background: #f9ffff;
+}
+
+.returnBtn {
+  width: 50px;
+  height: 25px;
+  line-height: 25px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #dfe6ec;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  position: fixed;
+  right: 60px;
+  top: 90px;
+  z-index: 100;
+}
+
+.returnBtn:hover {
+  border: 1px solid #20a0ff;
+  color: red;
+}
+
+.uploadBtn {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  color: white;
+  background: #20a0ff;
+  border: 1px solid #dfe6ec;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  position: fixed;
+  right: 60px;
+  bottom: 80px;
+  z-index: 100;
+}
+
+.uploadBtn:hover {
+  background: #0656ff;
+}
+
+.confirmUploadCover {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  color: #dbdbdb;
+  background: gray;
+  border: 1px solid #dfe6ec;
+  border-radius: 5px;
+  text-align: center;
+  cursor: not-allowed;
+  position: fixed;
+  right: 60px;
+  bottom: 30px;
+  z-index: 200;
+}
+
+.confirmUpload {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  color: white;
+  background: #20a0ff;
+  border: 1px solid #dfe6ec;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  position: fixed;
+  right: 60px;
+  bottom: 30px;
+  z-index: 100;
+}
+
+.confirmUpload:hover {
+  background: #0656ff;
+}
+
+.pageFoot_1 {
+  margin-left: 20px;
+}
+
+.jianceImg {
+  width: 80px;
+  height: 50px;
+}
+
+.btnBox {
+  margin-top: 3%;
+  text-align: right;
+}
+
+.delClass {
+  margin-top: 10px;
+}
+
+.contents2 {
+  position: fixed;
+  font-size: 16px;
+  width: 20vw;
+  z-index: 99999;
+  height: 27vw;
+  padding-top: 15px;
+  left: 5vw;
+  background: gainsboro;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 5px 0px;
+  top: 30vh;
+  overflow-y: auto;
+}
+
+.contents {
+  position: fixed;
+  font-size: 16px;
+  width: 20vw;
+  z-index: 99999;
+  height: 27vw;
+  padding-top: 15px;
+  left: 75vw;
+  background: gainsboro;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 5px 0px;
+  top: 30vh;
+  overflow-y: auto;
+}
+
+.closeContent {
+  margin-left: 18.5vw;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.closeContent:hover {
+  color: red;
 }

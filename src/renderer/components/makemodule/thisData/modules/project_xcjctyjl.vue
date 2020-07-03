@@ -194,7 +194,8 @@ export default {
     "showing",
     "watchSign",
     "isTemplate",
-    "ableInput"
+    "ableInput",
+    "btnFlag"
   ],
   methods: {
     show(index) {

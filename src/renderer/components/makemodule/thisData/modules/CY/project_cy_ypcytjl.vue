@@ -56,7 +56,7 @@
 				</td>
 				<td>
 					<myInput v-model="item.Remarks"></myInput>
-					<div class="___relative" v-if="target === '0'">
+					<div class="___relative" v-if="target ==0">
 						<utilBar :data="data"
 										 :index="index"
 										 :barNum="[0, item.isPrototype ? 1: '', 3, 4, item.isPrototype ? 5: '', item.isPrototype ? 6: '']"
