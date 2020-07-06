@@ -13,13 +13,13 @@
         <p>机房门情况</p>
       </div>
       <div
-        v-show="show&&btnFlag"
+        v-show="show && btnFlag"
         class="___absolute  el-icon-arrow-down"
         style="left: 760px; top: 0px; color:gray; font-size: 28px; cursor: pointer; width: 50px; height: 50px;"
         @click="toFold"
       ></div>
       <div
-        v-show="!show&&btnFlag"
+        v-show="!show && btnFlag"
         class="___absolute el-icon-arrow-right"
         style="left: 760px; top: 0px; color:gray; font-size: 28px; cursor: pointer; width: 50px; height: 50px;"
         @click="toNoFold"
@@ -75,6 +75,7 @@
               index != data.valueData.point.length - 1 ? 'borderBottom' : ''
             "
             style="line-height: 64px"
+            :key="index + 'a'"
             v-for="(item, index) in data.valueData.point"
           >
             <div class="___relative">
@@ -109,6 +110,7 @@
                 <divModel
                   v-if="item.rows[1] === '是'"
                   v-model="item.rows[2]"
+                  :computers="isInteger(item.rows[2], index, 2)"
                   style="width:60%;text-align: center; border-bottom: 1px solid black; height: 50px;"
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
@@ -118,6 +120,7 @@
                 <divModel
                   v-if="item.rows[1] === '是'"
                   v-model="item.rows[3]"
+                  :computers="isInteger(item.rows[3], index, 3)"
                   style="width:60%;text-align: center; height: 50px; border-bottom: 1px solid black;"
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
@@ -242,6 +245,16 @@ export default {
     "btnFlag"
   ],
   methods: {
+    isInteger(val, index, rowIndex) {
+      if (val % 1 !== 0) {
+        this.$message.warning("请输入整数");
+        this.$nextTick(() => {
+          this.data.valueData.point[index].rows[rowIndex] = "";
+          this.$forceUpdate();
+        });
+      }
+    },
+
     reduce(index) {
       if (this.data.valueData.point.length > 1) {
         this.data.valueData.point.splice(index, 1);

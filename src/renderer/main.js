@@ -12,7 +12,7 @@ import Module from "./components/makemodule/thisData/modules/out_module.js";
 import computes from "./utils/computes.js";
 import { ipcRenderer, remote } from "electron";
 import "viewerjs/dist/viewer.css";
-import axios from './utils/request'
+import axios from "./utils/request";
 import Viewer from "v-viewer";
 Vue.use(Viewer, {
   defaultOptions: {
@@ -71,7 +71,7 @@ import {
   Autocomplete,
   TimePicker,
   Upload,
-  Avatar
+  Avatar,
 } from "element-ui";
 import "./public/css/Css.css";
 import "./public/css/curve.css";
@@ -138,7 +138,7 @@ Vue.prototype.$ipcRenderer = ipcRenderer;
 Vue.prototype.computeObj = computes;
 Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
-Vue.prototype.$updateAxios=axios.updateAxios
+Vue.prototype.$updateAxios = axios.updateAxios;
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
   let index = "";
@@ -187,7 +187,7 @@ Vue.prototype.getFactor = function(val, arr) {
     retain.push(item.value.split("/")[1]);
   });
   // return parseFloat(result).toFixed46(this.sizeMin(retain));
-  return parseFloat(result)
+  return parseFloat(result);
 };
 Vue.prototype.isNumber = function(val) {
   if (parseFloat(val).toString() == "NaN") {
@@ -284,6 +284,14 @@ Vue.prototype.getRange = function(val, arr) {
   }
   return result;
 };
+Vue.prototype.IntegerAdd0=function(val){
+  if (!isNaN(val)) {
+    if ((val + "").split(".").length == 1) {
+      val += ".0";
+    }
+  }
+  return val;
+}
 
 const myVue = new Vue({
   components: { App },

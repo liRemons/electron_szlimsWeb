@@ -71,14 +71,13 @@ function createWindow() {
           }
         } else if (state === "interrupted") {
           console.log("终止下载");
-        } else if (state === "completed") {
-        }
+        } 
       });
-      item.once("done", (event, state) => {
+      item.on("done", (event, state) => {
         if (state === "completed") {
-          console.log("下载完成");
-        } else if (state == "cancelled") {
-          console.log("取消下载");
+          mainWindow.webContents.send("getScheduleEvent", ['下载成功', item.getSavePath()]);
+        } else if (state === "cancelled") {
+          mainWindow.webContents.send("getScheduleEvent", ['取消下载', item.getSavePath()]);
         } else {
           //...
         }

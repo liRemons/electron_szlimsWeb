@@ -62,7 +62,7 @@
       </el-button>
 
       <el-button
-        @click="(showFingerprint = true), getTaskPerson()"
+        @click="submitSongshen"
         size="mini"
         type="primary"
         v-if="tempalteAction == 'update' && target == 0"
@@ -228,7 +228,7 @@
           v-show="key == currentTab"
         >
           <show-template
-          ref="templateHTML"
+            ref="templateHTML"
             :imgBase64Two="imgBase64Two"
             :task="item"
             :taskData="taskDatas[key]"
@@ -347,6 +347,20 @@
         </div>
       </el-dialog>
     </div>
+    <!-- 取消原因提醒框 -->
+    <el-dialog
+      title="以下项目您取消了检测，请确认"
+      :visible.sync="deleteDialog"
+    >
+      <el-table :data="deleteData" style="width: 100%">
+        <el-table-column prop="testprojectName" label="项目"> </el-table-column>
+        <el-table-column prop="reason" label="原因"> </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="deleteDialog = false">取 消</el-button>
+        <el-button type="primary" @click="confirmDelete">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -453,7 +467,9 @@ export default {
         flag: false
       },
       importData: {},
-      unitUrl: []
+      unitUrl: [],
+      deleteData: [],
+      deleteDialog: false
     };
   },
 
@@ -466,6 +482,23 @@ export default {
     showReviewTemplate
   },
   methods: {
+    submitSongshen() {
+      this.deleteData = this.taskDatas[0].showing
+        .flat()
+        .filter(
+          item => item.to == "project_deleteReason"
+        )[0].data.valueData.point;
+      if (this.deleteData.length > 0) {
+        this.deleteDialog = true;
+      } else {
+        this.confirmDelete();
+      }
+    },
+    confirmDelete() {
+      this.deleteDialog = false;
+      this.showFingerprint = true;
+      this.getTaskPerson();
+    },
     goBack() {
       this.$confirm("点击此处返回可能会导致数据丢失, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -495,50 +528,46 @@ export default {
           updateIsDone(ids[i]);
         }
       }
-      Promise.all(promiseArr)
-        .then(values => {
-          this.tasksArrCheck = values;
-          this.numObj.sampleNum_lh = values[0].sampleNum_lh;
-          this.numObj.sampleNum_wsw = values[0].sampleNum_wsw;
-          this.numObj.sampleNum_xczd = values[0].sampleNum_xczd;
-          this.numObj.sampleNum_kb = values[0].sampleNum_kb;
-          sessionStorage.setItem("numObj", JSON.stringify(this.numObj));
-          sessionStorage.setItem("projectNum", values[0].tasks[0].projectNum);
-          sessionStorage.setItem(
-            "checkUnitName",
-            values[0].tasks[0].checkUnitName
-          );
-          values.forEach(resItem => {
-            this.unitUrl.push({
-              id: resItem.tasks[0].id,
-              unitUrl: resItem.tasks[0].unitUrl
-            });
-            this.tasks.push(resItem.tasks[0]);
-            this.taskDatas.push({
-              id: "",
-              disWs: "",
-              showing: []
-            });
+      Promise.all(promiseArr).then(values => {
+        this.tasksArrCheck = values;
+        this.numObj.sampleNum_lh = values[0].sampleNum_lh;
+        this.numObj.sampleNum_wsw = values[0].sampleNum_wsw;
+        this.numObj.sampleNum_xczd = values[0].sampleNum_xczd;
+        this.numObj.sampleNum_kb = values[0].sampleNum_kb;
+        sessionStorage.setItem("numObj", JSON.stringify(this.numObj));
+        sessionStorage.setItem("projectNum", values[0].tasks[0].projectNum);
+        sessionStorage.setItem(
+          "checkUnitName",
+          values[0].tasks[0].checkUnitName
+        );
+        values.forEach(resItem => {
+          this.unitUrl.push({
+            id: resItem.tasks[0].id,
+            unitUrl: resItem.tasks[0].unitUrl
           });
-          let taskState = this.tasks.map(item => {
-            if (item.monitorType === "验收检测") {
-              return 1;
-            } else if (item.monitorType === "状态检测") {
-              return 2;
-            } else {
-              return "";
-            }
+          this.tasks.push(resItem.tasks[0]);
+          this.taskDatas.push({
+            id: "",
+            disWs: "",
+            showing: []
           });
-          this.nowTask = this.tasks[0];
-          if (Number(target)) {
-            this.getTaskPerson();
-          }
-          this.taskState = taskState;
-          this.$store.dispatch("actionsTestingState", this.taskState[0]);
-        })
-        .catch(err => {
-          console.log("请求数据出现错误");
         });
+        let taskState = this.tasks.map(item => {
+          if (item.monitorType === "验收检测") {
+            return 1;
+          } else if (item.monitorType === "状态检测") {
+            return 2;
+          } else {
+            return "";
+          }
+        });
+        this.nowTask = this.tasks[0];
+        if (Number(target)) {
+          this.getTaskPerson();
+        }
+        this.taskState = taskState;
+        this.$store.dispatch("actionsTestingState", this.taskState[0]);
+      });
     },
     // 获取现场模板数据
     initTasks(ids) {
@@ -745,16 +774,12 @@ export default {
       if (result) {
         this.entryId = id;
         this.entryEndTime = _dateFormat("now", "Y-M-D h:m:s");
-        getStaffImg(id)
-          .then(res => {
-            this.imgBase64 = res;
-            this.taskDatas.forEach(item => {
-              this.uploadTemplate(item, 3);
-            });
-          })
-          .catch(error => {
-            console.log("进入了错误", error);
+        getStaffImg(id).then(res => {
+          this.imgBase64 = res;
+          this.taskDatas.forEach(item => {
+            this.uploadTemplate(item, 3);
           });
+        });
       } else {
         this.$notify({
           message: "指纹匹配失败",
@@ -855,14 +880,10 @@ export default {
         clearInterval(that.timerId);
       }
       if (result) {
-        getStaffImg(id)
-          .then(res => {
-            this.imgBase64 = res;
-            this.toUpdateSampleData(false, id);
-          })
-          .catch(error => {
-            console.log("进入了错误", error);
-          });
+        getStaffImg(id).then(res => {
+          this.imgBase64 = res;
+          this.toUpdateSampleData(false, id);
+        });
       } else {
         this.$notify({
           message: "指纹匹配失败",
@@ -874,13 +895,6 @@ export default {
 
     //上传
     toUpload(signature) {
-      // generateMeasure(this.ids[0],this.$refs.templateHTML[0].$el.innerHTML).then(response=>{
-      //   // const a = document.createElement("a"); // 创建a标签
-      //   // a.setAttribute("download", response.url); // download属性
-      //   // a.setAttribute("href",  response.url); // href链接
-      //   // a.click(); // 自执行点击事件
-      // })
-
       // return
       let flag = false;
       let result = this.tasks.some(item => {
@@ -910,13 +924,18 @@ export default {
       updateTaskUpload(this.ids.toString(), uploadStaffId)
         .then(res => {
           if (res.success) {
-            
             this.$notify({
               type: "success",
               message: res.msg
             });
             this.delFile(this.ids.toString());
-            this.$router.push("/local/upload");
+            // 生成html
+            generateMeasure(
+              this.ids[0],
+              this.$refs.templateHTML[0].$el.innerHTML
+            ).then(response => {
+              this.$router.push("/local/upload");
+            });
           } else {
             this.$notify({
               type: "error",
@@ -1036,7 +1055,6 @@ export default {
     //实验室更新data数据
     toUpdateSampleData(isReview = false, id) {
       let valueDatas = [];
-
       this.sampleDatas.forEach(item => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {

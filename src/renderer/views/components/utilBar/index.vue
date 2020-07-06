@@ -6,7 +6,7 @@
 			</li>
 
 			<li v-if="barNum && barNum.indexOf(1) !== -1">
-				<div class="myBtn" @dbclick="openReduce()" title="删除一行">-</div>
+				<div class="myBtn" @dblclick="openReduce()" title="删除一行">-</div>
 			</li>
 
 			<li v-if="barNum && barNum.indexOf(2) !== -1">

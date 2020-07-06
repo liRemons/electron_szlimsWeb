@@ -23,7 +23,7 @@
                 <th class="p20">检测结果</th>
             </tr>
             <tr>
-                <td align="left" class="p20 ___relative">
+                <td align="left" class="p20 ___relative" style="height:32px;">
                     <el-checkbox @change="changeNum2" :disabled="forbidOne" v-model="data.valueData.check1">管电压固定，管电压：</el-checkbox>
                     <div class="___absolute t0" style="width:70px;height:32px;left:190px;">
                         <divModel v-if="data.valueData.check1" v-model="data.valueData.voltage1"

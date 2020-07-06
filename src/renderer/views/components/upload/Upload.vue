@@ -191,10 +191,6 @@ export default {
         });
         return;
       }
-      console.log(
-        this.selectIndex,
-        this.person[this.selectIndex].staffFingerprint
-      );
       try {
         this.matFingerprintArr = this.person[
           this.selectIndex
@@ -223,7 +219,6 @@ export default {
         }
       }
 
-      console.log("指纹验证结果", detectResult);
 
       if (false && !detectResult) {
         this.$notify({
@@ -246,7 +241,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.tasksArrCheck[0]);
     //获取所有检测员
     getMan(0)
       .then(res => {

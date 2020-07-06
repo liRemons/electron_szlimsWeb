@@ -85,6 +85,9 @@
             <div class="___absolute Full" style="width: 50%;">
               <divModel
                 v-model="data.valueData.mainParameterkV"
+                :computers="
+                  isInteger(data.valueData.mainParameterkV, 'mainParameterkV')
+                "
                 style="width:60%;text-align: center; height: 30px; border-bottom: 1px solid black;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
@@ -92,6 +95,9 @@
             </div>
             <div class="___absolute Full" style="width: 50%;left:50%;">
               <divModel
+                :computers="
+                  isInteger(data.valueData.mainParametermA, 'mainParametermA')
+                "
                 v-model="data.valueData.mainParametermA"
                 style="width:60%;text-align: center; border-bottom: 1px solid black; height: 30px;"
                 class="Full warp2 rowsInput2 hide focusBg"
@@ -328,6 +334,9 @@
           </div>
           <div style="width:100px;left:141px;" class="___absolute t0 Full">
             <divModel
+              :computers="
+                Fixed1(data.valueData.siteEnvironment, 'siteEnvironment')
+              "
               v-model="data.valueData.siteEnvironment"
               style="width:100%;text-align: center; border-bottom: 1px solid black; height: 28px; margin-left: 5px;"
               class="Full warp2 rowsInput2 hide focusBg"
@@ -339,6 +348,9 @@
 
           <div style="width:100px;left:291px;" class="___absolute t0 Full">
             <divModel
+              :computers="
+                Fixed1(data.valueData.siteEnvironment2, 'siteEnvironment2')
+              "
               v-model="data.valueData.siteEnvironment2"
               style="width:100%;text-align: center; border-bottom: 1px solid black; height: 28px; margin-left: 5px;"
               class="Full warp2 rowsInput2 hide focusBg"
@@ -350,6 +362,9 @@
 
           <div style="width:100px;left:441px;" class="___absolute t0 Full">
             <divModel
+              :computers="
+                Fixed1(data.valueData.siteEnvironment3, 'siteEnvironment3')
+              "
               v-model="data.valueData.siteEnvironment3"
               style="width:100%;text-align: center; border-bottom: 1px solid black; height: 28px; margin-left: 5px;"
               class="Full warp2 rowsInput2 hide focusBg"
@@ -430,6 +445,19 @@ export default {
     "target"
   ],
   methods: {
+    // 是不是整数
+    isInteger(val, type) {
+      if (val % 1 !== 0) {
+        this.data.valueData[type] = "";
+        this.$message.warning("请输入整数");
+      }
+    },
+    // 保留一位小数，不足补0
+    Fixed1(val, type) {
+      this.data.valueData[type] = this.IntegerAdd0(
+        Number(this.data.valueData[type]).toFixed46(1)
+      );
+    },
     increase() {
       let obj = {
         exposureMode: "",
@@ -527,7 +555,7 @@ export default {
         v => v.name === this.data.valueData.deviceType
       ).exposures;
       // if (this.data.valueData.point.length > this.exposureModeList.length) {
-      if ( this.exposureModeList.length==0) {
+      if (this.exposureModeList.length == 0) {
         let obj = {
           exposureMode: "",
           harnessDirection: ""
@@ -1002,7 +1030,7 @@ export default {
           v => v.name === this.data.valueData.deviceType
         ).exposures;
         // if (this.data.valueData.point.length > this.exposureModeList.length) {
-        if ( this.exposureModeList.length==0) {
+        if (this.exposureModeList.length == 0) {
           let obj = {
             exposureMode: "",
             harnessDirection: ""

@@ -64,6 +64,7 @@
             "
             style="line-height: 32px"
             v-for="(item, index) in data.valueData.point"
+            :key="index+'b'"
           >
             <div class="___relative">
               <div style="width: 50px;" class="borderRight">
@@ -89,6 +90,7 @@
               <div class="___absolute Full" style="width: 50%">
                 <divModel
                   v-model="item.rows[1]"
+                  :computers="isInteger(item.rows[1], index, 1)"
                   style="width:60%;text-align: center; height: 30px; border-bottom: 1px solid black;"
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
@@ -97,6 +99,7 @@
               <div class="___absolute Full" style="width: 50%;left:50%">
                 <divModel
                   v-model="item.rows[2]"
+                  :computers="isInteger(item.rows[2], index, 2)"
                   style="width:60%;text-align: center; height: 30px; border-bottom: 1px solid black;"
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
@@ -214,6 +217,15 @@ export default {
     "btnFlag"
   ],
   methods: {
+    isInteger(val, index, rowIndex) {
+      if (val % 1 !== 0) {
+        this.$message.warning("请输入整数");
+        this.$nextTick(() => {
+          this.data.valueData.point[index].rows[rowIndex] = "";
+          this.$forceUpdate();
+        });
+      }
+    },
     reduce(index) {
       if (this.data.valueData.point.length > 1) {
         this.data.valueData.point.splice(index, 1);

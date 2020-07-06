@@ -86,7 +86,7 @@ export default {
     return {
       updateflag: false,
       dialogVisible: false,
-      version: "0.2",
+      version: "0.1",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
@@ -103,20 +103,28 @@ export default {
       }
     }, 1000);
   },
-  watch: {
-    percentage() {}
-  },
   methods: {
     download() {
+      this.downloadState = "";
+      this.downloadText = "正在下载，请稍后";
       this.updateflag = false;
       this.dialogVisible = true;
       let this_ = this;
       this.$ipcRenderer.on("getScheduleEvent", function(event, arg) {
-        this_.percentage = Number(arg[0]);
-        if (this_.percentage >= 100) {
+        if (arg[0] == "取消下载") {
+          this_.$message.warning("您已取消下载");
+          this_.dialogVisible = false;
+          return;
+        }
+        if (arg[0] == "下载成功") {
           this_.downloadState = "success";
           this_.downloadText = "下载完成";
           this_.filePath = arg[1];
+          return;
+        }
+        this_.percentage = Number(arg[0]);
+        if (this_.percentage >= 100) {
+          this_.downloadText = "正在解析文件，请稍后";
         }
       });
     },
@@ -133,7 +141,6 @@ export default {
         let apkVersion = JSON.parse(res.data.data[0].apkVersion);
         this.updateMain = apkVersion.update;
         this.updateVersion = apkVersion.code;
-
         if (
           Number(this.updateVersion.split(".")[0]) >
           Number(this.version.split(".")[0])

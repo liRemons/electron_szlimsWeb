@@ -1260,7 +1260,6 @@ export default {
         let data = this.deepCopy(this.importData);
         let this_ = this;
         data.tasks.tasks[0].data = this.saveData;
-        // this.$ipcRenderer.send("writeFile", data);
         this.whrite(data);
         this.writeFileEvent().then(res => {
           if (res) {
