@@ -416,10 +416,12 @@ export default {
     if (this.pulldown) {
       this.$refs.sel.value = this.value;
     }
-
-    this.detectionLimitObj = JSON.myParse(
+    if(sessionStorage.getItem('detectionLimitObj')){
+      this.detectionLimitObj = JSON.myParse(
       sessionStorage.getItem("detectionLimitObj")
     );
+    }
+    
   },
   destroyed() {
     let that = this;

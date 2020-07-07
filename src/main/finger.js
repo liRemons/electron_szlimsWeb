@@ -1,7 +1,7 @@
 import { ipcMain, BrowserWindow } from "electron";
 // const Finger = require("C:/Users/Administrator/AppData/Local/finger/finger");
 import Finger from './finger/finger'
-// const Finger = require("../../static/finger/finger.js");
+// const Finger = require("./finger/finger");
 function FingerAction(mainWindow) {
   // 0  false    1 true
   Finger.openDevice(0, 0, 0, (res) => {

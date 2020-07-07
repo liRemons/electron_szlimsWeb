@@ -97,7 +97,7 @@
             </el-button>
             <viewer
               class="viewer"
-              v-if="flag && scope.row.unitUrl"
+              v-if="flag && scope.row.pointUrl"
               :images="[hostUrl + scope.row.pointUrl]"
             >
               <img
@@ -483,10 +483,9 @@ export default {
     }
   },
   mounted() {
-    sessionStorage.getItem("flag") !== ""
-      ? (this.flag = Number(sessionStorage.getItem("flag")))
-      : "";
-    console.log(this.flag);
+    if (sessionStorage.getItem("flag")) {
+      this.flag = Number(sessionStorage.getItem("flag"));
+    }
   },
   computed: {
     pageCount() {

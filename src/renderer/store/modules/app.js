@@ -1,4 +1,6 @@
 import Cookies from "js-cookie";
+import { data } from "jquery";
+// import { delete } from "vue/types/umd";
 
 const app = {
   state: {
@@ -13,8 +15,25 @@ const app = {
     pinpu: [],
     menuState: "local", // 菜单状态
     templateAction: "update", // 模板动作
+    shareObject:{}
   },
   mutations: {
+    SESSIONSTORAGE_SET:(state,data)=>{
+      console.log(data)
+      state.shareObject[data.key]=data.value
+    },
+    SESSIONSTORAGE_GET:(state,data)=>{
+      
+    },
+    SESSIONSTORAGE_REMOVE:(state,key)=>{
+      if(key){
+        delete state.shareObject[key]
+      }
+      
+    },
+    SESSIONSTORAGE_CLEAR:(state,data)=>{
+      state.shareObject={}
+    },
     TOGGLE_BLOCK: (state, menuState) => {
       state.menuState = menuState;
     },

@@ -2,7 +2,7 @@
   <div id="app">
     <div class="control">
       <div style="float:left">
-        <span style="line-height: 24px;padding-left:20px" @click="delDir"
+        <span style="line-height: 24px;padding-left:20px"
           >深圳市瑞达智能检测系统用户端V{{ version }}</span
         >
       </div>
@@ -98,9 +98,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      if (this.$route.path == "/login") {
-        this.getUpdateVersion();
-      }
+      this.getUpdateVersion();
     }, 1000);
   },
   methods: {
@@ -110,7 +108,7 @@ export default {
       this.updateflag = false;
       this.dialogVisible = true;
       let this_ = this;
-      this.$ipcRenderer.on("getScheduleEvent", function(event, arg) {
+      this.$ipcRenderer.on("getScheduleEvent", (event, arg) => {
         if (arg[0] == "取消下载") {
           this_.$message.warning("您已取消下载");
           this_.dialogVisible = false;
@@ -120,6 +118,8 @@ export default {
           this_.downloadState = "success";
           this_.downloadText = "下载完成";
           this_.filePath = arg[1];
+          this.$ipcRenderer.removeListeners("getScheduleEvent", (e, arg) => {});
+
           return;
         }
         this_.percentage = Number(arg[0]);
@@ -141,6 +141,10 @@ export default {
         let apkVersion = JSON.parse(res.data.data[0].apkVersion);
         this.updateMain = apkVersion.update;
         this.updateVersion = apkVersion.code;
+        sessionStorage.setItem("version", {
+          updateVersion: this.updateVersion,
+          version: this.version
+        });
         if (
           Number(this.updateVersion.split(".")[0]) >
           Number(this.version.split(".")[0])
@@ -255,47 +259,25 @@ export default {
       hanle(this); //this指向Array
       return arr;
     };
-    sessionStorage["setItem"] = function(key, value) {
-      _this.remote.getGlobal("shareObject")[key] = value;
+    sessionStorage["setItem"] = (key, value) => {
+      let data = {
+        key: key,
+        value: value
+      };
+      this.$store.commit("SESSIONSTORAGE_SET", data);
+      // _this.remote.getGlobal("shareObject")[key] = value;
     };
-    sessionStorage["getItem"] = function(key) {
-      return _this.remote.getGlobal("shareObject")[key] ||
-        _this.remote.getGlobal("shareObject")[key] == 0
-        ? _this.remote.getGlobal("shareObject")[key]
-        : null;
+    sessionStorage["getItem"] = key => {
+      // return _this.remote.getGlobal("shareObject")[key] ||
+      //   _this.remote.getGlobal("shareObject")[key] == 0
+      //   ? _this.remote.getGlobal("shareObject")[key]
+      //   : null;
+      return this.$store.state.app.shareObject[key];
     };
-    sessionStorage["removeItem"] = function(key) {
-      _this.remote.getGlobal("shareObject")[key] = null;
+    sessionStorage["removeItem"] = key => {
+      // _this.remote.getGlobal("shareObject")[key] = null;
+      this.$store.commit("SESSIONSTORAGE_REMOVE", key);
     };
-    // Number.prototype.toFixed46 = function (decimalPlaces, Judge = false) {
-    //   let num = this;
-    //   let numStr = this + ''; //将调用该方法的数字转为字符串
-    //   if (numStr.includes('.')) {
-    //     let splitArr = numStr.split(".");
-    //     let after = splitArr[1].slice(0, 20);
-    //     if (Judge && [...splitArr[0]][0] > 0) {
-    //       decimalPlaces = decimalPlaces - splitArr[0].length;
-    //       decimalPlaces = decimalPlaces >= 0 ? decimalPlaces : 0
-    //     }
-    //     if (decimalPlaces > 0) {
-    //       for (let i = 0; i < after; i++) {
-    //         if (after[i] == 0) {
-    //           decimalPlaces++
-    //         } else {
-    //           break;
-    //         }
-    //       }
-    //     }
-    //   }
-    //   let d = decimalPlaces || 0;
-    //   let m = Math.pow(10, d);
-    //   let n = +(d ? num * m : num).toFixed(8); // Avoid rounding errors
-    //   let i = Math.floor(n), f = n - i;
-    //   let e = 1e-8; // Allow for rounding errors in f
-    //   let r = (f > 0.5 - e && f < 0.5 + e) ?
-    //           ((i % 2 == 0) ? i : i + 1) : Math.round(n);
-    //   return d ? r / m : r;
-    // };
 
     Number.prototype.toFixed46 = function(
       decimalPlaces,
