@@ -448,15 +448,19 @@ export default {
     // 是不是整数
     isInteger(val, type) {
       if (val % 1 !== 0) {
-        this.data.valueData[type] = "";
-        this.$message.warning("请输入整数");
+        this.$nextTick(() => {
+          this.data.valueData[type] = "";
+          this.$message.warning("请输入整数");
+        });
       }
     },
     // 保留一位小数，不足补0
     Fixed1(val, type) {
-      this.data.valueData[type] = this.IntegerAdd0(
-        Number(this.data.valueData[type]).toFixed46(1)
-      );
+      if (this.data.valueData[type]) {
+        this.data.valueData[type] = this.IntegerAdd0(
+          Number(this.data.valueData[type]).toFixed46(1)
+        );
+      }
     },
     increase() {
       let obj = {

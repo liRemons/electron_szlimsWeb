@@ -358,7 +358,7 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="deleteDialog = false">取 消</el-button>
-        <el-button type="primary" @click="confirmDelete">确 定</el-button>
+        <el-button type="primary" @click="confirmDelete">继续送审</el-button>
       </span>
     </el-dialog>
   </div>

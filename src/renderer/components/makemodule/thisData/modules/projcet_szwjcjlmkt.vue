@@ -107,6 +107,9 @@
               <div class="___absolute t0 Full" style="width: 355px;left:185px;">
                 <divModel
                   v-model="data.valueData.tubeVoltage"
+                  :computers="
+                    isInteger(data.valueData.tubeVoltage, 'tubeVoltage')
+                  "
                   style="width:60px;text-align: center;"
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
@@ -123,6 +126,9 @@
               <div class="___absolute t0 Full" style="width: 355px;left:185px;">
                 <divModel
                   v-model="data.valueData.tubeCurrent"
+                  :computers="
+                    isInteger(data.valueData.tubeCurrent, 'tubeCurrent')
+                  "
                   style="width:60px;text-align: center;"
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
@@ -156,6 +162,12 @@
                   &nbsp;
                   <divModel
                     v-model="data.valueData.irradiationFieldM1"
+                    :computers="
+                      isInteger(
+                        data.valueData.irradiationFieldM1,
+                        'irradiationFieldM1'
+                      )
+                    "
                     style="width:30px;text-align: center;"
                     class="Full warp2 rowsInput2 Full hide focusBg"
                   ></divModel>
@@ -168,6 +180,12 @@
                 >
                   &nbsp;
                   <divModel
+                    :computers="
+                      isInteger(
+                        data.valueData.irradiationFieldM2,
+                        'irradiationFieldM2'
+                      )
+                    "
                     v-model="data.valueData.irradiationFieldM2"
                     style="width:30px;text-align: center;"
                     class="Full warp2 rowsInput2 Full hide focusBg"
@@ -220,6 +238,14 @@ export default {
     "target"
   ],
   methods: {
+    isInteger(val, type) {
+      if (val % 1 !== 0) {
+        this.$nextTick(() => {
+          this.data.valueData[type] = "";
+          this.$message.warning("请输入整数");
+        });
+      }
+    },
     isNumber(val) {
       if (parseFloat(val).toString() == "NaN") {
         return false;

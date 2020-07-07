@@ -86,7 +86,7 @@ export default {
     return {
       updateflag: false,
       dialogVisible: false,
-      version: "0.1",
+      version: "0.2",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
