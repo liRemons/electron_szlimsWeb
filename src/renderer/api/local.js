@@ -89,7 +89,9 @@ export function winUpdateTaskState(
   pass,
   checkStaffId,
   isDetect = false,
-  reason
+  reason,
+  staffName,
+  staffId
 ) {
   return service({
     url: "/winUpdateTaskState",
@@ -100,6 +102,8 @@ export function winUpdateTaskState(
       checkStaffId,
       isDetect,
       reason,
+      staffName,
+      staffId
     },
   });
 }
@@ -121,6 +125,15 @@ export function getStaffImg(id) {
         )
       );
     },
+    data: {
+      id,
+    },
+  });
+}
+export function getStaffImg_x(id) {
+  return service({
+    url: "/getStaffImg_x",
+    method: "post",
     data: {
       id,
     },
@@ -287,17 +300,16 @@ export function addSampleNumDelete(sampleNum) {
   });
 }
 // 生成html
-export function generateMeasure(taskId,measureHtml) {
+export function generateMeasure(taskId, measureHtml) {
   return service({
     url: "/generateMeasure",
     method: "post",
     data: {
       taskId: taskId,
-      measureHtml:measureHtml
+      measureHtml: measureHtml,
     },
   });
 }
-
 
 export function uploadImg(formData) {
   return service.post("/upload_image", formData, {

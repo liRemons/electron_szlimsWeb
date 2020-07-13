@@ -1,5 +1,5 @@
 <template>
-	<input  class="box" style="border:none;width:95%" ref="myBox" :placeholder="placeholder" @change="toInput" @blur="limit"
+	<input   class="box" style="border:none;width:95%" ref="myBox" :placeholder="placeholder" @change="toInput" @blur="limit"
 				 :style="disable ? {background: '#FFCCFF'} : {}"></input>
 </template>
 
@@ -24,8 +24,12 @@ export default {
     },
     limit(e) {
       if (this.reg) {
-        let value = e.target.value;
-        this.reg == "[^0-9./]" ? e.target.value=Number(value.replace(/[^\d.]/g,'')) : '';
+        this.reg == "[^0-9./]"
+          ? (this.$refs.myBox.value = Number(
+              e.target.value.replace(/[^\d.]/g, "")
+            ))
+          : "";
+        this.$emit("input", this.$refs.myBox.value);
         // let value = e.target.value;
         // let val = new RegExp(this.reg, 'g');
         // e.target.value = value.replace(val, '');

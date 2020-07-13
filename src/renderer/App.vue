@@ -3,7 +3,7 @@
     <div class="control">
       <div style="float:left">
         <span style="line-height: 24px;padding-left:20px"
-          >深圳市瑞达智能检测系统用户端V{{ version }}</span
+          >深圳市瑞达智能检测系统用户端V{{ version }} Beta</span
         >
       </div>
       <div class="action">
@@ -77,8 +77,6 @@ import update from "./components/update";
 import { add, addValue, addNengPuValue } from "@/api/task";
 import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
 import moment from "moment";
-// import { resolve } from "upath";
-// import { resolve } from "../../../vuework/roms300bak/roms300_web/node_modules1/_uri-js@4.2.2@uri-js/src";
 export default {
   name: "App",
   components: { update },
@@ -86,7 +84,7 @@ export default {
     return {
       updateflag: false,
       dialogVisible: false,
-      version: "0.2",
+      version: "0.4",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
@@ -99,6 +97,10 @@ export default {
   mounted() {
     setTimeout(() => {
       this.getUpdateVersion();
+      // sessionStorage.setItem("version", {
+      //     updateVersion: '2.0',
+      //     version: '2.0'
+      //   });
     }, 1000);
   },
   methods: {
@@ -118,8 +120,6 @@ export default {
           this_.downloadState = "success";
           this_.downloadText = "下载完成";
           this_.filePath = arg[1];
-          this.$ipcRenderer.removeListeners("getScheduleEvent", (e, arg) => {});
-
           return;
         }
         this_.percentage = Number(arg[0]);
@@ -179,6 +179,10 @@ export default {
     }
   },
   created() {
+    // 读取指纹信息
+    this.$ipcRenderer.on("Finger_MSG", (event, arg) => {
+      this.$store.dispatch("CHANGE_FINGER_MUTATIONS", arg);
+    });
     // 写入文件
     Vue.prototype.whrite = function(arr) {
       this.$ipcRenderer.send("writeFile", arr);
@@ -222,21 +226,20 @@ export default {
     Vue.prototype.delFile = function(id) {
       this.$ipcRenderer.send("delFile", { taskId: id });
     };
-    let this_ = this;
-    document.onkeydown = function(e) {
+    document.onkeydown = e => {
       if (e.keyCode == 123) {
         // 控制台
-        this_.$ipcRenderer.send("openDevTools");
+        this.$ipcRenderer.send("openDevTools");
       }
       if (e.keyCode == 116) {
+        let path = this.$route.path.split("/")[2];
+        // if (path === "doc-entering" || path === "entering") {
+        //   return;
+        // }
         // 刷新页面
-        this_.$ipcRenderer.send("reload");
+        this.$ipcRenderer.send("reload");
       }
     };
-
-    this.$ipcRenderer.on("Finger_MSG", (event, arg) => {
-      this.$store.dispatch("CHANGE_FINGER_MUTATIONS", arg);
-    });
 
     let _this = this;
     // _this.userIsLogin();
@@ -259,25 +262,33 @@ export default {
       hanle(this); //this指向Array
       return arr;
     };
-    sessionStorage["setItem"] = (key, value) => {
-      let data = {
-        key: key,
-        value: value
+    sessionStorage: {
+      setItem: (key, value) => {
+        let data = {
+          key: key,
+          value: value
+        };
+        this.$store.commit("SESSIONSTORAGE_SET", data);
       };
-      this.$store.commit("SESSIONSTORAGE_SET", data);
-      // _this.remote.getGlobal("shareObject")[key] = value;
-    };
-    sessionStorage["getItem"] = key => {
-      // return _this.remote.getGlobal("shareObject")[key] ||
-      //   _this.remote.getGlobal("shareObject")[key] == 0
-      //   ? _this.remote.getGlobal("shareObject")[key]
-      //   : null;
-      return this.$store.state.app.shareObject[key];
-    };
-    sessionStorage["removeItem"] = key => {
-      // _this.remote.getGlobal("shareObject")[key] = null;
-      this.$store.commit("SESSIONSTORAGE_REMOVE", key);
-    };
+      getItem: key => {
+        return this.$store.state.app.shareObject[key];
+      };
+      removeItem: key => {
+        this.$store.commit("SESSIONSTORAGE_REMOVE", key);
+      };
+    }
+    // sessionStorage["setItem"] = (key, value) => {
+    //   // _this.remote.getGlobal("shareObject")[key] = value;
+    // };
+    // sessionStorage["getItem"] = key => {
+    //   // return _this.remote.getGlobal("shareObject")[key] ||
+    //   //   _this.remote.getGlobal("shareObject")[key] == 0
+    //   //   ? _this.remote.getGlobal("shareObject")[key]
+    //   //   : null;
+    // };
+    // sessionStorage["removeItem"] = key => {
+    //   // _this.remote.getGlobal("shareObject")[key] = null;
+    // };
 
     Number.prototype.toFixed46 = function(
       decimalPlaces,

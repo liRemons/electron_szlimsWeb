@@ -58,7 +58,7 @@ export default {
       matFingerprint: "", //该人员录入的指纹
       staff: null,
       imgShow: true,
-      fingerprint: {},
+      fingerprint: {}
     };
   },
   methods: {
@@ -74,35 +74,31 @@ export default {
         });
         return;
       }
-      winGetUserInfo(this.phone)
-        .then(res => {
-          let staffFingerprint = res.staff.staffFingerprint; //返回的是该人员的多个指纹 以逗号分隔
-          this.staff = res.staff;
-          if (staffFingerprint == "" || staffFingerprint == null) {
-            this.$notify({
-              message: "该人员没有录入指纹",
-              type: "error"
-            });
-          } else {
-            this.$notify({
-              message: "获取指纹信息成功, 请录入指纹.",
-              type: "success"
-            });
-            this.staffFingerprints = staffFingerprint.split(",");
-            setToken(this.staff);
-            this.$router.push("/");
-            // this.GetMatTemplate();//指纹
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      winGetUserInfo(this.phone).then(res => {
+        let staffFingerprint = res.staff.staffFingerprint; //返回的是该人员的多个指纹 以逗号分隔
+        this.staff = res.staff;
+        if (staffFingerprint == "" || staffFingerprint == null) {
+          this.$notify({
+            message: "该人员没有录入指纹",
+            type: "error"
+          });
+        } else {
+          this.$notify({
+            message: "获取指纹信息成功, 请录入指纹.",
+            type: "success"
+          });
+          this.staffFingerprints = staffFingerprint.split(",");
+          setToken(this.staff);
+          this.$router.push("/");
+          // this.GetMatTemplate();//指纹
+        }
+      });
     },
 
     //获取匹配指纹
     GetMatTemplate() {
       this.finger(this.staffFingerprints[0]);
-    },
+    }
   },
   mounted() {
     //回车登录
@@ -151,7 +147,7 @@ export default {
 
   beforeDestroy() {
     window.onkeydown = null;
-  },
+  }
 };
 </script>
 

@@ -262,9 +262,7 @@ export default {
             100
           ).toFixed46(1);
         }
-        console.log(
-          String(this.data.valueData.point[index].rows[5]).split(".")
-        );
+
         if (
           String(this.data.valueData.point[index].rows[5]).split(".").length ==
           1

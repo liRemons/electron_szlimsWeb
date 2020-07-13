@@ -264,7 +264,7 @@ body {
   font-size: 14px;
   color: gray;
   position: absolute;
-  width: 25%;
+  width:35%;
   bottom: 20px;
 }
 
@@ -272,7 +272,7 @@ body {
   font-size: 14px;
   color: gray;
   position: absolute;
-  left: 25%;
+  left: 37%;
   width: 25%;
   bottom: 20px;
 }
@@ -281,7 +281,7 @@ body {
   font-size: 14px;
   color: gray;
   position: absolute;
-  left: 50%;
+  left: 52%;
   width: 25%;
   bottom: 20px;
 }
@@ -298,27 +298,27 @@ body {
 .nameContainer1 {
   max-width: 395px;
   min-width: 80%;
-  height: 58px;
+  height: 30px;
   position: absolute;
-  top: -20px;
+  top: -4px;
   left: 40px;
 }
 
 .nameContainer2 {
   max-width: 150px;
   min-width: 80%;
-  height: 58px;
+  height: 30px;
   position: absolute;
-  top: -20px;
+  top: -4px;
   left: 40px;
 }
 
 .nameContainer3 {
   max-width: 150px;
   min-width: 80%;
-  height: 58px;
+  height: 30px;
   position: absolute;
-  top: -20px;
+  top: -4px;
   left: 110px;
 }
 
@@ -2297,4 +2297,20 @@ body {
 
 .closeContent:hover {
   color: red;
+}
+
+.project_dr_gdyzsdpl table td{
+  line-height: 25px !important;
+  height: 25px !important;
+}
+
+.project_dr_gdyzsdpl .box {
+  height: 25px !important;
+}
+.project_dr_jxkjfbl .hoverFinger{
+  height: 200px !important;
+}
+.project_dr_jxkjfbl ._normalInput_{
+  white-space: normal;
+  height: 200px !important;
 }

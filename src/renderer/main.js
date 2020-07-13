@@ -284,15 +284,23 @@ Vue.prototype.getRange = function(val, arr) {
   }
   return result;
 };
-Vue.prototype.IntegerAdd0=function(val){
+Vue.prototype.IntegerAdd0 = function(val) {
   if (!isNaN(val)) {
     if ((val + "").split(".").length == 1) {
       val += ".0";
     }
   }
   return val;
-}
-
+};
+Vue.prototype.detectionType = function(val) {
+  if (val == "环保验收" || val == "卫生验收") {
+    return "验收检测";
+  } else if (val == "状态") {
+    return "状态检测";
+  } else {
+    return "";
+  }
+};
 const myVue = new Vue({
   components: { App },
   router,

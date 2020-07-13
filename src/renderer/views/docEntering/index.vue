@@ -246,7 +246,8 @@
         <fingerprint
           @fingerResult="toEntry"
           :person="allPerson"
-          fingerprintBox="0"
+          :target="target"
+          :limit="3"
           v-if="showFingerprint"
           :showFingerprintFlag="showFingerprint"
           :tasksArrCheck="tasksArrCheck"
@@ -258,7 +259,7 @@
         <fingerprint
           @fingerResult="toSongshen"
           :person="allPerson"
-          fingerprintBox="2"
+          :target="target"
           v-if="showFingerprintThree"
           :showFingerprintFlag="showFingerprintThree"
         ></fingerprint>
@@ -270,7 +271,7 @@
           v-if="showFingerprintTwo"
           @fingerResult="toReview"
           :person="allPerson"
-          fingerprintBox="1"
+          :target="target"
           :tasksArrCheck="tasksArrCheck"
           :showFingerprintFlag="showFingerprintTwo"
         ></fingerprint>
@@ -287,7 +288,7 @@
           v-if="showFingerprintFour"
           @fingerResult="toShiYanReview"
           :person="allPerson"
-          fingerprintBox="3"
+          :target="target"
           :tasksArrCheck="tasksArrCheck"
           :showFingerprintFlag="showFingerprintFour"
         ></fingerprint>
@@ -302,7 +303,7 @@
           :person="allPerson"
           :tasksArrCheck="tasksArrCheck"
           :showFingerprintFlag="showFingerprintNopass"
-          fingerprintBox="1"
+          :target="target"
         ></fingerprint>
       </el-dialog>
 
@@ -381,6 +382,7 @@ import {
   winUpdateTaskState,
   updateTaskData,
   getStaffImg,
+  getStaffImg_x,
   updateIsDone,
   updateTaskUpload,
   getMan,
@@ -469,7 +471,8 @@ export default {
       importData: {},
       unitUrl: [],
       deleteData: [],
-      deleteDialog: false
+      deleteDialog: false,
+      staffName: ""
     };
   },
 
@@ -483,11 +486,15 @@ export default {
   },
   methods: {
     submitSongshen() {
-      this.deleteData = this.taskDatas[0].showing
+      let data = this.taskDatas[0].showing
         .flat()
-        .filter(
-          item => item.to == "project_deleteReason"
-        )[0].data.valueData.point;
+        .filter(item => item.to == "project_deleteReason");
+      if (data.length) {
+        this.deleteData = data[0].data.valueData.point;
+      }else{
+        this.deleteData=[]
+      }
+
       if (this.deleteData.length > 0) {
         this.deleteDialog = true;
       } else {
@@ -770,12 +777,13 @@ export default {
     },
 
     // 录入
-    toEntry(result, id) {
+    toEntry(result, id, staffName) {
       if (result) {
         this.entryId = id;
+        this.staffName = staffName;
         this.entryEndTime = _dateFormat("now", "Y-M-D h:m:s");
-        getStaffImg(id).then(res => {
-          this.imgBase64 = res;
+        getStaffImg_x(id).then(res => {
+          this.imgBase64 = res.staffImgs;
           this.taskDatas.forEach(item => {
             this.uploadTemplate(item, 3);
           });
@@ -789,30 +797,29 @@ export default {
     },
 
     // 现场审核
-    toReview(result, checkId) {
+    toReview(result, checkId, staffName) {
+      this.staffName = staffName;
       if (result) {
-        getStaffImg(checkId)
-          .then(res => {
-            this.imgBase64Two = res;
-            this.showFingerprintTwo = false;
-            this.taskDatas.forEach(item => {
-              this.toUpdateTaskData(item, 2);
-            });
-            this.$notify({
-              type: "success",
-              message: "审核成功"
-            });
-            this.$router.push("/local/review");
-          })
-          .catch(error => {
-            console.log("进入了错误", error);
+        getStaffImg(checkId).then(res => {
+          this.imgBase64Two = res;
+          this.showFingerprintTwo = false;
+          this.taskDatas.forEach(item => {
+            this.toUpdateTaskData(item, 2);
           });
+          this.$notify({
+            type: "success",
+            message: "审核成功"
+          });
+          this.$router.push("/local/review");
+        });
         winUpdateTaskState(
           this.ids.toString(),
           2,
           checkId,
           false,
-          this.reason
+          this.reason,
+          this.staffName,
+          JSON.myParse(getToken()).id
         ).then(res => {
           this.$notify({
             message: "审核成功",
@@ -862,7 +869,7 @@ export default {
           });
         }
       });
-      getStaffImg(id)
+      getStaffImg(id[0])
         .then(res => {
           this.imgBase64 = res;
           this.showFingerprintFour = false;
@@ -880,9 +887,9 @@ export default {
         clearInterval(that.timerId);
       }
       if (result) {
-        getStaffImg(id).then(res => {
+        getStaffImg(id[0]).then(res => {
           this.imgBase64 = res;
-          this.toUpdateSampleData(false, id);
+          this.toUpdateSampleData(false, id[0]);
         });
       } else {
         this.$notify({
@@ -984,7 +991,6 @@ export default {
           }
         });
       });
-
       // console.log("上传的模板数据1", this.templateArr);
       if (tasktemp.disWs == "4") {
         addGwCyTaskData(
@@ -1390,7 +1396,7 @@ export default {
     },
 
     //暂存数据
-    TemporaryStorage(isbut = false) {
+    TemporaryStorage(isbut = false, isReview) {
       let valueDatas = [];
       this.sampleDatas.forEach(item => {
         let showing = item.showing;
@@ -1596,7 +1602,8 @@ export default {
       }
     },
 
-    toNoPass(result, id) {
+    toNoPass(result, id, staffName) {
+      this.staffName = staffName;
       if (result) {
         this.checkId = id;
         this.showFingerprintNopass = false;
@@ -1612,9 +1619,11 @@ export default {
       winUpdateTaskState(
         this.ids.toString(),
         1,
-        this.checkId,
+        this.checkId[0],
         false,
-        this.reason
+        this.reason,
+        this.staffName[0],
+        JSON.myParse(getToken()).id
       ).then(res => {
         if (res.success) {
           this.$notify({
@@ -1666,12 +1675,22 @@ export default {
     },
 
     toChangeState() {
-      winUpdateTaskState(this.ids.toString(), 0, this.entryId, true).then(
-        res => {
+      winUpdateTaskState(
+        this.ids.toString(),
+        0,
+        this.entryId,
+        true,
+        this.reason,
+        this.staffName,
+        JSON.myParse(getToken()).id
+      )
+        .then(res => {
           this.showFingerprint = false;
           this.$router.push("/local/entering");
-        }
-      );
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
 

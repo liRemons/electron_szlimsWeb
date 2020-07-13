@@ -490,7 +490,10 @@ export default {
               this.localData;
               // sessionStorage.setItem("TolocalNo", 0);
               this.whrite(enteringList);
-              this.getList();
+              this.writeFileEvent().then(res => {
+                this.getList();
+              });
+
               ids.map(a => {
                 this.delFile(a);
               });

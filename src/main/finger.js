@@ -69,7 +69,6 @@ function FingerAction(mainWindow) {
             code: res,
           });
           Finger.getFpStrByGen((res) => {
-            console.log("匹配模板:", res);
             mainWindow.webContents.send("Finger_MSG", {
               msg: "匹配模板",
               code: res,

@@ -95,6 +95,7 @@
                   :jsonString="jsonString"
                   :target="target"
                   :deviceData="moduleJson.data.valueData.deviceData"
+                  :deviceData2="moduleJson.data.valueData.deviceData2"
                   :task="task"
                   :showing="taskData.showing"
                   :watchSign="watchSign"
@@ -121,11 +122,21 @@
           <div class="pageFoot_1">
             检测 :
             <div :class="{ nameContainer1: true, mainContentBox_debug: debug }">
-              <img
+              <div style="display:inline-block" v-if="(taskData.showing[0][0]['data']['valueData']['imgBase64'] instanceof Array)">
+                <img
+                class="jianceImg"
+                :key="item+index"
+                v-for="(item,index) in taskData.showing[0][0]['data']['valueData']['imgBase64']"
+                :src="item"
+              />
+              </div>
+               <div style="display:inline-block" v-else>
+                 <img
                 class="jianceImg"
                 :src="taskData.showing[0][0]['data']['valueData']['imgBase64']"
                 alt
               />
+               </div>
             </div>
           </div>
 
@@ -147,7 +158,9 @@
             受检单位(签字) :
             <div :class="{ nameContainer3: true, mainContentBox_debug: debug }">
               <img
-              v-if="taskData.showing[0][0]['data']['valueData']['imgBase64Three']"
+                v-if="
+                  taskData.showing[0][0]['data']['valueData']['imgBase64Three']
+                "
                 class="jianceImg"
                 :src="
                   taskData.showing[0][0]['data']['valueData']['imgBase64Three']
@@ -213,7 +226,7 @@ export default {
   data() {
     return {
       heads,
-      btnFlag:true,
+      btnFlag: true,
       modules,
       aObjectsIndex: "",
       testProjectMsgBox: false,
@@ -266,7 +279,7 @@ export default {
       reasonMsgArr: [],
       contentArray: [],
       SampleNumJudge: true,
-      requestNo: 0,
+      requestNo: 0
     };
   },
   props: {
@@ -572,7 +585,9 @@ export default {
                 a => a.testProjectId == item.data.valueData.testProjectId
               )
             );
+            that.$set(item.data.valueData, "deviceData2", res.data);
           });
+          console.log(res.data);
           that.componentFlag = true;
           let data = res.data;
           let data_fz = res.data_fz;
@@ -1503,10 +1518,10 @@ export default {
     }
   },
   mounted() {
-    if(this.$route.params.target==3){
-      this.btnFlag=false
-    }else{
-      this.btnFlag=true
+    if (this.$route.params.target == 3) {
+      this.btnFlag = false;
+    } else {
+      this.btnFlag = true;
     }
     function getImageBase64Data(imgSrc) {
       function getBase64(img) {
@@ -1668,7 +1683,7 @@ export default {
     // console.log(this.task.detectionTime)
     this.refre = true;
     //获取任务开始录入时间
-    console.log(this.task.startTime)
+    console.log(this.task.startTime);
     if (this.task.startTime == null) {
       let entryStartTime = _dateFormat("now", "Y-M-D h:m:s");
       this.task.startTime = entryStartTime;
@@ -1722,7 +1737,7 @@ export default {
   bottom: 0;
   right: 0;
   z-index: 9999;
-  overflow: scroll;
+  overflow: auto;
 }
 
 #showTemplateBox .isTemplate {
@@ -1814,8 +1829,8 @@ export default {
 }
 
 #showTemplateBox .jianceImg {
-  width: 80px;
-  height: 50px;
+  width: 70px;
+  height: 30px;
 }
 
 #showTemplateBox .btnBox {

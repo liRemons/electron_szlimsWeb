@@ -1,34 +1,53 @@
 <template>
   <div>
-    <el-select v-model="selectIndex" @change="change" placeholder="请选择人员">
+    <el-select
+      v-model="selectIndex"
+      @change="change"
+      :multiple-limit="limit || 1"
+      value-key="id"
+      multiple
+      placeholder="请选择人员"
+    >
       <el-option
         v-for="(item, index) in person"
         :key="item.id"
         :label="item.staffName"
         :value="index"
-        :disabled="
-          fingerprintBox == 3 || fingerprintBox == 2 || fingerprintBox == 0
-            ? false
-            : item.id == tasksArrCheck[0].tasks[0].recordStaffId
-        "
+        :disabled="item.disabled"
       >
       </el-option>
     </el-select>
     <h2 style="margin-bottom: 10px; margin-top: 6vh;">录入指纹</h2>
-    <!-- <object
-      classid="clsid:059059BE-8F4C-49AC-B2A9-5649F02A4FC6"
-      class="checkFingerprint"
-      id="checkFingerprintBox"
-      data="DATA:application/x-oleobject;BASE64,汶六啂偹䕲祭噱䩚䌸偰杸䩁䅁奄睅䅁䈲䅍䅁㴽"
-    >
-    </object> -->
-    <img src="../../../assets/img/fingerprint2.png" alt="" v-show="flagImg" />
-    <img src="../../../assets/img/fingerprint1.png" alt="" v-show="!flagImg" />
-    <p>
-      <el-tag v-show="fingerprintMsg">{{ fingerprintMsg }}</el-tag>
-    </p>
+
+    <div class="flex">
+      <div
+        class="card"
+        :style="{ background: bg }"
+        v-for="(item, index) in fingerBox"
+        :key="item.id + 'finger'"
+      >
+        <div
+          class="card_hover"
+          @click="getcheckFingerprint(item, index)"
+          v-if="!item.result"
+        >
+          点击录入
+        </div>
+        <div v-if="item.result" style="color:#67c23a">
+          <i class="el-icon-success"></i>匹配成功
+        </div>
+        <div v-else>
+          <img src="../../../assets/img/fingerprint2.png" v-if="item.flagImg" />
+          <img src="../../../assets/img/fingerprint1.png" v-else />
+        </div>
+
+        <el-tag class="___absolute" style="bottom:-40px">{{
+          item.staffName
+        }}</el-tag>
+      </div>
+    </div>
     <div style="margin-top: 20px; text-align: right;">
-      <el-button class="btn" @click="getcheckFingerprint">录入指纹</el-button>
+      <!-- <el-button class="btn" @click="getcheckFingerprint">录入指纹</el-button> -->
       <el-button @click="matchFingerprint" type="primary">确定</el-button>
     </div>
   </div>
@@ -44,57 +63,42 @@ export default {
     "multipleSelection",
     "now",
     "sampleIds",
-    "fingerprintBox",
+    "target",
     "button",
     "person",
     "showFingerprintFlag",
-    "tasksArrCheck"
+    "tasksArrCheck",
+    "limit"
   ],
   data() {
     return {
-      detectMan: [], //检测员
-      checkMan: [], //校核员
-      checkFingerprint: "", //录入的检测员的指纹
-      DetectFingerprint: [], //录入的校核员指纹
-      matcheckFingerprint: [], //检测人员在数据库中的指纹数组
-      matDetectFingerprint: [], //校核人员在数据库中的指纹数组
-      detectFinger: [],
-      checkFinger: [],
-      detectId: [],
-      detectSelected: [],
-      checkId: "",
-      taskIds: "",
       message: "",
-      num: 0,
-      allPerson: [],
       selectIndex: "",
-      isEntry: false,
-      matFingerprintArr: [],
       nowMan: {},
-      timer: "",
       fingerprint: {},
       staffFingerprints: "",
       flag: false,
-      flagImg: true,
-      fingerprintMsg: ""
+      fingerprintMsg: "",
+      bg: "#f0f9eb",
+      fingerBox: [],
+      boxIndex: ""
     };
   },
   watch: {
     getFingerprintCode() {
-      this.flagImg = true;
       if (!this.flag) {
         return;
       }
       let code = this.fingerprint.fingerprintCode;
       let msg = this.fingerprint.fingerprintMsg;
-
       switch (code) {
         case 2:
-          this.flagImg = true;
+          this.$set(this.fingerBox[this.boxIndex], "flagImg", true);
           break;
         case 3:
-          this.flagImg = false;
+          this.$set(this.fingerBox[this.boxIndex], "flagImg", false);
       }
+      this.$forceUpdate();
       if (code == -1 || code == 2 || code == 3) {
         this.$message(msg);
         this.fingerprintMsg = msg;
@@ -102,8 +106,14 @@ export default {
         this.showFingerprintFlag ? this.finger(this.staffFingerprints[0]) : "";
       } else if (code >= 100) {
         this.$message.success("匹配成功");
+        this.$set(this.fingerBox[this.boxIndex], "result", true);
         this.fingerprintMsg = msg;
-        this.$emit("fingerResult", true, this.person[this.selectIndex].id);
+        let submitFlag = this.fingerBox.filter(item => item.result);
+        if (submitFlag.length == this.fingerBox.length) {
+          let id = this.fingerBox.map(item => item.id);
+          let checkStaffName = this.fingerBox.map(item => item.staffName);
+          this.$emit("fingerResult", true, id, checkStaffName);
+        }
       } else if (
         code < 100 &&
         code !== 4 &&
@@ -125,138 +135,70 @@ export default {
     }
   },
   methods: {
-    change() {
+    change(a) {
+      this.fingerBox = [];
+      a.forEach(item => {
+        this.fingerBox.push(this.person[item]);
+      });
+      this.fingerBox.forEach(item => {
+        item.flagImg = true;
+      });
       this.flag = false;
     },
     finger(a) {
       this.$ipcRenderer.send("getUser", a);
     },
-    //点击录入校核员指纹按钮 触发这个函数 进入指纹准备获取状态
-    getcheckFingerprint() {
+    getcheckFingerprint(data, index) {
+      this.boxIndex = index;
       this.flag = true;
-      if (this.selectIndex !== 0 && this.selectIndex == "") {
-        this.$message.warning("请选择");
-        return;
-      }
-      this.staffFingerprints = this.person[
-        this.selectIndex
-      ].staffFingerprint.split(",");
+      this.staffFingerprints = data.staffFingerprint.split(",");
       this.finger(this.staffFingerprints[0]);
-      return;
-      if (checkFingerprintBox.OpenDevice(0, 0, 0) == 1) {
-        if (checkFingerprintBox.LinkDevice() == 1) {
-          checkFingerprintBox.GenCharEx();
-          this.checkTransaction();
-        } else {
-          alert("连接USB指纹仪失败");
-        }
-      } else {
-        alert("打开USB指纹仪失败");
-      }
     },
+    // getcheckFingerprint() {
+    //   this.flagImg = true;
+    //   if (this.selectIndex !== 0 && this.selectIndex == "") {
+    //     this.$message.warning("请选择");
+    //     return;
+    //   }
+    //   this.staffFingerprints = this.person[0].staffFingerprint.split(",");
+    //   this.finger(this.staffFingerprints[0]);
+    // },
 
-    //根据校核员状态, 执行相应操作
-    checkTransaction() {
-      var istatus = checkFingerprintBox.GetWorkMsg();
-      var _this = this;
-      switch (istatus) {
-        case 1:
-          this.$notify({
-            message: "设备未连接",
-            type: "error"
-          });
-          break;
-        case 5:
-          this.checkFingerprint = checkFingerprintBox.GetCharEx();
-          return;
-          break;
-      }
-      timer = setTimeout(_this.checkTransaction, 500);
-    },
-
-    //将以获取的指纹进行匹配
+    //确定按钮
     matchFingerprint() {
-      //跳过指纹
       if (this.selectIndex !== "") {
-        this.$emit("fingerResult", true, this.person[this.selectIndex].id);
+        let id = [];
+        let name = [];
+        this.selectIndex.forEach(item => {
+          id.push(this.person[item].id);
+          name.push(this.person[item].staffName);
+        });
+        this.$emit("fingerResult", true, id, name);
       } else {
         this.$emit("fingerResult", true, this.nowMan.id);
       }
-      return;
-
-      if (this.checkFingerprint === "") {
-        this.$notify({
-          message: "请录入指纹",
-          type: "warning"
-        });
-        return;
-      }
-      try {
-        this.matFingerprintArr = this.person[
-          this.selectIndex
-        ].staffFingerprint.split(",");
-      } catch (e) {
-        this.matFingerprintArr = [];
-      }
-
-      if (this.matFingerprintArr.length <= 0) {
-        this.$notify({
-          message: "未获取到指纹",
-          type: "warning"
-        });
-        return;
-      }
-
-      let detectResult = false;
-      for (let i = 0; i <= this.matFingerprintArr.length; i++) {
-        let num = checkFingerprintBox.MatchTemplateEx(
-          this.checkFingerprint,
-          this.matFingerprintArr[i]
-        );
-        if (num > 100) {
-          detectResult = true; //只要和 检测员指纹数组中的一个指纹匹配成功 结束循环
-          break;
-        }
-      }
-
-
-      if (false && !detectResult) {
-        this.$notify({
-          message: "指纹验证失败",
-          type: "warning"
-        });
-        return;
-      } else {
-        this.$notify({
-          message: "指纹验证成功",
-          type: "success"
-        });
-      }
-
-      this.$emit(
-        "fingerResult",
-        detectResult,
-        this.person[this.selectIndex].id
-      );
     }
   },
   mounted() {
+    this.person.forEach(item => {
+      item["flagImg"] = true;
+      if (this.target == 0 || this.target == 2) {
+        if (this.tasksArrCheck[0].tasks[0].recordStaffId) {
+          let recordStaffId = this.tasksArrCheck[0].tasks[0].recordStaffId.split(
+            ","
+          );
+          if (recordStaffId.includes(item.id)) {
+            item["disabled"] = true;
+          }
+        }
+      }
+    });
     //获取所有检测员
-    getMan(0)
-      .then(res => {
-        //this.detectMan = res.data.filter(item => item.staffFingerprint != null);
-        let nowManId = JSON.myParse(getToken()).id;
-        let mans = res.data;
-        this.nowMan = mans.find(item => item.id === nowManId);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  },
-  beforeDestroy() {
-    if (this.timer) {
-      clearTimeout(this.timer);
-    }
+    getMan(0).then(res => {
+      let nowManId = JSON.myParse(getToken()).id;
+      let mans = res.data;
+      this.nowMan = mans.find(item => item.id === nowManId);
+    });
   }
 };
 </script>
@@ -274,6 +216,47 @@ export default {
   height: 40vh;
   background: gray;
   cursor: pointer;
+}
+.card {
+  width: 150px;
+  height: 150px;
+  color: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+}
+
+.card img {
+  width: 90%;
+}
+
+.card:hover {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.card:hover .card_hover {
+  transition: all 0.5s;
+  display: block;
+}
+
+.card_hover {
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  line-height: 150px;
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+  margin-bottom: 50px;
+  justify-content: space-around;
 }
 </style>
 

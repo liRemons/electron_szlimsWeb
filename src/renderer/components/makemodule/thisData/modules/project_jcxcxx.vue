@@ -580,10 +580,23 @@ export default {
       }
     },
     sure(Judge) {
+      
       let result = this.checkField(Judge);
+
       if (!result) {
         return;
       }
+      let StomatologyLinkage = this.$store.state.StomatologyLinkage;
+      if (
+        StomatologyLinkage.deviceFactor ||
+        StomatologyLinkage.deviceFactor2 ||
+        StomatologyLinkage.deviceFactorObj
+      ) {
+      } else {
+        this.$message.error("您未选择仪器");
+        return;
+      }
+
       if (this.data.valueData.surgeonNum != "") {
         if (this.data.valueData.surgeonNum <= 10) {
           let dataArr = [];

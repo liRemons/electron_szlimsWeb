@@ -109,6 +109,7 @@ export default [
       //模块高度
       _normal: {
         carried: true,
+        fixed:120,
         value: function(obj) {
           return (
             32 *
@@ -117,7 +118,7 @@ export default [
         },
       },
       _short: {
-        carried: false,
+        carried: true,
         value: function(obj) {
           return (
             26 *
@@ -4872,10 +4873,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 386,
+        fixed: 452,
         confirm: true,
         value: function(obj) {
-          return 386;
+          return 452;
         },
       },
       _short: {

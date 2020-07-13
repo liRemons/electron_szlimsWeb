@@ -66,7 +66,7 @@
 															v-model="data.valueData.deviceNum1"
 															v-if="target === '0'"
 															ref="querySelect"
-															:list="deviceData"
+															:list="deviceData2"
 															@getSelectItem="(val, index) => {returnVal2(val, index, 'deviceNum1', 'deviceNumId1')}"
 															:defaultValue="data.valueData.deviceNum1"
 															:name="'deviceNum'"
@@ -85,7 +85,7 @@
 											<querySelect
 															v-model="data.valueData.deviceNum2"
 															v-if="target === '0'"
-															:list="deviceData"
+															:list="deviceData2"
 															@getSelectItem="(val, index) => {returnVal2(val, index, 'deviceNum2', 'deviceNumId2')}"
 															:defaultValue="data.valueData.deviceNum2"
 															:name="'deviceNum'"
@@ -299,7 +299,8 @@
       "headInput",
       "target",
       "task",
-      "deviceData"
+			"deviceData",
+			'deviceData2'
     ],
     watch: {
       "data.valueData.point": {
@@ -426,8 +427,8 @@
         }
       }
     },
-    mounted: function () {
-
+    mounted () {
+			console.log(this.data)
       //this.data.valueData.standard = this.data.valueData.standard.split(',');
     }
   };
