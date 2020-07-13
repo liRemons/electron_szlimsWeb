@@ -98,7 +98,7 @@
                   v-else
                   v-model="data.valueData.point[0].v4"
                   :reg="'[^0-9/]'"
-                  @change.native="changeV4()"
+                  @change.native="changeV4(0)"
                 ></myInput>
               </div>
               <div v-else>
@@ -170,9 +170,9 @@
                 </selectModel>
                 <myInput
                   v-else
-                  v-model="data.valueData.point[0].v4"
+                  v-model="data.valueData.point[1].v4"
                   :reg="'[^0-9/]'"
-                  @change.native="changeV4()"
+                  @change.native="changeV4(1)"
                 ></myInput>
               </div>
               <div v-else>/</div>
@@ -256,7 +256,7 @@
             label="新标准实施后首次检测，以80% fNyquist作为最小基线值。"
           ></el-radio>
           <el-radio
-          v-if="noteFlag"
+            v-if="noteFlag"
             v-model="data.valueData.note"
             disabled
             :label="data.valueData.note"
@@ -281,7 +281,7 @@ export default {
   props: ["data", "jsonString", "target"],
   data() {
     return {
-      noteFlag:false,
+      noteFlag: false,
       list: [
         {
           id: 0,
@@ -347,7 +347,7 @@ export default {
       }
     },
     returnFn(val, a, index, row) {
-       this.noteFlag=false;
+      this.noteFlag = false;
       let item = this.data.valueData.point[index];
       // this.yanShouTest(item);
       let allow = [];
@@ -395,7 +395,11 @@ export default {
       } else {
         if (val === "自定义") {
           item.v4 = " ";
-          this.showInput = true;
+          if (index == 0) {
+            this.showInput = true;
+          } else {
+            this.showInput2 = true;
+          }
         } else {
           item.v4 = val;
           item.v4Id = row.id;
@@ -415,6 +419,11 @@ export default {
             message: "有必填项未填写！"
           });
         } else {
+          this.$nextTick(() => {
+            this.data.valueData.point.forEach(item => {
+              this.yanShouTest(item);
+            });
+          });
           this.$notify({
             type: "success",
             message: "完成"
@@ -436,6 +445,9 @@ export default {
     },
 
     yanShouTest(item) {
+      item.v5.forEach((r, i) => {
+        item.v5[i] = false;
+      });
       if (
         this.data.valueData.checkBoxsTop[0] === true &&
         item.v2 !== "" &&
@@ -443,13 +455,24 @@ export default {
         item.v3 === ""
       ) {
         let e = item.v1 / item.v2;
+
+        if (e >= 0.9) {
+          item.v5[0] = true;
+        } else {
+          item.v5[1] = true;
+        }
       } else if (
         this.data.valueData.checkBoxsTop[0] === false &&
         item.v2 === "" &&
         this.data.valueData.checkBoxsTop[1] === true &&
         item.v3 !== ""
       ) {
-        let f = item.v1 / item.v2;
+        let f = item.v1 / item.v3;
+        if (f >= 0.8) {
+          item.v5[2] = true;
+        } else {
+          item.v5[3] = true;
+        }
       } else if (
         this.data.valueData.checkBoxsTop[0] === true &&
         item.v2 !== "" &&
@@ -457,7 +480,13 @@ export default {
         item.v3 !== ""
       ) {
         let g = item.v1 / item.v2;
+        if (g >= 0.8) {
+          item.v5[5] = true;
+        } else {
+          item.v5[6] = true;
+        }
       }
+      this.$forceUpdate();
     },
 
     stateTest(item) {
@@ -512,12 +541,12 @@ export default {
         } else if (item.v4Id == 5) {
           let g = item.v4 * 0.9;
           if (item.v1 >= g) {
-            this.noteFlag=true;
-            this.data.valueData.note='基线值为'+ item.v4
+            this.noteFlag = true;
+            this.data.valueData.note = "基线值为" + item.v4;
             item.v5[5] = true;
           } else {
-            this.data.valueData.note=''
-            this.noteFlag=false;
+            this.data.valueData.note = "";
+            this.noteFlag = false;
             item.v5[6] = true;
           }
         }
@@ -567,12 +596,12 @@ export default {
         } else if (item.v4Id == 5) {
           let g = item.v4 * 0.9;
           if (item.v1 >= g) {
-            this.noteFlag=true;
-            this.data.valueData.note='基线值为'+ item.v4
+            this.noteFlag = true;
+            this.data.valueData.note = "基线值为" + item.v4;
             item.v5[5] = true;
           } else {
-            this.data.valueData.note=''
-            this.noteFlag=false;
+            this.data.valueData.note = "";
+            this.noteFlag = false;
             item.v5[6] = true;
           }
         }
@@ -620,12 +649,12 @@ export default {
         } else if (item.v4Id == 5) {
           let g = item.v4 * 0.9;
           if (item.v1 >= g) {
-            this.noteFlag=true;
-            this.data.valueData.note='基线值为'+ item.v4
+            this.noteFlag = true;
+            this.data.valueData.note = "基线值为" + item.v4;
             item.v5[5] = true;
           } else {
-            this.noteFlag=false;
-            this.data.valueData.note=''
+            this.noteFlag = false;
+            this.data.valueData.note = "";
             item.v5[6] = true;
           }
         }
@@ -638,28 +667,32 @@ export default {
         if (item.v4Id == 5) {
           let g = item.v4 * 0.9;
           if (item.v1 >= g) {
-            this.noteFlag=true;
-            this.data.valueData.note='基线值为'+ item.v4
+            this.noteFlag = true;
+            this.data.valueData.note = "基线值为" + item.v4;
             item.v5[5] = true;
           } else {
-            this.noteFlag=false;
-            this.data.valueData.note=''
+            this.noteFlag = false;
+            this.data.valueData.note = "";
             item.v5[6] = true;
           }
         }
       }
     },
-    changeV4() {
-      if (this.data.valueData.point[0].v4 === "") {
-        this.showInput = false;
+    changeV4(index) {
+      console.log(index);
+      if (this.data.valueData.point[index].v4 === "") {
+        if (index == 0) {
+          this.showInput = false;
+        } else {
+          this.showInput2 = false;
+        }
       } else {
-        this.data.valueData.point[0].v4 = this.data.valueData.point[0].v4.replace(
-          " ",
-          ""
-        );
+        this.data.valueData.point[index].v4 = this.data.valueData.point[
+          index
+        ].v4.replace(" ", "");
       }
-      this.data.valueData.point[0].v4Id = 5;
-      this.stateTest(this.data.valueData.point[0]);
+      this.data.valueData.point[index].v4Id = 5;
+      this.stateTest(this.data.valueData.point[index]);
     }
   }
 };

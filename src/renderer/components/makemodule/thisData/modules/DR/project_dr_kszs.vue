@@ -281,7 +281,6 @@ export default {
     },
     baseValue() {
       let val = this.data.valueData.arr[1].replace(" ", "");
-      console.log(val);
       if (val !== "" && val !== "无") {
         return "有";
       } else {

@@ -35,7 +35,7 @@
           <div class="___relative">
             <div
               class="___absolute"
-              style="left: 6px; width: 80px; text-align: left;"
+              style="left: 6px; width:90px; text-align: left;"
             >
               使用的模体：
             </div>
@@ -231,10 +231,7 @@ export default {
       deep: true,
       handler: function(point) {
         let item = point[3];
-        if (
-          !this.data.valueData.checkboxsValue[1] &&
-          this.state === "状态检测"
-        ) {
+        if (!this.data.valueData.checkboxsValue[1]) {
           this.data.valueData.point[4].v1 = item.v1;
           this.data.valueData.point[4].v2 = item.v2;
           this.data.valueData.point[4].v3 = item.v3;
@@ -265,7 +262,7 @@ export default {
       return this.data.valueData.note.some(item => item);
     },
     result() {
-      return this.noteResult || this.state === "验收检测";
+      return this.noteResult || this.state !== "验收检测";
     }
   },
   methods: {
@@ -313,9 +310,8 @@ export default {
       }
     }
   },
-  mounted() {
-  }
-}
+  mounted() {}
+};
 </script>
 
 <style scoped>

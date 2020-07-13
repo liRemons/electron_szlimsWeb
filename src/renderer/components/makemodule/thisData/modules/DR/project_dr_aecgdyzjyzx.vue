@@ -132,6 +132,7 @@
             </p>
             <p>
               <el-radio
+              v-if="state=='状态检测'"
                 v-model="data.valueData.point[0].v7"
                 @click.native.prevent="
                   computeObj.clearRadio(
@@ -212,7 +213,7 @@ export default {
   },
   computed: {
     state() {
-      return this.computeObj.judgeState(
+      return this.detectionType(
         this.jsonString.find(item => item.to === "project_jbxx").data.valueData
           .purposeDetection
       );
