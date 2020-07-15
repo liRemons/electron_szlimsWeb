@@ -5,7 +5,7 @@
       <div
         style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
       >
-        探测器剂量指示（DDI）（探测器1）
+        探测器剂量指示（DDI）（{{data.valueData.title}}）
       </div>
       <div
         style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;"

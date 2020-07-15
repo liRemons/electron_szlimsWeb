@@ -15,9 +15,6 @@ const getters = {
   hasReviewData: state => state.laboratory.hasReviewData,
   analysisData: state => state.laboratory.analysisData,
   inspectionTime:state=>state.laboratory.inspectionTime,
-
-
-  inputNum: state => state.drone.inputNum,
-
+  inputNum: state => state.drone.inputNum
 }
 export default getters

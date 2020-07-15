@@ -55,7 +55,9 @@
           :class="{ delLine: index === 0 }"
         >
           <td rowspan="12" v-if="index === 0 && focus">
-            大焦点
+            <el-checkbox disabled v-model="data.valueData.bigFocusChecked"
+              >大焦点</el-checkbox
+            >
           </td>
           <td rowspan="3" v-if="item.toRow3">
             <myInput
@@ -92,13 +94,19 @@
           :class="{ delLine: index === 0 }"
         >
           <td rowspan="12" v-if="index === 0 && focus">
-            小焦点
+            <el-checkbox disabled v-model="data.valueData.smallFocusChecked"
+              >小焦点</el-checkbox
+            >
           </td>
           <td rowspan="3" v-if="item.toRow3">
             <myInput
               reg="[^0-9./]"
               @change.native="changeNum(index, 'smallFocus', item.getIndex)"
               v-model="item.rows[0]"
+              v-if="
+                data.valueData.smallFocusChecked &&
+                  (item.getIndex == 0 || rxppsy_ys_flag)
+              "
             ></myInput>
           </td>
           <td>
@@ -106,6 +114,10 @@
               reg="[^0-9./]"
               @change.native="changeNum(index, 'smallFocus', item.getIndex)"
               v-model="item.rows[1]"
+              v-if="
+                data.valueData.smallFocusChecked &&
+                  (item.getIndex == 0 || rxppsy_ys_flag)
+              "
             ></myInput>
           </td>
           <td>
@@ -202,13 +214,16 @@ export default {
         }
       ],
       detectionObjects: "",
-      row0Flag: true
+      row0Flag: true,
+      type: "",
+      rxppsy_ys_flag: true
     };
   },
   props: ["data", "jsonString", "target"],
   computed: {
     ...mapState({
-      deviceFactor: state => state.StomatologyLinkage.deviceFactor
+      deviceFactor: state => state.StomatologyLinkage.deviceFactor,
+      JudgePhotography: state => state.StomatologyLinkage.JudgePhotography
     }),
     mode() {
       return this.jsonString
@@ -222,6 +237,9 @@ export default {
         this.data.valueData.factorArr = val;
         this.reset();
       }
+    },
+    JudgePhotography() {
+      this.judge();
     }
   },
   methods: {
@@ -243,17 +261,10 @@ export default {
       }
     },
     changeNum(index, key, getIndex, e) {
-      let type = this.detectionType(
-        this.jsonString.find(item => item.to === "project_jbxx").data.valueData
-          .purposeDetection
-      );
-      let detectionObjects = this.jsonString.find(
-        (item, index) => item.to === "project_jbxx"
-      ).data.valueData.detectionObjects;
-      if (type == "验收检测" && key == "bigFocus") {
-        if (detectionObjects == "乳腺屏片摄影设备") {
+      if (this.type == "验收检测" && key == "bigFocus"&&this.data.valueData.bigFocus[index].rows[0]!=='') {
+        if (!this.deviation) {
           let n = Number(this.data.valueData.bigFocus[index].rows[0]);
-          if (n < 25 || n > 32) {
+          if ((n < 25 || n > 32) && n !== "") {
             this.$message.error("预设管电压应在25kV-32kV之间");
             return;
           }
@@ -389,11 +400,65 @@ export default {
       } else {
         return "";
       }
+    },
+    judge() {
+      // 检测类型
+       this.rxppsy_ys_flag = true;
+      this.type = this.detectionType(
+        this.jsonString.filter(item => item.to == "project_jbxx")[0].data
+          .valueData.purposeDetection
+      );
+      // 检测项目
+      let arr = this.jsonString.filter(item => item.to == "project_jcxcxx");
+      this.detectionObjects = arr[0].data.valueData.point[0].exposureMode;
+      // 大小焦点打钩
+      this.$set(this.data.valueData, "bigFocusChecked", true);
+      this.$set(this.data.valueData, "smallFocusChecked", true);
+      let arr1 = ["DR摄影", "CR摄影", "点片摄影", "屏片摄影"];
+      let bigFocus = this.data.valueData.bigFocus;
+      let smallFocus = this.data.valueData.smallFocus;
+      if (arr1.includes(this.detectionObjects)) {
+        // 如果检测对象是DR摄影、CR摄影、屏片摄影、点片摄影。最多会测量四档管电压的结果
+        if (this.type == "状态检测") {
+          // 如果是状态检测，大焦点需要打钩（可填写检测数据），小焦点不可填检测数据。
+          // 大焦点预设80，但是可以由现场检测人员进行修改（修改仅限把电压改成相邻档（对应原因2）），大焦点剩下的三行里必须要填写一行数据， 否者报错（报错文字：未测临床常用其他管电压）
+          this.data.valueData.smallFocusChecked = false;
+          bigFocus[0].rows[0] = 80;
+        } else {
+          // 如果是验收检测，大小焦点都需要测量（在系统上即两个都打钩，可以填写检测数据）且大小焦点预设值固定为60/80/100/120
+          // 但是可以由现场检测人员进行修改（第一种情况没有大小焦点之分（对应修改原因1），第二种情况是没有60/80/100/120这几档，把电压改成相邻档（对应修改原因2），第三种是最高管电压不到120或者100或者80（对应修改原因3）），修改需要填写原因。
+          [...new Set(bigFocus.map(item => item.getIndex))].forEach((a, b) => {
+            bigFocus[a].rows[0] = 60 + b * 20;
+          });
+          [...new Set(smallFocus.map(item => item.getIndex))].forEach(
+            (a, b) => {
+              smallFocus[a].rows[0] = 60 + b * 20;
+            }
+          );
+        }
+      }
+      let arr2 = ["乳腺屏片摄影"];
+      if (arr2.includes(this.detectionObjects)) {
+        // 乳腺屏片摄影。
+        if (this.type == "验收检测") {
+          // 如果是验收检测，大小焦点都需要测量（即两个都打钩，可填写检测数据）大焦点至少需要测量四档管电压，如果少了一个需要提示报错（报错文字：验收检测大焦点至少需测量四个管电压档）。
+          // 小焦点固定测量28kV（系统自动填写28kV），其他三行不能填写数据。
+          smallFocus[0].rows[0] = 28;
+          this.rxppsy_ys_flag = false;
+        }
+      }
+      let arr3=['乳腺CR','乳腺DR']
+      if(arr3.includes(this.detectionObjects)){
+        
+      }
     }
   },
 
   mounted() {
     this.init();
+    this.$nextTick(() => {
+      this.judge();
+    });
   }
 };
 </script>

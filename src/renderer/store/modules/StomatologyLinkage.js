@@ -27,6 +27,7 @@ const StomatologyLinkage = {
 
     sizeList: [],
     sizeList2: [],
+    NumberOfDetectors: "",
   },
   mutations: {
     savePurposeDetection(state, payload) {
@@ -62,6 +63,9 @@ const StomatologyLinkage = {
       state.syntheticData = payload;
       state.needPorjectName = "projcet_szwjcjlmknr";
       state.changeNum = !state.changeNum;
+    },
+    changeNumberOfDetectors(state, data) {
+      state.NumberOfDetectors = data;
     },
 
     saveJudgePorjectName(state, payload) {

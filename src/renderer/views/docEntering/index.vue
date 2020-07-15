@@ -406,7 +406,6 @@ import {
 } from "@/api/laboratory";
 import { getToken } from "@/utils/auth";
 import FileSaver from "file-saver";
-// import { resolve } from "../../../../../vuework/roms300bak/roms300_web/node_modules1/_uri-js@4.2.2@uri-js/dist/es5/uri.all";
 export default {
   data() {
     return {
@@ -491,8 +490,8 @@ export default {
         .filter(item => item.to == "project_deleteReason");
       if (data.length) {
         this.deleteData = data[0].data.valueData.point;
-      }else{
-        this.deleteData=[]
+      } else {
+        this.deleteData = [];
       }
 
       if (this.deleteData.length > 0) {

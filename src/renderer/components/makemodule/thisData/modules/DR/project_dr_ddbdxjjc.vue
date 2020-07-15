@@ -6,7 +6,7 @@
         <div
           style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
         >
-          低对比度细节检测
+          低对比度细节检测（{{data.valueData.title}}）
         </div>
         <div
           style="border: 1px solid black;font-weight: bolder; border-top: none;"

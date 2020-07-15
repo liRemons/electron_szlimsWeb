@@ -3,12 +3,13 @@
     <div class="control">
       <div style="float:left">
         <span style="line-height: 24px;padding-left:20px"
-          >深圳市瑞达智能检测系统用户端V{{ version }} Beta</span
+          >深圳市瑞达智能检测系统用户端V{{ version }} （测试版）</span
         >
       </div>
       <div class="action">
         <img
           src="@/assets/icon/upload.png"
+          v-if="$isUpdate"
           @click="getUpdateVersion"
           style="width: 24px;padding-top:2px"
           alt=""
@@ -84,7 +85,7 @@ export default {
     return {
       updateflag: false,
       dialogVisible: false,
-      version: "0.4",
+      version: "0.5",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
@@ -97,10 +98,6 @@ export default {
   mounted() {
     setTimeout(() => {
       this.getUpdateVersion();
-      // sessionStorage.setItem("version", {
-      //     updateVersion: '2.0',
-      //     version: '2.0'
-      //   });
     }, 1000);
   },
   methods: {
@@ -129,6 +126,9 @@ export default {
       });
     },
     getUpdateVersion() {
+      if(!this.$isUpdate){
+        return
+      }
       let data = { projectName: "SZ_LIMS_RD" };
       const loading = this.$loading({
         lock: true,

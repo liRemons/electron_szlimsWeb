@@ -5,8 +5,12 @@
       <div style="text-align: center;">
         <div
           style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
-          v-html="title"
-        ></div>
+        >
+          {{ title
+          }}<span v-if="title == '极限空间分辨力'"
+            >（{{ data.valueData.title }}）</span
+          >
+        </div>
         <div
           style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;"
         >
@@ -330,7 +334,7 @@ export default {
       if (this.testType === "乳腺DR") {
         return "高对比分辨力";
       } else {
-        return "极限空间分辨力（探测器1）";
+        return "极限空间分辨力";
       }
     }
   },

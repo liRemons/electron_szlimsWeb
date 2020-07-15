@@ -4,7 +4,7 @@
         <div>
             <div style="text-align: center;">
                 <div style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;">
-                    测距误差（探测器1）
+                    测距误差（{{data.valueData.title}}）
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;" class="tl">
                     标准要求

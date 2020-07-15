@@ -122,21 +122,32 @@
           <div class="pageFoot_1">
             检测 :
             <div :class="{ nameContainer1: true, mainContentBox_debug: debug }">
-              <div style="display:inline-block" v-if="(taskData.showing[0][0]['data']['valueData']['imgBase64'] instanceof Array)">
+              <div
+                style="display:inline-block"
+                v-if="
+                  taskData.showing[0][0]['data']['valueData'][
+                    'imgBase64'
+                  ] instanceof Array
+                "
+              >
                 <img
-                class="jianceImg"
-                :key="item+index"
-                v-for="(item,index) in taskData.showing[0][0]['data']['valueData']['imgBase64']"
-                :src="item"
-              />
+                  class="jianceImg"
+                  :key="item + index"
+                  v-for="(item, index) in taskData.showing[0][0]['data'][
+                    'valueData'
+                  ]['imgBase64']"
+                  :src="item"
+                />
               </div>
-               <div style="display:inline-block" v-else>
-                 <img
-                class="jianceImg"
-                :src="taskData.showing[0][0]['data']['valueData']['imgBase64']"
-                alt
-              />
-               </div>
+              <div style="display:inline-block" v-else>
+                <img
+                  class="jianceImg"
+                  :src="
+                    taskData.showing[0][0]['data']['valueData']['imgBase64']
+                  "
+                  alt
+                />
+              </div>
             </div>
           </div>
 
@@ -314,12 +325,90 @@ export default {
     },
     redefinition(needPorjectName) {
       let redefinitionArr = [];
+      let detectionObjects = this.jsonString.filter(
+        item => item.to == "project_jbxx"
+      )[0].data.valueData.detectionObjects;
+      let NumberOfDetectors;
+      let createdDetector = [];
+      // 当 DR 探测器数量 选择 2 时，以下项目为两个- start-------------------------------
+      let createdDetectorName = [
+        "project_dr_xhcttx", //信号传递特性（STP）
+        "project_dr_kszs", //DR暗噪声
+        "project_dr_tcqjlzs", //探测器剂量指示（DDI）
+        "project_dr_xyjyx", //响应均匀性
+        "project_dr_cjwc", //测距误差
+        "project_dr_aeclmd", //AEC灵敏度
+        "project_dr_aecdlszjyzx", //AEC电离室之间一致性
+        "project_dr_aecgdyzjyzx", //AEC管电压之间一致性
+        "project_dr_ddbdxjjc", //DR低对比度细节检测
+        "project_dr_cy", //DR残影
+        "project_dr_wy", //DR伪影
+        "project_dr_jxkjfbl" //极限空间分辨力
+      ];
+      this.jsonString.forEach((val, index) => {
+        if (val.to == "project_dr_tcq") {
+          NumberOfDetectors = Number(val.data.valueData.NumberOfDetectors);
+        }
+        if (createdDetectorName.includes(val.to)) {
+          if (detectionObjects == "乳腺DR" && val.to == "project_dr_jxkjfbl") {
+          } else {
+            createdDetector.push({
+              [val.to]: this.deepCopy(val),
+              index: index + 1,
+              title: "探测器2",
+              drIdNum2: val.data.valueData.drIdNum2 + "create",
+              testProject: val.to
+            });
+          }
+        }
+        this.$set(val.data.valueData, "NumberOfDetectors", NumberOfDetectors);
+      });
+      if (NumberOfDetectors == 2) {
+        let obj = {};
+        let peon = createdDetector.reduce((cur, next) => {
+          obj[next.testProject]
+            ? ""
+            : (obj[next.testProject] = true && cur.push(next));
+          return cur;
+        }, []); //设置cur默认类型为数组，并且初始值为空的数组
+        createdDetector = peon;
+        createdDetector.forEach(item => {
+          item[item.testProject].data.valueData.drIdNum2 = item.drIdNum2;
+          item[item.testProject].data.valueData.title = item.title;
+          item[item.testProject].data.valueData.del = true;
+          if (
+            this.jsonString.filter(a => a.to == item.testProject).length < 2
+          ) {
+            this.jsonString.splice(
+              this.jsonString.findIndex(a => a.to == item.testProject) + 1,
+              0,
+              item[item.testProject]
+            );
+          }
+        });
+      } else {
+        this.jsonString.forEach(item => {
+          if (
+            createdDetectorName.includes(item.to) &&
+            item.data.valueData.del
+          ) {
+            for (let key in item) {
+              delete item[key];
+            }
+          }
+        });
+        this.jsonString = this.jsonString.filter(
+          value => Object.keys(value).length !== 0
+        );
+      }
+      // ----------------------------------------------end----------------------------
       this.jsonString.forEach((item, index) => {
         let obj = {};
         let findIndex = redefinitionArr.findIndex(val => {
           return (
             val.to === item.to &&
-            val.data.valueData.multipleId === item.data.valueData.multipleId
+            val.data.valueData.multipleId === item.data.valueData.multipleId &&
+            val.data.valueData.drIdNum2 === item.data.valueData.drIdNum2
           );
         });
         if (item.data.valueData.heBingJudge) {
@@ -346,6 +435,7 @@ export default {
           );
         }
       });
+
       let decompose = [];
       let height = redefinitionArr[0].data.switch ? 1010 : 670;
       redefinitionArr.forEach((item, index) => {
@@ -587,7 +677,6 @@ export default {
             );
             that.$set(item.data.valueData, "deviceData2", res.data);
           });
-          console.log(res.data);
           that.componentFlag = true;
           let data = res.data;
           let data_fz = res.data_fz;
@@ -797,6 +886,17 @@ export default {
           "Y年M月D日  h时m分"
         );
       }
+      this.jsonString.forEach(item => {
+        if (
+          !item.data.valueData.title &&
+          item.to.includes("_dr_") &&
+          !item.data.valueData.drIdNum2
+        ) {
+          this.$set(item.data.valueData, "title", "探测器1");
+          this.$set(item.data.valueData, "drIdNum2", uuid());
+          this.$set(item.data.valueData, "del", false);
+        }
+      });
       this.todayDate = this.jsonString[0].data.valueData.todayDate;
       this.operation();
       this.redefinition();
@@ -820,6 +920,9 @@ export default {
       this.testContentArray = JSON.myParse(this.task.testProjectList);
       this.control = new Array(this.testContentArray.length).fill(false);
       this.testContentArray.forEach((item, index) => {
+        if (item.name.includes("_dr_") && !item.title) {
+          this.$set(item, "title", "探测器1");
+        }
         let subNum = this.jsonString.findIndex(
           val => val.data.valueData.testProjectId === item.testProjectId
         );
@@ -908,6 +1011,7 @@ export default {
           if (result) {
             result.valueData.testProjectId = obj.testProjectId;
             result.valueData.testProjectType = obj.testProjectType;
+            result.valueData.title = obj.title;
             result.valueData.sysTestProjectName = obj.sysTestProjectName;
             if (obj.testProjectChineseName)
               result.valueData.testProjectChineseName =
@@ -920,6 +1024,7 @@ export default {
               Math.random() + "init" + Math.random();
             result.groundName = modelObj.groundName;
             result.showName = modelObj.showName;
+            console.log(obj, "obj");
             this.dataFormat(result, obj, this.task);
             modelObj.push(result);
           }
@@ -937,6 +1042,7 @@ export default {
           let index = this.jsonString.findIndex(
             item => item.to === "project_deleteReason"
           );
+
           this.jsonString.splice(index, 0, json);
         });
         let testprojectId = obj.testProjectId;

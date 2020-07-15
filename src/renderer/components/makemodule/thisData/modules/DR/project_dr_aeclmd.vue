@@ -6,7 +6,7 @@
         <div
           style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
         >
-          AEC灵敏度（探测器1）
+          AEC灵敏度（{{data.valueData.title}}）
         </div>
         <div
           class="tl"

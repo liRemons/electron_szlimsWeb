@@ -4,7 +4,7 @@
         <div>
             <div style="text-align: center;">
                 <div style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;">
-                    残影（探测器1）
+                    残影（{{data.valueData.title}}）
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;">
                     标准要求

@@ -139,6 +139,7 @@ Vue.prototype.computeObj = computes;
 Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
 Vue.prototype.$updateAxios = axios.updateAxios;
+Vue.prototype.$isUpdate=false
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
   let index = "";

@@ -6,7 +6,7 @@
         <div
           style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
         >
-          暗噪声（探测器1）
+          暗噪声（{{data.valueData.title}}）
         </div>
         <div
           style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;"
@@ -281,6 +281,7 @@ export default {
     },
     baseValue() {
       let val = this.data.valueData.arr[1].replace(" ", "");
+      console.log(val);
       if (val !== "" && val !== "无") {
         return "有";
       } else {
@@ -386,7 +387,6 @@ export default {
         }
       } else if (val === "状态检测") {
         let factoryValue = this.data.valueData.factoryValue;
-        console.log(this.baseValue);
         if (factoryValue === "无" && this.baseValue === "无") {
           this.data.valueData.checkBoxArr[2] = true;
         } else if (factoryValue === "无" && this.baseValue === "有") {

@@ -109,7 +109,7 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed:120,
+        fixed: 120,
         value: function(obj) {
           return (
             32 *
@@ -2758,13 +2758,19 @@ export default [
       detector: [],
       point: [
         {
-          rows: [["K/μGy", "", "", "", "", ""], ["P", "", "", "", "", ""]],
+          rows: [
+            ["K/μGy", "", "", "", "", ""],
+            ["P", "", "", "", "", ""],
+          ],
           valP: "",
           valR2: "",
           option: "对数的拟合曲线",
         },
         {
-          rows: [["K/μGy", "", "", "", "", ""], ["P", "", "", "", "", ""]],
+          rows: [
+            ["K/μGy", "", "", "", "", ""],
+            ["P", "", "", "", "", ""],
+          ],
           valP: "",
           valR2: "",
           option: "对数的拟合曲线",
@@ -3205,14 +3211,20 @@ export default [
           measure: "",
           SID: "",
           focus: "",
-          rows: [["水平", "", "", "", ""], ["垂直", "", "", "", ""]],
+          rows: [
+            ["水平", "", "", "", ""],
+            ["垂直", "", "", "", ""],
+          ],
         },
         {
           distance: "",
           measure: "",
           SID: "",
           focus: "",
-          rows: [["水平", "", "", "", ""], ["垂直", "", "", "", ""]],
+          rows: [
+            ["水平", "", "", "", ""],
+            ["垂直", "", "", "", ""],
+          ],
         },
       ],
     },
@@ -4376,12 +4388,64 @@ export default [
       testProject: "project_dr_tcq",
       testProjectChineseName: "DR探测器",
       isPole: "",
+      isPole2: "",
       NumberOfDetectors: "1",
       AECNum: "",
       cxbgcx: "",
+      cxbgcx2: "",
       tcqNum1: "",
       tcqNum2: "",
       point: [
+        {
+          v1: 70,
+          v2: "",
+          v3: "1mmCu",
+          v4: "",
+          v5: 1,
+          v6: "",
+        },
+        {
+          v1: 70,
+          v2: "",
+          v3: "1mmCu",
+          v4: "",
+          v5: 5,
+          v6: "",
+        },
+        {
+          v1: 70,
+          v2: "",
+          v3: "",
+          v4: "1mmCu",
+          v5: 10,
+          v6: "",
+        },
+        {
+          v1: 70,
+          v2: "",
+          v3: "",
+          v4: "1mmCu",
+          v5: 20,
+          v6: "",
+        },
+        {
+          v1: 70,
+          v2: "",
+          v3: "",
+          v4: "1mmCu",
+          v5: 30,
+          v6: "",
+        },
+        {
+          v1: 70,
+          v2: "",
+          v3: "无",
+          v4: "",
+          v5: 5,
+          v6: "",
+        },
+      ],
+      point2: [
         {
           v1: 70,
           v2: "",
@@ -4436,10 +4500,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 410,
+        fixed: 820,
         confirm: true,
         value: function(obj) {
-          return 410;
+          return 410 * Number(obj.NumberOfDetectors);
         },
       },
       _short: {
@@ -4475,7 +4539,7 @@ export default [
         fixed: 485,
         confirm: true,
         value: function(obj) {
-          return 485;
+          return 485
         },
       },
       _short: {
@@ -4501,7 +4565,9 @@ export default [
       jlJiXianZhi: "",
       note: "",
       computer: "",
+      computer2: "",
       pianCha: "",
+      pianCha2: "",
       checkArr: [false, false],
       arr1: ["", "", "", ""],
       arr2: ["", "", "", ""],
@@ -4511,10 +4577,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 520,
+        fixed: 450,
         confirm: true,
         value: function(obj) {
-          return 520;
+          return 450;
         },
       },
       _short: {
@@ -4875,7 +4941,7 @@ export default [
         carried: true,
         fixed: 452,
         confirm: true,
-        value: function(obj) {
+        value: function(obj, num) {
           return 452;
         },
       },

@@ -561,10 +561,13 @@ export default {
       //   console.log(e);
       // });
       let version = sessionStorage.getItem("version");
-      if (version.updateVersion !== version.version) {
-        this.$message.warning("请更新到最新版本再进行录入");
-        return;
+      if (this.$isUpdate) {
+        if (version.updateVersion !== version.version) {
+          this.$message.warning("请更新到最新版本再进行录入");
+          return;
+        }
       }
+
       this.readFile(row.taskId);
       this.readFileEvent().then(res => {
         if (res) {
