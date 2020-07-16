@@ -15,7 +15,7 @@
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                     检测及计算方法
                 </div>
-                <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+                <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;" class="tl">
                     有可能的话取出滤线栅，设置SID等于或尽量接近180cm。选用屏/片X射线摄影密着检测板放置于探测器上面，用60kV，约10mAs，进行曝光，目视影像是否存在伪影，如果存在，检查伪影来源。
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">

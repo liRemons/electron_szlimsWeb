@@ -14,7 +14,7 @@
             <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                 检测及计算方法
             </div>
-            <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+            <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;" class="tl">
                 选取探测器剂量指示（DDI）项目中10μGy的预处理图像，选取中心和四个像限中央各一个面积约4cm×4cmROI，分别获取像素值Vi，计算变异系数。变异系数计算公式为： CV=1/V ̅  √(∑▒(V_i-V ̅ )^2⁄((5-1) ))×100%。
             </div>
             <div style="border: 1px solid black;font-weight: bolder; border-top: none;">

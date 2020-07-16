@@ -12,7 +12,7 @@
             <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                 检测及计算方法
             </div>
-            <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+            <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;" class="tl">
                 将检测板放置于影像接收器上，使检测板中心与光野中心重合，检测筒放在检测板上，检测筒的圆心与检测板的中心重合，调节焦片距为100cm或常用焦片距，设置加载条件：60kV，3mAs左右，曝光后观察检测筒上表面中心钢珠的影像落在检测板中大圆影像内，则记录检测结果为＜3°。
             </div>
             <div style="border: 1px solid black;font-weight: bolder; border-top: none;">

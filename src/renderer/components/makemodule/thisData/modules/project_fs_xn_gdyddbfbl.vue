@@ -17,7 +17,7 @@
 				<th class="p20 tc" colspan="3">检测及计算方法</th>
 			</tr>
 			<tr>
-				<td class="p20" align="left" colspan="3" style="line-height: 16px;">
+				<td class="p20 tl" align="left" colspan="3" style="line-height: 16px;">
 					对于口内牙片机，将模体置于靠近限束筒出口位置，并使其平面与主射束中心轴垂直；
 					对于全景摄影功能，将模体置于头托中心，主射束中心轴与测试平面垂直，并在X射线
 					球管出线口放置0.8mmCu作为附加衰减层；对于头颅摄影功能，将模体置于临床受检者

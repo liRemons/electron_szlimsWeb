@@ -9,7 +9,6 @@
           AEC灵敏度（{{data.valueData.title}}）
         </div>
         <div
-          class="tl"
           style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;"
         >
           标准要求
@@ -23,6 +22,7 @@
           检测及计算方法
         </div>
         <div
+        class="tl"
           style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;"
         >
           70kV，1mmCu滤过，选择所有的电离室，在AEC条件下曝光，记录mA，s，或mAs或DDI值。偏差=（检测结果-基线值）/基线值×100%。

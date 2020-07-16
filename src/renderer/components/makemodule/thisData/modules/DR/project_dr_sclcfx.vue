@@ -29,6 +29,7 @@
       </div>
       <div
         style="border: 1px solid black; border-top: none; padding: 5px; min-height: 22px;"
+        class="tl"
       >
         {{ this.getContent(1) }}
       </div>

@@ -22,6 +22,7 @@
           检测及计算方法
         </div>
         <div
+        class="tl"
           style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;"
         >
           1mmCu滤过，有可能的话在无滤线栅无床面衰减条件下，分别设置70kV、80kV、90kV和100kV，在AEC条件下曝光，分别测量4个电压档的影像探测器表面入射空气比释动能，记录剂量值或DDI值，并计算平均值。偏差=（平均值-基线值）/基线值×100%。

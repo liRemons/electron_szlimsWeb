@@ -14,7 +14,7 @@
             <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                 检测及计算方法
             </div>
-            <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+            <div class="tl" style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
                 将检测板放置于影像接收器上，使检测板中心与光野中心重合检测筒放在检测板上，检测筒的圆心与检测板的中心重合，调节焦片距为100cm或常用焦片距（并记录下来），调节光野左边和上边分别与检测板长方框左边和上边对齐，记录光野右边和下边与长方框右边和下边的的距离，如果光野边在长方框外面则记录光野边与长方框边距离为a（在框内记为负，载框外记为正），曝光后记录影像四边与检测板长方框四边的距离，如果影像边在长方框外面则记录影像边与长方框边距离为b（在框内记为负，载框外记为正），则光野偏离为b-a，如果焦片距不能调节至100cm则检测结果需要进行距离修正，修正公式：光野偏离为（b-a）×100/焦皮距。
             </div>
             <div style="border: 1px solid black;font-weight: bolder; border-top: none;">

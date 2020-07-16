@@ -22,6 +22,7 @@
       </div>
       <div
         style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;"
+        class="tl"
       >
         有可能的话取出滤线栅，设置SID为180cm，如达不到则调节SID至最大值，70kV，1mmCu滤过，入射空气比释动能约10μGy，实际检测条件参考曝光参数选择，曝光3次，记录DDI值，如果没有DDI值则读取影像中心10cm×10cmROI的平均像素值，并计算三幅影像平均像素值。验收检测结果偏差=（计算值-测量值）/测量值×100%，状态检测结果偏差=（平均值-基线值）/基线值×100%。
       </div>
@@ -178,7 +179,7 @@
               v-if="!showInput"
               :multi-select="false"
               :receive="'AECNum'"
-              :transmitText="''"
+              :transmitText="data.valueData.jiXianZhi"
               :single="true"
               :rows="false"
               :list="['无', '自定义']"
@@ -201,7 +202,7 @@
               <el-checkbox
                 v-model="data.valueData.checkArr[0]"
                 disabled
-                style="width: 90px;"
+                style="width: 110px;"
               >
                 建立基线值 =
               </el-checkbox>
@@ -213,7 +214,7 @@
               <el-checkbox
                 v-model="data.valueData.checkArr[1]"
                 disabled
-                style="width: 120px;"
+                style="width: 140px;"
               >
                 与基线值的偏差 =
               </el-checkbox>

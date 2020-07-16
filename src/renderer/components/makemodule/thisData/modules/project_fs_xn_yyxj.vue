@@ -19,7 +19,7 @@
                 <th class="p20 tc" colspan="2">检测及计算方法</th>
             </tr>
             <tr>
-                <td class="p20" colspan="2">
+                <td class="p20 tl" colspan="2">
                     采用直读法，可选择管电压指示的偏离项目时检测的管电压下进行测量。
                 </td>
             </tr>

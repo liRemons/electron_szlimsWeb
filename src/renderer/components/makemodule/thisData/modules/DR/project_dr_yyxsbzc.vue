@@ -27,6 +27,7 @@
       </div>
       <div
         style="border: 1px solid black; border-top: none; padding: 1px; min-height: 31px;"
+        class="tl"
       >
         {{ this.getContent(1) }}
       </div>
@@ -213,8 +214,8 @@ window.hh = {
       }
     },
     myList() {
-      let arr1 = ["乳腺DR"];
-      let arr2 = ["乳腺CR"];
+      let arr1 = ["乳腺DR",'乳腺DR摄影'];
+      let arr2 = ["乳腺CR",'乳腺CR摄影'];
 
       if (this.computeObj.intersect(this.mode, arr1).length > 0) {
         return this.list;
@@ -310,7 +311,7 @@ window.hh = {
     },
 
     setV1() {
-      let arr1 = ["乳腺DR", "乳腺CR"];
+      let arr1 = ["乳腺DR摄影", "乳腺CR", "乳腺CR摄影"];
       let arr3 = ["乳腺屏片"];
       let arr2 = [
         "DR摄影",

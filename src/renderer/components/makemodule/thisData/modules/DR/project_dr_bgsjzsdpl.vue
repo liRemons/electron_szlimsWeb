@@ -13,16 +13,18 @@
           标准要求
         </div>
         <div
+        class="tl"
           style="border: 1px solid black; border-top: none; min-height: 30px;"
           v-html="getDetailContent()"
         ></div>
         <div
           style="border: 1px solid black;font-weight: bolder; border-top: none;"
-          class="tl"
+          
         >
           检测及计算方法
         </div>
         <div
+        class="tl"
           style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px; min-height: 22px;"
           v-html="getDetailContent2()"
         ></div>

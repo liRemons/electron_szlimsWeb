@@ -17,7 +17,7 @@
 				<th class="p20 tc" colspan="7">检测及计算方法</th>
 			</tr>
 			<tr>
-				<td class="p20" colspan="7" style="line-height:16px;">
+				<td class="p20 tl" colspan="7" style="line-height:16px;">
 					检测方法同管电压指示的偏离项目。以设备常用成人曝光条件进行检测。加载时间的偏离
 					（ms）=加载时间测量平均值-加载时间。加载时间的偏离（%）=（加载时间测量平均值-
 					加载时间）/加载时间×100%。

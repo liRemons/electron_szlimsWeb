@@ -22,6 +22,7 @@
       </div>
       <div
         style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;"
+        class="tl"
       >
         有可能的话取出滤线栅，SID等于或尽量接近180cm，70kV，1mmCu滤过，入射空气比释动能分别选取约1μGy、5μGy、10μGy、20μGy和30μGy，实际检测条件参考曝光参数选择，曝光后，读取每幅影像中心约10cm×10cmROI的平均像素值。进行P和K的拟合计算R2。
       </div>

@@ -15,7 +15,7 @@
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                     检测及计算方法
                 </div>
-                <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+                <div class="tl" style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
                     70kV，1mmCu滤过，分别选择一个电离室，在AEC条件下曝光，记录mA，s或mAs或DDI值，将每两个电离室的测量值X进行比较，计算平均值最大偏差。电离室i测量值Xi与电离室j测量值Xj之间的平均值偏差ij=(Xi-Xj)/(Xi+Xj)。
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">

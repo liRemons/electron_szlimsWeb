@@ -15,7 +15,7 @@
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                     检测及计算方法
                 </div>
-                <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+                <div class="tl" style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
                     有可能的话取出滤线栅，设置SID等于或尽量接近180cm。第一次曝光，关闭遮线器，用面积15cm×15cm，厚2mm铅板覆盖出线口，设置最低管电压最低管电流积或最低管电流后，手动曝光并获取一幅空白影像；第二次曝光，打开遮线器，取走铅板，在探测器表面中央部位放置一块面积4cm×4cm，厚4mm铅板，70kV，无滤过，入射空气比释动能选取5μGy，实际检测条件参考曝光参数选择；1.5分钟内进行第三次曝光，条件同第一次曝光，观察第三次曝光后的空白影像中不应存在第二次曝光影像中的残影，如果存在残影，应分别测量残影区和非残影区相同ROI面积的平均像素值，并比较。计算公式：误差=(残影区平均像素值-非残影区平均像素值)/非残影区平均像素值×100%。
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">

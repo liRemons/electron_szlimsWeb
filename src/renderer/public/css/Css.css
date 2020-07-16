@@ -2052,7 +2052,7 @@ body {
 }
 
 .p20 {
-  padding: 0 20px;
+  padding: 0 5px;
 }
 
 .myBtn {
@@ -2117,6 +2117,7 @@ body {
 
 .tl {
   text-align: left !important;
+  text-indent: 2rem;
 }
 
 
@@ -2308,9 +2309,9 @@ body {
   height: 25px !important;
 }
 .project_dr_jxkjfbl .hoverFinger{
-  height: 200px !important;
+  height: 100px !important;
 }
 .project_dr_jxkjfbl ._normalInput_{
   white-space: normal;
-  height: 200px !important;
+  height: 100px !important;
 }

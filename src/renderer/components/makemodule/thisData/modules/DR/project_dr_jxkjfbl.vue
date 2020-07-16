@@ -26,6 +26,7 @@
         </div>
         <div
           style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px; min-height: 40px;"
+          class="tl"
         >
           {{ this.getDetailContent() }}
         </div>
@@ -47,6 +48,8 @@
               <redStar v-if="state === '验收检测'"></redStar>
               <el-checkbox
                 v-model="data.valueData.checkBoxsTop[0]"
+                :disabled="data.valueData.checkBoxsTop[1]"
+                @change="el => checkBoxsTop(el, 'v2')"
                 label="厂家规定"
               ></el-checkbox>
               <br />
@@ -56,6 +59,8 @@
               <redStar v-if="state === '验收检测'"></redStar>
               <el-checkbox
                 v-model="data.valueData.checkBoxsTop[1]"
+                :disabled="data.valueData.checkBoxsTop[0]"
+                @change="el => checkBoxsTop(el, 'v3')"
                 label="fNyquist"
               ></el-checkbox>
               <br />
@@ -76,10 +81,20 @@
               <myInput v-model="data.valueData.point[0].v1"></myInput>
             </td>
             <td>
-              <myInput v-model="data.valueData.point[0].v2"></myInput>
+              <myInput
+                v-model="data.valueData.point[0].v2"
+                v-if="data.valueData.checkBoxsTop[0]"
+                @change.native="changePointNum($event, 0)"
+              ></myInput>
+              <span v-else>/</span>
             </td>
             <td>
-              <myInput v-model="data.valueData.point[0].v3"></myInput>
+              <myInput
+                v-model="data.valueData.point[0].v3"
+                v-if="data.valueData.checkBoxsTop[1]"
+                @change.native="changePointNum($event, 0)"
+              ></myInput>
+              <span v-else>/</span>
             </td>
             <td>
               <div v-if="state === '状态检测'" class="project_dr_jxkjfbl">
@@ -110,36 +125,7 @@
               </div>
             </td>
             <td style="text-align: left; padding-left: 20px;">
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[0]"
-                >≥90%厂家规定值</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[1]"
-                >＜90%厂家规定值</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[2]"
-                >≥80%fNyquist</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[3]"
-                >＜80%fNyquist</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[4]"
-                >建立基线值=
-                <span style="border-bottom: 1px solid black;">{{
-                  data.valueData.point[0].jiXianVal
-                }}</span></el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[5]"
-                >≥90%基线值</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[0].v5[6]"
-                >＜90%基线值</el-checkbox
-              >
+              {{ data.valueData.point[0].v5 }}
             </td>
           </tr>
           <tr>
@@ -150,10 +136,20 @@
               <myInput v-model="data.valueData.point[1].v1"></myInput>
             </td>
             <td>
-              <myInput v-model="data.valueData.point[1].v2"></myInput>
+              <myInput
+                v-model="data.valueData.point[1].v2"
+                v-if="data.valueData.checkBoxsTop[0]"
+                @change.native="changePointNum($event, 1)"
+              ></myInput>
+              <span v-else>/</span>
             </td>
             <td>
-              <myInput v-model="data.valueData.point[1].v3"></myInput>
+              <myInput
+                v-model="data.valueData.point[1].v3"
+                v-if="data.valueData.checkBoxsTop[1]"
+                @change.native="changePointNum($event, 1)"
+              ></myInput>
+              <span v-else>/</span>
             </td>
             <td>
               <div v-if="state === '状态检测'" class="project_dr_jxkjfbl">
@@ -182,36 +178,7 @@
               <div v-else>/</div>
             </td>
             <td style="text-align: left; padding-left: 20px;">
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[0]"
-                >≥90%厂家规定值</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[1]"
-                >＜90%厂家规定值</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[2]"
-                >≥80%fNyquist</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[3]"
-                >＜80%fNyquist</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[4]"
-                >建立基线值=
-                <span style="border-bottom: 1px solid black;">{{
-                  data.valueData.point[1].jiXianVal
-                }}</span></el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[5]"
-                >≥90%基线值</el-checkbox
-              >
-              <br />
-              <el-checkbox disabled v-model="data.valueData.point[1].v5[6]"
-                >＜90%基线值</el-checkbox
-              >
+              {{ data.valueData.point[1].v5 }}
             </td>
           </tr>
         </table>
@@ -226,43 +193,43 @@
         >
           <el-radio
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             label="新标准实施后首次检测，建立基线值。"
           ></el-radio>
           <br />
           <el-radio
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             label="无法确认建立基线值的检测条件，建立基线值。"
           ></el-radio>
           <br />
           <el-radio
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             label="无法确认建立基线值的检测条件，以90%厂家规定值作为最小基线值。"
           ></el-radio>
           <br />
           <el-radio
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             label="新标准实施后首次检测，以90%厂家规定值作为最小基线值。"
           ></el-radio>
           <br />
           <el-radio
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             label="无法确认建立基线值的检测条件，以80% fNyquist作为最小基线值。"
           ></el-radio>
           <br />
           <el-radio
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             label="新标准实施后首次检测，以80% fNyquist作为最小基线值。"
           ></el-radio>
           <el-radio
             v-if="noteFlag"
             v-model="data.valueData.note"
-            disabled
+            :disabled="state === '验收检测'"
             :label="data.valueData.note"
           ></el-radio>
         </div>
@@ -350,6 +317,19 @@ export default {
         return "";
       }
     },
+    // 切换checkbox清空
+    checkBoxsTop(data, pro) {
+      this.data.valueData.point.forEach(item => {
+        item[pro] = "";
+      });
+    },
+    changePointNum(e, index) {
+      if (this.state == "验收检测") {
+        this.data.valueData.point[index].v5 = (
+          this.data.valueData.point[index].v1 / Number(e.target.value)
+        ).toFixed46(2);
+      }
+    },
     returnFn(val, a, index, row) {
       this.noteFlag = false;
       let item = this.data.valueData.point[index];
@@ -409,7 +389,7 @@ export default {
           item.v4Id = row.id;
         }
       }
-      this.stateTest(item);
+      this.yanShouTest(item);
     },
     sure() {
       if (this.state === "验收检测") {
@@ -449,54 +429,27 @@ export default {
     },
 
     yanShouTest(item) {
-      item.v5.forEach((r, i) => {
-        item.v5[i] = false;
-      });
+      item.v5 = "";
       if (
         this.data.valueData.checkBoxsTop[0] === true &&
         item.v2 !== "" &&
         this.data.valueData.checkBoxsTop[1] === false &&
         item.v3 === ""
       ) {
-        let e = item.v1 / item.v2;
-
-        if (e >= 0.9) {
-          item.v5[0] = true;
-        } else {
-          item.v5[1] = true;
-        }
+        item.v5 = (item.v1 / (0.9 * item.v2)).toFixed46(2);
       } else if (
         this.data.valueData.checkBoxsTop[0] === false &&
         item.v2 === "" &&
         this.data.valueData.checkBoxsTop[1] === true &&
         item.v3 !== ""
       ) {
-        let f = item.v1 / item.v3;
-        if (f >= 0.8) {
-          item.v5[2] = true;
-        } else {
-          item.v5[3] = true;
-        }
-      } else if (
-        this.data.valueData.checkBoxsTop[0] === true &&
-        item.v2 !== "" &&
-        this.data.valueData.checkBoxsTop[1] === true &&
-        item.v3 !== ""
-      ) {
-        let g = item.v1 / item.v2;
-        if (g >= 0.8) {
-          item.v5[5] = true;
-        } else {
-          item.v5[6] = true;
-        }
+        item.v5 = (item.v1 / (item.v3 * 0.8)).toFixed46(2);
       }
       this.$forceUpdate();
     },
 
     stateTest(item) {
-      item.v5.forEach((r, i) => {
-        item.v5[i] = false;
-      });
+      item.v5 = "";
       item.jiXianVal = "";
       if (
         this.data.valueData.checkBoxsTop[0] === true &&
@@ -505,54 +458,25 @@ export default {
         item.v3 === ""
       ) {
         if (item.v4Id === 0) {
-          let e1 = item.v2 * 0.9 * 0.9;
-          if (item.v1 >= e1) {
-            item.v5[4] = true;
+          item.v5 = item.v2 * 0.9 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以90%厂家规定值作为最小基线值。";
           }
-          item.val = e1;
+          item.val = item.v5;
         } else if (item.v4Id === 2) {
-          let e1 = item.v2 * 0.9 * 0.9;
-          if (item.v1 >= e1) {
-            item.v5[4] = true;
+          item.v5 = item.v2 * 0.9 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note = "新标准实施后首次检测，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以90%厂家规定值作为最小基线值。";
           }
-          item.val = e1;
+          item.val = item.v5;
         } else if (item.v4Id === 4) {
-          let g1 = item.v2 * 0.9;
-          if (item.v1 >= g1) {
-            item.v5[5] = true;
+          item.v5 = item.v2 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以90%厂家规定值作为最小基线值。";
           }
-          item.val = g1;
+          item.val = item.v5;
         } else if (item.v4Id == 5) {
-          let g = item.v4 * 0.9;
-          if (item.v1 >= g) {
-            this.noteFlag = true;
-            this.data.valueData.note = "基线值为" + item.v4;
-            item.v5[5] = true;
-          } else {
-            this.data.valueData.note = "";
-            this.noteFlag = false;
-            item.v5[6] = true;
-          }
+          item.v5 = item.v4 * 0.9;
         }
       } else if (
         this.data.valueData.checkBoxsTop[0] === false &&
@@ -561,53 +485,25 @@ export default {
         item.v3 !== ""
       ) {
         if (item.v4Id === 1) {
-          let e2 = item.v3 * 0.8 * 0.9;
-          if (item.v1 >= e2) {
-            item.v5[4] = true;
+          item.v5 = item.v3 * 0.8 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以80% fNyquist作为最小基线值。";
           }
-          item.val = e2;
+          item.val = item.v5;
         } else if (item.v4Id === 3) {
-          let e2 = item.v3 * 0.8 * 0.9;
-          if (item.v1 >= e2) {
-            item.v5[4] = true;
+          item.v5 = item.v3 * 0.8 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note = "新标准实施后首次检测，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以80% fNyquist作为最小基线值。";
           }
-          item.val = e2;
+          item.val = item.v5;
         } else if (item.v4Id === 4) {
-          let g1 = item.v3 * 0.9;
-          if (item.v1 >= g1) {
-            item.v5[4] = true;
+          item.v5 = item.v3 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note = "新标准实施后首次检测，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以80% fNyquist作为最小基线值。";
           }
-          item.val = g1;
+          item.val = item.v5;
         } else if (item.v4Id == 5) {
-          let g = item.v4 * 0.9;
-          if (item.v1 >= g) {
-            this.noteFlag = true;
-            this.data.valueData.note = "基线值为" + item.v4;
-            item.v5[5] = true;
-          } else {
-            this.data.valueData.note = "";
-            this.noteFlag = false;
-            item.v5[6] = true;
-          }
+          item.v5 = item.v4 * 0.9;
         }
       } else if (
         this.data.valueData.checkBoxsTop[0] === true &&
@@ -616,51 +512,26 @@ export default {
         item.v3 !== ""
       ) {
         if (item.v4Id === 0) {
-          let e1 = item.v2 * 0.9 * 0.9;
-          if (item.v1 >= e1) {
-            item.v5[4] = true;
+          item.v5 = item.v2 * 0.9 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以90%厂家规定值作为最小基线值。";
           }
-          item.val = e1;
+          item.val = item.v5;
         } else if (item.v4Id === 2) {
-          let e1 = item.v2 * 0.9 * 0.9;
+          item.v5 = item.v2 * 0.9 * 0.9;
 
-          if (item.v1 >= e1) {
-            item.v5[4] = true;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-            this.data.valueData.note = "新标准实施后首次检测，建立基线值。";
-          } else {
-            item.v5[6] = true;
-            this.data.valueData.note =
-              "无法确认建立基线值的检测条件，以90%厂家规定值作为最小基线值。";
           }
-          item.val = e1;
+          item.val = item.v5;
         } else if (item.v4Id === 4) {
-          let g1 = item.v2 * 0.9;
-          if (item.v1 >= g1) {
-            item.v5[5] = true;
+          item.v5 = item.v2 * 0.9;
+          if (item.v1 >= item.v5) {
             item.jiXianVal = item.v1;
-          } else {
-            item.v5[6] = true;
           }
-          item.g1 = g1;
+          item.g1 = item.v5;
         } else if (item.v4Id == 5) {
-          let g = item.v4 * 0.9;
-          if (item.v1 >= g) {
-            this.noteFlag = true;
-            this.data.valueData.note = "基线值为" + item.v4;
-            item.v5[5] = true;
-          } else {
-            this.noteFlag = false;
-            this.data.valueData.note = "";
-            item.v5[6] = true;
-          }
+          item.v5 = item.v4 * 0.9;
         }
       } else if (
         this.data.valueData.checkBoxsTop[0] === false &&
@@ -669,21 +540,11 @@ export default {
         item.v3 == ""
       ) {
         if (item.v4Id == 5) {
-          let g = item.v4 * 0.9;
-          if (item.v1 >= g) {
-            this.noteFlag = true;
-            this.data.valueData.note = "基线值为" + item.v4;
-            item.v5[5] = true;
-          } else {
-            this.noteFlag = false;
-            this.data.valueData.note = "";
-            item.v5[6] = true;
-          }
+          item.v5 = item.v4 * 0.9;
         }
       }
     },
     changeV4(index) {
-      console.log(index);
       if (this.data.valueData.point[index].v4 === "") {
         if (index == 0) {
           this.showInput = false;
@@ -696,7 +557,7 @@ export default {
         ].v4.replace(" ", "");
       }
       this.data.valueData.point[index].v4Id = 5;
-      this.stateTest(this.data.valueData.point[index]);
+      // this.stateTest(this.data.valueData.point[index]);
     }
   }
 };

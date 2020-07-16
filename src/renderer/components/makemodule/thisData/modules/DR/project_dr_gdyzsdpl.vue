@@ -24,6 +24,7 @@
         检测及计算方法
       </div>
       <div
+      class="tl"
         style="border: 1px solid black; border-top: none; padding: 2px; min-height: 20px;line-height:20px"
       >
         {{ getContent(1) }}

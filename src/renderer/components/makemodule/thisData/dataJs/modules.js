@@ -4969,7 +4969,8 @@ export default [
           v2: "",
           v3: "",
           v4: "",
-          v5: [false, false, false, false, false, false, false],
+          // v5: [false, false, false, false, false, false, false],
+          v5:"",
           jiXianVal: "",
         },
         {
@@ -4977,7 +4978,8 @@ export default [
           v2: "",
           v3: "",
           v4: "",
-          v5: [false, false, false, false, false, false, false],
+          // v5: [false, false, false, false, false, false, false],
+          v5:'',
           jiXianVal: "",
         },
       ],
@@ -4988,10 +4990,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 925,
+        fixed: 680,
         confirm: true,
         value: function(obj) {
-          return 925;
+          return 680;
         },
       },
       _short: {

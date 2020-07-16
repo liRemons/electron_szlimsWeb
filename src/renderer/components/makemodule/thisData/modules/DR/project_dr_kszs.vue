@@ -18,7 +18,6 @@
           class="tl"
         >
           验收：像素值或DDI在规定值内，或建立基线值，影像均匀无伪影；
-          <br />
           状态&稳定性：像素值或DDI在规定值内，或基线值±50.0%，影像均匀无伪影。
         </div>
         <div
@@ -28,6 +27,7 @@
         </div>
         <div
           style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;"
+          class="tl"
         >
           有可能的话取出滤线栅，关闭遮线器，用面积15cm×15cm，厚2mm铅板覆盖出线口，设置最低管电流积或最低管电流和最低管电压进行手动曝光并获取一幅空白预处理影像，读取影像中心10cm×10cmROI的平均像素值或记录DDI值。调节适当窗宽窗位，目视检查影像应均匀无伪影。
         </div>
@@ -150,7 +150,7 @@
                   v-if="!showInput2"
                   :multi-select="false"
                   :receive="'AECNum'"
-                  :transmitText="''"
+                  :transmitText="data.valueData.arr[1]"
                   :single="true"
                   :rows="false"
                   :list="['无', '自定义']"

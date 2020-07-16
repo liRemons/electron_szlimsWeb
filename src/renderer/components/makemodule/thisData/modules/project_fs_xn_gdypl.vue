@@ -19,7 +19,7 @@
         <th class="p20 tc" colspan="7">检测及计算方法</th>
       </tr>
       <tr>
-        <td class="p20" colspan="7" style="line-height: 16px;">
+        <td class="p20 tl" colspan="7" style="line-height: 16px;">
           对于口内牙片机，将探测器置于靠近限束筒出口的位置；对于全景摄影功能的口外机，将探测器置于影像接收器外壳表面；
           对于头颅摄影功能的口外机，将探测器置于次级光阑外侧，
           确保探测器位于主射束中心轴并使探测器表面与主射束中心轴 垂直。

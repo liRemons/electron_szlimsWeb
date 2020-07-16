@@ -37,27 +37,6 @@
             <div v-else>/</div>
           </td>
         </tr>
-        <!-- <tr>
-          <td style="font-weight: bolder">
-            AEC电离室数量：
-          </td>
-          <td style="line-height: 32px;">
-            <selectModel
-              @returnVal="returnVal"
-              :Judge="true"
-              :special="1"
-              :multi-select="false"
-              :receive="'AECNum'"
-              :transmitText="data.valueData.AECNum"
-              :single="true"
-              :rows="false"
-              :list="['0', '1', '2']"
-              :Obj="''"
-            >
-            </selectModel>
-          </td>
-          <td colspan="4"></td>
-        </tr> -->
       </table>
 
       <div>

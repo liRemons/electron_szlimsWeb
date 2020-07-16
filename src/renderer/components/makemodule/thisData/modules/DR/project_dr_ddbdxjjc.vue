@@ -23,6 +23,7 @@
         </div>
         <div
           style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;"
+          class="tl"
         >
           有可能的话取出滤线栅。选取合适的SID、管电压和滤过，入射空气比释动能分别选取约1μGy、5μGy、10μGy，进行三次曝光获取影像，并记录检测结果，验收检测控模体说明书判断或建立基线值，状态检测与基线值进行比较。
         </div>

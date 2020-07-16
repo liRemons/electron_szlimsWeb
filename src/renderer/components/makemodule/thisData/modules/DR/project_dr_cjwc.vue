@@ -6,16 +6,16 @@
                 <div style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;">
                     测距误差（{{data.valueData.title}}）
                 </div>
-                <div style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;" class="tl">
+                <div style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;" >
                     标准要求
                 </div>
-                <div style="border: 1px solid black; border-top: none;">
+                <div class="tl" style="border: 1px solid black; border-top: none;">
                     验收&状态：±2.0%内。
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
                     检测及计算方法
                 </div>
-                <div style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
+                <div class="tl" style="border: 1px solid black; border-top: none; padding: 5px; line-height: 20px;">
                     有可能的话取出滤线栅，设置SID等于或尽量接近180cm，选用两个相互垂直的铅尺放置于探测器表面中央，用50kV，10mAs，进行曝光，用测距软件测量不低于10cm的影像距离，如果铅尺不能放置在探测器表面，应将铅尺放置在患者床面中央，获得影像应做距离修正，距离修正公式：修正后测量距离=测量距离×焦点至铅尺距离/SID。计算公式：E=[(Dm-D0)/D0]×100%。
                 </div>
                 <div style="border: 1px solid black;font-weight: bolder; border-top: none;">
