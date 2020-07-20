@@ -580,9 +580,7 @@ export default {
       }
     },
     sure(Judge) {
-      
       let result = this.checkField(Judge);
-
       if (!result) {
         return;
       }
@@ -594,6 +592,10 @@ export default {
       ) {
       } else {
         this.$message.error("您未选择仪器");
+        return;
+      }
+      if (StomatologyLinkage.purposeFH == "") {
+        this.$message.error("您未选择防护仪器");
         return;
       }
 

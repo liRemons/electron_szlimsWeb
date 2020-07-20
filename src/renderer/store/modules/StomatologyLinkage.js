@@ -1,7 +1,7 @@
 const StomatologyLinkage = {
   state: {
     testingState: 1,
-
+    purposeFH:[],//防护仪器
     purposeDetection: "",
     JudgePhotography: false,
     // deviceFactor: "[{\"value\":\"80/1.07\",\"key\":1572443265583},{\"value\":\"100/1.14\",\"key\":1572443274594},{\"value\":\"150/1.52\",\"key\":1572443281894},{\"value\":\"200/1.68\",\"key\":1572443287879}]",
@@ -30,6 +30,9 @@ const StomatologyLinkage = {
     NumberOfDetectors: "",
   },
   mutations: {
+    changePurposeFH(state,data){
+      state.purposeFH=data
+    },
     savePurposeDetection(state, payload) {
       state.purposeDetection = payload;
     },

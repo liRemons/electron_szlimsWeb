@@ -476,6 +476,7 @@ export default {
           this.$store.dispatch("actionsDeviceFactor", rowObj.deviceFactor);
           this.$store.dispatch("actionsDeviceFactorObj", rowObj);
         } else if (purpose === "防护") {
+          this.$store.commit('changePurposeFH','防护')
           this.$store.dispatch("actionsDeviceFactor2", rowObj.deviceFactor);
         }
       }
@@ -517,15 +518,21 @@ export default {
       }
     },
     clearRow(item) {
+      if (item.deviceObj.purpose == "性能") {
+        this.$store.dispatch("actionsDeviceFactor", "");
+        this.$store.dispatch("actionsDeviceFactorObj", "");
+      } else if (item.deviceObj.purpose == "防护") {
+        this.$store.commit('changePurposeFH','')
+        this.$store.dispatch("actionsDeviceFactor2", "");
+      }
+
       item.rows[0] = "";
       item.rows[1] = "";
       item.rows[2] = "";
       item.rows[3] = "";
       item.rows[4] = "";
       item.deviceObj = {};
-      this.$store.dispatch("actionsDeviceFactor", "");
-      this.$store.dispatch("actionsDeviceFactorObj", "");
-      this.$store.dispatch("actionsDeviceFactor2", "");
+
       this.$forceUpdate();
     }
   },
