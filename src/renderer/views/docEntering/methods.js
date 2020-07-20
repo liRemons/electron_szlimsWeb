@@ -20,10 +20,7 @@ export default {
           if (i == self.length - 1) result.push(arr_temporary);
           return front + value;
         } else {
-          let value = val.data.height._short.value(
-            val.data.valueData,
-            NumberOfDetectors
-          );
+          let value = val.data.height._short.value(val.data.valueData);
           if (front + value < normNumber + sum_temporary) {
             arr_temporary.push(val);
           } else {

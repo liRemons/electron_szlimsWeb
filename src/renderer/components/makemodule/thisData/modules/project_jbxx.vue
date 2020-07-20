@@ -284,9 +284,10 @@
                   class="tc Full borderRight ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[2] && item.rows[2][0] }}<br />{{
-                      item.rows[2] && item.rows[2][1]
-                    }}
+                    <p>{{ item.rows[2] && item.rows[2][0] }}</p>
+                    <p v-if="item.rows[2][1] !== item.rows[2][0]">
+                      {{ item.rows[2] && item.rows[2][1] }}
+                    </p>
                   </div>
                 </div>
                 <div
@@ -294,9 +295,10 @@
                   class="tc Full borderRight ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[3] && item.rows[3][0] }}<br />{{
-                      item.rows[3] && item.rows[3][1]
-                    }}
+                    <p>{{ item.rows[3] && item.rows[3][0] }}</p>
+                    <p v-if="item.rows[3][0] !== item.rows[3][1]">
+                      {{ item.rows[3] && item.rows[3][1] }}
+                    </p>
                   </div>
                 </div>
                 <div
@@ -304,9 +306,10 @@
                   class="tc Full ___absolute t0"
                 >
                   <div style="height:32px;">
-                    {{ item.rows[4] && item.rows[4][0] | filterTime }}<br />{{
-                      item.rows[4] && item.rows[4][1] | filterTime
-                    }}
+                    <p>{{ item.rows[4] && item.rows[4][0] | filterTime }}</p>
+                    <p v-if="item.rows[4][1] !== item.rows[4][0]">
+                      {{ item.rows[4] && item.rows[4][1] | filterTime }}
+                    </p>
                   </div>
                 </div>
                 <div
@@ -520,9 +523,9 @@ export default {
       item.rows[3] = "";
       item.rows[4] = "";
       item.deviceObj = {};
-      this.$store.dispatch("actionsDeviceFactor", '');
-      this.$store.dispatch("actionsDeviceFactorObj", '');
-      this.$store.dispatch("actionsDeviceFactor2", '');
+      this.$store.dispatch("actionsDeviceFactor", "");
+      this.$store.dispatch("actionsDeviceFactorObj", "");
+      this.$store.dispatch("actionsDeviceFactor2", "");
       this.$forceUpdate();
     }
   },

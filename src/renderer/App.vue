@@ -3,7 +3,7 @@
     <div class="control">
       <div style="float:left">
         <span style="line-height: 24px;padding-left:20px"
-          >深圳市瑞达智能检测系统用户端V{{ version }} （测试版）</span
+          >深圳市瑞达智能检测系统用户端V{{ version }} （正式版）</span
         >
       </div>
       <div class="action">
@@ -85,7 +85,7 @@ export default {
     return {
       updateflag: false,
       dialogVisible: false,
-      version: "0.5",
+      version: "0.2",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",

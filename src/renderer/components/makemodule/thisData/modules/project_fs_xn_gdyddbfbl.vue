@@ -44,7 +44,7 @@
 						<divModel v-model="item.rows[1]"
 											style="width:50px;text-align: center; border-bottom: 1px solid black; height: 28px;"
 											class="Full warp2 rowsInput2 hide focusBg"></divModel>
-						<span style="margin-left:55px;">kv</span>
+						<span style="margin-left:55px;">kV</span>
 					</div>
 					<div v-if="item.rows[0]!=''" class="___absolute t0" style="width:150px;margin-left:100px;">
 						<divModel v-model="item.rows[2]"

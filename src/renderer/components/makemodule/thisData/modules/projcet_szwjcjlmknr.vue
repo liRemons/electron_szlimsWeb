@@ -256,6 +256,10 @@ export default {
             total / judgeNum.length
           ).toFixed(2);
         }
+        if(num1==''&&num2==''&&num3==''){
+        this.data.valueData.point[index].rows[4] = ''
+        this.data.valueData.point[index].rows[5] = ''
+      }
       } catch (e) {}
     },
     judgeNum(arr) {

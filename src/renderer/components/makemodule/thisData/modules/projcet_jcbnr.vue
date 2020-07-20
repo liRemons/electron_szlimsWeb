@@ -87,11 +87,12 @@
           </td>
           <td v-if="JudgePhotography">
             <div>
-              <divModel v-model="item.rows[2]"></divModel>
+              <divModel :isNumBox="true" v-model="item.rows[2]"></divModel>
             </div>
           </td>
           <td v-if="data.valueData.testPoinrNum[0]">
             <divModel
+            :isNumBox="true"
               v-if="item.rows[3] !== '/'"
               v-model="item.rows[3]"
               style="text-align: center;"
@@ -100,6 +101,7 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[1]">
             <divModel
+            :isNumBox="true"
               v-model="item.rows[4]"
               v-if="item.rows[4] !== '/'"
               style="text-align: center;"
@@ -108,6 +110,7 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[2]">
             <divModel
+            :isNumBox="true"
               v-model="item.rows[5]"
               v-if="item.rows[5] !== '/'"
               style="text-align: center;"
@@ -120,8 +123,6 @@
               style="text-align: center;"
               :edit="false"
               :is-computer="true"
-              :input="true"
-              :factor="true"
               :computers="
                 changeNum(item.rows[3], item.rows[4], item.rows[5], index)
               "
@@ -150,129 +151,6 @@
           </td>
         </tr>
       </table>
-
-      <!--<div class="modules_1_tableBox ___relative">
-					<div class="___relative ___module_frame_Box" style="border-top: solid 1px black;">
-							<div class="___relative borderBottom">
-									<div :id="data.valueData.testProjectId" class="___absolute Full tc borderRight" style="width: 50px;">
-											<span class="heightCenter3">序号</span>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 120px;left:50px;">
-											<span class="heightCenter3">检测点位置</span>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 70px;left:170px;">
-											<span class="heightCenter3">毗邻场所</span>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 60px;left:240px;">
-											<span class="heightCenter3">居留因子</span>
-									</div>
-									<div class="___relative" style="left:300px;">
-											<div style="width: 200px;" class="___relative borderRight">
-													<div style="width: 200px;" class="___relative borderBottom">
-															<div class="tc" style="height:32px;">
-																	<div class="___relative">
-																			<span class="___absolute" style="left: 30px;">测量值（单位:</span>
-																			<selectModel @returnVal="changeCompany"
-																									 class="___relative"
-																									 :Judge="true"
-																									 style="left: 45px;"
-																									 :special="1"
-																									 :receive="''"
-																									 :single="true"
-																									 :rows="false"
-																									 :transmitText="company[0]"
-																									 :list="company" :Obj="''">
-																			</selectModel>
-																			<span class="___absolute" style="left:165px; top: 0px;">)</span>
-																	</div>
-															</div>
-													</div>
-													<div style="width: 200px;" class="___relative">&nbsp;
-															<div style="width: 33.333%;" :class="index!=2 ? 'borderRight':''"
-																	 :style="{left:(index*33.333)+'%'}" v-for="(item,index) in 3"
-																	 class="___absolute tc t0 Full">
-																	<div>{{index+1}}</div>
-															</div>
-													</div>
-											</div>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 90px;left:500px;">
-											<span class="heightCenter3" style="line-height: 16px;">*报告值(单<br>位：μSv/h)</span>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 60px;left:590px;">
-											<span class="heightCenter3" style="line-height: 16px;">年剂量<br>(mSv)</span>
-									</div>
-									<div class="___absolute Full tc" style="width: 60px;right: 0">
-											<span class="heightCenter3">标准差</span>
-									</div>
-							</div>
-							<div class="___relative"
-									 :class="index!=data.valueData.point.length-1 ? 'borderBottom':''"
-									 v-for="(item,index) in data.valueData.point">
-									<div class="___relative tc borderRight" style="width: 50px;">
-											<div class="___relative w100">
-													<div class="tc" style="height:32px;">
-															<span>{{item.index}}</span>
-													</div>
-											</div>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 120px;left:50px;">
-											<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg">
-													{{item.rows[0]}}
-											</div>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 70px;left:170px;">
-											<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg">
-													{{item.rows[1]}}
-											</div>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 60px;left:240px;">
-											<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg" v-if="JudgePhotography">
-													{{item.rows[2]}}
-											</div>
-											<div style="width:100%;text-align: center;" v-else class="Full warp2 rowsInput2 hide focusBg">
-													不涉及
-											</div>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 200px;left:300px;">&nbsp;
-											<div style="width: 33.333%;" class="___absolute borderRight tc t0 Full">
-													<divModel v-model="item.rows[3]" style="width:100%;text-align: center;"
-																		class="Full warp2 rowsInput2 hide focusBg"></divModel>
-											</div>
-											<div style="width: 33.333%;left:33.333%" class="___absolute borderRight tc t0 Full">
-													<divModel v-model="item.rows[4]" style="width:100%;text-align: center;"
-																		class="Full warp2 rowsInput2 hide focusBg"></divModel>
-											</div>
-											<div style="width: 33.333%;left:66.666%" class="___absolute tc t0 Full">
-													<divModel v-model="item.rows[5]" style="width:100%;text-align: center;"
-																		class="Full warp2 rowsInput2 hide focusBg"></divModel>
-											</div>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 90px;left:500px;">
-											<divModel v-model="item.rows[6]"
-																style="width:100%;text-align: center;"
-																class="Full warp2 rowsInput2 hide focusBg"
-																:edit="false"
-																:is-computer="true"
-																:input="true"
-																:factor="true"
-																:computers="changeNum(item.rows[3],item.rows[4],item.rows[5],index)"
-																:computerFormula="'gs11'">
-											</divModel>
-									</div>
-									<div class="___absolute Full tc borderRight" style="width: 60px;left:590px;">
-											<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg">
-													{{item.rows[7]}}
-											</div>
-									</div>
-									<div class="___absolute Full tc" style="width: 60px;right: 0">
-											<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg">
-													{{item.rows[8]}}
-											</div>
-									</div>
-							</div>
-					</div>
-			</div>-->
     </div>
   </div>
 </template>
@@ -314,10 +192,9 @@ export default {
             item.rows[1] = item.rows[0].split("(")[1]
               ? item.rows[0].split("(")[1].split(")")[0]
               : "";
-             item.rows[0] = item.rows[0].split("(")[0];
+            item.rows[0] = item.rows[0].split("(")[0];
           }
         }
-       
       });
       this.$forceUpdate();
     },
@@ -365,13 +242,13 @@ export default {
         if (this.isNumber(calibration) && this.isNumber(average)) {
           this.data.valueData.point[index].rows[6] = (
             average * parseFloat(calibration)
-          ).toFixed(2);
+          ).toFixed46(2);
         }
         if (this.isNumber(this.timeExposure)) {
           this.data.valueData.point[index].rows[7] = (
             this.data.valueData.point[index].rows[6] *
             (this.timeExposure / 1000)
-          ).toFixed(2);
+          ).toFixed46(2);
         }
         if (this.isNumber(average)) {
           let total = 0;
@@ -382,6 +259,10 @@ export default {
           // this.data.valueData.point[index].rows[8] = Math.sqrt(
           //   total / judgeNum.length
           // ).toFixed(2);
+        }
+        if (num1 == "" && num2 == "" && num3 == "") {
+          this.data.valueData.point[index].rows[6] = "";
+          this.data.valueData.point[index].rows[7] = "";
         }
       } catch (e) {}
     },

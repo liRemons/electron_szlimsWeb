@@ -1,5 +1,5 @@
 <template>
-  <div style="line-height: 30px;" class="___relative">
+  <div style="line-height: 30px;padding-top:10px" class="___relative">
     <div :class="{ eventCover: target !== '0' }"></div>
     <div>
       <div style="text-align: center;">

@@ -224,11 +224,17 @@ export default {
     },
     changeNum(kv) {
       try {
+        let length, digit;
+        if (this.deviceFactor[0].value) {
+          length = this.deviceFactor[0].value.split(".").length;
+          digit = this.deviceFactor[0].value.split(".")[length - 1].length;
+        }
+
         if (this.isNumber(kv)) {
           this.data.valueData.calibrationFactor = this.getFactor(
             kv,
             this.deviceFactor
-          );
+          ).toFixed46(digit !== "" ? digit : 2);
         }
       } catch (e) {
         this.data.valueData.calibrationFactor = "";

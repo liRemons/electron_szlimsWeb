@@ -5,119 +5,6 @@
     :id="data.valueData.testProjectId"
   >
     <div :class="{ eventCover: !ableInput }"></div>
-    <!--<div class="modules_1_tableBox ___relative">
-				<div class="___relative ___module_frame_Box" style="border-top: solid 1px black;">
-						<div class="___relative borderBottom">
-								<div class="___absolute Full tc borderRight" style="width: 40px;">
-										<span class="heightCenter3">序号</span>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 170px;left:40px;">
-										<span class="heightCenter3">检测点位置</span>
-								</div>
-								<div class="___relative" style="left:210px;">
-										<div style="width: 200px;" class="___relative borderRight">
-												<div style="width: 200px;" class="___relative borderBottom">
-														<div class="tc" style="height:32px;">
-																<div class="___relative">
-																		<span class="___absolute" style="left: 20px;">测量值（单位:</span>
-																		<selectModel @returnVal="changeCompany"
-																								 class="___relative"
-																								 :Judge="true"
-																								 style="left: 30px;"
-																								 :special="1"
-																								 :receive="''"
-																								 :single="true"
-																								 :rows="false"
-																								 :transmitText="company[0]"
-																								 :list="company" :Obj="''">
-																		</selectModel>
-																		<span class="___absolute" style="left:145px; top: 0px;">)</span>
-																		&lt;!&ndash;<span>测量值（单位:</span>&ndash;&gt;
-																		&lt;!&ndash;<divModel v-model="data.valueData.company" style="width:30px;height:32px;text-align: center;left:140px;"&ndash;&gt;
-																		&lt;!&ndash;class="warp2 rowsInput2 hide focusBg ___absolute t0"></divModel>&ndash;&gt;
-																		&lt;!&ndash;<span class="___relative" style="left:30px;">)</span>&ndash;&gt;
-																</div>
-														</div>
-												</div>
-												<div style="width: 200px;" class="___relative">&nbsp;
-														<div style="width: 33.333%;" :class="index!=2 ? 'borderRight':''"
-																 :style="{left:(index*33.333)+'%'}" v-for="(item,index) in 3"
-																 class="___absolute tc t0 Full">
-																<div>{{index+1}}</div>
-														</div>
-												</div>
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 80px;left:410px;">
-										<span class="heightCenter3" style="line-height: 16px;">最小值(单位<br>:{{data.valueData.company}})</span>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 80px;left:490px;">
-										<span class="heightCenter3" style="line-height: 16px;">最大值(单位<br>:{{data.valueData.company}})</span>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 70px;left:570px;">
-										<span class="heightCenter3" style="line-height: 16px;">平均值(单<br>位:{{data.valueData.company}}) </span>
-								</div>
-								<div class="___absolute Full tc" style="width: 70px;right: 0">
-										<span class="heightCenter3" style="line-height: 16px;">标准差(单<br>位:{{data.valueData.company}})</span>
-								</div>
-						</div>
-						<div class="___relative" :class="index!=data.valueData.point.length-1 ? 'borderBottom':''"
-								 v-for="(item,index) in data.valueData.point">
-								<div class="___relative tc borderRight" style="width: 40px;">
-										<div class="___relative w100">
-												<div class="tc" style="height:32px;">
-														<span>{{item.index}}</span>
-												</div>
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 170px;left:40px;">
-										<div v-if="!item.isSzpbt || target !== '0'">
-												{{item.rows[0]}}
-										</div>
-										<myInput v-else v-model="item.rows[0]"></myInput>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 200px;left:210px;">&nbsp;
-										<div style="width: 33.333%;" class="___absolute borderRight tc t0 Full">
-												<divModel v-model="item.rows[1]" style="width:100%;text-align: center;"
-																	class="Full warp2 rowsInput2 hide focusBg"></divModel>
-										</div>
-										<div style="width: 33.333%;left:33.333%" class="___absolute borderRight tc t0 Full">
-												<divModel v-model="item.rows[2]" style="width:100%;text-align: center;"
-																	class="Full warp2 rowsInput2 hide focusBg"></divModel>
-										</div>
-										<div style="width: 33.333%;left:66.666%" class="___absolute tc t0 Full">
-												<divModel v-model="item.rows[3]" style="width:100%;text-align: center;"
-																	class="Full warp2 rowsInput2 hide focusBg"></divModel>
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 80px;left:410px;">
-										<divModel v-model="item.rows[4]"
-															style="width:100%;text-align: center;"
-															class="Full warp2 rowsInput2 hide focusBg"
-															:edit="false"
-															:is-computer="true"
-															:computers="changeNum(item.rows[1],item.rows[2],item.rows[3],index)"
-															:computerFormula="'gs11'">
-										</divModel>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 80px;left:490px;">
-										<div style="width:100%;text-align: center;"
-												 class="Full warp2 rowsInput2 hide focusBg">{{item.rows[5]}}
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 70px;left:570px;">
-										<div style="width:100%;text-align: center;"
-												 class="Full warp2 rowsInput2 hide focusBg">{{item.rows[6]}}
-										</div>
-								</div>
-								<div class="___absolute Full tc" style="width: 70px;right: 0">
-										<div style="width:100%;text-align: center;"
-												 class="Full warp2 rowsInput2 hide focusBg">{{item.rows[7]}}
-										</div>
-								</div>
-						</div>
-				</div>
-		</div>-->
     <table class="myTable" style="width: 712px">
       <tr>
         <td width="202">
@@ -229,7 +116,7 @@
         </td>
         <td v-if="data.valueData.testPoinrNum[1]">
           <divModel
-          v-if="item.rows[2] !== '/'"
+            v-if="item.rows[2] !== '/'"
             v-model="item.rows[2]"
             style="text-align: center;"
           ></divModel>
@@ -237,7 +124,7 @@
         </td>
         <td v-if="data.valueData.testPoinrNum[2]">
           <divModel
-          v-if="item.rows[3] !== '/'"
+            v-if="item.rows[3] !== '/'"
             v-model="item.rows[3]"
             style="text-align: center;"
           ></divModel>
@@ -397,6 +284,11 @@ export default {
         this.data.valueData.point[index].rows[7] = Math.sqrt(
           total / judgeNum.length
         ).toFixed(2);
+      }
+      if (num1 == "" && num2 == "" && num3 == "") {
+        this.data.valueData.point[index].rows[4] = "";
+        this.data.valueData.point[index].rows[5] = "";
+        this.data.valueData.point[index].rows[6] = "";
       }
     },
     isNumber(val) {
