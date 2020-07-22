@@ -42,7 +42,6 @@ function createWindow() {
   });
   mainWindow.maximize();
   mainWindow.loadURL(winURL);
-
   mainWindow.on("ready-to-show", function() {
     mainWindow.show();
     mainWindow.focus();
@@ -64,20 +63,29 @@ function createWindow() {
         );
 
         if (state === "progressing") {
-          mainWindow.webContents.send("getScheduleEvent", [num, item.getSavePath()]);
+          mainWindow.webContents.send("getScheduleEvent", [
+            num,
+            item.getSavePath(),
+          ]);
           if (item.isPaused()) {
           } else {
             //这里是主战场
           }
         } else if (state === "interrupted") {
           console.log("终止下载");
-        } 
+        }
       });
       item.on("done", (event, state) => {
         if (state === "completed") {
-          mainWindow.webContents.send("getScheduleEvent", ['下载成功', item.getSavePath()]);
+          mainWindow.webContents.send("getScheduleEvent", [
+            "下载成功",
+            item.getSavePath(),
+          ]);
         } else if (state === "cancelled") {
-          mainWindow.webContents.send("getScheduleEvent", ['取消下载', item.getSavePath()]);
+          mainWindow.webContents.send("getScheduleEvent", [
+            "取消下载",
+            item.getSavePath(),
+          ]);
         } else {
           //...
         }
@@ -108,22 +116,32 @@ app.on("activate", () => {
     createWindow();
   }
 });
-
+ipcMain.on("unmaximize", (event, arg) => {
+  mainWindow.unmaximize();
+  event.sender.send("isMaximized", mainWindow.isMaximized());
+});
+ipcMain.on("max", (event, arg) => {
+  mainWindow.maximize();
+  event.sender.send("isMaximized", mainWindow.isMaximized());
+});
 ipcMain.on("mini", (event, arg) => {
-  console.log("最小化事件触发了", arg); // prints "ping"
   mainWindow.minimize();
 });
 
 ipcMain.on("close", (event, arg) => {
-  console.log("关闭事件触发了", arg); // prints "ping"
   mainWindow.close();
 });
+// 最大化窗口
 //控制键盘F12控制台
 ipcMain.on("openDevTools", (event, arg) => {
   mainWindow.webContents.openDevTools();
 });
+// 刷新
 ipcMain.on("reload", (event, arg) => {
   mainWindow.webContents.reload();
+  setTimeout(() => {
+    event.sender.send("isMaximized", mainWindow.isMaximized());
+  }, 1000);
 });
 fs.exists("./data", function(e) {
   if (e) {
@@ -136,20 +154,37 @@ fs.exists("./data", function(e) {
   }
 });
 
-// 读取文件
-ipcMain.on("readFile", function(event, arg) {
-  // arg是从渲染进程返回来的数据
-  fs.readFile(`./data/${arg.taskId}.json`, "utf8", (err, data) => {
-    if (err) {
-      event.sender.send("readFileEvent", false);
+ipcMain.on("mkdir", function(event, arg) {
+  fs.exists(`./data/${arg.staffPhone}`, function(e) {
+    if (e) {
     } else {
-      event.sender.send("readFileEvent", data);
+      fs.mkdir(`./data/${arg.staffPhone}`, function(err) {
+        if (err) {
+          console.log(err);
+        }
+      });
     }
   });
 });
+
+// 读取文件
+ipcMain.on("readFile", function(event, arg) {
+  // arg是从渲染进程返回来的数据
+  fs.readFile(
+    `./data/${arg.staffPhone}/${arg.taskId}.json`,
+    "utf8",
+    (err, data) => {
+      if (err) {
+        event.sender.send("readFileEvent", false);
+      } else {
+        event.sender.send("readFileEvent", data);
+      }
+    }
+  );
+});
 // 读取文件夹
 ipcMain.on("readDir", function(event, arg) {
-  fs.readdir("./data", (err, files) => {
+  fs.readdir(`./data/${arg.staffPhone}`, (err, files) => {
     if (err) {
       event.sender.send("readDirEvent", false);
     } else {
@@ -160,7 +195,7 @@ ipcMain.on("readDir", function(event, arg) {
 
 ipcMain.on("writeFile", function(event, arg) {
   fs.writeFile(
-    `./data/${arg.taskId}.json`,
+    `./data/${arg.staff.staffPhone}/${arg.taskId}.json`,
     JSON.stringify(arg),
     "utf8",
     (err, data) => {
@@ -173,7 +208,7 @@ ipcMain.on("writeFile", function(event, arg) {
   );
 });
 ipcMain.on("delFile", function(event, arg) {
-  fs.unlink(`./data/${arg.taskId}.json`, (err, data) => {
+  fs.unlink(`./data/${arg.staffPhone}/${arg.taskId}.json`, (err, data) => {
     if (err) {
       event.sender.send("delFileEvent", false);
     } else {
@@ -182,19 +217,23 @@ ipcMain.on("delFile", function(event, arg) {
   });
 });
 ipcMain.on("delDir", function(event, arg) {
-  let files = [];
-  let path = "./data";
-  if (fs.existsSync(path)) {
-    files = fs.readdirSync(path);
-    files.forEach((file, index) => {
-      let curPath = path + "/" + file;
-      if (fs.statSync(curPath).isDirectory()) {
-        delDir(curPath); //递归删除文件夹
-      } else {
-        fs.unlinkSync(curPath); //删除文件
-      }
-    });
+  delDir("./data");
+  function delDir(path) {
+    let files = [];
+    if (fs.existsSync(path)) {
+      files = fs.readdirSync(path);
+      files.forEach((file, index) => {
+        let curPath = path + "/" + file;
+        if (fs.statSync(curPath).isDirectory()) {
+          delDir(curPath); //递归删除文件夹
+        } else {
+          fs.unlinkSync(curPath); //删除文件
+        }
+      });
+      fs.rmdirSync(path);
+    }
   }
+
   fs.exists("./data", function(e) {
     if (e) {
     } else {

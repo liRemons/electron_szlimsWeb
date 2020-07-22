@@ -218,7 +218,7 @@ export default {
         this.synchronization();
         return;
       }
-      this.readFile("enteringList");
+      this.readFile(JSON.parse(getToken()), "enteringList");
       this.readFileEvent().then(res => {
         if (res) {
           this.localData = JSON.parse(res).list.filter(task => {
@@ -230,19 +230,6 @@ export default {
           });
           this.localDataFenYe = this.toTwoArr(this.localData, this.pageSize);
         }
-      });
-      return;
-      let staffPhone = JSON.myParse(getToken()).staffPhone;
-      getLocalData(staffPhone).then(response => {
-        this.localData = response.data.filter(task => {
-          return (
-            task.pass == "未录入" ||
-            task.pass == "未通过" ||
-            task.pass == "正在录入"
-          );
-        });
-        this.localDataFenYe = this.toTwoArr(this.localData, this.pageSize);
-        this.listLoading = false;
       });
     },
     // 从服务器获取数据
@@ -340,12 +327,11 @@ export default {
             background: "rgba(0, 0, 0, 0.7)"
           });
           // 如果已有列表则先上传数据再下载数据
-          this.readFile("enteringList");
+          this.readFile(JSON.parse(getToken()), "enteringList");
           this.readFileEvent().then(res => {
             if (res) {
               let uploadingPromiseArr = [];
               let staffPhone = JSON.myParse(getToken()).staffPhone;
-
               getLocalData(staffPhone).then(response => {
                 let uploadTask = response.data.filter(item => {
                   return item.pass == "已上传";
@@ -371,7 +357,7 @@ export default {
                 Promise.all(uploadingPromiseArr)
                   .then(uploadingRes => {
                     uploadTask.forEach(a => {
-                      this.delFile(a.taskId);
+                      this.delFile(a.taskId, JSON.parse(getToken()));
                     });
                     this.getUploadingList(loading);
                   })
@@ -407,7 +393,7 @@ export default {
           });
           let writeFileEventPromise = [];
           data.map(item => {
-            this.whrite(item);
+            this.whrite(item, JSON.parse(getToken()));
             writeFileEventPromise.push(this.writeFileEvent());
           });
           Promise.all(writeFileEventPromise)
@@ -431,7 +417,7 @@ export default {
             delete item.taskList.assessArr;
             enteringList.list.push(item.taskList);
           });
-          this.whrite(enteringList);
+          this.whrite(enteringList, JSON.parse(getToken()));
           this.writeFileEvent().then(res => {});
         })
         .catch(err => {
@@ -450,16 +436,6 @@ export default {
 
     toUpdateTaskReturn() {
       let staffId = JSON.myParse(getToken()).id;
-      // let result = this.haoCaiMultipleSelection.every(
-      //   item => item.pass === "未录入"
-      // );
-      // if (!result) {
-      //   this.$notify({
-      //     message: "只能打回未录入任务！",
-      //     type: "warning"
-      //   });
-      //   return;
-      // }
       let ids = this.haoCaiMultipleSelection.map(item => item.taskId);
       if (ids.length <= 0) {
         this.$notify({
@@ -489,13 +465,13 @@ export default {
               });
               this.localData;
               // sessionStorage.setItem("TolocalNo", 0);
-              this.whrite(enteringList);
+              this.whrite(enteringList, JSON.parse(getToken()));
               this.writeFileEvent().then(res => {
                 this.getList();
               });
 
               ids.map(a => {
-                this.delFile(a);
+                this.delFile(a, JSON.parse(getToken()));
               });
             } else {
               this.$notify({
@@ -568,7 +544,7 @@ export default {
         }
       }
 
-      this.readFile(row.taskId);
+      this.readFile(JSON.parse(getToken()), row.taskId);
       this.readFileEvent().then(res => {
         if (res) {
           this.$store.dispatch("actionsSetTestprojectId", true);
@@ -596,7 +572,7 @@ export default {
           taskId: that.multipleSelection[0].taskId,
           staffId: JSON.myParse(getToken()).id
         };
-        this.readFile(data.taskId);
+        this.readFile(JSON.parse(getToken()), data.taskId);
         this.readFileEvent().then(r => {
           if (r) {
             queryTaskIsOpen(data)
@@ -657,7 +633,7 @@ export default {
           type: "error"
         }
       ).then(() => {
-        this.delFile(id);
+        this.delFile(id, JSON.parse(getToken()));
         this.localData.map((item, index) => {
           if (item.taskId == id) {
             this.localData.splice(index, 1);
@@ -667,7 +643,7 @@ export default {
           taskId: "enteringList",
           list: this.localData
         };
-        this.whrite(arr);
+        this.whrite(arr, JSON.parse(getToken()));
         this.writeFileEvent(res => {
           this.$message.success("删除成功");
           this.localDataFenYe[this.nowShowPage].forEach((item, index) => {
@@ -694,10 +670,10 @@ export default {
           type: "error"
         }
       ).then(() => {
-        this.readDir();
+        this.readDir(JSON.parse(getToken()));
         this.readDirEvent().then(res => {
           res.forEach(item => {
-            this.delFile(item.split(".")[0]);
+            this.delFile(item.split(".")[0], JSON.parse(getToken()));
           });
           this.$message.success("删除成功");
           this.localDataFenYe = [];

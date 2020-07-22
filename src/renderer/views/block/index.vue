@@ -1,29 +1,25 @@
 <template>
-  <div class="box" style="font-family: SimSun;">
-    <el-row>
-      <el-col :span="3">
-        <h2 class="logout" @click="toLogout" style="font-size: 20px;">
-          退出登录
-        </h2>
-      </el-col>
-      <el-col :span="21">
-        <div style="margin-top: 20px; margin-left: 65vw; color: gray;">
-          <h2 style="font-size: 20px;">当前登录人：{{ name }}</h2>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="7" :offset="4">
-        <div @click="toggleScene(0)">
-          <div class="blockLeft">现场</div>
-        </div>
-      </el-col>
-      <el-col :span="7" :offset="2">
-        <div @click="toggleScene(1)">
-          <div class="blockRight">实验室</div>
-        </div>
-      </el-col>
-    </el-row>
+  <div class="bg">
+    <div class="satff">登录人：{{ name }}</div>
+    <div class="quit" @click="toLogout">
+      <i class="el-icon-switch-button"></i>
+    </div>
+    <div class="left" @click="toggleScene(0)">
+      <div class="img"><img src="../../assets/img/scene.png" alt="" /></div>
+      <div class="title">
+        <p class="ch">现场</p>
+        <p>Scene</p>
+      </div>
+    </div>
+    <div class="right" @click="toggleScene(1)">
+      <div class="img">
+        <img src="../../assets/img/laboratory.png" alt="" />
+      </div>
+      <div class="title">
+        <p class="ch">实验室</p>
+        <p>Laboratory</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,7 +38,7 @@ export default {
     toggleScene(scene) {
       if (scene == 0) {
         // 现场
-        sessionStorage.setItem('TolocalNo',0)
+        sessionStorage.setItem("TolocalNo", 0);
         sessionStorage.setItem("ToggleBlock", "local");
         sessionStorage.setItem("nowRouter", "entering");
         this.$router.push(`/local`);
@@ -54,8 +50,16 @@ export default {
       }
     },
     toLogout() {
-      setToken("");
-      this.$router.push(`/login`);
+      this.$confirm("确定退出?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          setToken("");
+          this.$router.push(`/login`);
+        })
+        .catch(() => {});
     },
     // 判断用户是否登录
     userIsLogin() {
@@ -79,68 +83,129 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.block {
-  &Left {
-    width: 100%;
-    height: 40vh;
-    background-color: #fff;
-    margin-top: 40%;
-    margin-bottom: 47%;
-    padding-left: 10%;
-    cursor: pointer;
-    font-size: 4vw;
-    line-height: 40vh;
-    letter-spacing: 3vw;
-    border-radius: 5px;
-    user-select: none;
-    text-align: center;
-    box-shadow: 0px 0px 20px 10px;
-    transition: box-shadow 0.5s;
-  }
-
-  &Left:hover {
-    box-shadow: 0px 0px 20px 10px #c2ccd0;
-  }
-
-  &Right {
-    width: 100%;
-    height: 40vh;
-    background-color: #fff;
-    margin-top: 40%;
-    margin-bottom: 47%;
-    padding-left: 10%;
-    cursor: pointer;
-    font-size: 4vw;
-    line-height: 40vh;
-    text-align: center;
-    letter-spacing: 3vw;
-    border-radius: 5px;
-    user-select: none;
-    box-shadow: 0px 0px 20px 10px;
-    transition: box-shadow 0.5s;
-  }
-
-  &Right:hover {
-    box-shadow: 0px 0px 20px 10px #c2ccd0;
-  }
-}
-
-.box {
-  height: 100%;
+<style lang="scss" scoped>
+.bg {
   overflow: hidden;
-  background-image: url("../../assets/img/bg6.jpg");
-  background-size: cover;
+  width: 100%;
+  height: 100%;
+  background: url("../../assets/icon/login_bg.png");
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .satff {
+    position: absolute;
+    top: 50px;
+    color: rgb(217, 222, 251);
+    left: 50px;
+    font-size: 18px;
+  }
+  .quit {
+    transition: 0.3s;
+    position: absolute;
+    right: 50px;
+    top: 50px;
+    color: #fff;
+    font-size: 30px;
+    cursor: pointer;
+  }
+  .quit:hover {
+    text-shadow: 0px 0px 6px rgb(216, 212, 212);
+  }
+  .left,
+  .right {
+    transition: 0.5s;
+    cursor: pointer;
+    text-align: center !important;
+    width: 450px;
+    height: 450px;
+    background: #fff;
+    border-radius: 10px;
+    .img {
+      height: 200px;
+      margin-top: 100px;
+      img {
+        height: 100%;
+      }
+    }
+    .title {
+      font-size: 20px;
+      margin-top: 50px;
+      .ch {
+        font-size: 24px;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .left {
+    margin-left: 150px;
+  }
+  .right {
+    margin-right: 150px;
+  }
+
+  .right:hover {
+    box-shadow: 0px 0px 15px #cfcfcf;
+  }
+  .left:hover {
+    box-shadow: 0px 0px 15px #cfcfcf;
+  }
+}
+@media screen and (max-width:1200px) {
+  .bg {
+    .left,
+    .right {
+      width: 300px;
+      height: 300px;
+      .img {
+        height: 140px;
+        margin-top: 50px;
+      }
+      .title {
+        font-size: 18px;
+        margin-top: 20px;
+        .ch {
+          font-size: 20px;
+          letter-spacing: 4px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .left {
+      margin-left: 50px;
+    }
+    .right {
+      margin-right: 50px;
+    }
+  }
+}
+@media screen and (max-width: 800px) {
+  .bg {
+    .left,
+    .right {
+      width: 250px;
+      height: 250px;
+      .img {
+        height: 100px;
+        margin-top: 50px;
+      }
+      .title {
+        font-size: 18px;
+        margin-top: 20px;
+        .ch {
+          font-size: 20px;
+          letter-spacing: 4px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .left {
+      margin-left: 50px;
+    }
+    .right {
+      margin-right: 50px;
+    }
+  }
 }
 
-.logout {
-  color: gray;
-  cursor: pointer;
-  margin-top: 20px;
-  font-weight: 800;
-}
-
-.logout:hover {
-  color: #19caad;
-}
 </style>

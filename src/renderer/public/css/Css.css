@@ -34,6 +34,7 @@ body {
   font: 12px "宋体", "Arial Narrow", HELVETICA;
   background: #fff;
   -webkit-text-size-adjust: 100%;
+  -webkit-app-region: drag !important;
 }
 
 a {
@@ -2247,8 +2248,8 @@ body {
 }
 
 .jianceImg {
-  width: 80px;
-  height: 50px;
+  width: 70px;
+  height: 30px;
 }
 
 .btnBox {

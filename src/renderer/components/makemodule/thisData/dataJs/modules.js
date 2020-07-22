@@ -1903,10 +1903,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 80,
+        fixed: 100,
         itemHeight: 64,
         value: function(obj) {
-          let height = obj.moFold ? 80 : 80 + obj.point.length * 64;
+          let height = obj.moFold ? 100 : 100 + obj.point.length * 64;
           return height;
         },
       },

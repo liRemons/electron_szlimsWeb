@@ -151,7 +151,7 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss">
+<style rel="stylesheet/scss" lang="scss" scoped>
 .laboratory {
   &-container {
     margin: 1.2%;

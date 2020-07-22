@@ -217,7 +217,7 @@ import FileSaver from "file-saver";
 import Methods from "../methods.js"; //  尼玛 babel版本太低, 无法解析 import {Adaptive, dataRefresh} from './methods.js'
 let { Adaptive } = Methods;
 import { queryListType } from "@/api/local";
-
+import { getToken } from "@/utils/auth";
 import heads from "@/components/makemodule/thisData/dataJs/heads.js";
 import modules from "@/components/makemodule/thisData/dataJs/modules.js";
 import bus from "@/utils/bus.js";
@@ -1381,7 +1381,7 @@ export default {
         let data = this.deepCopy(this.importData);
         let this_ = this;
         data.tasks.tasks[0].data = this.saveData;
-        this.whrite(data);
+        this.whrite(data,JSON.parse(getToken()));
         this.writeFileEvent().then(res => {
           if (res) {
             this.$message.success("暂存成功");
@@ -1769,7 +1769,7 @@ export default {
           arr.taskId = this.task.id;
           arr.tasks.tasks[0].data = this.saveData;
 
-          this.whrite(arr);
+          this.whrite(arr,JSON.parse(getToken()));
           this.writeFileEvent().then(res => {
             bus.$emit("showSave", true);
             this.timeId2 = setTimeout(() => {

@@ -3,22 +3,33 @@
     <div class="control">
       <div style="float:left">
         <span style="line-height: 24px;padding-left:20px"
-          >深圳市瑞达智能检测系统用户端V{{ version }} （测试版）</span
+          >深圳市瑞达智能检测系统用户端V{{ version }} （{{
+            $isUpdate ? "正式版" : "测试版"
+          }}）</span
         >
       </div>
       <div class="action">
         <img
-          src="@/assets/icon/upload.png"
+          @click="clean"
+          src="@/assets/icon/clean.png"
+          style="padding-top:1px"
+          v-if="$route.path == '/login'"
+        />
+        <el-tooltip
+          class="item"
+          content="检查更新"
+          placement="bottom"
           v-if="$isUpdate"
-          @click="getUpdateVersion"
-          style="width: 24px;padding-top:2px"
-          alt=""
-        />
-        <img
-          @click="mini"
-          style="width: 23px; padding-left: 4px;"
-          src="@/assets/icon/mini.png"
-        />
+        >
+          <img
+            src="@/assets/icon/upload.png"
+            @click="getUpdateVersion"
+            style="padding-top:2px"
+          />
+        </el-tooltip>
+        <img @click="mini" src="@/assets/icon/mini.png" />
+        <img @click="max" v-if="!isMax" src="@/assets/icon/big.png" />
+        <img v-else @click="miniSize" src="@/assets/icon/small.png" />
         <img @click="close" src="@/assets/icon/close.png" />
       </div>
     </div>
@@ -83,9 +94,10 @@ export default {
   components: { update },
   data() {
     return {
+      isMax: true,
       updateflag: false,
       dialogVisible: false,
-      version: "0.5",
+      version: "0.4",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
@@ -126,8 +138,8 @@ export default {
       });
     },
     getUpdateVersion() {
-      if(!this.$isUpdate){
-        return
+      if (!this.$isUpdate) {
+        return;
       }
       let data = { projectName: "SZ_LIMS_RD" };
       const loading = this.$loading({
@@ -161,8 +173,37 @@ export default {
         }
       });
     },
+    clean() {
+      this.$confirm(
+        "此操作将永久删除应用中所有的数据且无法恢复，请确认所有离线任务数据已上传?",
+        "清理缓存",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "error"
+        }
+      ).then(() => {
+        this.delDir();
+        const loading = this.$loading({
+          lock: true,
+          text: "清理中，请稍后...",
+          spinner: "el-icon-loading",
+          background: "rgba(0, 0, 0, 0.7)"
+        });
+        setTimeout(() => {
+          loading.close();
+          this.$message.success("清理完成");
+        }, 2000);
+      });
+    },
     mini() {
       this.$ipcRenderer.send("mini", true);
+    },
+    max() {
+      this.$ipcRenderer.send("max", true);
+    },
+    miniSize() {
+      this.$ipcRenderer.send("unmaximize", true);
     },
     close() {
       this.$ipcRenderer.send("close", true);
@@ -183,8 +224,15 @@ export default {
     this.$ipcRenderer.on("Finger_MSG", (event, arg) => {
       this.$store.dispatch("CHANGE_FINGER_MUTATIONS", arg);
     });
+    this.$ipcRenderer.on("isMaximized", (event, arg) => {
+      this.isMax = arg;
+    });
+    Vue.prototype.mkdir = function(data) {
+      this.$ipcRenderer.send("mkdir", data);
+    };
     // 写入文件
-    Vue.prototype.whrite = function(arr) {
+    Vue.prototype.whrite = function(arr, staff) {
+      arr.staff = staff;
       this.$ipcRenderer.send("writeFile", arr);
     };
     // 接收写入文件信息状态
@@ -196,8 +244,11 @@ export default {
       });
     };
     // 读取文件
-    Vue.prototype.readFile = function(id) {
-      this.$ipcRenderer.send("readFile", { taskId: id });
+    Vue.prototype.readFile = function(staff, id) {
+      this.$ipcRenderer.send("readFile", {
+        taskId: id,
+        staffPhone: staff.staffPhone
+      });
     };
     // 接收读取文件信息状态
     Vue.prototype.readFileEvent = function() {
@@ -208,8 +259,8 @@ export default {
       });
     };
     // 读取文件夹
-    Vue.prototype.readDir = function() {
-      this.$ipcRenderer.send("readDir");
+    Vue.prototype.readDir = function(staff) {
+      this.$ipcRenderer.send("readDir", { staffPhone: staff.staffPhone });
     };
     // 接收读取文件夹状态
     Vue.prototype.readDirEvent = function() {
@@ -223,8 +274,11 @@ export default {
       this.$ipcRenderer.send("delDir");
     };
     // 删除文件
-    Vue.prototype.delFile = function(id) {
-      this.$ipcRenderer.send("delFile", { taskId: id });
+    Vue.prototype.delFile = function(id, staff) {
+      this.$ipcRenderer.send("delFile", {
+        taskId: id,
+        staffPhone: staff.staffPhone
+      });
     };
     document.onkeydown = e => {
       if (e.keyCode == 123) {
@@ -232,10 +286,6 @@ export default {
         this.$ipcRenderer.send("openDevTools");
       }
       if (e.keyCode == 116) {
-        let path = this.$route.path.split("/")[2];
-        // if (path === "doc-entering" || path === "entering") {
-        //   return;
-        // }
         // 刷新页面
         this.$ipcRenderer.send("reload");
       }
@@ -277,18 +327,6 @@ export default {
         this.$store.commit("SESSIONSTORAGE_REMOVE", key);
       };
     }
-    // sessionStorage["setItem"] = (key, value) => {
-    //   // _this.remote.getGlobal("shareObject")[key] = value;
-    // };
-    // sessionStorage["getItem"] = key => {
-    //   // return _this.remote.getGlobal("shareObject")[key] ||
-    //   //   _this.remote.getGlobal("shareObject")[key] == 0
-    //   //   ? _this.remote.getGlobal("shareObject")[key]
-    //   //   : null;
-    // };
-    // sessionStorage["removeItem"] = key => {
-    //   // _this.remote.getGlobal("shareObject")[key] = null;
-    // };
 
     Number.prototype.toFixed46 = function(
       decimalPlaces,
@@ -428,11 +466,15 @@ export default {
     top: 0;
     width: 100%;
     z-index: 1000;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
     .action {
+      -webkit-app-region: no-drag;
       float: right;
       padding: 0 10px;
       img {
         width: 24px;
+        padding-left: 4px;
       }
       img:hover {
         cursor: pointer;
@@ -442,6 +484,7 @@ export default {
   .content {
     height: 100%;
     overflow: auto;
+    -webkit-app-region: no-drag;
   }
   // .sider {
   //   box-shadow: rgb(213, 213, 213) 0px 0px 6px;
@@ -470,6 +513,7 @@ export default {
     background: rgba(0, 0, 0, 0);
   }
 }
+
 .el_tag {
   white-space: normal !important;
   line-height: 20px !important;

@@ -1,46 +1,26 @@
 <template>
-  <div class="login-container" style="font-family: SimSun; position: relative">
-    <img
-      src="@/assets/img/myba.jpg"
-      style="width: 100vw; height: 100vh; position: absolute; left: 0; top: 0;"
-      alt=""
-    />
-
-    <div class="title">
-      深圳市瑞达智能检测系统用户端
-    </div>
-    <div style="margin-top: 20vh; margin-left: 3.5vw;">
-      <el-input
-        v-model="phone"
-        style="width: 30vw;"
-        @keyup.native="phone = phone.replace(/[^\d]/g, '')"
-        placeholder="请输入您的手机号"
-      ></el-input>
-    </div>
-    <div>
-      <el-button
-        type="danger"
-        style="margin-top: 10px; width: 30vw; height: 40px; position: relative; margin-left: 3.5vw;"
-        @click="winGetUserInfo"
-        >登录
-      </el-button>
-    </div>
-    <div class="login-box">
-      <el-row>
-        <el-col :offset="10" :span="5">
-          <object
-            v-show="!imgShow"
-            classid="clsid:059059BE-8F4C-49AC-B2A9-5649F02A4FC6"
-            class="login-fingerprintBox"
-            id="FPEngineEx1"
-            data="DATA:application/x-oleobject;BASE64,汶六啂偹䕲祭噱䩚䌸偰杸䩁䅁奄睅䅁䈲䅍䅁㴽"
-          ></object>
-          <div v-show="imgShow" class="login-fingerprintBox-img"></div>
-        </el-col>
-      </el-row>
-      <!-- <div class="foot">
-        该系统建议在360安全浏览器11.0版兼容模式或ie11以上使用
-      </div> -->
+  <div class="login">
+    <div class="login_box">
+      <div class="img">
+        <div class="title">深圳瑞达智能检测系统用户端</div>
+        <img src="../../assets/icon/login_box.png" alt="" />
+      </div>
+      <div class="right">
+        <el-form class="form_right" ref="form" label-position="top">
+          <el-form-item label="手机号码：" required>
+            <el-input
+              v-model="phone"
+              @keyup.native="phone = phone.replace(/[^\d]/g, '')"
+              placeholder="请输入手机号码"
+            ></el-input>
+            <!-- 下面input没用，为了阻止回车页面刷新事件 -->
+            <el-input v-show="false"></el-input>
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" style="width:100%" @click="winGetUserInfo"
+          >登 录</el-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -55,9 +35,7 @@ export default {
     return {
       phone: "",
       staffFingerprints: "", //数据库中的参考指纹
-      matFingerprint: "", //该人员录入的指纹
       staff: null,
-      imgShow: true,
       fingerprint: {}
     };
   },
@@ -89,7 +67,11 @@ export default {
           });
           this.staffFingerprints = staffFingerprint.split(",");
           setToken(this.staff);
-          this.$router.push("/");
+          // 创建本人的文件夹
+          this.mkdir(this.staff);
+          setTimeout(() => {
+            this.$router.push("/");
+          }, 100);
           // this.GetMatTemplate();//指纹
         }
       });
@@ -151,61 +133,88 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.title {
-  padding-top: 8%;
-  padding-left: 3%;
-  font-size: 2.5vw;
-  height: 30px;
-  text-align: center;
-  letter-spacing: 12px;
-  position: relative;
-}
 
+<style lang="scss" scoped>
 .login {
-  &-container {
-    /* background-image: url('../../assets/img/myba.jpg');*/
-    background-size: 100vw 100vh;
-    background-repeat: no-repeat;
-    width: 100vw;
-    height: 100vh;
-  }
-
-  &-box {
-    position: relative;
-    top: 5%;
-  }
-
-  &-fingerprint {
-    margin-top: 10px;
-    width: 50%;
-    height: 200px;
-    background-color: #fff;
-  }
-
-  &-fingerprintBox {
-    margin-top: 2vh;
-    width: 15vw;
-    height: 30vh;
-    background-color: gray;
-  }
-
-  &-fingerprintBox-img {
-    background-image: url("../../assets/img/fingerprint.jpg");
-    background-size: cover;
-    width: 15vw;
-    height: 22vh;
-    margin: 0 auto;
-    margin-top: 20%;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: url("../../assets/icon/login_bg.png");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .login_box {
+    background: url("../../assets/icon/loginbox_bg.png") no-repeat;
+    background-size: contain;
+    width: 1000px;
+    height: 620px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    .img {
+      width: 50%;
+      img {
+        width: 400px;
+      }
+      .title {
+        line-height: 30px;
+        margin: 60px 0;
+        font-size: 20px;
+        font-weight: 600;
+        font-family: Arial, Helvetica, sans-serif;
+        letter-spacing: 8px;
+        color: #fff;
+      }
+    }
+    .right {
+      text-align: left;
+      width: 40%;
+      padding: 0 5%;
+      .form_right {
+        margin-top: 150px;
+      }
+    }
   }
 }
 
-.foot {
-  margin-top: 5vh;
-  margin-left: 3.5vw;
-  font-size: 20px;
-  color: black;
-  text-align: center;
-  font-weight: bolder;
+@media screen and (max-width: 1000px) {
+  .login {
+    .login_box {
+      width: 800px;
+      height: 500px;
+    }
+  }
+}
+@media screen and (max-width: 800px) {
+  .login {
+    .login_box {
+      width: 600px;
+      height: 400px;
+      .img {
+        width: 50%;
+        img {
+          width: 300px;
+        }
+        .title {
+          line-height: 20px;
+          margin: 30px 0;
+          font-size: 16px;
+          font-weight: 400;
+          font-family: Arial, Helvetica, sans-serif;
+          letter-spacing: 3px;
+          color: #fff;
+        }
+      }
+      .right {
+        text-align: left;
+        width: 40%;
+        padding: 0 5%;
+        .form_right {
+          margin-top: 100px;
+        }
+      }
+    }
+  }
 }
 </style>
+

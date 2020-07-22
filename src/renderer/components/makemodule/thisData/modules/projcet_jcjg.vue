@@ -134,26 +134,6 @@
               <el-radio v-model="item.rows[4]" label="是"></el-radio>
               <el-radio v-model="item.rows[4]" label="否"></el-radio>
             </div>
-            <!-- <div style="width:100px;left:510px; line-height: 16px;" class="tc borderRight ___absolute t0 Full">
-                            <divModel v-model="item.rows[5]" style="width:100%;text-align: center;"
-                                      class="Full warp2 rowsInput2 hide focusBg"></divModel>
-                        </div>
-                        <div style="width:100px;right: 0" class="tc ___absolute t0 Full">
-                            <selectModel v-if="JudgePhotography"
-                                         @returnVal="returnVal"
-                                         :special="2" :receive="index"
-                                         :single="true"
-                                         :rows="false"
-                                         :input="true"
-                                         :factor="true"
-                                         :transmitText="item.rows[6]"
-                                         :Judge="JudgePhotography"
-                                         :list="factorList" :Obj="''">
-                            </selectModel>
-                            <div v-else>
-                                不涉及
-                            </div>
-                        </div>-->
             <div
               class="__functionBox"
               v-if="
@@ -165,7 +145,7 @@
             >
               <div
                 class="__functionButton6"
-                @click="reduce(index)"
+                @dblclick="reduce(index)"
                 style="right:0;"
               >
                 <p class="spanButton1">-</p>
