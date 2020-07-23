@@ -313,7 +313,7 @@ export default {
       if (row) {
         let that = this;
         if (row.unitUrl) {
-          let src = "http://120.77.153.63:8033" + row.unitUrl;
+          let src = "http://120.77.153.63:8022" + row.unitUrl;
           let image = new Image();
           image.crossOrigin = "";
           image.src = src;
@@ -347,7 +347,7 @@ export default {
       let data = { taskId: this.nowRow.taskId, type: 1 };
       val.upload(
         v2,
-        "http://120.77.153.63:8033/upload_image",
+        "http://120.77.153.63:8022/upload_image",
         this.fileSuccess2,
         this.fileError2,
         data

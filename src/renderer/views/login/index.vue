@@ -3,7 +3,8 @@
     <div class="login_box">
       <div class="img">
         <div class="title">深圳瑞达智能检测系统用户端</div>
-        <img src="../../assets/icon/login_box.png" alt="" />
+        <img  src="@/assets/icon/login_box.png" alt="" />
+        <!-- @click="$router.replace('/camera')" -->
       </div>
       <div class="right">
         <el-form class="form_right" ref="form" label-position="top">
@@ -144,6 +145,7 @@ export default {
   justify-content: center;
   align-items: center;
   .login_box {
+    transition: .3s;
     background: url("../../assets/icon/loginbox_bg.png") no-repeat;
     background-size: contain;
     width: 1000px;

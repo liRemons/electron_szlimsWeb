@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <div style="min-height:60vh;">
+    <div style="min-height: 60vh;">
       <el-table
         v-loading="listLoading"
         ref="multipleTable"
@@ -78,7 +78,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div style="margin-bottom: 10vh;margin-top: 10px;">
+    <div style="margin-bottom: 10vh; margin-top: 10px;">
       <el-pagination
         @current-change="changeCurrentPage"
         @size-change="handleSizeChange"
@@ -174,7 +174,7 @@ import {
   queryListType,
   getQueryByDeviceTypeName,
   queryDeviceByDeviceTypeId,
-  updateTaskData
+  updateTaskData,
 } from "@/api/local";
 import { getTaskById } from "@/api/entering";
 import store from "@/store";
@@ -192,13 +192,13 @@ export default {
       localDataFenYe: [],
       dataTasks: [],
       dataConsumables: [],
-      showHaocai: false
+      showHaocai: false,
     };
   },
   computed: {
     pageCount() {
       return this.localData.length;
-    }
+    },
   },
   filters: {
     getTime(time) {
@@ -209,7 +209,7 @@ export default {
       } catch (e) {
         return "";
       }
-    }
+    },
   },
   methods: {
     //获取table数据
@@ -219,9 +219,9 @@ export default {
         return;
       }
       this.readFile(JSON.parse(getToken()), "enteringList");
-      this.readFileEvent().then(res => {
+      this.readFileEvent().then((res) => {
         if (res) {
-          this.localData = JSON.parse(res).list.filter(task => {
+          this.localData = JSON.parse(res).list.filter((task) => {
             return (
               task.pass == "未录入" ||
               task.pass == "未通过" ||
@@ -235,9 +235,9 @@ export default {
     // 从服务器获取数据
     getUploadingList(loading) {
       let staffPhone = JSON.myParse(getToken()).staffPhone;
-      getLocalData(staffPhone).then(response => {
+      getLocalData(staffPhone).then((response) => {
         sessionStorage.getItem("TolocalNo", 1);
-        this.localData = response.data.filter(task => {
+        this.localData = response.data.filter((task) => {
           return (
             task.pass == "未录入" ||
             task.pass == "未通过" ||
@@ -252,11 +252,11 @@ export default {
         });
         let name = [];
         let DeviceTypeId = [];
-        arr.map(item => {
+        arr.map((item) => {
           name.push(item.taskList.name);
           DeviceTypeId.push({
             deviceTypeId: item.taskList.deviceTypeId,
-            subCompanyId: item.taskList.subCompanyId
+            subCompanyId: item.taskList.subCompanyId,
           });
         });
 
@@ -268,10 +268,10 @@ export default {
           );
         }
         Promise.all(promiseArr)
-          .then(res => {
+          .then((res) => {
             promiseArr = [];
-            arr.map(item => {
-              res.map(a => {
+            arr.map((item) => {
+              res.map((a) => {
                 if (a.datas.length) {
                   item.taskList.name == a.datas[0].deviceTypeName
                     ? (item["getQueryByDeviceTypeName"] = a)
@@ -286,9 +286,9 @@ export default {
               );
             }
             Promise.all(DeviceTypeIdPromise)
-              .then(DeviceTypeIdRes => {
-                arr.map(item => {
-                  DeviceTypeIdRes.map(a => {
+              .then((DeviceTypeIdRes) => {
+                arr.map((item) => {
+                  DeviceTypeIdRes.map((a) => {
                     item.taskList.deviceTypeId == a.deviceTypeId
                       ? (item["device"] = a)
                       : "";
@@ -296,12 +296,12 @@ export default {
                 });
                 this.getId(arr, loading);
               })
-              .catch(err => {
+              .catch((err) => {
                 this.$message.error("同步失败");
                 loading.close();
               });
           })
-          .catch(err => {
+          .catch((err) => {
             this.$message.error("同步失败");
             loading.close();
           });
@@ -317,34 +317,35 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "warning"
+          type: "warning",
         }
       )
         .then(() => {
           const loading = Loading.service({
             lock: true,
             text: "加载中.....",
-            background: "rgba(0, 0, 0, 0.7)"
+            target: "#content",
+            background: "rgba(0, 0, 0, 0.7)",
           });
           // 如果已有列表则先上传数据再下载数据
           this.readFile(JSON.parse(getToken()), "enteringList");
-          this.readFileEvent().then(res => {
+          this.readFileEvent().then((res) => {
             if (res) {
               let uploadingPromiseArr = [];
               let staffPhone = JSON.myParse(getToken()).staffPhone;
-              getLocalData(staffPhone).then(response => {
-                let uploadTask = response.data.filter(item => {
+              getLocalData(staffPhone).then((response) => {
+                let uploadTask = response.data.filter((item) => {
                   return item.pass == "已上传";
                 });
-                let state = response.data.filter(item => {
+                let state = response.data.filter((item) => {
                   return (
                     item.pass == "未录入" ||
                     item.pass == "未通过" ||
                     item.pass == "正在录入"
                   );
                 });
-                JSON.parse(res).list.forEach(item => {
-                  state.forEach(a => {
+                JSON.parse(res).list.forEach((item) => {
+                  state.forEach((a) => {
                     if (item.taskId == a.taskId) {
                       item.data
                         ? uploadingPromiseArr.push(
@@ -355,13 +356,13 @@ export default {
                   });
                 });
                 Promise.all(uploadingPromiseArr)
-                  .then(uploadingRes => {
-                    uploadTask.forEach(a => {
+                  .then((uploadingRes) => {
+                    uploadTask.forEach((a) => {
                       this.delFile(a.taskId, JSON.parse(getToken()));
                     });
                     this.getUploadingList(loading);
                   })
-                  .catch(err => {
+                  .catch((err) => {
                     this.$message.error("同步失败");
                     loading.close();
                     return;
@@ -379,48 +380,48 @@ export default {
     },
     getId(data, loading) {
       let promiseGetTaskById = [];
-      data.forEach(item => {
+      data.forEach((item) => {
         promiseGetTaskById.push(getTaskById(item.taskId));
       });
       Promise.all(promiseGetTaskById)
-        .then(res => {
+        .then((res) => {
           this.listLoading = false;
-          data.map(item => {
-            item["tasks"] = res.filter(a => {
+          data.map((item) => {
+            item["tasks"] = res.filter((a) => {
               return item.taskId == a.tasks[0].id;
             });
             item.tasks = item.tasks[0];
           });
           let writeFileEventPromise = [];
-          data.map(item => {
+          data.map((item) => {
             this.whrite(item, JSON.parse(getToken()));
             writeFileEventPromise.push(this.writeFileEvent());
           });
           Promise.all(writeFileEventPromise)
-            .then(a => {
+            .then((a) => {
               this.$message.success("同步成功");
               loading.close();
             })
-            .catch(err => {
+            .catch((err) => {
               this.$message.error("同步失败");
               loading.close();
               return;
             });
           let enteringList = {
             taskId: "enteringList",
-            list: []
+            list: [],
           };
           let enteringListInit = JSON.parse(JSON.stringify(data));
-          enteringListInit.map(item => {
+          enteringListInit.map((item) => {
             item.taskList["data"] = item.tasks.tasks[0].data;
             delete item.taskList.testProjectList;
             delete item.taskList.assessArr;
             enteringList.list.push(item.taskList);
           });
           this.whrite(enteringList, JSON.parse(getToken()));
-          this.writeFileEvent().then(res => {});
+          this.writeFileEvent().then((res) => {});
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message.error("同步失败");
           return;
         });
@@ -436,11 +437,11 @@ export default {
 
     toUpdateTaskReturn() {
       let staffId = JSON.myParse(getToken()).id;
-      let ids = this.haoCaiMultipleSelection.map(item => item.taskId);
+      let ids = this.haoCaiMultipleSelection.map((item) => item.taskId);
       if (ids.length <= 0) {
         this.$notify({
           message: "请选择打回任务！",
-          type: "warning"
+          type: "warning",
         });
         return;
       }
@@ -448,35 +449,35 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         modal: false,
-        inputType: "textarea"
+        inputType: "textarea",
       })
         .then(({ value }) => {
           let reason = value;
-          let arr = this.localData.filter(item => !ids.includes(item.taskId));
+          let arr = this.localData.filter((item) => !ids.includes(item.taskId));
           let enteringList = {
             taskId: "enteringList",
-            list: arr
+            list: arr,
           };
-          updateTaskReturn(staffId, ids, reason).then(res => {
+          updateTaskReturn(staffId, ids, reason).then((res) => {
             if (res.success) {
               this.$notify({
                 message: res.msg,
-                type: "success"
+                type: "success",
               });
               this.localData;
               // sessionStorage.setItem("TolocalNo", 0);
               this.whrite(enteringList, JSON.parse(getToken()));
-              this.writeFileEvent().then(res => {
+              this.writeFileEvent().then((res) => {
                 this.getList();
               });
 
-              ids.map(a => {
+              ids.map((a) => {
                 this.delFile(a, JSON.parse(getToken()));
               });
             } else {
               this.$notify({
                 message: res.msg,
-                type: "error"
+                type: "error",
               });
             }
           });
@@ -484,16 +485,16 @@ export default {
         .catch(() => {});
     },
     searchHaoCai() {
-      let ids = this.haoCaiMultipleSelection.map(item => item.taskId);
+      let ids = this.haoCaiMultipleSelection.map((item) => item.taskId);
       if (ids.length <= 0) {
         this.$notify({
           type: "warning",
-          message: "请选择任务"
+          message: "请选择任务",
         });
         return;
       }
       queryTaskMaterialStatistics(ids)
-        .then(res => {
+        .then((res) => {
           if (res.success) {
             this.dataTasks = res.data_tasks;
             this.dataConsumables = res.data_consumables;
@@ -501,11 +502,11 @@ export default {
           } else {
             this.$notify({
               type: "error",
-              message: "查询耗材失败"
+              message: "查询耗材失败",
             });
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
@@ -524,18 +525,6 @@ export default {
     },
     // 单个跳转到模板页面
     goOneTemplate(row) {
-      // let data = {
-      //   taskId: row.taskId,
-      //   staffId: JSON.myParse(getToken()).id,
-      // };
-      // let that = this;
-      // queryTaskIsOpen(data).then(res => {
-      //   that.$store.dispatch("actionsSetTestprojectId", true);
-      //   store.dispatch("TemplateAction", "update"); //取出以选择的行id
-      //   that.$router.push(`/local/doc-entering/0/${row.taskId}`);
-      // }).catch(e => {
-      //   console.log(e);
-      // });
       let version = sessionStorage.getItem("version");
       if (this.$isUpdate) {
         if (version.updateVersion !== version.version) {
@@ -543,16 +532,31 @@ export default {
           return;
         }
       }
-
-      this.readFile(JSON.parse(getToken()), row.taskId);
-      this.readFileEvent().then(res => {
-        if (res) {
-          this.$store.dispatch("actionsSetTestprojectId", true);
-          store.dispatch("TemplateAction", "update"); //取出以选择的行id
-          this.$router.push(`/local/doc-entering/0/${row.taskId}`);
-        } else {
-          this.$message.error("离线数据暂无本条记录，请点击同步后再试");
-        }
+      this.readFile(JSON.parse(getToken()), "enteringList");
+      this.readFileEvent().then((res) => {
+        let list = JSON.parse(res).list;
+        list.forEach((item) => {
+          if (item.taskId == row.taskId && item.pass == "未录入") {
+            item.pass = "正在录入";
+          }
+        });
+        let enteringList = {
+          taskId: "enteringList",
+          list: list,
+        };
+        this.whrite(enteringList, JSON.parse(getToken()));
+        this.writeFileEvent().then(() => {
+          this.readFile(JSON.parse(getToken()), row.taskId);
+          this.readFileEvent().then((response) => {
+            if (response) {
+              this.$store.dispatch("actionsSetTestprojectId", true);
+              store.dispatch("TemplateAction", "update"); //取出以选择的行id
+              this.$router.push(`/local/doc-entering/0/${row.taskId}`);
+            } else {
+              this.$message.error("离线数据暂无本条记录，请点击同步后再试");
+            }
+          });
+        });
       });
     },
 
@@ -570,17 +574,17 @@ export default {
         let that = this;
         let data = {
           taskId: that.multipleSelection[0].taskId,
-          staffId: JSON.myParse(getToken()).id
+          staffId: JSON.myParse(getToken()).id,
         };
         this.readFile(JSON.parse(getToken()), data.taskId);
-        this.readFileEvent().then(r => {
+        this.readFileEvent().then((r) => {
           if (r) {
             queryTaskIsOpen(data)
-              .then(res => {
+              .then((res) => {
                 that.$store.dispatch("actionsSetTestprojectId", true);
                 that.$router.push(`/local/doc-entering/0/${ids.toString()}`);
               })
-              .catch(e => {
+              .catch((e) => {
                 console.log(e);
               });
           } else {
@@ -590,7 +594,7 @@ export default {
       } else {
         this.$notify({
           type: "warning",
-          message: "请选择任务!"
+          message: "请选择任务!",
         });
       }
     },
@@ -630,7 +634,7 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "error"
+          type: "error",
         }
       ).then(() => {
         this.delFile(id, JSON.parse(getToken()));
@@ -641,10 +645,10 @@ export default {
         });
         let arr = {
           taskId: "enteringList",
-          list: this.localData
+          list: this.localData,
         };
         this.whrite(arr, JSON.parse(getToken()));
-        this.writeFileEvent(res => {
+        this.writeFileEvent((res) => {
           this.$message.success("删除成功");
           this.localDataFenYe[this.nowShowPage].forEach((item, index) => {
             item.taskId == id
@@ -667,23 +671,23 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "error"
+          type: "error",
         }
       ).then(() => {
         this.readDir(JSON.parse(getToken()));
-        this.readDirEvent().then(res => {
-          res.forEach(item => {
+        this.readDirEvent().then((res) => {
+          res.forEach((item) => {
             this.delFile(item.split(".")[0], JSON.parse(getToken()));
           });
           this.$message.success("删除成功");
           this.localDataFenYe = [];
         });
       });
-    }
+    },
   },
   created() {
     this.getList();
-  }
+  },
 };
 </script>
 

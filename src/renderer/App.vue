@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" @contextmenu="showRightClickMenu">
     <div class="control">
-      <div style="float:left">
-        <span style="line-height: 24px;padding-left:20px"
+      <div style="float: left;">
+        <span style="line-height: 24px; padding-left: 20px;"
           >深圳市瑞达智能检测系统用户端V{{ version }} （{{
             $isUpdate ? "正式版" : "测试版"
           }}）</span
@@ -12,7 +12,7 @@
         <img
           @click="clean"
           src="@/assets/icon/clean.png"
-          style="padding-top:1px"
+          style="padding-top: 1px;"
           v-if="$route.path == '/login'"
         />
         <el-tooltip
@@ -24,7 +24,7 @@
           <img
             src="@/assets/icon/upload.png"
             @click="getUpdateVersion"
-            style="padding-top:2px"
+            style="padding-top: 1px; width: 25px;"
           />
         </el-tooltip>
         <img @click="mini" src="@/assets/icon/mini.png" />
@@ -33,9 +33,9 @@
         <img @click="close" src="@/assets/icon/close.png" />
       </div>
     </div>
-    <div style="height:30px"></div>
+    <div style="height: 30px;"></div>
 
-    <div class="content">
+    <div class="content" id="content">
       <router-view />
     </div>
     <update
@@ -52,7 +52,7 @@
       :close-on-click-modal="false"
       :show-close="false"
     >
-      <p style="margin-bottom:10px" v-if="!downloadState">
+      <p style="margin-bottom: 10px;" v-if="!downloadState">
         {{ downloadText }}
         <i class="el-icon-loading"></i>
       </p>
@@ -62,10 +62,10 @@
         :status="downloadState"
         :stroke-width="10"
       ></el-progress>
-      <div v-if="downloadState" style="margin-top:20px">
+      <div v-if="downloadState" style="margin-top: 20px;">
         {{ downloadText }}
         <i class="el-icon-check"></i><br />
-        <p style="margin-top:20px">
+        <p style="margin-top: 20px;">
           <span>文件保存在：</span
           ><el-tag class="el_tag" type="success">{{ filePath }}</el-tag
           ><br />
@@ -89,6 +89,8 @@ import update from "./components/update";
 import { add, addValue, addNengPuValue } from "@/api/task";
 import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
 import moment from "moment";
+const { remote } = require("electron");
+const { Menu, MenuItem } = remote;
 export default {
   name: "App",
   components: { update },
@@ -97,14 +99,14 @@ export default {
       isMax: true,
       updateflag: false,
       dialogVisible: false,
-      version: "0.4",
+      version: "0.5",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
       percentage: 0,
       downloadState: "",
       downloadText: "正在下载，请稍后",
-      filePath: ""
+      filePath: "",
     };
   },
   mounted() {
@@ -146,16 +148,16 @@ export default {
         lock: true,
         text: "检查更新中，请稍后......",
         spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)"
+        background: "rgba(0, 0, 0, 0.7)",
       });
-      this.$updateAxios.post("/getOnlineApk", data).then(res => {
+      this.$updateAxios.post("/getOnlineApk", data).then((res) => {
         loading.close();
         let apkVersion = JSON.parse(res.data.data[0].apkVersion);
         this.updateMain = apkVersion.update;
         this.updateVersion = apkVersion.code;
         sessionStorage.setItem("version", {
           updateVersion: this.updateVersion,
-          version: this.version
+          version: this.version,
         });
         if (
           Number(this.updateVersion.split(".")[0]) >
@@ -180,7 +182,7 @@ export default {
         {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "error"
+          type: "error",
         }
       ).then(() => {
         this.delDir();
@@ -188,7 +190,7 @@ export default {
           lock: true,
           text: "清理中，请稍后...",
           spinner: "el-icon-loading",
-          background: "rgba(0, 0, 0, 0.7)"
+          background: "rgba(0, 0, 0, 0.7)",
         });
         setTimeout(() => {
           loading.close();
@@ -207,19 +209,23 @@ export default {
     },
     close() {
       this.$ipcRenderer.send("close", true);
-    }
+    },
+    showRightClickMenu() {
+      this.$ipcRenderer.send("sigShowRightClickMenu", this.$route.name);
+    },
   },
   watch: {
     $route() {
       sessionStorage.setItem("routerPath", this.$route.path);
-    }
+    },
   },
   computed: {
     taskId() {
       return this.$store.state.app.taskId;
-    }
+    },
   },
   created() {
+    
     // 读取指纹信息
     this.$ipcRenderer.on("Finger_MSG", (event, arg) => {
       this.$store.dispatch("CHANGE_FINGER_MUTATIONS", arg);
@@ -227,73 +233,63 @@ export default {
     this.$ipcRenderer.on("isMaximized", (event, arg) => {
       this.isMax = arg;
     });
-    Vue.prototype.mkdir = function(data) {
+    Vue.prototype.mkdir = function (data) {
       this.$ipcRenderer.send("mkdir", data);
     };
     // 写入文件
-    Vue.prototype.whrite = function(arr, staff) {
+    Vue.prototype.whrite = function (arr, staff) {
       arr.staff = staff;
       this.$ipcRenderer.send("writeFile", arr);
     };
     // 接收写入文件信息状态
-    Vue.prototype.writeFileEvent = function() {
-      return new Promise(reslove => {
-        this.$ipcRenderer.on("writeFileEvent", function(event, arg) {
+    Vue.prototype.writeFileEvent = function () {
+      return new Promise((reslove) => {
+        this.$ipcRenderer.on("writeFileEvent", function (event, arg) {
           reslove(arg);
         });
       });
     };
     // 读取文件
-    Vue.prototype.readFile = function(staff, id) {
+    Vue.prototype.readFile = function (staff, id) {
       this.$ipcRenderer.send("readFile", {
         taskId: id,
-        staffPhone: staff.staffPhone
+        staffPhone: staff.staffPhone,
       });
     };
     // 接收读取文件信息状态
-    Vue.prototype.readFileEvent = function() {
-      return new Promise(resolve => {
-        this.$ipcRenderer.on("readFileEvent", function(event, arg) {
+    Vue.prototype.readFileEvent = function () {
+      return new Promise((resolve) => {
+        this.$ipcRenderer.on("readFileEvent", function (event, arg) {
           resolve(arg);
         });
       });
     };
     // 读取文件夹
-    Vue.prototype.readDir = function(staff) {
+    Vue.prototype.readDir = function (staff) {
       this.$ipcRenderer.send("readDir", { staffPhone: staff.staffPhone });
     };
     // 接收读取文件夹状态
-    Vue.prototype.readDirEvent = function() {
-      return new Promise(resolve => {
-        this.$ipcRenderer.on("readDirEvent", function(event, arg) {
+    Vue.prototype.readDirEvent = function () {
+      return new Promise((resolve) => {
+        this.$ipcRenderer.on("readDirEvent", function (event, arg) {
           resolve(arg);
         });
       });
     };
-    Vue.prototype.delDir = function() {
+    Vue.prototype.delDir = function () {
       this.$ipcRenderer.send("delDir");
     };
     // 删除文件
-    Vue.prototype.delFile = function(id, staff) {
+    Vue.prototype.delFile = function (id, staff) {
       this.$ipcRenderer.send("delFile", {
         taskId: id,
-        staffPhone: staff.staffPhone
+        staffPhone: staff.staffPhone,
       });
-    };
-    document.onkeydown = e => {
-      if (e.keyCode == 123) {
-        // 控制台
-        this.$ipcRenderer.send("openDevTools");
-      }
-      if (e.keyCode == 116) {
-        // 刷新页面
-        this.$ipcRenderer.send("reload");
-      }
     };
 
     let _this = this;
     // _this.userIsLogin();
-    Array.prototype.flat = function() {
+    Array.prototype.flat = function () {
       let arr = [];
 
       //定义hanle函数方便递归
@@ -316,19 +312,19 @@ export default {
       setItem: (key, value) => {
         let data = {
           key: key,
-          value: value
+          value: value,
         };
         this.$store.commit("SESSIONSTORAGE_SET", data);
       };
-      getItem: key => {
+      getItem: (key) => {
         return this.$store.state.app.shareObject[key];
       };
-      removeItem: key => {
+      removeItem: (key) => {
         this.$store.commit("SESSIONSTORAGE_REMOVE", key);
       };
     }
 
-    Number.prototype.toFixed46 = function(
+    Number.prototype.toFixed46 = function (
       decimalPlaces,
       Judge = false,
       revision = false
@@ -384,7 +380,7 @@ export default {
     };
 
     // 100 以上转科学计数法
-    Number.prototype.num2e = function() {
+    Number.prototype.num2e = function () {
       let p = Math.floor(Math.log(this) / Math.LN10);
       let n = this * Math.pow(10, -p);
       let subArr = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
@@ -398,12 +394,12 @@ export default {
     };
 
     // 微生物使用，小于检出值
-    Number.prototype.checkValue = function(value) {
+    Number.prototype.checkValue = function (value) {
       console.log("微生物使用，小于检出值", this, value);
       return this < value ? "<" + value : this;
     };
 
-    Date.prototype.format = function(fmt) {
+    Date.prototype.format = function (fmt) {
       //author: meizz
       var o = {
         "M+": this.getMonth() + 1, //月份
@@ -412,7 +408,7 @@ export default {
         "m+": this.getMinutes(), //分
         "s+": this.getSeconds(), //秒
         "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-        S: this.getMilliseconds() //毫秒
+        S: this.getMilliseconds(), //毫秒
       };
       if (/(y+)/.test(fmt))
         fmt = fmt.replace(
@@ -434,7 +430,7 @@ export default {
     window.sampleNum2 = "";
     window.sampleNum3 = "";
     window.sampleNum4 = "";
-    JSON.myParse = function(value) {
+    JSON.myParse = function (value) {
       try {
         value = value.replace(/[\r\n]/g, "");
         let obj = this.parse(value);
@@ -444,7 +440,7 @@ export default {
         return obj;
       }
     };
-  }
+  },
 };
 </script>
 

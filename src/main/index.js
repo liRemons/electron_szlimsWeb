@@ -1,4 +1,11 @@
-import { app, BrowserWindow, Menu, ipcMain } from "electron";
+import {
+  app,
+  BrowserWindow,
+  Menu,
+  MenuItem,
+  ipcMain,
+  globalShortcut,
+} from "electron";
 var fs = require("fs");
 const path = require("path");
 /**
@@ -26,16 +33,10 @@ function createWindow() {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    // useContentSize: true,
-    // height: 1080,
-    // width: 1200,
-    // minWidth: 1200,
-    // minHeight: 660,
-    // fullscreen: true, // 全屏?
     show: false,
-
     frame: false,
-    backgroundColor: "#ffffff",
+    // transparent为true后导致窗口放大缩小失败  原因isMaximized()始终返回fasle，官方仍未解决
+    transparent: true,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -92,17 +93,49 @@ function createWindow() {
       });
     }
   );
+  
 }
 
+// 注册右键菜单
+ipcMain.on("sigShowRightClickMenu", (event, arg) => {
+  // 生成菜单
+  const menu = new Menu();
+  menu.append(
+    new MenuItem({
+      label: "刷新",
+      enabled: arg !== "doc-entering" || process.env.NODE_ENV == "development",
+      role: "reload",
+      accelerator: "CommandOrControl+F5",
+    })
+  );
+  menu.append(new MenuItem({ label: "复制", role: "copy" }));
+  menu.append(new MenuItem({ label: "粘贴", role: "paste" }));
+  menu.append(new MenuItem({ label: "剪切", role: "cut" }));
+  menu.append(new MenuItem({ label: "全选", role: "selectall" }));
+  menu.append(
+    new MenuItem({
+      label: "检查元素",
+      role: "toggledevtools",
+      accelerator: "CommandOrControl+F12",
+    })
+  );
+  menu.append(new MenuItem({ label: "最小化", role: "minimize" }));
+
+  const win = BrowserWindow.fromWebContents(event.sender);
+  menu.popup(win);
+});
 app.on("ready", () => {
   createWindow();
   FingerAction(mainWindow);
-  // mainWindow.webContents.openDevTools();
-
-  // MSerialPort(mainWindow);
-
-  // 开始websocker 视频处理
-  // WebsockerRelay('supersecret', 8081, 8082)
+  // 开发模式下注册快捷键
+  if (process.env.NODE_ENV == "development") {
+    globalShortcut.register("CommandOrControl+F12", () => {
+      mainWindow.webContents.openDevTools();
+    });
+    globalShortcut.register("CommandOrControl+F5", () => {
+      mainWindow.webContents.reload();
+    });
+  }
 });
 
 app.on("window-all-closed", () => {
@@ -118,11 +151,11 @@ app.on("activate", () => {
 });
 ipcMain.on("unmaximize", (event, arg) => {
   mainWindow.unmaximize();
-  event.sender.send("isMaximized", mainWindow.isMaximized());
+  event.sender.send("isMaximized", false);
 });
 ipcMain.on("max", (event, arg) => {
   mainWindow.maximize();
-  event.sender.send("isMaximized", mainWindow.isMaximized());
+  event.sender.send("isMaximized", true);
 });
 ipcMain.on("mini", (event, arg) => {
   mainWindow.minimize();
@@ -130,41 +163,33 @@ ipcMain.on("mini", (event, arg) => {
 
 ipcMain.on("close", (event, arg) => {
   mainWindow.close();
+  // event.preventDefault();
+  // event.sender.send('action', 'exiting');
 });
-// 最大化窗口
-//控制键盘F12控制台
-ipcMain.on("openDevTools", (event, arg) => {
-  mainWindow.webContents.openDevTools();
-});
-// 刷新
-ipcMain.on("reload", (event, arg) => {
-  mainWindow.webContents.reload();
-  setTimeout(() => {
-    event.sender.send("isMaximized", mainWindow.isMaximized());
-  }, 1000);
-});
-fs.exists("./data", function(e) {
-  if (e) {
-  } else {
-    fs.mkdir("./data", function(err) {
-      if (err) {
-        return console.error(err);
-      }
-    });
+ipcMain.on('reqaction', (event, arg) => {
+  console.log('zhu jin cheng:', arg)
+  switch(arg){
+    case 'exit':
+      app.exit()  // 退出所有窗口，注意这里使用 app.quit() 无效
+      break;
   }
 });
 
-ipcMain.on("mkdir", function(event, arg) {
-  fs.exists(`./data/${arg.staffPhone}`, function(e) {
+function mkdir(fileName) {
+  fs.exists(fileName, function(e) {
     if (e) {
     } else {
-      fs.mkdir(`./data/${arg.staffPhone}`, function(err) {
+      fs.mkdir(fileName, function(err) {
         if (err) {
-          console.log(err);
+          return console.error(err);
         }
       });
     }
   });
+}
+mkdir("./data");
+ipcMain.on("mkdir", function(event, arg) {
+  mkdir(`./data/${arg.staffPhone}`);
 });
 
 // 读取文件

@@ -405,7 +405,6 @@ import {
   updateSampleStaff
 } from "@/api/laboratory";
 import { getToken } from "@/utils/auth";
-import FileSaver from "file-saver";
 export default {
   data() {
     return {
@@ -578,7 +577,7 @@ export default {
     // 获取现场模板数据
     initTasks(ids) {
       if (this.$route.params.target == 0) {
-        this.readFile(JSON.parse(getToken()),this.$route.params.ids);
+        this.readFile(JSON.parse(getToken()), this.$route.params.ids);
         this.readFileEvent().then(res => {
           this.enteringData(res, ids, this.$route.params.target);
         });
@@ -738,7 +737,7 @@ export default {
             this.templateArr.push(item.data.valueData);
           });
           arr.tasks.tasks[0].data = JSON.stringify(this.templateArr);
-          this.readFile(JSON.parse(getToken()),"enteringList");
+          this.readFile(JSON.parse(getToken()), "enteringList");
           this.readFileEvent().then(res => {
             let arrList = JSON.parse(res);
             arrList.list.map(item => {
@@ -746,9 +745,9 @@ export default {
                 ? (item.data = JSON.stringify(this.templateArr))
                 : "";
             });
-            this.whrite(arrList,JSON.parse(getToken()));
+            this.whrite(arrList, JSON.parse(getToken()));
           });
-          this.whrite(arr,JSON.parse(getToken()));
+          this.whrite(arr, JSON.parse(getToken()));
           this.writeFileEvent().then(res => {
             if (res) {
               if (that.target == 0) {
@@ -927,31 +926,26 @@ export default {
         }
       }
       let uploadStaffId = JSON.myParse(getToken()).id;
-      updateTaskUpload(this.ids.toString(), uploadStaffId)
-        .then(res => {
-          if (res.success) {
+      generateMeasure(
+        this.ids[0],
+        this.$refs.templateHTML[0].$el.innerHTML
+      ).then(response => {
+        updateTaskUpload(this.ids.toString(), uploadStaffId).then(response => {
+          if (response.success) {
             this.$notify({
               type: "success",
-              message: res.msg
+              message: response.msg
             });
-            this.delFile(JSON.parse(getToken()),this.ids.toString());
-            // 生成html
-            generateMeasure(
-              this.ids[0],
-              this.$refs.templateHTML[0].$el.innerHTML
-            ).then(response => {
-              this.$router.push("/local/upload");
-            });
+            this.delFile(JSON.parse(getToken()), this.ids.toString());
+            this.$router.push("/local/upload");
           } else {
             this.$notify({
               type: "error",
               message: res.msg
             });
           }
-        })
-        .catch(error => {
-          console.log("上传接口捕捉到异常", error);
         });
+      });
 
       this.showSignature = false;
       this.taskDatas.forEach(item => {
@@ -1000,13 +994,13 @@ export default {
         )
           .then(res => {
             if (res.success) {
-              this.readFile(JSON.parse(getToken()),"enteringList");
+              this.readFile(JSON.parse(getToken()), "enteringList");
               this.readFileEvent().then(a => {
                 let arr = JSON.parse(a);
                 arr.list.map((item, index) => {
                   item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
                 });
-                this.whrite(arr,JSON.parse(getToken()));
+                this.whrite(arr, JSON.parse(getToken()));
               });
               this.$notify({
                 message: res.msg,
@@ -1032,13 +1026,13 @@ export default {
         )
           .then(res => {
             if (res.success) {
-              this.readFile(JSON.parse(getToken()),"enteringList");
+              this.readFile(JSON.parse(getToken()), "enteringList");
               this.readFileEvent().then(a => {
                 let arr = JSON.parse(a);
                 arr.list.map((item, index) => {
                   item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
                 });
-                this.whrite(arr,JSON.parse(getToken()));
+                this.whrite(arr, JSON.parse(getToken()));
               });
               this.$notify({
                 message: res.msg,

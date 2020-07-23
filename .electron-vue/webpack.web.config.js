@@ -4,7 +4,7 @@ process.env.BABEL_ENV = "web";
 
 const path = require("path");
 const webpack = require("webpack");
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const BabiliWebpackPlugin = require("babili-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -87,6 +87,13 @@ let webConfig = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    // new UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     compress: {
+    //       drop_console: true,
+    //     },
+    //   },
+    // }),
   ],
   output: {
     filename: "[name].js",

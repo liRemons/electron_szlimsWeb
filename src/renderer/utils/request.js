@@ -5,11 +5,11 @@ import { getToken } from "@/utils/auth";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: "http://120.77.153.63:8033", // api 的 base_url
+  baseURL: "http://120.77.153.63:8022", // api 的 base_url
   timeout: 20000, // 请求超时时间
 });
 const requestImg = axios.create({
-  baseURL: "http://120.77.153.63:8033", // api 的 base_url
+  baseURL: "http://120.77.153.63:8022", // api 的 base_url
   timeout: 20000, // 请求超时时间
 });
 
@@ -23,7 +23,7 @@ let hint = true; //是否全局提示
 // request拦截器
 service.interceptors.request.use(
   (config) => {
-    if (config.baseURL == "http://120.77.153.63:8033") {
+    if (config.baseURL == "http://120.77.153.63:8022") {
       // console.log(config.url)
       if (
         window.location.hash.split("#")[1] == "/local/entering" &&
@@ -39,6 +39,7 @@ service.interceptors.request.use(
       if (hint) {
         globalLoading = Loading.service({
           lock: true,
+          // target:'#content',
           text: "加载中.....",
           background: "rgba(0, 0, 0, 0.8)",
         });

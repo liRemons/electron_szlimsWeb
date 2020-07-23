@@ -11,7 +11,7 @@ const BabiliWebpackPlugin = require("babili-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 /**
  * List of node_modules to include in webpack bundle
  *
@@ -133,6 +133,13 @@ let rendererConfig = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    // new UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     compress: {
+    //       drop_console: true,
+    //     },
+    //   },
+    // }),
   ],
   output: {
     filename: "[name].js",

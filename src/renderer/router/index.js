@@ -18,6 +18,15 @@ import Router from "vue-router";
 Vue.use(Router);
 import { getToken } from "../utils/auth";
 const constantRouterMap = [
+  // {
+  //   path: "/",
+  //   redirect: "/login",
+  // },
+  {
+    path:"/camera",
+    component:()=>import('@/views/camera')
+    // component:()=>import('@/views/demo')
+  },
   {
     path: "/",
     component: () => import("@/views/block/index"),
@@ -41,6 +50,7 @@ const constantRouterMap = [
     redirect: "/local/entering",
     children: [
       {
+        
         path: "entering",
         component: () => import("../views/local/entering/index"),
       },
@@ -53,6 +63,7 @@ const constantRouterMap = [
         component: () => import("../views/local/Review/index"),
       },
       {
+        name: "doc-entering",
         path: "doc-entering/:target/:ids",
         component: () => import("../views/docEntering/index"),
       },
@@ -71,7 +82,7 @@ const constantRouterMap = [
         path: "curve",
         component: () => import("../views/laboratory/curve/index"),
       },
-      {
+      {name: "doc-entering",
         path: "doc-entering/:target",
         component: () => import("../views/docEntering/index"),
       },
@@ -97,13 +108,18 @@ const router = new Router({
   routes: constantRouterMap,
 });
 
-/*router.beforeEach((to, from, next) => {
-    let token = getToken();
-    if(token){
-        next();
-    } else {
-        router.push('/login');
-    }
-});*/
+router.beforeEach((to, from, next) => {
+  next();
+  // if (to.path == "/login") {
+
+  //   next();
+  // } else {
+  //   if (getToken()) {
+  //     next()
+  //   } else {
+  //     router.push("/login");
+  //   }
+  // }
+});
 
 export default router;

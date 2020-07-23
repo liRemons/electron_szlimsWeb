@@ -4,7 +4,7 @@
     class="showTemplateBox"
     :class="ipdTemplate == 'ipdTemplate' ? 'box_warpper' : ''"
   >
-    <div class="contents" v-if="showBookValue" style="background: transparent">
+    <div class="contents" v-if="showBookValue" style="background: transparent;">
       <span class="closeContent" @click="showBookValue = false">X</span>
       <p
         v-for="(item, index) in aObjects"
@@ -16,7 +16,7 @@
           :href="'#' + item.id"
           @click="aObjectsIndex = index"
           :style="aObjectsIndex === index ? { color: 'red' } : {}"
-          style="text-decoration:none;"
+          style="text-decoration: none;"
           >{{ item.name }}</a
         >
       </p>
@@ -25,7 +25,7 @@
     <div
       class="contents2"
       v-if="showModuleOption"
-      style="padding-left: 20px; background: transparent"
+      style="padding-left: 20px; background: transparent;"
     >
       <span class="closeContent" @click="showModuleOption = false">X</span>
       <div
@@ -52,13 +52,13 @@
         :key="pageNumber + 'taskDataShowing'"
       >
         <div
-          style="margin:0 auto;"
+          style="margin: 0 auto;"
           v-if="pageDataArray.length > 0"
           :class="{
             page: !pageDataArray[0].data.switch,
             page2: pageDataArray[0].data.switch,
             _print: true,
-            ableInput: ableInput
+            ableInput: ableInput,
           }"
         >
           <!-- 真打印区域 -->
@@ -72,7 +72,7 @@
             :class="{
               mainContentBox: !pageDataArray[0].data.switch,
               mainContentBox2: pageDataArray[0].data.switch,
-              mainContentBox_debug: debug
+              mainContentBox_debug: debug,
             }"
           >
             <!-- 正文总高度: 700px -->
@@ -123,7 +123,7 @@
             检测 :
             <div :class="{ nameContainer1: true, mainContentBox_debug: debug }">
               <div
-                style="display:inline-block"
+                style="display: inline-block;"
                 v-if="
                   taskData.showing[0][0]['data']['valueData'][
                     'imgBase64'
@@ -139,7 +139,7 @@
                   :src="item"
                 />
               </div>
-              <div style="display:inline-block" v-else>
+              <div style="display: inline-block;" v-else>
                 <img
                   class="jianceImg"
                   :src="
@@ -213,7 +213,6 @@
 </template>
 
 <script>
-import FileSaver from "file-saver";
 import Methods from "../methods.js"; //  尼玛 babel版本太低, 无法解析 import {Adaptive, dataRefresh} from './methods.js'
 let { Adaptive } = Methods;
 import { queryListType } from "@/api/local";
@@ -227,12 +226,10 @@ import {
   updateTaskData,
   fsUpdateTaskData,
   querySampleNum,
-  addSampleNumDelete
+  addSampleNumDelete,
 } from "@/api/local";
 import { mapState } from "vuex";
-import { constants } from "crypto";
 import { currentTime } from "@/utils/dateTime.js";
-// import { resolve } from "../../../../../../vuework/roms300bak/roms300_web/node_modules1/_uri-js@4.2.2@uri-js/dist/es5/uri.all";
 export default {
   data() {
     return {
@@ -284,13 +281,13 @@ export default {
         _short: 0,
         _up: 0,
         _down: 0,
-        _delete: 0
+        _delete: 0,
       },
       refre: false,
       reasonMsgArr: [],
       contentArray: [],
       SampleNumJudge: true,
-      requestNo: 0
+      requestNo: 0,
     };
   },
   props: {
@@ -301,7 +298,7 @@ export default {
     imgBase64Two: String,
     target: String,
     importData: Object,
-    unitUrl: Array
+    unitUrl: Array,
   },
   methods: {
     classification(data) {
@@ -325,9 +322,13 @@ export default {
     },
     redefinition(needPorjectName) {
       let redefinitionArr = [];
-      let detectionObjects = this.jsonString.filter(
-        item => item.to == "project_jbxx"
+      if (this.jsonString.filter((item) => item.to == "project_jbxx").length) {
+        let detectionObjects = this.jsonString.filter(
+        (item) => item.to == "project_jbxx"
       )[0].data.valueData.detectionObjects;
+      }
+      
+
       let NumberOfDetectors;
       let createdDetector = [];
       // 当 DR 探测器数量 选择 2 时，以下项目为两个- start-------------------------------
@@ -343,7 +344,7 @@ export default {
         "project_dr_ddbdxjjc", //DR低对比度细节检测
         "project_dr_cy", //DR残影
         "project_dr_wy", //DR伪影
-        "project_dr_jxkjfbl" //极限空间分辨力
+        "project_dr_jxkjfbl", //极限空间分辨力
       ];
       this.jsonString.forEach((val, index) => {
         if (val.to == "project_dr_tcq") {
@@ -357,7 +358,7 @@ export default {
               index: index + 1,
               title: "探测器2",
               drIdNum2: val.data.valueData.drIdNum2 + "create",
-              testProject: val.to
+              testProject: val.to,
             });
           }
         }
@@ -372,22 +373,22 @@ export default {
           return cur;
         }, []); //设置cur默认类型为数组，并且初始值为空的数组
         createdDetector = peon;
-        createdDetector.forEach(item => {
+        createdDetector.forEach((item) => {
           item[item.testProject].data.valueData.drIdNum2 = item.drIdNum2;
           item[item.testProject].data.valueData.title = item.title;
           item[item.testProject].data.valueData.del = true;
           if (
-            this.jsonString.filter(a => a.to == item.testProject).length < 2
+            this.jsonString.filter((a) => a.to == item.testProject).length < 2
           ) {
             this.jsonString.splice(
-              this.jsonString.findIndex(a => a.to == item.testProject) + 1,
+              this.jsonString.findIndex((a) => a.to == item.testProject) + 1,
               0,
               item[item.testProject]
             );
           }
         });
       } else {
-        this.jsonString.forEach(item => {
+        this.jsonString.forEach((item) => {
           if (
             createdDetectorName.includes(item.to) &&
             item.data.valueData.del
@@ -398,13 +399,13 @@ export default {
           }
         });
         this.jsonString = this.jsonString.filter(
-          value => Object.keys(value).length !== 0
+          (value) => Object.keys(value).length !== 0
         );
       }
       // ----------------------------------------------end----------------------------
       this.jsonString.forEach((item, index) => {
         let obj = {};
-        let findIndex = redefinitionArr.findIndex(val => {
+        let findIndex = redefinitionArr.findIndex((val) => {
           return (
             val.to === item.to &&
             val.data.valueData.multipleId === item.data.valueData.multipleId &&
@@ -425,7 +426,7 @@ export default {
 
           redefinitionArr[findIndex].data.valueData.point = [
             ...redefinitionArr[findIndex].data.valueData.point,
-            ...point
+            ...point,
           ];
           classificationIndex = findIndex;
         }
@@ -442,7 +443,7 @@ export default {
         let projcet = {
           to: item.to,
           type: null,
-          data: this.deepCopy(item.data)
+          data: this.deepCopy(item.data),
         };
 
         let surplusPoint = [];
@@ -454,7 +455,7 @@ export default {
           if (arr.length > 0) {
             let firstRow = item.data.valueData.point[0].rows;
             let keys = Object.keys(firstRow);
-            keys.forEach(key => {
+            keys.forEach((key) => {
               if (firstRow[key] !== "") {
                 result = true;
               } //如果第一行有一列有数据
@@ -464,7 +465,7 @@ export default {
             for (let i = 0; i < this.syntheticData.length; i++) {
               let nowRows = this.syntheticData[i].rows;
               let myId = nowRows[nowRows.length - 1];
-              let index = arr.findIndex(item => {
+              let index = arr.findIndex((item) => {
                 return item.rows[item.rows.length - 1] === myId;
               });
               if (
@@ -591,7 +592,7 @@ export default {
         this.getContents();
       }, 100);
 
-      this.jsonString.forEach(item => {
+      this.jsonString.forEach((item) => {
         if (this.target != 0 && item.data.toBeShow) {
           setTimeout(() => {
             item.data.height._normal.carried = true;
@@ -604,14 +605,14 @@ export default {
       this.$notify({
         title: "成功",
         message: msg,
-        type: "success"
+        type: "success",
       });
     },
 
     err(msg) {
       this.$notify({
         title: "错误",
-        message: msg
+        message: msg,
       });
     },
 
@@ -630,8 +631,8 @@ export default {
     toConfirmUpload() {
       let midArray = [...this.taskData.showing];
       let templateArr = [];
-      midArray.forEach(cld => {
-        cld.forEach(val => {
+      midArray.forEach((cld) => {
+        cld.forEach((val) => {
           templateArr.push(val.data.valueData);
         });
       });
@@ -643,7 +644,7 @@ export default {
       }
       this.$http
         .post(url, { taskId: this.task.id, data: JSON.stringify(templateArr) })
-        .then(res => {
+        .then((res) => {
           if (res.data.success) {
             this.success(res.data.msg);
           } else {
@@ -655,24 +656,24 @@ export default {
     InstrumentQuery(taskId, subCompanyId) {
       if (this.$route.params.target == 0) {
         let res = this.importData.device;
-        new Promise(resolve => {
+        new Promise((resolve) => {
           resolve();
-        }).then(r => {
+        }).then((r) => {
           dataInit(res, this);
         });
       } else {
-        getInstrumentList(taskId, subCompanyId).then(res => {
+        getInstrumentList(taskId, subCompanyId).then((res) => {
           dataInit(res, this);
         });
       }
       function dataInit(res, that) {
         if (res.success) {
-          that.taskData.showing.flat().forEach(item => {
+          that.taskData.showing.flat().forEach((item) => {
             that.$set(
               item.data.valueData,
               "deviceData",
               res.data.filter(
-                a => a.testProjectId == item.data.valueData.testProjectId
+                (a) => a.testProjectId == item.data.valueData.testProjectId
               )
             );
             that.$set(item.data.valueData, "deviceData2", res.data);
@@ -684,14 +685,14 @@ export default {
           for (let i = 0; i < data.length; i++) {
             let obj = {
               id: data[i].id,
-              name: data[i].deviceName
+              name: data[i].deviceName,
             };
             that.mainArr.push(obj);
           }
           for (let i = 0; i < data_fz.length; i++) {
             let obj = {
               id: data_fz[i].id,
-              name: data_fz[i].deviceName
+              name: data_fz[i].deviceName,
             };
             that.auxiliaryArr.push(obj);
           }
@@ -745,7 +746,7 @@ export default {
             item.name !== "project_fs_fh"
           ) {
             let preservationArr = [];
-            item.testProjectArr.forEach(val => {
+            item.testProjectArr.forEach((val) => {
               let newObj = Object.assign(this.deepCopy(item), val);
               preservationArr.push(newObj);
             });
@@ -759,14 +760,14 @@ export default {
         if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
           let index = contentArray.findIndex(
-            item => item.name === "project_fs_fh"
+            (item) => item.name === "project_fs_fh"
           );
           if (index !== -1) {
             let obj = this.deepCopy(contentArray[index]);
             let testProjectArr = contentArray[index].testProjectArr;
             contentArray.splice(index, 1);
             let index2 = index;
-            testProjectArr.forEach(item => {
+            testProjectArr.forEach((item) => {
               //给防护设置一个组名, 因为是一个检测项目
               item.groundName = "project_fs_fh";
               item.showName = "防护";
@@ -795,7 +796,7 @@ export default {
       for (let i = 0; i < contentArray.length; i++) {
         // 获取模块
         let result1 = this.modules.find(
-          mod =>
+          (mod) =>
             mod.name ==
             (this.task.data != null ? contentArray[i] : contentArray[i].name)
         );
@@ -844,7 +845,7 @@ export default {
         } else {
           //头模块
           let result2 = this.heads.find(
-            mod =>
+            (mod) =>
               mod.name ==
               (this.task.data != null ? contentArray[i] : contentArray[i].name)
           );
@@ -876,7 +877,7 @@ export default {
         let json = {
           to: val.name,
           type: null,
-          data: val
+          data: val,
         };
         this.jsonString.push(json);
       });
@@ -886,7 +887,7 @@ export default {
           "Y年M月D日  h时m分"
         );
       }
-      this.jsonString.forEach(item => {
+      this.jsonString.forEach((item) => {
         if (
           !item.data.valueData.title &&
           item.to.includes("_dr_") &&
@@ -924,7 +925,7 @@ export default {
           this.$set(item, "title", "探测器1");
         }
         let subNum = this.jsonString.findIndex(
-          val => val.data.valueData.testProjectId === item.testProjectId
+          (val) => val.data.valueData.testProjectId === item.testProjectId
         );
         if (subNum !== -1) {
           this.control[index] = true;
@@ -935,7 +936,7 @@ export default {
     //添加空白样组件
     addBlankComponet(contentArray) {
       let blankTestProjects = contentArray.filter(
-        item => item.testProjectType === 2
+        (item) => item.testProjectType === 2
       );
       if (blankTestProjects.length > 0) {
         contentArray.splice(1, 0, { name: "project_blankSample" });
@@ -950,7 +951,7 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           modal: false,
-          inputType: "textarea"
+          inputType: "textarea",
         })
           .then(({ value }) => {
             if (this.task.deviceMainId == 4) {
@@ -958,7 +959,7 @@ export default {
               this.reasonMsgArr.push({
                 testprojectName: obj.testProjectChineseName,
                 reason,
-                testProjectId: obj.testProjectId
+                testProjectId: obj.testProjectId,
               });
               this.reasonMsg = "";
               bus.$emit("getDeleteArr", this.reasonMsgArr);
@@ -971,18 +972,18 @@ export default {
               this.reasonMsgArr.push({
                 testprojectName: obj.testProjectChineseName,
                 reason,
-                testProjectId: obj.testProjectId
+                testProjectId: obj.testProjectId,
               });
               this.reasonMsg = "";
               bus.$emit("getDeleteArr", this.reasonMsgArr);
 
               let modelName = [];
               if (obj.testProjectArr && obj.testProjectArr.length > 0) {
-                modelName = obj.testProjectArr.map(item => item.name);
+                modelName = obj.testProjectArr.map((item) => item.name);
               } else {
                 modelName = [obj.name];
               }
-              modelName.forEach(item => {
+              modelName.forEach((item) => {
                 this.jsonString = this.jsonString.filter(
                   (val, index) => val.to !== item
                 );
@@ -1000,14 +1001,14 @@ export default {
       } else {
         let modelName = [];
         if (obj.testProjectArr && obj.testProjectArr.length > 0) {
-          modelName = obj.testProjectArr.map(item => item.name);
+          modelName = obj.testProjectArr.map((item) => item.name);
         } else {
           modelName = [obj.name];
         }
         let modelObj = [];
 
-        modelName.forEach(item => {
-          let result = this.modules.find(mod => mod.name === item);
+        modelName.forEach((item) => {
+          let result = this.modules.find((mod) => mod.name === item);
           if (result) {
             result.valueData.testProjectId = obj.testProjectId;
             result.valueData.testProjectType = obj.testProjectType;
@@ -1037,17 +1038,17 @@ export default {
           let json = {
             to: val.name,
             type: null,
-            data: val
+            data: val,
           };
           let index = this.jsonString.findIndex(
-            item => item.to === "project_deleteReason"
+            (item) => item.to === "project_deleteReason"
           );
 
           this.jsonString.splice(index, 0, json);
         });
         let testprojectId = obj.testProjectId;
         let myindex = this.reasonMsgArr.findIndex(
-          item => item.testProjectId === testprojectId
+          (item) => item.testProjectId === testprojectId
         );
         if (myindex != -1) {
           this.reasonMsgArr.splice(myindex, 1);
@@ -1082,7 +1083,7 @@ export default {
         }
       });
       let deleteModule = this.jsonString.find(
-        item => item.to === "project_deleteReason"
+        (item) => item.to === "project_deleteReason"
       );
       if (deleteModule) {
         deleteModule.data.valueData.point = this.deepCopy(this.reasonMsgArr);
@@ -1092,7 +1093,7 @@ export default {
     },
     headData(data, name) {
       let objData = {};
-      let valData = this.heads.find(mod => mod.name == name);
+      let valData = this.heads.find((mod) => mod.name == name);
       let valLength = Object.keys(valData.valueData).length,
         dataEntriesLength = Object.keys(data).length;
       let valKeysArr = Object.keys(valData.valueData),
@@ -1114,7 +1115,7 @@ export default {
 
     findFirstXn(item) {
       let firstXn = this.jsonString.find(
-        item =>
+        (item) =>
           item.data.name.indexOf("_xn_") !== -1 ||
           item.data.name.indexOf("_dr_") !== -1 ||
           item.data.name.indexOf("_ts_") !== -1 ||
@@ -1151,7 +1152,7 @@ export default {
           obj = []; //处理target是数组的情况
         }
         copyed_objs.push({ target: target, copyTarget: obj });
-        Object.keys(target).forEach(key => {
+        Object.keys(target).forEach((key) => {
           if (obj[key]) {
             return;
           }
@@ -1179,7 +1180,7 @@ export default {
             "metrologicalCertificate",
             "staffName",
             "standard",
-            "staffName"
+            "staffName",
           ];
           let localArr = [
             "entrustedUnitName",
@@ -1193,7 +1194,7 @@ export default {
             "metrologyCertificate",
             "detectionTime",
             "samplingPersonnel",
-            "detectionBasis"
+            "detectionBasis",
           ];
           keyArr.forEach((item, index) => {
             if (task[item] != null && task[item] != undefined) {
@@ -1203,7 +1204,7 @@ export default {
           template.valueData.detectionTime = _dateFormat("now", "Y-M-D  h:m:s");
           try {
             template.valueData.assessArr = JSON.myParse(task["assessArr"])
-              .map(item => item.evaluateProjectName)
+              .map((item) => item.evaluateProjectName)
               .toString();
           } catch (e) {
             template.valueData.assessArr = "";
@@ -1218,7 +1219,7 @@ export default {
             "manufacturer",
             "mainParameterkV",
             "mainParametermA",
-            "location"
+            "location",
           ];
           let keyArr = [
             "checkDeviceName",
@@ -1227,7 +1228,7 @@ export default {
             "checkDeviceVender",
             "nominalCapacity",
             "nominalCapacity1",
-            "place"
+            "place",
           ];
           keyArr.forEach((item, index) => {
             if (task[item] != null && task[item] != undefined) {
@@ -1247,7 +1248,7 @@ export default {
         case "head_ggcs":
           {
             let assessArr = task.assessArr
-              ? JSON.myParse(task.assessArr).map(item => item.evaluateName)
+              ? JSON.myParse(task.assessArr).map((item) => item.evaluateName)
               : [];
             let str = "";
             assessArr.forEach((item, index) => {
@@ -1284,8 +1285,8 @@ export default {
 
     //给检测项目生成id
     generateTestprojectId() {
-      this.taskData.showing.forEach(item => {
-        item.forEach(a => {
+      this.taskData.showing.forEach((item) => {
+        item.forEach((a) => {
           if (!a.data.valueData.positionId) {
             a.data.valueData.positionId = uuid();
           }
@@ -1307,10 +1308,10 @@ export default {
       if (this.deleteObj) {
         if (this.deleteObj.data.isGroup) {
           let arr2 = this.jsonString.filter(
-            item => item.data.groundName === this.deleteObj.data.groundName
+            (item) => item.data.groundName === this.deleteObj.data.groundName
           );
 
-          arr2.forEach(item2 => {
+          arr2.forEach((item2) => {
             item2.data.height._normal.carried = false;
           });
         }
@@ -1318,7 +1319,7 @@ export default {
         let reason = `取消对${this.deleteObj.data.valueData.testProjectChineseName}的检测, 原因是${this.reasonMsg}。`;
         this.reasonMsgArr.push({
           testprojectName: this.deleteObj.data.valueData.testProjectChineseName,
-          reason
+          reason,
         });
         this.reasonMsg = "";
         this.isDelete = true;
@@ -1331,22 +1332,22 @@ export default {
 
     getContents() {
       let filterArr = this.jsonString.filter(
-        item =>
+        (item) =>
           item.data.height._normal.carried === true &&
           item.to !== "project_deleteReason"
       );
 
-      this.aObjects = filterArr.map(item => {
+      this.aObjects = filterArr.map((item) => {
         if (this.task.deviceMainId === "4") {
           return {
             name: item.data.valueData.testProjectChineseName,
-            id: item.data.valueData.positionId
+            id: item.data.valueData.positionId,
           };
         } else {
           //return {name: item.data.projectName, id: item.data.valueData.testProjectId}
           return {
             name: item.data.projectName,
-            id: item.data.valueData.positionId
+            id: item.data.valueData.positionId,
           };
         }
       });
@@ -1360,7 +1361,7 @@ export default {
     temporary() {
       const data = {
         id: this.task.id,
-        data: this.saveData
+        data: this.saveData,
       };
       // return
       this.requestNo++;
@@ -1381,8 +1382,8 @@ export default {
         let data = this.deepCopy(this.importData);
         let this_ = this;
         data.tasks.tasks[0].data = this.saveData;
-        this.whrite(data,JSON.parse(getToken()));
-        this.writeFileEvent().then(res => {
+        this.whrite(data, JSON.parse(getToken()));
+        this.writeFileEvent().then((res) => {
           if (res) {
             this.$message.success("暂存成功");
           }
@@ -1390,18 +1391,18 @@ export default {
         return;
 
         fsUpdateTaskData(this.task.id, this.saveData)
-          .then(res => {
+          .then((res) => {
             globalLoading.close();
             if (res.success) {
               this.$notify({
                 title: "提示",
                 message: res.msg,
-                type: "success"
+                type: "success",
               });
             } else {
               this.$notify.error({
                 title: "提示",
-                message: res.msg
+                message: res.msg,
               });
             }
           })
@@ -1484,7 +1485,7 @@ export default {
         pointArr.length === 1
       ) {
         let that = this;
-        addSampleNumDelete(item.sampleNum).then(res => {
+        addSampleNumDelete(item.sampleNum).then((res) => {
           if (res.success) {
             if (item.hasOwnProperty("noShow")) {
               let projectName = item.heBingId.split("-")[0];
@@ -1538,11 +1539,11 @@ export default {
               point[0].sampleLabel !== "" && point[0].sampleLabel !== undefined
                 ? point[0].sampleLabel
                 : 3,
-            sampleNumSize: num
+            sampleNumSize: num,
           };
           let that = this;
           querySampleNum(data)
-            .then(res => {
+            .then((res) => {
               if (res.success) {
                 let sampleNums = res.sampleNums;
                 if (point[0].hasOwnProperty("noShow")) {
@@ -1578,22 +1579,22 @@ export default {
             });
         }
       }
-    }
+    },
   },
   destroyed() {
     this.$store.dispatch("actionsPurposeDetection", "");
   },
   computed: {
     ...mapState({
-      syntheticData: state => state.StomatologyLinkage.syntheticData,
-      needPorjectName: state => state.StomatologyLinkage.needPorjectName,
-      changeNum: state => state.StomatologyLinkage.changeNum,
-      testprojectId: state => state.StomatologyLinkage.testprojectId
+      syntheticData: (state) => state.StomatologyLinkage.syntheticData,
+      needPorjectName: (state) => state.StomatologyLinkage.needPorjectName,
+      changeNum: (state) => state.StomatologyLinkage.changeNum,
+      testprojectId: (state) => state.StomatologyLinkage.testprojectId,
     }),
     saveData() {
       let templateArr = [];
-      this.taskData.showing.forEach(item => {
-        item.forEach(a => {
+      this.taskData.showing.forEach((item) => {
+        item.forEach((a) => {
           if (a.data.isHead) {
             a.data.valueData.delRowReasonArr = this.delRowReasonArr;
             a.data.valueData.deleteArr = this.reasonMsgArr;
@@ -1609,7 +1610,7 @@ export default {
         });
       });
       return JSON.stringify(templateArr);
-    }
+    },
   },
   watch: {
     changeNum() {
@@ -1621,7 +1622,7 @@ export default {
         this.generateTestprojectId();
         this.getContents();
       }
-    }
+    },
   },
   mounted() {
     if (this.$route.params.target == 3) {
@@ -1645,7 +1646,7 @@ export default {
         var image = new Image();
         image.crossOrigin = "Anonymous";
         image.src = imgSrc;
-        image.onload = function() {
+        image.onload = function () {
           var imageBase64Data = getBase64(image);
           resolve(imageBase64Data);
         };
@@ -1654,10 +1655,7 @@ export default {
     }
     //this.$store.dispatch("actionsTimeExposure", this.data.valueData.valueD);
 
-    this.nowYear = new Date()
-      .getFullYear()
-      .toString()
-      .substring(2, 4);
+    this.nowYear = new Date().getFullYear().toString().substring(2, 4);
     this.numObj = JSON.myParse(sessionStorage.getItem("numObj"));
     bus.$on("showBook", () => {
       this.showBookValue = !this.showBookValue;
@@ -1667,7 +1665,7 @@ export default {
       this.showModuleOption = !this.showModuleOption;
     });
 
-    bus.$on("getReason", data => {
+    bus.$on("getReason", (data) => {
       this.delRowReasonArr.push(data);
     });
     this.$eventBus.$off("generateSamplenum");
@@ -1690,11 +1688,11 @@ export default {
       this.$set(
         this.taskData,
         "unitUrl",
-        this.unitUrl.filter(item => this.taskData.id == item.id)[0].unitUrl
+        this.unitUrl.filter((item) => this.taskData.id == item.id)[0].unitUrl
       );
       getImageBase64Data(
-        "http://120.77.153.63:8033" + this.taskData.unitUrl
-      ).then(res => {
+        "http://120.77.153.63:8022" + this.taskData.unitUrl
+      ).then((res) => {
         this.taskData.showing[0][0]["data"]["valueData"][
           "imgBase64Three"
         ] = res;
@@ -1736,7 +1734,7 @@ export default {
       } catch (e) {}
     }
 
-    this.testProjectArray.forEach(item => {
+    this.testProjectArray.forEach((item) => {
       if (item.height._normal.carried && !item.isHead) {
         this.testArr.push(item.valueData.testProjectId);
         this.oldTestArr.push(item.valueData.testProjectId);
@@ -1756,7 +1754,7 @@ export default {
 
     setTimeout(() => {
       if (this.target != 0) {
-        this.jsonString.forEach(item => {
+        this.jsonString.forEach((item) => {
           item.data.height._normal.carried = true;
         });
         this.redefinition();
@@ -1769,8 +1767,8 @@ export default {
           arr.taskId = this.task.id;
           arr.tasks.tasks[0].data = this.saveData;
 
-          this.whrite(arr,JSON.parse(getToken()));
-          this.writeFileEvent().then(res => {
+          this.whrite(arr, JSON.parse(getToken()));
+          this.writeFileEvent().then((res) => {
             bus.$emit("showSave", true);
             this.timeId2 = setTimeout(() => {
               bus.$emit("showSave", false);
@@ -1807,7 +1805,7 @@ export default {
       if (this.timeId) clearInterval(this.timeId);
       if (this.timeId2) clearInterval(this.timeId2);
     }
-  }
+  },
 };
 </script>
 

@@ -5,7 +5,7 @@
       <i class="el-icon-switch-button"></i>
     </div>
     <div class="left" @click="toggleScene(0)">
-      <div class="img"><img src="../../assets/img/scene.png" alt="" /></div>
+      <div class="img"><img src="@/assets/img/scene.png" alt="" /></div>
       <div class="title">
         <p class="ch">现场</p>
         <p>Scene</p>
@@ -13,7 +13,7 @@
     </div>
     <div class="right" @click="toggleScene(1)">
       <div class="img">
-        <img src="../../assets/img/laboratory.png" alt="" />
+        <img src="@/assets/img/laboratory.png" alt="" />
       </div>
       <div class="title">
         <p class="ch">实验室</p>
