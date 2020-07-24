@@ -322,12 +322,12 @@ export default {
     },
     redefinition(needPorjectName) {
       let redefinitionArr = [];
+      let detectionObjects;
       if (this.jsonString.filter((item) => item.to == "project_jbxx").length) {
-        let detectionObjects = this.jsonString.filter(
-        (item) => item.to == "project_jbxx"
-      )[0].data.valueData.detectionObjects;
+        detectionObjects = this.jsonString.filter(
+          (item) => item.to == "project_jbxx"
+        )[0].data.valueData.detectionObjects;
       }
-      
 
       let NumberOfDetectors;
       let createdDetector = [];
@@ -1691,7 +1691,7 @@ export default {
         this.unitUrl.filter((item) => this.taskData.id == item.id)[0].unitUrl
       );
       getImageBase64Data(
-        "http://120.77.153.63:8022" + this.taskData.unitUrl
+        "http://120.77.153.63:8033" + this.taskData.unitUrl
       ).then((res) => {
         this.taskData.showing[0][0]["data"]["valueData"][
           "imgBase64Three"

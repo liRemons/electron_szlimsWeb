@@ -36,7 +36,7 @@
             <tr>
                 <td align="left" class="p20 ___relative">
                     <el-checkbox @change="changeNum" :disabled="forbidTwo" v-model="data.valueData.check2">管电压可调，最低管电压：</el-checkbox>
-                    <div class="___absolute t0" style="width:70px;height:36px;left:220px;">
+                    <div class="___absolute t0" style="width:70px;height:36px;left:200px;">
                         <divModel v-if="data.valueData.check2" v-model="data.valueData.voltage2"
                                   style="width:50px;text-align: center; border-bottom: 1px solid black; height: 28px;"
                                   class="Full moduleInput hide focusBg"></divModel>

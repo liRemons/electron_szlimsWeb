@@ -124,6 +124,8 @@ ipcMain.on("sigShowRightClickMenu", (event, arg) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   menu.popup(win);
 });
+
+
 app.on("ready", () => {
   createWindow();
   FingerAction(mainWindow);

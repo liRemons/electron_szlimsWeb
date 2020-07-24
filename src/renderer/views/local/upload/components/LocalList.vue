@@ -1,19 +1,19 @@
 <template>
   <el-card id="imgTooles">
-    <div style="text-align: left; padding-left: 10px;margin:10px 0">
+    <div style="text-align: left; padding-left: 10px; margin: 10px 0;">
       <el-radio-group v-model="flag" @change="getNewData">
         <el-radio-button :label="0">未上传</el-radio-button>
         <el-radio-button :label="1">已上传</el-radio-button>
       </el-radio-group>
     </div>
-    <div style="min-height:60vh;">
+    <div style="min-height: 60vh;">
       <el-table
         v-loading="listLoading"
         ref="multipleTable"
         :data="localDataFenYe[nowShowPage]"
         @row-dblclick="goOneTemplate"
         tooltip-effect="dark"
-        style="width: 100%"
+        style="width: 100%;"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"></el-table-column>
@@ -26,12 +26,14 @@
         <el-table-column
           prop="checkUnitName"
           label="受检单位名称"
+          show-overflow-tooltip
           width="150"
         ></el-table-column>
         <el-table-column
           prop="name"
           label="检测对象"
           width="100"
+          show-overflow-tooltip
         ></el-table-column>
         <el-table-column
           prop="address"
@@ -58,7 +60,7 @@
               :images="[hostUrl + scope.row.unitUrl]"
             >
               <img
-                style="display:inline-block;height:50px"
+                style="display: inline-block; height: 50px;"
                 v-for="item in [hostUrl + scope.row.unitUrl]"
                 :src="item"
                 :key="item.index"
@@ -66,13 +68,12 @@
             </viewer>
           </template>
         </el-table-column>
-        <el-table-column label="点位图操作" width="220">
+        <el-table-column label="点位图操作" width="220" v-if="!flag">
           <template slot-scope="scope">
             <el-select
               v-model="scope.row.isDocImg"
               @change="changeIsDocImg(scope.row)"
               placeholder="请选择"
-              :disabled="flag ? true : false"
             >
               <el-option
                 v-for="item in options"
@@ -101,7 +102,7 @@
               :images="[hostUrl + scope.row.pointUrl]"
             >
               <img
-                style="display:inline-block;height:50px"
+                style="display: inline-block; height: 50px;"
                 v-for="item in [hostUrl + scope.row.pointUrl]"
                 :src="item"
                 :key="item.index"
@@ -123,7 +124,7 @@
       </el-table>
     </div>
 
-    <div style="margin-bottom: 10vh;margin-top: 10px;">
+    <div style="margin-bottom: 10vh; margin-top: 10px;">
       <el-pagination
         @current-change="changeCurrentPage"
         @size-change="handleSizeChange"
@@ -153,7 +154,7 @@
           :before-upload="beforeUpload"
         >
           <el-button size="small" type="primary">选择点位图</el-button>
-          <div style="margin:20px 0">
+          <div style="margin: 20px 0;">
             请按报告出具的方向上传图片
           </div>
         </el-upload>
@@ -196,21 +197,21 @@ export default {
       options: [
         {
           value: 0,
-          label: "不需要上传图片"
+          label: "不需要上传图片",
         },
         {
           value: 1,
-          label: "现场草图(需要重新编辑后方可放入检测报告中的图片)"
+          label: "现场草图(需要重新编辑后方可放入检测报告中的图片)",
         },
         {
           value: 2,
-          label: "现场照片(可以直接放入检测报告的图片)"
-        }
-      ]
+          label: "现场照片(可以直接放入检测报告的图片)",
+        },
+      ],
     };
   },
   components: {
-    signature
+    signature,
   },
   filters: {
     getTime(time) {
@@ -221,7 +222,7 @@ export default {
       } catch (e) {
         return "";
       }
-    }
+    },
   },
   methods: {
     beforeUpload(file) {
@@ -251,12 +252,12 @@ export default {
     getList() {
       this.listLoading = true;
       let staffPhone = JSON.myParse(getToken()).staffPhone;
-      getLocalData(staffPhone).then(response => {
-        let localData = response.data.filter(task => {
+      getLocalData(staffPhone).then((response) => {
+        let localData = response.data.filter((task) => {
           return task.pass == "通过";
         });
 
-        let localData2 = response.data.filter(task => {
+        let localData2 = response.data.filter((task) => {
           return task.pass == "已上传";
         });
         if (this.flag === 0) {
@@ -279,7 +280,7 @@ export default {
     // 切换选中状态 或取消选择
     toggleSelection(rows) {
       if (rows) {
-        rows.forEach(row => {
+        rows.forEach((row) => {
           this.$refs.multipleTable.toggleRowSelection(row);
         });
       } else {
@@ -301,7 +302,7 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$notify({
           message: "请选择",
-          type: "warning"
+          type: "warning",
         });
         return;
       }
@@ -313,11 +314,11 @@ export default {
       if (row) {
         let that = this;
         if (row.unitUrl) {
-          let src = "http://120.77.153.63:8022" + row.unitUrl;
+          let src = "http://120.77.153.63:8033" + row.unitUrl;
           let image = new Image();
           image.crossOrigin = "";
           image.src = src;
-          image.onload = function() {
+          image.onload = function () {
             let data = that.computeObj.getBase64Image(image);
             sessionStorage.setItem("uploadBase64", data);
             store.dispatch("TemplateAction", "show");
@@ -330,14 +331,14 @@ export default {
           } else {
             this.$notify({
               type: "warning",
-              message: "签名或点位图未上传"
+              message: "签名或点位图未上传",
             });
           }
         }
       } else {
         this.$notify({
           type: "warning",
-          message: "请选择"
+          message: "请选择",
         });
       }
     },
@@ -347,7 +348,7 @@ export default {
       let data = { taskId: this.nowRow.taskId, type: 1 };
       val.upload(
         v2,
-        "http://120.77.153.63:8022/upload_image",
+        "http://120.77.153.63:8033/upload_image",
         this.fileSuccess2,
         this.fileError2,
         data
@@ -359,15 +360,15 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$notify({
           type: "warning",
-          message: "请选择"
+          message: "请选择",
         });
         return;
       }
       let flag = 1;
-      let ids = this.multipleSelection.map(item => {
+      let ids = this.multipleSelection.map((item) => {
         return item.taskId;
       });
-      this.multipleSelection.map(item => {
+      this.multipleSelection.map((item) => {
         if (item.isDocImg !== 0) {
           item.pointUrl ? "" : (flag = 0);
         }
@@ -376,7 +377,7 @@ export default {
       if (!flag) {
         this.$notify({
           type: "warning",
-          message: "签名或点位图未上传"
+          message: "签名或点位图未上传",
         });
         return;
       }
@@ -418,20 +419,20 @@ export default {
         this.uploadDianWeiFlag = false;
         this.$notify({
           type: "success",
-          message: data.msg
+          message: data.msg,
         });
         this.getList();
       } else {
         this.$notify({
           type: "error",
-          message: data.msg
+          message: data.msg,
         });
       }
     },
     fileError() {
       this.$notify({
         type: "error",
-        message: "接口请求失败！"
+        message: "接口请求失败！",
       });
     },
     fileSuccess2(data) {
@@ -440,20 +441,20 @@ export default {
         this.showSignature = false;
         this.$notify({
           type: "success",
-          message: "上传成功"
+          message: "上传成功",
         });
         this.getList();
       } else {
         this.$notify({
           type: "error",
-          message: "上传失败"
+          message: "上传失败",
         });
       }
     },
     fileError2() {
       this.$notify({
         type: "error",
-        message: "接口请求失败！"
+        message: "接口请求失败！",
       });
     },
     uploadDianWei(row) {
@@ -462,25 +463,25 @@ export default {
     },
     changeIsDocImg(row) {
       toUpdateIsDocImg(row.projectId, row.isDocImg)
-        .then(res => {
+        .then((res) => {
           if (res.success) {
             this.showSignature = false;
             this.$notify({
               type: "success",
-              message: res.msg
+              message: res.msg,
             });
             this.getList();
           } else {
             this.$notify({
               type: "error",
-              message: res.msg
+              message: res.msg,
             });
           }
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
-    }
+    },
   },
   mounted() {
     if (sessionStorage.getItem("flag")) {
@@ -490,11 +491,11 @@ export default {
   computed: {
     pageCount() {
       return this.localData.length;
-    }
+    },
   },
   created() {
     this.getList();
-  }
+  },
 };
 </script>
 

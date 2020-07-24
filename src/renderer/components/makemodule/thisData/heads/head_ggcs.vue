@@ -249,7 +249,7 @@
 						<td>
 							<divModel v-if="target === '0'" v-model="poi.remarks"></divModel>
 							<span v-else>{{poi.remarks | toDot}}</span>
-							<div class="___relative">
+							<div class="___relative" v-if="target==0">
 								<utilBar
 												:data="data"
 												:index="index"

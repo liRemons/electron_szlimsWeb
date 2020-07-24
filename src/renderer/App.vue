@@ -99,7 +99,6 @@ export default {
       isMax: true,
       updateflag: false,
       dialogVisible: false,
-      version: "0.5",
       updateMain: "",
       apkUrl: "",
       updateVersion: "",
