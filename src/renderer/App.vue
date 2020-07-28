@@ -85,8 +85,11 @@
 <script>
 import store from "@/store";
 import Vue from "vue";
+
 import update from "./components/update";
+import { getToken } from "@/utils/auth";
 import { add, addValue, addNengPuValue } from "@/api/task";
+import { updateStaffOnlineTime } from "@/api/login";
 import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
 import moment from "moment";
 const { remote } = require("electron");
@@ -112,8 +115,29 @@ export default {
     setTimeout(() => {
       this.getUpdateVersion();
     }, 1000);
+    setInterval(() => {
+      this.getStaffState();
+    }, 10000);
   },
   methods: {
+    // 更新用户在线状态
+    getStaffState() {
+      if (this.$route.path == "/login") {
+        return;
+      }
+      if (getToken()) {
+        updateStaffOnlineTime(JSON.parse(getToken()).id).then((res) => {
+          if (!res.success) {
+            this.$message.error("登录信息已失效或已在其它设备登录");
+            this.$router.replace("/login");
+          }
+        });
+      } else {
+        this.$router.replace("/login");
+        this.$message.error("登录信息已失效或已在其它设备登录");
+      }
+    },
+    // 下载安装包
     download() {
       this.downloadState = "";
       this.downloadText = "正在下载，请稍后";
@@ -224,7 +248,6 @@ export default {
     },
   },
   created() {
-    
     // 读取指纹信息
     this.$ipcRenderer.on("Finger_MSG", (event, arg) => {
       this.$store.dispatch("CHANGE_FINGER_MUTATIONS", arg);

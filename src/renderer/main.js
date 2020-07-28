@@ -71,12 +71,14 @@ import {
   Autocomplete,
   TimePicker,
   Upload,
+  InputNumber,
   Avatar,
 } from "element-ui";
 import "./public/css/Css.css";
 import "./public/css/curve.css";
 import Axios from "axios";
 Vue.use(Checkbox);
+Vue.use(InputNumber);
 Vue.use(Avatar);
 Vue.use(Tooltip);
 Vue.use(Popover);

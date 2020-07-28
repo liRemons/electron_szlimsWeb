@@ -103,7 +103,7 @@ export function winUpdateTaskState(
       isDetect,
       reason,
       staffName,
-      staffId
+      staffId,
     },
   });
 }
@@ -307,6 +307,17 @@ export function generateMeasure(taskId, measureHtml) {
     data: {
       taskId: taskId,
       measureHtml: measureHtml,
+    },
+  });
+}
+// 是否可远程签字
+export function updateUnitGenerateTime(taskId,unitInvalidDuration) {
+  return service({
+    url: "/updateUnitGenerateTime",
+    method: "post",
+    data: {
+      taskId: taskId,
+      unitInvalidDuration:unitInvalidDuration
     },
   });
 }

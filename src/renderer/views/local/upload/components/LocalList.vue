@@ -326,7 +326,8 @@ export default {
           };
         } else {
           store.dispatch("TemplateAction", "show");
-          if (row.unitUrl && row.pointUrl) {
+          // if (row.unitUrl && row.pointUrl) {
+          if (row.pointUrl) {
             that.$router.push(`/local/doc-entering/3/${row.taskId}`);
           } else {
             this.$notify({
@@ -372,7 +373,7 @@ export default {
         if (item.isDocImg !== 0) {
           item.pointUrl ? "" : (flag = 0);
         }
-        item.unitUrl ? "" : (flag = 0);
+        // item.unitUrl ? "" : (flag = 0);
       });
       if (!flag) {
         this.$notify({

@@ -19,7 +19,7 @@
         type="primary"
         v-if="
           target == 1 &&
-            (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
+          (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
         "
       >
         保存
@@ -35,7 +35,7 @@
 
       <el-button
         @click="showModuleOption"
-        style="position: fixed;left: 4.2vw; top: 25vh;"
+        style="position: fixed; left: 4.2vw; top: 25vh;"
         size="mini"
         type="primary"
         round
@@ -45,7 +45,7 @@
 
       <el-button
         @click="showBook"
-        style="position: fixed;right: 4.1vw; top: 25vh;"
+        style="position: fixed; right: 4.1vw; top: 25vh;"
         size="mini"
         type="primary"
         round
@@ -77,7 +77,7 @@
         type="primary"
         v-else-if="
           target == 1 &&
-            (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
+          (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
         "
       >
         送审
@@ -96,6 +96,13 @@
         type="primary"
         v-else-if="target == 3 && nowTask.pass !== 4"
         >上传
+      </el-button>
+      <el-button
+        @click="signatureTimeDialog = true"
+        size="mini"
+        type="primary"
+        v-if="target == 3 && nowTask.pass !== 4"
+        >远程签名
       </el-button>
 
       <el-button
@@ -342,7 +349,7 @@
         <div style="min-height: 700px; padding-left: 2vw;">
           <show-curve-template
             :templateContent="templateContent"
-            style="width: 800px"
+            style="width: 800px;"
             ref="curveTemplate"
           />
         </div>
@@ -353,7 +360,7 @@
       title="以下项目您取消了检测，请确认"
       :visible.sync="deleteDialog"
     >
-      <el-table :data="deleteData" style="width: 100%">
+      <el-table :data="deleteData" style="width: 100%;">
         <el-table-column prop="testprojectName" label="项目"> </el-table-column>
         <el-table-column prop="reason" label="原因"> </el-table-column>
       </el-table>
@@ -361,6 +368,29 @@
         <el-button @click="deleteDialog = false">取 消</el-button>
         <el-button type="primary" @click="confirmDelete">继续送审</el-button>
       </span>
+    </el-dialog>
+    <el-dialog title="提示" :visible.sync="copyDialog">
+      <el-input id="copy" placeholder="请输入内容" v-model="copyText">
+        <template slot="append">
+          <el-button type="primary" @click="copy">复制</el-button>
+        </template>
+      </el-input>
+    </el-dialog>
+    <el-dialog
+      width="400px"
+      title="设置远程签名失效时间（小时）"
+      :visible.sync="signatureTimeDialog"
+      v-if="signatureTimeDialog"
+    >
+      <el-input-number
+        v-model="unitInvalidDuration"
+        :min="0.1"
+        :step="0.5"
+      ></el-input-number>
+      <div style="margin-top: 30px;">
+        <el-button round @click="unitInvalidDuration = false">取消</el-button>
+        <el-button type="primary" round @click="longSignature">确定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -387,13 +417,14 @@ import {
   updateTaskUpload,
   getMan,
   getAllMan,
-  generateMeasure
+  generateMeasure,
+  updateUnitGenerateTime,
 } from "@/api/local";
 import {
   updateSampleData,
   toTemporaryStorageSampleData,
   updateSolution,
-  querySysSampleData
+  querySysSampleData,
 } from "@/api/laboratory";
 import {
   receiveSample,
@@ -402,7 +433,7 @@ import {
   copySolution,
   updateSampleStateFinger,
   updateSampleStaffCheck,
-  updateSampleStaff
+  updateSampleStaff,
 } from "@/api/laboratory";
 import { getToken } from "@/utils/auth";
 export default {
@@ -410,6 +441,9 @@ export default {
     return {
       inputFlag: true,
       tasksArrCheck: [],
+      copyText: "",
+      copyDialog: false,
+      signatureTimeDialog: "",
       tasks: [],
       currentTab: 0,
       tabArray: [],
@@ -464,13 +498,14 @@ export default {
       delRowReasonArr: [],
       AllFeng: "",
       AllFengFlag: {
-        flag: false
+        flag: false,
       },
       importData: {},
       unitUrl: [],
       deleteData: [],
       deleteDialog: false,
-      staffName: ""
+      staffName: "",
+      unitInvalidDuration: 0.5,
     };
   },
 
@@ -480,13 +515,13 @@ export default {
     signature,
     ShowLaboratoryTemplate,
     ShowCurveTemplate,
-    showReviewTemplate
+    showReviewTemplate,
   },
   methods: {
     submitSongshen() {
       let data = this.taskDatas[0].showing
         .flat()
-        .filter(item => item.to == "project_deleteReason");
+        .filter((item) => item.to == "project_deleteReason");
       if (data.length) {
         this.deleteData = data[0].data.valueData.point;
       } else {
@@ -508,7 +543,7 @@ export default {
       this.$confirm("点击此处返回可能会导致数据丢失, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "error"
+        type: "error",
       })
         .then(() => {
           window.history.back();
@@ -525,7 +560,7 @@ export default {
         this.importData = JSON.parse(arg);
         let p1 = new Promise((resolve, reject) => {
           resolve();
-        }).then(res => JSON.parse(arg).tasks);
+        }).then((res) => JSON.parse(arg).tasks);
         promiseArr = [p1];
       } else {
         for (let i = 0; i < ids.length; i++) {
@@ -533,7 +568,7 @@ export default {
           updateIsDone(ids[i]);
         }
       }
-      Promise.all(promiseArr).then(values => {
+      Promise.all(promiseArr).then((values) => {
         this.tasksArrCheck = values;
         this.numObj.sampleNum_lh = values[0].sampleNum_lh;
         this.numObj.sampleNum_wsw = values[0].sampleNum_wsw;
@@ -545,19 +580,19 @@ export default {
           "checkUnitName",
           values[0].tasks[0].checkUnitName
         );
-        values.forEach(resItem => {
+        values.forEach((resItem) => {
           this.unitUrl.push({
             id: resItem.tasks[0].id,
-            unitUrl: resItem.tasks[0].unitUrl
+            unitUrl: resItem.tasks[0].unitUrl,
           });
           this.tasks.push(resItem.tasks[0]);
           this.taskDatas.push({
             id: "",
             disWs: "",
-            showing: []
+            showing: [],
           });
         });
-        let taskState = this.tasks.map(item => {
+        let taskState = this.tasks.map((item) => {
           if (item.monitorType === "验收检测") {
             return 1;
           } else if (item.monitorType === "状态检测") {
@@ -578,7 +613,7 @@ export default {
     initTasks(ids) {
       if (this.$route.params.target == 0) {
         this.readFile(JSON.parse(getToken()), this.$route.params.ids);
-        this.readFileEvent().then(res => {
+        this.readFileEvent().then((res) => {
           this.enteringData(res, ids, this.$route.params.target);
         });
       } else {
@@ -594,7 +629,7 @@ export default {
     lookConfig() {
       if (this.changeHasReviewData) {
         this.templateContent = this.changeHasReviewData.map(
-          item => item.testProject
+          (item) => item.testProject
         );
 
         this.showConfigPage = true;
@@ -604,7 +639,7 @@ export default {
       } else {
         this.$notify({
           message: "没有该配置记录！",
-          type: "warning"
+          type: "warning",
         });
       }
     },
@@ -618,7 +653,7 @@ export default {
       for (let i = 0; i < this.labtemplate.length; i++) {
         this.sampleDatas.push({
           id: "",
-          showing: []
+          showing: [],
         });
       }
     },
@@ -626,14 +661,14 @@ export default {
     // 切换tab 选项卡
     switchTab(key) {
       if (this.target == 4) {
-        let sampleNums = this.tasks[key].value.map(item => item.sysSampleId);
-        querySysSampleData(sampleNums).then(res => {
+        let sampleNums = this.tasks[key].value.map((item) => item.sysSampleId);
+        querySysSampleData(sampleNums).then((res) => {
           if (res.success) {
             store.dispatch("TemplateAction", "update");
             store.dispatch("ChangeHasReviewData", res);
             store.dispatch("UpdateLabTemplate", this.template);
           }
-          res.samples.forEach(item => {
+          res.samples.forEach((item) => {
             try {
               item.myBlankSample = JSON.parse(item.blankSampleArr);
             } catch (e) {
@@ -661,13 +696,13 @@ export default {
     },
 
     getTaskPerson() {
-      getAllMan(this.nowTask.id).then(res => {
+      getAllMan(this.nowTask.id).then((res) => {
         if (res.success) {
           this.allPerson = res.data;
         } else {
           this.$notify({
             type: "warning",
-            message: "查询该任务绑定人员失败！"
+            message: "查询该任务绑定人员失败！",
           });
         }
       });
@@ -699,7 +734,7 @@ export default {
       this.$confirm("确定退出吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => {
         let taskLen = this.taskDatas.length;
         let taskArr = [];
@@ -738,9 +773,9 @@ export default {
           });
           arr.tasks.tasks[0].data = JSON.stringify(this.templateArr);
           this.readFile(JSON.parse(getToken()), "enteringList");
-          this.readFileEvent().then(res => {
+          this.readFileEvent().then((res) => {
             let arrList = JSON.parse(res);
-            arrList.list.map(item => {
+            arrList.list.map((item) => {
               item.taskId == arr.taskId
                 ? (item.data = JSON.stringify(this.templateArr))
                 : "";
@@ -748,7 +783,7 @@ export default {
             this.whrite(arrList, JSON.parse(getToken()));
           });
           this.whrite(arr, JSON.parse(getToken()));
-          this.writeFileEvent().then(res => {
+          this.writeFileEvent().then((res) => {
             if (res) {
               if (that.target == 0) {
                 that.entryStartTime = "";
@@ -780,16 +815,16 @@ export default {
         this.entryId = id;
         this.staffName = staffName;
         this.entryEndTime = _dateFormat("now", "Y-M-D h:m:s");
-        getStaffImg_x(id).then(res => {
+        getStaffImg_x(id).then((res) => {
           this.imgBase64 = res.staffImgs;
-          this.taskDatas.forEach(item => {
+          this.taskDatas.forEach((item) => {
             this.uploadTemplate(item, 3);
           });
         });
       } else {
         this.$notify({
           message: "指纹匹配失败",
-          type: "warning"
+          type: "warning",
         });
       }
     },
@@ -798,15 +833,15 @@ export default {
     toReview(result, checkId, staffName) {
       this.staffName = staffName;
       if (result) {
-        getStaffImg(checkId).then(res => {
+        getStaffImg(checkId).then((res) => {
           this.imgBase64Two = res;
           this.showFingerprintTwo = false;
-          this.taskDatas.forEach(item => {
+          this.taskDatas.forEach((item) => {
             this.toUpdateTaskData(item, 2);
           });
           this.$notify({
             type: "success",
-            message: "审核成功"
+            message: "审核成功",
           });
           this.$router.push("/local/review");
         });
@@ -818,32 +853,34 @@ export default {
           this.reason,
           this.staffName,
           JSON.myParse(getToken()).id
-        ).then(res => {
+        ).then((res) => {
           this.$notify({
             message: "审核成功",
-            type: "success"
+            type: "success",
           });
-          updateSampleStaffCheck(this.ids.toString(), checkId, 2).then(res => {
-            if (res.success) {
-              this.$notify({
-                message: res.msg,
-                duration: 1000,
-                type: "success"
-              });
-            } else {
-              this.$notify({
-                message: res.msg,
-                duration: 1000,
-                type: error
-              });
+          updateSampleStaffCheck(this.ids.toString(), checkId, 2).then(
+            (res) => {
+              if (res.success) {
+                this.$notify({
+                  message: res.msg,
+                  duration: 1000,
+                  type: "success",
+                });
+              } else {
+                this.$notify({
+                  message: res.msg,
+                  duration: 1000,
+                  type: error,
+                });
+              }
             }
-          });
+          );
           this.showFingerprintTwo = false;
         });
       } else {
         this.$notify({
           message: "指纹匹配失败",
-          type: "warning"
+          type: "warning",
         });
       }
     },
@@ -854,26 +891,26 @@ export default {
         this.ids.toString(),
         7,
         labPickSampleStaffId
-      ).then(res => {
+      ).then((res) => {
         if (res.success) {
           this.$notify({
             type: "success",
-            message: res.msg
+            message: res.msg,
           });
         } else {
           this.$notify({
             type: "error",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
       getStaffImg(id[0])
-        .then(res => {
+        .then((res) => {
           this.imgBase64 = res;
           this.showFingerprintFour = false;
           this.$router.push("/laboratory/upload");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log("进入了错误", error);
         });
     },
@@ -885,7 +922,7 @@ export default {
         clearInterval(that.timerId);
       }
       if (result) {
-        getStaffImg(id[0]).then(res => {
+        getStaffImg(id[0]).then((res) => {
           this.imgBase64 = res;
           this.toUpdateSampleData(false, id[0]);
         });
@@ -893,34 +930,66 @@ export default {
         this.$notify({
           message: "指纹匹配失败",
           duration: 1000,
-          type: error
+          type: error,
         });
       }
     },
+    longSignature() {
+      generateMeasure(
+        this.ids[0],
+        this.$refs.templateHTML[0].$el.innerHTML
+      ).then((res) => {
+        this.signatureTimeDialog = false;
+        // this.copyText =
+        //   "http://localhost:8888" +
+        //   "/#/signature?url="+
+        //   res.url +
+        //   "&id=" +
+        //   this.tasks[0].id;
+        this.copyText =this.hostUrl+'/#/signature?url='+ res.url+'&id='+this.tasks[0].id;
+        this.copyDialog = true;
 
+        updateUnitGenerateTime(
+          this.tasks[0].id,
+          parseInt(1000 * 60 * 60 * this.unitInvalidDuration)
+        ).then((response) => {
+          if (response.success) {
+            this.$message.success(
+              `链接生成成功，有效时间 ${this.unitInvalidDuration} 小时`
+            );
+          } else {
+            this.$message.error(response.msg);
+          }
+        });
+      });
+    },
+    copy() {
+      document.getElementById("copy").select();
+      document.execCommand("Copy");
+      this.$message.success("复制成功");
+      this.copyDialog = false;
+    },
     //上传
     toUpload(signature) {
       // return
       let flag = false;
-      let result = this.tasks.some(item => {
+      let result = this.tasks.some((item) => {
         if (item.deviceMainId == 4) {
           return false;
         } else {
-          return item.pointUrl === "" || item.pointUrl === null;
+          return item.pointUrl;
         }
       });
-      let result2 = this.tasks.some(
-        item => item.unitUrl === "" || item.unitUrl === null
-      );
+      let result2 = this.tasks.some((item) => item.unitUrl);
       // console.log(result, result2);
-      this.tasks.forEach(item => {
+      this.tasks.forEach((item) => {
         item.isDocImg !== 0 ? (flag = true) : "";
       });
       if (flag) {
         if (result || result2) {
           this.$notify({
             type: "error",
-            message: "签名照或点位图未上传！"
+            message: "签名照或点位图未上传！",
           });
           return;
         }
@@ -929,26 +998,28 @@ export default {
       generateMeasure(
         this.ids[0],
         this.$refs.templateHTML[0].$el.innerHTML
-      ).then(response => {
-        updateTaskUpload(this.ids.toString(), uploadStaffId).then(response => {
-          if (response.success) {
-            this.$notify({
-              type: "success",
-              message: response.msg
-            });
-            this.delFile(JSON.parse(getToken()), this.ids.toString());
-            this.$router.push("/local/upload");
-          } else {
-            this.$notify({
-              type: "error",
-              message: res.msg
-            });
+      ).then((response) => {
+        updateTaskUpload(this.ids.toString(), uploadStaffId).then(
+          (response) => {
+            if (response.success) {
+              this.$notify({
+                type: "success",
+                message: response.msg,
+              });
+              this.delFile(JSON.parse(getToken()), this.ids.toString());
+              this.$router.push("/local/upload");
+            } else {
+              this.$notify({
+                type: "error",
+                message: res.msg,
+              });
+            }
           }
-        });
+        );
       });
 
       this.showSignature = false;
-      this.taskDatas.forEach(item => {
+      this.taskDatas.forEach((item) => {
         this.toUpdateTaskData(item, 1);
       });
     },
@@ -966,8 +1037,8 @@ export default {
     uploadTemplate(tasktemp, flag) {
       let showing = tasktemp.showing;
       this.templateArr = [];
-      showing.forEach(item => {
-        item.forEach(a => {
+      showing.forEach((item) => {
+        item.forEach((a) => {
           if (a.data.height._normal.carried === true) {
             if (a.data.isHead) {
               //签名存在头模块里面
@@ -992,10 +1063,10 @@ export default {
           this.entryEndTime,
           JSON.stringify(this.templateArr)
         )
-          .then(res => {
+          .then((res) => {
             if (res.success) {
               this.readFile(JSON.parse(getToken()), "enteringList");
-              this.readFileEvent().then(a => {
+              this.readFileEvent().then((a) => {
                 let arr = JSON.parse(a);
                 arr.list.map((item, index) => {
                   item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
@@ -1004,17 +1075,17 @@ export default {
               });
               this.$notify({
                 message: res.msg,
-                type: "success"
+                type: "success",
               });
               this.toChangeState();
             } else {
               this.$notify({
                 message: res.msg,
-                type: "error"
+                type: "error",
               });
             }
           })
-          .catch(error => {});
+          .catch((error) => {});
       } else {
         // console.log(this.templateArr,'templateArr')
         // return
@@ -1024,10 +1095,10 @@ export default {
           this.entryEndTime,
           JSON.stringify(this.templateArr)
         )
-          .then(res => {
+          .then((res) => {
             if (res.success) {
               this.readFile(JSON.parse(getToken()), "enteringList");
-              this.readFileEvent().then(a => {
+              this.readFileEvent().then((a) => {
                 let arr = JSON.parse(a);
                 arr.list.map((item, index) => {
                   item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
@@ -1036,17 +1107,17 @@ export default {
               });
               this.$notify({
                 message: res.msg,
-                type: "success"
+                type: "success",
               });
               this.toChangeState();
             } else {
               this.$notify({
                 message: res.msg,
-                type: "error"
+                type: "error",
               });
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
           });
       }
@@ -1054,7 +1125,7 @@ export default {
     //实验室更新data数据
     toUpdateSampleData(isReview = false, id) {
       let valueDatas = [];
-      this.sampleDatas.forEach(item => {
+      this.sampleDatas.forEach((item) => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {
           item.showing[0][0].data.valueData.shiYanJianCe = this.imgBase64;
@@ -1062,12 +1133,12 @@ export default {
         if (this.imgBase64 != "" && isReview == true) {
           item.showing[0][0].data.valueData.shiShenHe = this.imgBase64;
         }
-        showing.forEach(item => {
+        showing.forEach((item) => {
           item.forEach((item, index) => {
-            this.selectedResults.forEach(sel => {
+            this.selectedResults.forEach((sel) => {
               item.data.valueData.checkBox2[sel.index] = sel.result;
             });
-            this.selectedResults2.forEach(sel => {
+            this.selectedResults2.forEach((sel) => {
               item.data.valueData.checkBox[sel.index] = sel.result;
             });
             valueDatas.push(item.data.valueData); //遍历出sampleDatas中所有的valueData,放在valueDatas中
@@ -1078,7 +1149,7 @@ export default {
       if (!result) {
         this.$notify({
           message: "有必填项未填写",
-          type: "warning"
+          type: "warning",
         });
         return;
       }
@@ -1117,35 +1188,35 @@ export default {
         this.curveArr,
         this.sysAtlasUrl
       )
-        .then(res => {
+        .then((res) => {
           if (res.success) {
             this.$notify({
               message: res.msg,
-              type: "success"
+              type: "success",
             });
             let labPickSampleStaffId = JSON.myParse(getToken()).id;
-            updateSampleStaff(this.ids.toString(), id, 1).then(res => {
+            updateSampleStaff(this.ids.toString(), id, 1).then((res) => {
               if (res.success) {
                 this.$notify({
                   message: res.msg,
                   duration: 1000,
-                  type: "success"
+                  type: "success",
                 });
               } else {
                 this.$notify({
                   message: res.msg,
                   duration: 1000,
-                  type: error
+                  type: error,
                 });
               }
             });
             toSongShen(labPickSampleStaffId, this.ids.toString())
-              .then(res => {
+              .then((res) => {
                 if (res.success) {
                   this.$notify({
                     message: res.msg,
                     duration: 1000,
-                    type: "success"
+                    type: "success",
                   });
                   this.showFingerprintThree = false;
                   this.$router.push("/laboratory/analysis");
@@ -1153,21 +1224,21 @@ export default {
                   this.$notify({
                     message: res.msg,
                     duration: 1000,
-                    type: error
+                    type: error,
                   });
                 }
               })
-              .catch(error => {
+              .catch((error) => {
                 console.log(error);
               });
           } else {
             this.$notify({
               message: res.msg,
-              type: "error"
+              type: "error",
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -1191,14 +1262,14 @@ export default {
       if (length <= 0) {
         this.$notify({
           type: "warning",
-          message: "没有可删除行"
+          message: "没有可删除行",
         });
         return;
       }
 
       let id = this.solutionPreparationData.biaoZhunArr[index].id;
       let delIndex = this.solutionPreparationData.biaoZhunDownArr.findIndex(
-        item => {
+        (item) => {
           return item.materialNameId == id;
         }
       );
@@ -1214,10 +1285,10 @@ export default {
     //检查是否有必填项未填
     checkMustWriter(valueDatas) {
       let result = true;
-      valueDatas.forEach(item => {
+      valueDatas.forEach((item) => {
         let mustWrite = item.mustWrite;
         if (mustWrite) {
-          mustWrite.forEach(fieldName => {
+          mustWrite.forEach((fieldName) => {
             if (item.hasOwnProperty(fieldName)) {
               if (item[fieldName] === "" || item[fieldName] === null) {
                 result = false;
@@ -1228,7 +1299,7 @@ export default {
                 result = false;
               }
             } else if (item["point"][0].hasOwnProperty(fieldName)) {
-              item["point"].forEach(item => {
+              item["point"].forEach((item) => {
                 if (item[fieldName] === "" || item[fieldName] === null) {
                   result = false;
                 } else if (
@@ -1247,7 +1318,7 @@ export default {
 
     addRowTemplateDwon(index) {
       this.solutionPreparationData.biaoZhunDownArr.splice(index + 1, 0, {
-        materialName: ""
+        materialName: "",
       });
     },
 
@@ -1256,7 +1327,7 @@ export default {
       if (length <= 0) {
         this.$notify({
           type: "warning",
-          message: "没有可删除行"
+          message: "没有可删除行",
         });
         return;
       }
@@ -1264,14 +1335,14 @@ export default {
         .materialNameId;
 
       let delIndex = this.solutionPreparationData.biaoZhunArr.findIndex(
-        item => {
+        (item) => {
           return item.id == id;
         }
       );
       if (delIndex != -1) {
         this.$notify({
           type: "warning",
-          message: "该行为自动生成,无法删除!"
+          message: "该行为自动生成,无法删除!",
         });
       } else {
         this.solutionPreparationData.biaoZhunDownArr.splice(index, 1);
@@ -1283,7 +1354,7 @@ export default {
       let index = arr[1];
       let materialList = this.solutionPreparationData.materialList;
       let selectedMater = "";
-      materialList.forEach(item => {
+      materialList.forEach((item) => {
         if (item.id == name) {
           item = JSON.myParse(JSON.stringify(item));
           selectedMater = item;
@@ -1306,13 +1377,13 @@ export default {
       }
       this.solutionPreparationData.biaoZhunDownArr[index] = {
         materialName: selectedMater.materialName,
-        materialNameId: selectedMater.id
+        materialNameId: selectedMater.id,
       };
     },
 
     entryYuanShi() {
       let jsonString = this.$refs["curveTemplate"].jsonString;
-      let valueData = jsonString.map(item => item.data.valueData);
+      let valueData = jsonString.map((item) => item.data.valueData);
       let labPickSampleStaffId = JSON.myParse(getToken()).id;
       if (this.$route.query.isEdit === "true") {
         if (this.$route.query.copy) {
@@ -1327,17 +1398,17 @@ export default {
             labPickSampleStaffId,
             JSON.stringify(valueData),
             solutionId
-          ).then(res => {
+          ).then((res) => {
             if (res.success) {
               this.$notify({
                 type: "success",
-                message: res.msg
+                message: res.msg,
               });
               this.$router.push("/laboratory/curve");
             } else {
               this.$notify({
                 type: "error",
-                message: res.msg
+                message: res.msg,
               });
             }
           });
@@ -1351,17 +1422,17 @@ export default {
       updateCurveSolutionPreparationData(
         labPickSampleStaffId,
         JSON.stringify(valueData)
-      ).then(res => {
+      ).then((res) => {
         if (res.success) {
           this.$notify({
             type: "success",
-            message: res.msg
+            message: res.msg,
           });
           this.$router.push("/laboratory/curve");
         } else {
           this.$notify({
             type: "error",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
@@ -1372,17 +1443,17 @@ export default {
         labPickSampleStaffId,
         beCopySolutionId,
         JSON.stringify(valueData)
-      ).then(res => {
+      ).then((res) => {
         if (res.success) {
           this.$notify({
             type: "success",
-            message: res.msg
+            message: res.msg,
           });
           this.$router.push("/laboratory/curve");
         } else {
           this.$notify({
             type: "error",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
@@ -1391,7 +1462,7 @@ export default {
     //暂存数据
     TemporaryStorage(isbut = false, isReview) {
       let valueDatas = [];
-      this.sampleDatas.forEach(item => {
+      this.sampleDatas.forEach((item) => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {
           item.showing[0][0].data.valueData.shiYanJianCe = this.imgBase64;
@@ -1399,12 +1470,12 @@ export default {
         if (this.imgBase64 != "" && isReview == true) {
           item.showing[0][0].data.valueData.shiShenHe = this.imgBase64;
         }
-        showing.forEach(item => {
+        showing.forEach((item) => {
           item.forEach((item, index) => {
-            this.selectedResults.forEach(sel => {
+            this.selectedResults.forEach((sel) => {
               item.data.valueData.checkBox2[sel.index] = sel.result;
             });
-            this.selectedResults2.forEach(sel => {
+            this.selectedResults2.forEach((sel) => {
               item.data.valueData.checkBox[sel.index] = sel.result;
             });
             valueDatas.push(item.data.valueData); //遍历出sampleDatas中所有的valueData,放在valueDatas中
@@ -1441,23 +1512,23 @@ export default {
         });
       }
       toTemporaryStorageSampleData(JSON.stringify(valueDatas))
-        .then(res => {
+        .then((res) => {
           if (res.success) {
             if (isbut) {
               this.$router.push("/laboratory/analysis");
             }
             this.$notify({
               type: "success",
-              message: res.msg
+              message: res.msg,
             });
           } else {
             this.$notify({
               type: "warning",
-              message: res.msg
+              message: res.msg,
             });
           }
         })
-        .catch(error => {});
+        .catch((error) => {});
     },
 
     toSelectedBox(item) {
@@ -1482,7 +1553,7 @@ export default {
         modal: false,
         inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
         inputErrorMessage: "请填写原因",
-        inputType: "textarea"
+        inputType: "textarea",
       })
         .then(({ value }) => {
           let reason = value;
@@ -1492,17 +1563,17 @@ export default {
             6,
             labPickSampleStaffId,
             reason
-          ).then(res => {
+          ).then((res) => {
             if (res.success) {
               this.$notify({
                 type: "success",
-                message: res.msg
+                message: res.msg,
               });
               this.$router.push("/laboratory/upload");
             } else {
               this.$notify({
                 type: "error",
-                message: res.msg
+                message: res.msg,
               });
             }
           });
@@ -1544,15 +1615,15 @@ export default {
             let allow = [
               "project_sysjq",
               "project_sysben_two",
-              "project_systvoc"
+              "project_systvoc",
             ];
             let modelName = this.labtemplate[0].modelName;
-            let index = allow.findIndex(item => item === modelName);
+            let index = allow.findIndex((item) => item === modelName);
             if (this.AllFengFlag.flag) {
               if (!this.AllFeng) {
                 this.$notify({
                   type: "warning",
-                  message: "请填写空白峰面积"
+                  message: "请填写空白峰面积",
                 });
                 return;
               }
@@ -1560,7 +1631,7 @@ export default {
             if (!this.selectedCurve && index != -1) {
               this.$notify({
                 type: "warning",
-                message: "请选择曲线"
+                message: "请选择曲线",
               });
               return;
             }
@@ -1568,7 +1639,7 @@ export default {
           } else {
             this.$notify({
               type: "error",
-              message: "结束时间必须大于开始时间"
+              message: "结束时间必须大于开始时间",
             });
           }
         } else {
@@ -1584,13 +1655,13 @@ export default {
           let s = date.getSeconds();
           this.$notify({
             type: "error",
-            message: "开始时间需大于接样时间 " + Y + M + D + h + m + s
+            message: "开始时间需大于接样时间 " + Y + M + D + h + m + s,
           });
         }
       } else {
         this.$notify({
           type: "error",
-          message: "请选择检测时间"
+          message: "请选择检测时间",
         });
       }
     },
@@ -1617,11 +1688,11 @@ export default {
         this.reason,
         this.staffName[0],
         JSON.myParse(getToken()).id
-      ).then(res => {
+      ).then((res) => {
         if (res.success) {
           this.$notify({
             type: "success",
-            message: res.msg
+            message: res.msg,
           });
           this.notPassedBox = false;
 
@@ -1633,7 +1704,7 @@ export default {
         } else {
           this.$notify({
             type: "error",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
@@ -1647,8 +1718,8 @@ export default {
     toUpdateTaskData(tasktemp, flag) {
       let showing = tasktemp.showing;
       this.templateArr = [];
-      showing.forEach(item => {
-        item.forEach(item => {
+      showing.forEach((item) => {
+        item.forEach((item) => {
           if (item.data.isHead) {
             if (flag == 2) {
               item.data.valueData.imgBase64Two = this.imgBase64Two;
@@ -1661,8 +1732,8 @@ export default {
         });
       });
       updateTaskData(tasktemp.id, JSON.stringify(this.templateArr))
-        .then(res => {})
-        .catch(err => {
+        .then((res) => {})
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -1677,14 +1748,14 @@ export default {
         this.staffName,
         JSON.myParse(getToken()).id
       )
-        .then(res => {
+        .then((res) => {
           this.showFingerprint = false;
           this.$router.push("/local/entering");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
+    },
   },
 
   created() {
@@ -1715,15 +1786,15 @@ export default {
         _this.samples = _this.samples.concat(labtemplate[i].value);
       }
       _this.initSamples();
-      this.ids = _this.samples.map(item => item.id);
+      this.ids = _this.samples.map((item) => item.id);
       // 给tab 选项卡赋值
       _this.tabArray = _this.labtemplate;
 
       getMan(2)
-        .then(res => {
+        .then((res) => {
           this.allPerson = res.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
 
@@ -1732,9 +1803,9 @@ export default {
       let forbidArr = [
         "project_systvoc",
         "project_sysben",
-        "project_sysben_two"
+        "project_sysben_two",
       ];
-      let index = forbidArr.findIndex(item => item === modelName);
+      let index = forbidArr.findIndex((item) => item === modelName);
       if (index === -1 && window.location.href.indexOf("localhost") === -1) {
         this.timerId = setInterval(() => {
           _this.TemporaryStorage();
@@ -1751,13 +1822,13 @@ export default {
 
       _this.initSamples();
       getMan(2)
-        .then(res => {
+        .then((res) => {
           this.allPerson = res.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-      this.ids = _this.samples.map(item => item.id);
+      this.ids = _this.samples.map((item) => item.id);
       _this.tabArray = _this.labtemplate;
       this.tasks = this.tabArray;
     }
@@ -1803,7 +1874,7 @@ export default {
       } else {
         return;
       }
-    }
+    },
   },
 
   mounted() {
@@ -1812,17 +1883,17 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener("popstate", this.goBack, false);
     // }
-    bus.$on("getReason", data => {
+    bus.$on("getReason", (data) => {
       this.delRowReason = true;
       this.delRowReasonArr.push(data);
     });
-    bus.$on("showSave", data => {
+    bus.$on("showSave", (data) => {
       this.showSaveLog = data;
     });
-    bus.$on("getDeleteArr", data => {
+    bus.$on("getDeleteArr", (data) => {
       this.deleteArr = data;
     });
-    bus.$on("getTuPuUrl", val => {
+    bus.$on("getTuPuUrl", (val) => {
       this.sysAtlasUrl = val;
     });
   },
@@ -1833,7 +1904,7 @@ export default {
       clearInterval(that.timerId);
     }
     // window.removeEventListener("popstate", this.goBack, false);
-  }
+  },
 };
 </script>
 

@@ -198,9 +198,32 @@ body {
 }
 
 #pageBox {
-  width: 1170px;
-  margin-left: 35%;
-  transform: translate(-35%, 0);
+  width: 770px;
+  margin: 0 auto;
+}
+
+body::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 4px;
+  scrollbar-arrow-color: red;
+}
+body::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  /*滚动条里面小方块*/
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+  background: #d1e8ff;
+
+  scrollbar-arrow-color: red;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: #abd5ff;
+}
+body::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0);
 }
 
 .pageMarginTop {

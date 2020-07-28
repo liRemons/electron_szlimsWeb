@@ -13,10 +13,10 @@ const requestImg = axios.create({
   timeout: 20000, // 请求超时时间
 });
 
-const updateAxios=axios.create({
+const updateAxios = axios.create({
   baseURL: "http://xtroms.com:5013", // api 的 base_url
   timeout: 20000, // 请求超时时间
-})
+});
 
 let globalLoading;
 let hint = true; //是否全局提示
@@ -31,7 +31,10 @@ service.interceptors.request.use(
         config.url !== "/queryTaskMaterialStatistics"
       ) {
         hint = false;
-      } else if (config.url == "/temporaryStorageSampleData") {
+      } else if (
+        config.url == "/temporaryStorageSampleData" ||
+        config.url == "/updateStaffOnlineTime"
+      ) {
         hint = false;
       } else {
         hint = true;
@@ -93,4 +96,4 @@ service.interceptors.response.use(
   }
 );
 
-export default { service, requestImg,updateAxios };
+export default { service, requestImg, updateAxios };

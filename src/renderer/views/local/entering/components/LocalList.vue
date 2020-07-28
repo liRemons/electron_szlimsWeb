@@ -563,9 +563,11 @@ export default {
     // 多个跳转到模板页面
     goTemplates() {
       let version = sessionStorage.getItem("version");
-      if (version.updateVersion !== version.version) {
-        this.$message.warning("请更新到最新版本再进行录入");
-        return;
+      if (this.$isUpdate) {
+        if (version.updateVersion !== version.version) {
+          this.$message.warning("请更新到最新版本再进行录入");
+          return;
+        }
       }
       if (this.multipleSelection.length > 0) {
         // let ids = this.multipleSelection.map(item => {  //取出以选择的行id
