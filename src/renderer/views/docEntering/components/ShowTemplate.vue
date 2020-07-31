@@ -1388,87 +1388,9 @@ export default {
             this.$message.success("暂存成功");
           }
         });
-        return;
-
-        fsUpdateTaskData(this.task.id, this.saveData)
-          .then((res) => {
-            globalLoading.close();
-            if (res.success) {
-              this.$notify({
-                title: "提示",
-                message: res.msg,
-                type: "success",
-              });
-            } else {
-              this.$notify.error({
-                title: "提示",
-                message: res.msg,
-              });
-            }
-          })
-          .catch(() => {});
       }
     },
 
-    PrefixInteger(num, n) {
-      return (Array(n).join(0) + num).slice(-n);
-    },
-
-    // generateSampleNum(item) {
-    //   if (item.sampleNum !== "") return;
-    //
-    //   if (item.sampleLabel === 1) {
-    //     if (window.sampleNum2 !== "") {
-    //       window.sampleNum2 += 1;
-    //       item.sampleNum = `GL${this.nowYear}${this.PrefixInteger(window.sampleNum2, 5)}`;
-    //     } else {
-    //       let number = this.jsonString[0].data.valueData.sampleNum2
-    //               ? Number(this.jsonString[0].data.valueData.sampleNum2)
-    //               : this.numObj.sampleNum_lh;
-    //       window.sampleNum2 = number + 1;
-    //
-    //       item.sampleNum = `GL${this.nowYear}${this.PrefixInteger(
-    //               window.sampleNum2,
-    //               5
-    //       )}`;
-    //     }
-    //   } else if (item.sampleLabel === 2) {
-    //     if (window.sampleNum3 !== "") {
-    //       window.sampleNum3 += 1;
-    //       item.sampleNum = `GW${this.nowYear}${this.PrefixInteger(
-    //               window.sampleNum3,
-    //               5
-    //       )}`;
-    //     } else {
-    //       let number = this.jsonString[0].data.valueData.sampleNum3
-    //               ? Number(this.jsonString[0].data.valueData.sampleNum3)
-    //               : this.numObj.sampleNum_wsw;
-    //
-    //       window.sampleNum3 = number + 1;
-    //       item.sampleNum = `GW${this.nowYear}${this.PrefixInteger(
-    //               window.sampleNum3,
-    //               5
-    //       )}`;
-    //     }
-    //   } else {
-    //     if (window.sampleNum !== "") {
-    //       window.sampleNum += 1;
-    //       item.sampleNum = `GD${this.nowYear}${this.PrefixInteger(
-    //               window.sampleNum,
-    //               5
-    //       )}`;
-    //     } else {
-    //       let number = this.jsonString[0].data.valueData.sampleNum
-    //               ? Number(this.jsonString[0].data.valueData.sampleNum)
-    //               : this.numObj.sampleNum_xczd;
-    //       window.sampleNum = number + 1;
-    //       item.sampleNum = `GD${this.nowYear}${this.PrefixInteger(
-    //               window.sampleNum,
-    //               5
-    //       )}`;
-    //     }
-    //   }
-    // },
     deleteSample(item) {
       let pointArr = [];
       this.jsonString.forEach((item, index) => {

@@ -19,7 +19,6 @@ const app = {
   },
   mutations: {
     SESSIONSTORAGE_SET:(state,data)=>{
-      console.log(data)
       state.shareObject[data.key]=data.value
     },
     SESSIONSTORAGE_GET:(state,data)=>{

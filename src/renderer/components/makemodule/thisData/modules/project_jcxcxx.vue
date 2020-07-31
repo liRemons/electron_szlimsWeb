@@ -13,73 +13,73 @@
       >
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="borderRight">
-            <div style="height:32px;">
+            <div style="height: 32px;">
               <div class="tc">设备名称</div>
             </div>
           </div>
           <div
-            style="width:190px;left:141px;"
+            style="width: 190px; left: 141px;"
             class="___absolute t0 Full borderRight"
           >
             <divModel
               v-model="data.valueData.deviceName"
               ref="deviceName"
-              style="width:100%;text-align: center;font-size:12px;"
+              style="width: 100%; text-align: center; font-size: 12px;"
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
           <div
-            style="width:140px;left:331px;"
+            style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc">设备型号</div>
           </div>
-          <div style="width:238px;right:0" class="___absolute t0 Full">
+          <div style="width: 238px; right: 0;" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.deviceModel"
-              style="width:100%;text-align: center;"
+              style="width: 100%; text-align: center;"
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="borderRight">
-            <div style="height:32px;">
+            <div style="height: 32px;">
               <div class="tc">设备编号</div>
             </div>
           </div>
           <div
-            style="width:190px;left:141px;"
+            style="width: 190px; left: 141px;"
             class="___absolute t0 Full borderRight"
           >
             <divModel
               v-model="data.valueData.deviceNum"
-              style="width:100%;text-align: center;"
+              style="width: 100%; text-align: center;"
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
           <div
-            style="width:140px;left:331px;"
+            style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc">生产厂家</div>
           </div>
-          <div style="width:238px;right:0" class="___absolute t0 Full">
+          <div style="width: 238px; right: 0;" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.manufacturer"
-              style="width:100%;text-align: center;"
+              style="width: 100%; text-align: center;"
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="borderRight">
-            <div style="height:35px;">
+            <div style="height: 35px;">
               <div class="tc">主要参数</div>
             </div>
           </div>
           <div
-            style="width:190px;left:141px;"
+            style="width: 190px; left: 141px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="___absolute Full" style="width: 50%;">
@@ -88,21 +88,31 @@
                 :computers="
                   isInteger(data.valueData.mainParameterkV, 'mainParameterkV')
                 "
-                style="width:60%;text-align: center; height: 30px; border-bottom: 1px solid black;"
+                style="
+                  width: 60%;
+                  text-align: center;
+                  height: 30px;
+                  border-bottom: 1px solid black;
+                "
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <span style="margin-left:70%;">kV</span>
+              <span style="margin-left: 70%;">kV</span>
             </div>
-            <div class="___absolute Full" style="width: 50%;left:50%;">
+            <div class="___absolute Full" style="width: 50%; left: 50%;">
               <divModel
                 :computers="
                   isInteger(data.valueData.mainParametermA, 'mainParametermA')
                 "
                 v-model="data.valueData.mainParametermA"
-                style="width:60%;text-align: center; border-bottom: 1px solid black; height: 30px;"
+                style="
+                  width: 60%;
+                  text-align: center;
+                  border-bottom: 1px solid black;
+                  height: 30px;
+                "
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <div style="margin-left:50%;">
+              <div style="margin-left: 50%;">
                 <selectModel
                   @returnVal="changeMainParametermAutil"
                   :Judge="true"
@@ -118,45 +128,45 @@
             </div>
           </div>
           <div
-            style="width:140px;left:331px;"
+            style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc">所在场所</div>
           </div>
-          <div style="width:238px;right:0" class="___absolute t0 Full">
+          <div style="width: 238px; right: 0;" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.location"
-              style="width:100%;text-align: center;"
+              style="width: 100%; text-align: center;"
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="___absolute t0 Full borderRight">
-            <div style="height:32px;">
+            <div style="height: 32px;">
               <div class="tc heightCenter3">球管编号</div>
             </div>
           </div>
           <div
-            style="width:190px;left:141px;"
+            style="width: 190px; left: 141px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="heightCenter3">
               <divModel
                 v-model="data.valueData.ballNum"
-                style="width:100%;text-align: center;height:32px;"
+                style="width: 100%; text-align: center; height: 32px;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
             </div>
           </div>
           <div
-            style="width:140px;left:331px;"
+            style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc heightCenter3">设备类型</div>
           </div>
           <div
-            style="width:238px;left:471px; min-height: 32px;"
+            style="width: 238px; left: 471px; min-height: 32px;"
             class="___relative"
           >
             <div v-for="(item, index) in deviceType" class="___relative ml5">
@@ -171,12 +181,12 @@
         <div v-for="(item, index) in data.valueData.point">
           <div class="___relative borderBottom">
             <div style="width: 140px;" class="borderRight">
-              <div style="height:32px;">
+              <div style="height: 32px;">
                 <div class="tc">曝光模式</div>
               </div>
             </div>
             <div
-              style="width:190px;left:141px;"
+              style="width: 190px; left: 141px;"
               class="___absolute t0 Full borderRight"
             >
               <selectModel
@@ -192,15 +202,15 @@
               ></selectModel>
             </div>
             <div
-              style="width:140px;left:331px;"
+              style="width: 140px; left: 331px;"
               class="___absolute t0 Full borderRight"
             >
               <div class="tc">有用线束方向</div>
             </div>
-            <div style="width:238px;right:0" class="___absolute t0 Full">
+            <div style="width: 238px; right: 0;" class="___absolute t0 Full">
               <divModel
                 v-model="item.harnessDirection"
-                style="width:100%;text-align: center;"
+                style="width: 100%; text-align: center;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
             </div>
@@ -209,15 +219,15 @@
               class="__functionBox"
               v-if="
                 index != data.valueData.point.length - 1 &&
-                  ipdTemplate == 'ipdTemplate' &&
-                  target == 0
+                ipdTemplate == 'ipdTemplate' &&
+                target == 0
               "
-              style="top:0px;right:-70px;width: 20px;z-index:100"
+              style="top: 0px; right: -70px; width: 20px; z-index: 100;"
             >
               <div
                 class="__functionButton6"
                 @dblclick.stop="reduce(index)"
-                style="right:0;"
+                style="right: 0;"
               >
                 <span>-</span>
               </div>
@@ -225,11 +235,11 @@
           </div>
         </div>
         <div class="___relative borderBottom">
-          <div style="width:140px;" class="___absolute t0 Full borderRight">
+          <div style="width: 140px;" class="___absolute t0 Full borderRight">
             <div class="tc heightCenter3">设备状态</div>
           </div>
           <div
-            style="width:190px;left:141px;"
+            style="width: 190px; left: 141px;"
             class="___absolute t0 Full borderRight"
           >
             <div
@@ -240,13 +250,13 @@
             </div>
           </div>
           <div
-            style="width:140px;left:331px;"
+            style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc heightCenter3">设备操作方式</div>
           </div>
-          <div style="width: 238px;left:472px;" class="___relative">
-            <div style="height:170px;margin-left:10px;">
+          <div style="width: 238px; left: 472px;" class="___relative">
+            <div style="height: 170px; margin-left: 10px;">
               <div>
                 <el-checkbox
                   label="隔室操作"
@@ -276,17 +286,22 @@
                       color:
                         data.valueData.sonOperation === '介入操作'
                           ? ''
-                          : '#C0C4CC'
+                          : '#C0C4CC',
                     }"
                   >
                     <span>术者数量(</span>
                     <divModel
                       v-model="data.valueData.surgeonNum"
                       v-if="data.valueData.sonOperation === '介入操作'"
-                      style="width:30px;height:32px;text-align: center;left:56px;"
+                      style="
+                        width: 30px;
+                        height: 32px;
+                        text-align: center;
+                        left: 56px;
+                      "
                       class="warp2 rowsInput2 hide focusBg ___absolute t0"
                     ></divModel>
-                    <span class="___relative" style="left:30px;">)</span>
+                    <span class="___relative" style="left: 30px;">)</span>
                   </div>
                 </div>
                 <div class="___relative">
@@ -302,17 +317,22 @@
                       color:
                         data.valueData.sonOperation === '近台同室操作'
                           ? ''
-                          : '#C0C4CC'
+                          : '#C0C4CC',
                     }"
                   >
                     <span>术者数量(</span>
                     <divModel
                       v-model="data.valueData.surgeonNum"
                       v-if="data.valueData.sonOperation === '近台同室操作'"
-                      style="width:30px;height:32px;text-align: center;left:56px;"
+                      style="
+                        width: 30px;
+                        height: 32px;
+                        text-align: center;
+                        left: 56px;
+                      "
                       class="warp2 rowsInput2 hide focusBg ___absolute t0"
                     ></divModel>
-                    <span class="___relative" style="left:30px;">)</span>
+                    <span class="___relative" style="left: 30px;">)</span>
                   </div>
                 </div>
                 <div>
@@ -328,49 +348,67 @@
         </div>
         <div class="___relative">
           <div style="width: 140px;" class="borderRight">
-            <div style="height:32px;">
+            <div style="height: 32px;">
               <div class="tc">现场环境</div>
             </div>
           </div>
-          <div style="width:100px;left:141px;" class="___absolute t0 Full">
+          <div style="width: 100px; left: 141px;" class="___absolute t0 Full">
             <divModel
               :computers="
                 Fixed1(data.valueData.siteEnvironment, 'siteEnvironment')
               "
               v-model="data.valueData.siteEnvironment"
-              style="width:100%;text-align: center; border-bottom: 1px solid black; height: 28px; margin-left: 5px;"
+              style="
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid black;
+                height: 28px;
+                margin-left: 5px;
+              "
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
-          <div style="width:50px;left:241px;" class="___absolute t0 Full">
+          <div style="width: 50px; left: 241px;" class="___absolute t0 Full">
             °C
           </div>
 
-          <div style="width:100px;left:291px;" class="___absolute t0 Full">
+          <div style="width: 100px; left: 291px;" class="___absolute t0 Full">
             <divModel
               :computers="
                 Fixed1(data.valueData.siteEnvironment2, 'siteEnvironment2')
               "
               v-model="data.valueData.siteEnvironment2"
-              style="width:100%;text-align: center; border-bottom: 1px solid black; height: 28px; margin-left: 5px;"
+              style="
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid black;
+                height: 28px;
+                margin-left: 5px;
+              "
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
-          <div style="width:50px;left:391px;" class="___absolute t0 Full">
+          <div style="width: 50px; left: 391px;" class="___absolute t0 Full">
             ％Rh
           </div>
 
-          <div style="width:100px;left:441px;" class="___absolute t0 Full">
+          <div style="width: 100px; left: 441px;" class="___absolute t0 Full">
             <divModel
               :computers="
                 Fixed1(data.valueData.siteEnvironment3, 'siteEnvironment3')
               "
               v-model="data.valueData.siteEnvironment3"
-              style="width:100%;text-align: center; border-bottom: 1px solid black; height: 28px; margin-left: 5px;"
+              style="
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid black;
+                height: 28px;
+                margin-left: 5px;
+              "
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
-          <div style="width:50px;left:551px;" class="___absolute t0 Full">
+          <div style="width: 50px; left: 551px;" class="___absolute t0 Full">
             kPa
           </div>
         </div>
@@ -381,7 +419,7 @@
         :style="{
           right: '-95px',
           width: '53px',
-          top: data.valueData.point.length * 33 + 140 + 'px'
+          top: data.valueData.point.length * 33 + 140 + 'px',
         }"
         v-if="ipdTemplate == 'ipdTemplate' && target == 0"
       >
@@ -389,7 +427,7 @@
         <div
           class="__functionButton6"
           @dblclick="reduce(data.valueData.point.length - 1)"
-          style="right:30px;"
+          style="right: 30px;"
         >
           <span>-</span>
         </div>
@@ -399,13 +437,13 @@
       </div>
       <div
         class="__functionBox tc"
-        style="right:-75px;width: 30px;"
+        style="right: -75px; width: 30px;"
         v-if="ipdTemplate == 'ipdTemplate' && target == 0"
       >
         <div
           class="__functionButton6"
           @click="sure(true)"
-          style="right:5px;font-size: 14px;"
+          style="right: 5px; font-size: 14px;"
         >
           <span class="el-icon-search"></span>
         </div>
@@ -427,7 +465,7 @@ export default {
       deviceType: [],
       exposureModeList: [],
       modules: modules,
-      testing: ""
+      testing: "",
     };
   },
   props: [
@@ -442,7 +480,7 @@ export default {
     "isTemplate",
     "ableInput",
     "task",
-    "target"
+    "target",
   ],
   methods: {
     // 是不是整数
@@ -465,7 +503,7 @@ export default {
     increase() {
       let obj = {
         exposureMode: "",
-        harnessDirection: ""
+        harnessDirection: "",
       };
       this.data.valueData.point.push(obj);
       this.$emit("redefinition");
@@ -479,7 +517,7 @@ export default {
         this.$emit("redefinition");
       }
       let result = this.data.valueData.point.findIndex(
-        v =>
+        (v) =>
           v.exposureMode === "DR摄影" ||
           v.exposureMode === "CR摄影" ||
           v.exposureMode === "屏片摄影" ||
@@ -495,7 +533,7 @@ export default {
     checkField(Judge) {
       let arr = this.data.checkField;
       let arr2 = [];
-      arr.forEach(item => {
+      arr.forEach((item) => {
         let key = Object.keys(item);
         let mykey = key[0];
         if (this.data.valueData.hasOwnProperty(mykey)) {
@@ -503,14 +541,14 @@ export default {
             arr2.push(item[mykey]);
           } else if (this.data.valueData[mykey] instanceof Array) {
             let result = this.data.valueData[mykey].every(
-              item => item === "" || item === false
+              (item) => item === "" || item === false
             );
             if (result) {
               arr2.push(item[mykey]);
             }
           }
         } else if (this.data.valueData["point"][0].hasOwnProperty(mykey)) {
-          this.data.valueData["point"].forEach(item2 => {
+          this.data.valueData["point"].forEach((item2) => {
             if (item2[mykey] === "") {
               arr2.push(item[mykey]);
             }
@@ -523,7 +561,7 @@ export default {
         if (Judge) {
           this.$notify({
             type: "warning",
-            message: `${arr2.toString()}未填写！`
+            message: `${arr2.toString()}未填写！`,
           });
         }
         return false;
@@ -535,7 +573,7 @@ export default {
         dataInit(res, this);
       } else {
         getQueryByDeviceTypeName({ deviceTypeName: this.deviceTypeName }).then(
-          res => {
+          (res) => {
             dataInit(res, this);
           }
         );
@@ -544,7 +582,7 @@ export default {
         if (res.success) {
           if (res.datas.length > 0) {
             that.deviceData = res.datas[0];
-            that.deviceType = [...res.datas[0].types.map(x => x.name)];
+            that.deviceType = [...res.datas[0].types.map((x) => x.name)];
             if (that.data.valueData.deviceType != "") {
               that.radio();
             }
@@ -556,13 +594,13 @@ export default {
     },
     radio() {
       this.exposureModeList = this.deviceData.types.find(
-        v => v.name === this.data.valueData.deviceType
+        (v) => v.name === this.data.valueData.deviceType
       ).exposures;
       // if (this.data.valueData.point.length > this.exposureModeList.length) {
       if (this.exposureModeList.length == 0) {
         let obj = {
           exposureMode: "",
-          harnessDirection: ""
+          harnessDirection: "",
         };
         this.data.valueData.point = [obj];
       }
@@ -612,7 +650,7 @@ export default {
             "七",
             "八",
             "九",
-            "十"
+            "十",
           ];
           this.jsonString.forEach((item, index) => {
             if (item.data.name === "projcet_szwjcjlmknr") {
@@ -644,8 +682,8 @@ export default {
                     "",
                     "",
                     "",
-                    ""
-                  ]
+                    "",
+                  ],
                 },
                 {
                   rows: [
@@ -654,8 +692,8 @@ export default {
                     "",
                     "",
                     "",
-                    ""
-                  ]
+                    "",
+                  ],
                 },
                 {
                   rows: [
@@ -664,8 +702,8 @@ export default {
                     "",
                     "",
                     "",
-                    ""
-                  ]
+                    "",
+                  ],
                 },
                 {
                   rows: [
@@ -674,8 +712,8 @@ export default {
                     "",
                     "",
                     "",
-                    ""
-                  ]
+                    "",
+                  ],
                 },
                 {
                   rows: [
@@ -684,9 +722,9 @@ export default {
                     "",
                     "",
                     "",
-                    ""
-                  ]
-                }
+                    "",
+                  ],
+                },
               ];
               completeArr.push(...rows);
             }
@@ -734,7 +772,7 @@ export default {
 
     setGzltj() {
       let result = this.data.valueData.point.findIndex(
-        v =>
+        (v) =>
           v.exposureMode === "DR摄影" ||
           v.exposureMode === "CR摄影" ||
           v.exposureMode === "屏片摄影" ||
@@ -745,13 +783,15 @@ export default {
       } else {
         this.$store.dispatch("actionsJudgePhotography", false);
       }
-      let gzltjs = this.jsonString.filter(item => item.to === "projcet_gzltj");
+      let gzltjs = this.jsonString.filter(
+        (item) => item.to === "projcet_gzltj"
+      );
       if (result !== -1) {
-        gzltjs.forEach(item => {
+        gzltjs.forEach((item) => {
           item.data.height._normal.carried = true;
         });
       } else {
-        gzltjs.forEach(item => {
+        gzltjs.forEach((item) => {
           item.data.height._normal.carried = false;
         });
       }
@@ -789,11 +829,11 @@ export default {
         "projcet_jcbt",
         "projcet_jcbnr",
         "projcet_jgyst",
-        "projcet_jgysnr"
+        "projcet_jgysnr",
       ];
       let projcetArr = [];
       projcetName.forEach((item, index) => {
-        let result = this.modules.find(mod => mod.name === item);
+        let result = this.modules.find((mod) => mod.name === item);
         projcetArr.push(JSON.myParse(JSON.stringify(result)));
         projcetArr[index].height = result.height;
       });
@@ -837,14 +877,14 @@ export default {
           JSON.stringify({
             to: projcetArr[0].name,
             type: null,
-            data: projcetArr[0]
+            data: projcetArr[0],
           })
         );
         let jcbnr = JSON.myParse(
           JSON.stringify({
             to: projcetArr[1].name,
             type: null,
-            data: projcetArr[1]
+            data: projcetArr[1],
           })
         );
 
@@ -855,14 +895,14 @@ export default {
           JSON.stringify({
             to: projcetArr[2].name,
             type: null,
-            data: projcetArr[2]
+            data: projcetArr[2],
           })
         );
         let jgysnr = JSON.myParse(
           JSON.stringify({
             to: projcetArr[3].name,
             type: null,
-            data: projcetArr[3]
+            data: projcetArr[3],
           })
         );
 
@@ -932,7 +972,7 @@ export default {
                 [
                   ...obj.map((v, i) =>
                     v.data.valueData.point.filter((k, l) => k.rows[0] !== "")
-                  )
+                  ),
                 ].flat()
               )
             );
@@ -966,7 +1006,7 @@ export default {
         this.importData.isCreate = true;
         this.$notify({
           type: "success",
-          message: "生成成功"
+          message: "生成成功",
         });
       }
       this.$emit("redefinition");
@@ -974,7 +1014,7 @@ export default {
     err(msg) {
       this.$message({
         type: "error",
-        message: msg
+        message: msg,
       });
     },
     getIndex(index) {
@@ -987,16 +1027,21 @@ export default {
 
     changeMainParametermAutil(val) {
       this.data.valueData.mainParametermAutil = val;
-    }
+    },
+    deviceNameInit(val) {
+      val.length >= 15
+        ? (this.$refs.deviceName.$el.style.lineHeight = "16px")
+        : (this.$refs.deviceName.$el.style.lineHeight = "32px");
+    },
   },
   computed: {
     ...mapState({
-      purposeDetection: state => state.StomatologyLinkage.purposeDetection
+      purposeDetection: (state) => state.StomatologyLinkage.purposeDetection,
     }),
     deviceTypeName() {
-      return this.jsonString.find(item => item.to === "project_jbxx").data
+      return this.jsonString.find((item) => item.to === "project_jbxx").data
         .valueData.detectionObjects;
-    }
+    },
   },
   watch: {
     purposeDetection(val) {
@@ -1011,12 +1056,12 @@ export default {
         this.sure(false);
       }
     },
-    "data.valueData.sonOperation": function(val) {
+    "data.valueData.sonOperation": function (val) {
       if (this.target == 0) {
         this.data.valueData.surgeonNum = "";
       }
     },
-    "data.valueData.operationMode": function(val) {
+    "data.valueData.operationMode": function (val) {
       if (!val[1]) {
         this.data.valueData.surgeonNum = "";
 
@@ -1030,35 +1075,31 @@ export default {
         });
       }
     },
-    "data.valueData.deviceName": function(val) {
-      if (val.length >= 15) {
-        this.$refs.deviceName.$el.style.lineHeight = "16px";
-      } else {
-        this.$refs.deviceName.$el.style.lineHeight = "32px";
-      }
-      // this.$refs.deviceName.style.lineHeight="16px"
-    }
+    "data.valueData.deviceName": function (val) {
+      this.deviceNameInit(val);
+    },
   },
   mounted() {
+    this.deviceNameInit(this.data.valueData.deviceName);
     this.getList();
     this.setGzltj();
     setTimeout(() => {
       if (this.deviceType.length == 1) {
         this.data.valueData.deviceType = this.deviceType[0];
         this.exposureModeList = this.deviceData.types.find(
-          v => v.name === this.data.valueData.deviceType
+          (v) => v.name === this.data.valueData.deviceType
         ).exposures;
         // if (this.data.valueData.point.length > this.exposureModeList.length) {
         if (this.exposureModeList.length == 0) {
           let obj = {
             exposureMode: "",
-            harnessDirection: ""
+            harnessDirection: "",
           };
           this.data.valueData.point = [obj];
         }
       }
     }, 1000);
-  }
+  },
 };
 </script>
 

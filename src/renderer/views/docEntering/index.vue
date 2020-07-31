@@ -120,6 +120,9 @@
         v-if="target == 4 && isSelect === '0'"
         >不通过</el-button
       >
+      <el-button size="mini" type="danger" v-if="target == 0" @click="end"
+        >检测结束</el-button
+      >
 
       <el-button
         @click="lookConfig"
@@ -518,21 +521,62 @@ export default {
     showReviewTemplate,
   },
   methods: {
+    end() {
+      if (this.entryEndTime) {
+        this.$confirm("已有结束时间，确认结束?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            this.entryEndTime = this.MethodsRe.dateFormat();
+            this.$message.success("结束时间生成成功");
+          })
+          .catch(() => {});
+      } else {
+        this.$confirm("确认结束?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            this.entryEndTime = this.MethodsRe.dateFormat();
+            this.$message.success("结束时间生成成功");
+          })
+          .catch(() => {});
+      }
+    },
     submitSongshen() {
-      let data = this.taskDatas[0].showing
-        .flat()
-        .filter((item) => item.to == "project_deleteReason");
-      if (data.length) {
-        this.deleteData = data[0].data.valueData.point;
-      } else {
-        this.deleteData = [];
-      }
+      this.$confirm(
+        "请确认未录入数据的检测参数，现场检测条件不适用时，必须选择删除模块！！！",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      )
+        .then(() => {
+          if (!this.entryEndTime) {
+            this.$message.error("请点击检测结束");
+            return;
+          }
+          let data = this.taskDatas[0].showing
+            .flat()
+            .filter((item) => item.to == "project_deleteReason");
+          if (data.length) {
+            this.deleteData = data[0].data.valueData.point;
+          } else {
+            this.deleteData = [];
+          }
 
-      if (this.deleteData.length > 0) {
-        this.deleteDialog = true;
-      } else {
-        this.confirmDelete();
-      }
+          if (this.deleteData.length > 0) {
+            this.deleteDialog = true;
+          } else {
+            this.confirmDelete();
+          }
+        })
+        .catch(() => {});
     },
     confirmDelete() {
       this.deleteDialog = false;
@@ -558,6 +602,7 @@ export default {
       let promiseArr = [];
       if (target == 0) {
         this.importData = JSON.parse(arg);
+        this.entryEndTime = this.importData.tasks.tasks[0].endTime;
         let p1 = new Promise((resolve, reject) => {
           resolve();
         }).then((res) => JSON.parse(arg).tasks);
@@ -814,7 +859,6 @@ export default {
       if (result) {
         this.entryId = id;
         this.staffName = staffName;
-        this.entryEndTime = _dateFormat("now", "Y-M-D h:m:s");
         getStaffImg_x(id).then((res) => {
           this.imgBase64 = res.staffImgs;
           this.taskDatas.forEach((item) => {
@@ -859,16 +903,16 @@ export default {
             type: "success",
           });
           updateSampleStaffCheck(this.ids.toString(), checkId, 2).then(
-            (res) => {
-              if (res.success) {
+            (response) => {
+              if (response.success) {
                 this.$notify({
-                  message: res.msg,
+                  message: response.msg,
                   duration: 1000,
                   type: "success",
                 });
               } else {
                 this.$notify({
-                  message: res.msg,
+                  message: response.msg,
                   duration: 1000,
                   type: error,
                 });
@@ -940,13 +984,12 @@ export default {
         this.$refs.templateHTML[0].$el.innerHTML
       ).then((res) => {
         this.signatureTimeDialog = false;
-        // this.copyText =
-        //   "http://localhost:8888" +
-        //   "/#/signature?url="+
-        //   res.url +
-        //   "&id=" +
-        //   this.tasks[0].id;
-        this.copyText =this.hostUrl+'/#/signature?url='+ res.url+'&id='+this.tasks[0].id;
+        this.copyText =
+          this.hostUrl +
+          "/signature?url=" +
+          res.url +
+          "&id=" +
+          this.tasks[0].id;
         this.copyDialog = true;
 
         updateUnitGenerateTime(
@@ -1087,8 +1130,6 @@ export default {
           })
           .catch((error) => {});
       } else {
-        // console.log(this.templateArr,'templateArr')
-        // return
         updateTask(
           tasktemp.id,
           tasktemp.startTime,

@@ -504,32 +504,6 @@ export default {
     overflow: auto;
     -webkit-app-region: no-drag;
   }
-  // .sider {
-  //   box-shadow: rgb(213, 213, 213) 0px 0px 6px;
-  // }
-  .content::-webkit-scrollbar {
-    /*滚动条整体样式*/
-    width: 10px; /*高宽分别对应横竖滚动条的尺寸*/
-    height: 4px;
-    // scrollbar-arrow-color: red;
-  }
-  .content::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    /*滚动条里面小方块*/
-    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    background: #d1e8ff;
-
-    // scrollbar-arrow-color: red;
-  }
-  .content::-webkit-scrollbar-thumb:hover {
-    background: #abd5ff;
-  }
-  .content::-webkit-scrollbar-track {
-    /*滚动条里面轨道*/
-    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    background: rgba(0, 0, 0, 0);
-  }
 }
 
 .el_tag {
@@ -538,5 +512,30 @@ export default {
   height: auto !important;
   text-align: left !important;
   margin: 10px 0 !important;
+}
+</style>
+
+<style >
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 8px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  /*滚动条里面小方块*/
+
+  background: rgba(166, 212, 255, 0.568);
+  transition: all 0.5s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a2cfff;
+}
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  border-radius: 5px;
+  border: none;
+  background: transparent;
 }
 </style>

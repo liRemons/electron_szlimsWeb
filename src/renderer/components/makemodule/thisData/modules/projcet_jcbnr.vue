@@ -2,7 +2,7 @@
   <div :id="data.valueData.testProjectId">
     <div :class="{ _normalHeight_: true }" class="___relative">
       <div :class="{ eventCover: !ableInput }"></div>
-      <table class="myTable" style="width: 710px">
+      <table class="myTable" style="width: 710px;">
         <tr>
           <td width="202">重复测量次数</td>
           <td>
@@ -25,22 +25,27 @@
         </tr>
       </table>
 
-      <table class="myTable" style="table-layout:auto !important">
+      <table class="myTable" style="table-layout: auto !important;">
         <tr class="delLine">
           <td rowspan="2" width="50">序号</td>
           <td rowspan="2" colspan="2" width="80">检测点位置</td>
           <!-- <td rowspan="2">毗邻场所</td> -->
           <td rowspan="2" v-if="JudgePhotography">居留因子</td>
           <td
-            :colspan="data.valueData.testPoinrNum.filter(item => item).length"
+            :colspan="data.valueData.testPoinrNum.filter((item) => item).length"
             width="150"
           >
             <div class="___relative">
-              <div style="display:inline-block;margin-right:20px">
+              <div style="display: inline-block; margin-right: 20px;">
                 测量值(单位:
               </div>
               <selectModel
-                style="display:inline-block;width:60px;position:absolute !important;right:-10px"
+                style="
+                  display: inline-block;
+                  width: 60px;
+                  position: absolute !important;
+                  right: -10px;
+                "
                 @returnVal="changeCompany"
                 :Judge="true"
                 class="___absolute"
@@ -54,13 +59,13 @@
               >
               </selectModel>
 
-              <span class="___absolute" style="right:0">)</span>
+              <span class="___absolute" style="right: 0;">)</span>
             </div>
           </td>
-          <td rowspan="2" style="font-size:12px">
+          <td rowspan="2" style="font-size: 12px;">
             *报告值(单<br />位：{{ data.valueData.company }})
           </td>
-          <td rowspan="2" style="font-size:12px" v-if="JudgePhotography">
+          <td rowspan="2" style="font-size: 12px;" v-if="JudgePhotography">
             *年剂量(单<br />位：{{ data.valueData.company }})
           </td>
           <td rowspan="2" :colspan="!JudgePhotography ? 2 : 1" width="60">
@@ -92,7 +97,7 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[0]">
             <divModel
-            :isNumBox="true"
+              :isNumBox="true"
               v-if="item.rows[3] !== '/'"
               v-model="item.rows[3]"
               style="text-align: center;"
@@ -101,7 +106,7 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[1]">
             <divModel
-            :isNumBox="true"
+              :isNumBox="true"
               v-model="item.rows[4]"
               v-if="item.rows[4] !== '/'"
               style="text-align: center;"
@@ -110,7 +115,7 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[2]">
             <divModel
-            :isNumBox="true"
+              :isNumBox="true"
               v-model="item.rows[5]"
               v-if="item.rows[5] !== '/'"
               style="text-align: center;"
@@ -162,7 +167,7 @@ export default {
   data() {
     return {
       company: ["μSv/h", "nSv/h"],
-      remark: ["无法到达", "不适用", "/"]
+      remark: ["无法到达", "不适用", "/"],
     };
   },
   props: [
@@ -175,15 +180,16 @@ export default {
     "watchSign",
     "isTemplate",
     "ableInput",
-    "target"
+    "target",
   ],
   updated() {
     // this.init(this.data.valueData.point);
   },
   methods: {
     init(arr) {
-      arr.forEach(item => {
-        if (item.rows[0] == "工作人员操作位" || item.rows[0] == "管线洞口") {
+      let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];
+      arr.forEach((item) => {
+        if (arr1.includes(item.rows[0])) {
           item.rows[1] = "/";
         }
         if (item.rows[1]) {
@@ -291,10 +297,10 @@ export default {
         });
       } else {
         this.data.valueData.point[b].rows.forEach((item, index) => {
-          if (index > 2 && index < 7) {
+          if (index > 2 && index < 6) {
             this.data.valueData.point[b].rows[index] = "/";
-          } else if (index == 8) {
-            this.data.valueData.point[b].rows[8] = val;
+          } else if (index == 8 || index == 6) {
+            this.data.valueData.point[b].rows[index] = val;
           }
         });
       }
@@ -314,44 +320,44 @@ export default {
           }
         });
       });
-    }
+    },
   },
   computed: {
     ...mapState({
-      JudgePhotography: state => state.StomatologyLinkage.JudgePhotography,
-      purposeDetection: state => state.StomatologyLinkage.purposeDetection,
-      timeExposure: state => state.StomatologyLinkage.timeExposure
-    })
+      JudgePhotography: (state) => state.StomatologyLinkage.JudgePhotography,
+      purposeDetection: (state) => state.StomatologyLinkage.purposeDetection,
+      timeExposure: (state) => state.StomatologyLinkage.timeExposure,
+    }),
   },
   watch: {
     purposeDetection() {
       this.modularShow();
     },
-    "data.valueData.testNum": function(val) {
+    "data.valueData.testNum": function (val) {
       if (val === "1") {
         this.data.valueData.testPoinrNum = [true, false, false];
       } else if (val === "3") {
         this.data.valueData.testPoinrNum = [true, true, true];
       }
     },
-    "data.valueData.testPoinrNum": function(arr) {
+    "data.valueData.testPoinrNum": function (arr) {
       if (this.target === "0") {
         arr.forEach((item, index) => {
           if (item === false) {
-            this.data.valueData.point.forEach(item2 => {
+            this.data.valueData.point.forEach((item2) => {
               item2.rows[index + 3] = "";
             });
           }
         });
       }
     },
-    "data.valueData.point": function(arr) {
+    "data.valueData.point": function (arr) {
       this.init(arr);
-    }
+    },
   },
   mounted() {
     this.init(this.data.valueData.point);
-  }
+  },
 };
 </script>
 

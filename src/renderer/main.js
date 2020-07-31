@@ -14,6 +14,7 @@ import { ipcRenderer, remote } from "electron";
 import "viewerjs/dist/viewer.css";
 import axios from "./utils/request";
 import Viewer from "v-viewer";
+import MethodsRe from 'methods-remons'
 Vue.use(Viewer, {
   defaultOptions: {
     zIndex: 9999,
@@ -133,6 +134,7 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$message = Message;
+Vue.prototype.MethodsRe=MethodsRe
 Vue.prototype.$ = $;
 Vue.prototype.hostUrl = "http://120.77.153.63:8033";
 Vue.prototype.global = global;

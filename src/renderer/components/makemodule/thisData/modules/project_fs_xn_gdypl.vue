@@ -295,7 +295,8 @@ export default {
     })
   },
   components: {},
-  mounted() {}
+  mounted() {
+  }
 };
 </script>
 

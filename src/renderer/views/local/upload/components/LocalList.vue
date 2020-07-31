@@ -142,16 +142,18 @@
       }}</el-button>
     </div>
     <el-dialog :visible.sync="showSignature">
-      <signature @download="toUpload"></signature>
+      <signature @download="toUpload" v-if="showSignature"></signature>
     </el-dialog>
     <el-dialog :visible.sync="uploadDianWeiFlag" :modal="false">
       <div style="min-height: 300px;">
         <el-upload
+          :limit="1"
           :action="hostUrl + '/upload_image'"
           :data="{ taskId: [nowRow.taskId], type: [0] }"
           :on-success="fileSuccess"
           :on-error="fileError"
           :before-upload="beforeUpload"
+          :on-exceed="handleExceed"
         >
           <el-button size="small" type="primary">选择点位图</el-button>
           <div style="margin: 20px 0;">
@@ -225,6 +227,11 @@ export default {
     },
   },
   methods: {
+    handleExceed(data) {
+      if (data.length) {
+        this.$message.error("您已上传图片，请删除后重试");
+      }
+    },
     beforeUpload(file) {
       return new Promise((resolve, reject) => {
         const isJPG =
@@ -369,6 +376,10 @@ export default {
       let ids = this.multipleSelection.map((item) => {
         return item.taskId;
       });
+      if (ids.length > 1) {
+        this.$message.warning("您只能选择一个任务");
+        return;
+      }
       this.multipleSelection.map((item) => {
         if (item.isDocImg !== 0) {
           item.pointUrl ? "" : (flag = 0);

@@ -63,7 +63,7 @@ const constantRouterMap = [
         component: () => import("../views/local/Review/index"),
       },
       {
-        name: "doc-entering",
+        name: "local-doc-entering",
         path: "doc-entering/:target/:ids",
         component: () => import("../views/docEntering/index"),
       },

@@ -5,9 +5,9 @@
     :id="data.valueData.testProjectId"
   >
     <div :class="{ eventCover: !ableInput }"></div>
-    <table class="myTable" style="width: 712px">
+    <table class="myTable" style="width: 712px;">
       <tr>
-        <td width="202">
+        <td width="182">
           重复测量次数
         </td>
         <td>
@@ -30,13 +30,13 @@
       </tr>
     </table>
 
-    <table class="myTable" style="width: 712px;table-layout:auto !important">
+    <table class="myTable" style="width: 712px; table-layout: auto !important;">
       <tr class="delLine">
         <td rowspan="2" width="50">序号</td>
         <td rowspan="2" colspan="2" width="100">检测点位置</td>
         <td
           width="200"
-          :colspan="data.valueData.testPoinrNum.filter(item => item).length"
+          :colspan="data.valueData.testPoinrNum.filter((item) => item).length"
           :rowspan="
             data.valueData.testPoinrNum[1] === false &&
             data.valueData.testPoinrNum[2] === false
@@ -52,7 +52,7 @@
               @returnVal="changeCompany"
               :Judge="true"
               class="___absolute"
-              style="width:100px;top: 0px; left: 80px;"
+              style="width: 100px; top: 0px; left: 80px;"
               :special="1"
               :receive="''"
               :single="true"
@@ -133,7 +133,7 @@
         <td>
           <divModel
             v-model="item.rows[4]"
-            style="width:100%;text-align: center;"
+            style="width: 100%; text-align: center;"
             :edit="false"
             :is-computer="true"
             :computers="
@@ -150,7 +150,7 @@
           <div style="text-align: center;">{{ item.rows[6] }}</div>
         </td>
         <td>
-          <div style="width:100%;text-align: center;">
+          <div style="width: 100%; text-align: center;">
             <selectModel
               @returnVal="changeRemark($event, index)"
               :Judge="true"
@@ -179,7 +179,7 @@ export default {
   data() {
     return {
       company: ["μSv/h", "nSv/h"],
-      remark: ["无法到达", "不适用", "/"]
+      remark: ["无法到达", "不适用", "/"],
     };
   },
   props: [
@@ -192,12 +192,13 @@ export default {
     "watchSign",
     "isTemplate",
     "ableInput",
-    "target"
+    "target",
   ],
   methods: {
     init(arr) {
-      arr.forEach(item => {
-        if (item.rows[0] == "工作人员操作位" || item.rows[0] == "管线洞口") {
+      let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];
+      arr.forEach((item) => {
+        if (arr1.includes(item.rows[0])) {
           item.rows[9] = "/";
         }
         item.rows[9]
@@ -257,7 +258,7 @@ export default {
         });
       } else {
         this.data.valueData.point[b].rows.forEach((item, index) => {
-          if (index > 0 && index < 7) {
+          if (index > 0 && index < 6) {
             this.data.valueData.point[b].rows[index] = "/";
           } else if (index == 8) {
             this.data.valueData.point[b].rows[7] = val;
@@ -312,42 +313,42 @@ export default {
           }
         });
       });
-    }
+    },
   },
   computed: {
     ...mapState({
-      purposeDetection: state => state.StomatologyLinkage.purposeDetection
-    })
+      purposeDetection: (state) => state.StomatologyLinkage.purposeDetection,
+    }),
   },
   watch: {
     purposeDetection() {
       this.modularShow();
     },
-    "data.valueData.testNum": function(val) {
+    "data.valueData.testNum": function (val) {
       if (val === "1") {
         this.data.valueData.testPoinrNum = [true, false, false];
       } else if (val === "3") {
         this.data.valueData.testPoinrNum = [true, true, true];
       }
     },
-    "data.valueData.testPoinrNum": function(arr) {
+    "data.valueData.testPoinrNum": function (arr) {
       if (this.target === "0") {
         arr.forEach((item, index) => {
           if (item === false) {
-            this.data.valueData.point.forEach(item2 => {
+            this.data.valueData.point.forEach((item2) => {
               item2.rows[index + 1] = "";
             });
           }
         });
       }
     },
-    "data.valueData.point": function(arr) {
+    "data.valueData.point": function (arr) {
       this.init(arr);
-    }
+    },
   },
   mounted() {
     this.init(this.data.valueData.point);
-  }
+  },
 };
 </script>
 
