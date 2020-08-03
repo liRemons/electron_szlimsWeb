@@ -87,13 +87,13 @@ let webConfig = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        compress: {
-          drop_console: true,
-        },
-      },
-    }),
+    // new UglifyJsPlugin({
+    //   uglifyOptions: {
+    //     compress: {
+    //       drop_console: true,
+    //     },
+    //   },
+    // }),
   ],
   output: {
     filename: "[name].js",

@@ -115,8 +115,9 @@ export default {
     setTimeout(() => {
       this.getUpdateVersion();
     }, 1000);
+
     setInterval(() => {
-      this.getStaffState();
+      if (window.navigator.onLine) this.getStaffState();
     }, 10000);
   },
   methods: {
@@ -345,7 +346,6 @@ export default {
         this.$store.commit("SESSIONSTORAGE_REMOVE", key);
       };
     }
-
     Number.prototype.toFixed46 = function (
       decimalPlaces,
       Judge = false,

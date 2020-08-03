@@ -1029,7 +1029,9 @@ export default {
         item.isDocImg !== 0 ? (flag = true) : "";
       });
       if (flag) {
-        if (result || result2) {
+        if (result && result2) {
+          
+        }else{
           this.$notify({
             type: "error",
             message: "签名照或点位图未上传！",

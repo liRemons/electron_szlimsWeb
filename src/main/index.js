@@ -93,7 +93,6 @@ function createWindow() {
       });
     }
   );
-  
 }
 
 // 注册右键菜单
@@ -103,7 +102,8 @@ ipcMain.on("sigShowRightClickMenu", (event, arg) => {
   menu.append(
     new MenuItem({
       label: "刷新",
-      enabled: arg !== "doc-entering" || process.env.NODE_ENV == "development",
+      enabled:
+        arg !== "local-doc-entering" || process.env.NODE_ENV == "development",
       role: "reload",
       accelerator: "CommandOrControl+F5",
     })
@@ -124,7 +124,6 @@ ipcMain.on("sigShowRightClickMenu", (event, arg) => {
   const win = BrowserWindow.fromWebContents(event.sender);
   menu.popup(win);
 });
-
 
 app.on("ready", () => {
   createWindow();
@@ -168,15 +167,14 @@ ipcMain.on("close", (event, arg) => {
   // event.preventDefault();
   // event.sender.send('action', 'exiting');
 });
-ipcMain.on('reqaction', (event, arg) => {
-  console.log('zhu jin cheng:', arg)
-  switch(arg){
-    case 'exit':
-      app.exit()  // 退出所有窗口，注意这里使用 app.quit() 无效
+ipcMain.on("reqaction", (event, arg) => {
+  console.log("zhu jin cheng:", arg);
+  switch (arg) {
+    case "exit":
+      app.exit(); // 退出所有窗口，注意这里使用 app.quit() 无效
       break;
   }
 });
-
 function mkdir(fileName) {
   fs.exists(fileName, function(e) {
     if (e) {
@@ -190,8 +188,17 @@ function mkdir(fileName) {
   });
 }
 mkdir("./data");
+mkdir(`C:/Program Files/szlimsLocal/`);
 ipcMain.on("mkdir", function(event, arg) {
   mkdir(`./data/${arg.staffPhone}`);
+  mkdir(`C:/Program Files/szlimsLocal/${arg.staffPhone}`);
+  let file = path.join(
+    `C:/Program Files/szlimsLocal/${arg.staffPhone}`,
+    "localStorage.json"
+  );
+  setTimeout(() => {
+    fs.writeFile(file, "", "utf8", (err, data) => {});
+  }, 1000);
 });
 
 // 读取文件
@@ -245,6 +252,7 @@ ipcMain.on("delFile", function(event, arg) {
 });
 ipcMain.on("delDir", function(event, arg) {
   delDir("./data");
+  delDir("C:/Program Files/szlimsLocal");
   function delDir(path) {
     let files = [];
     if (fs.existsSync(path)) {
@@ -260,17 +268,8 @@ ipcMain.on("delDir", function(event, arg) {
       fs.rmdirSync(path);
     }
   }
-
-  fs.exists("./data", function(e) {
-    if (e) {
-    } else {
-      fs.mkdir("./data", function(err) {
-        if (err) {
-          return console.error(err);
-        }
-      });
-    }
-  });
+  mkdir(`C:/Program Files/szlimsLocal/`);
+  mkdir("./data");
 });
 /*隐藏electron创建的菜单栏*/
 // Menu.setApplicationMenu(null);
