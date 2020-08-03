@@ -485,9 +485,10 @@ export default {
           });
           return;
         }
-        this.$store.dispatch("actionsDeviceFactorObj", rowObj);
+       
         if (purpose === "性能") {
           this.$store.dispatch("actionsDeviceFactor", rowObj.deviceFactor);
+          this.$store.dispatch("actionsDeviceFactorObj", rowObj);
         } else if (purpose === "防护") {
           this.$store.commit("changePurposeFH", "防护");
           this.$store.dispatch("actionsDeviceFactor2", rowObj.deviceFactor);
@@ -555,14 +556,14 @@ export default {
       "actionsPurposeDetection",
       this.data.valueData.purposeDetection
     );
+    
     let xnArr = this.data.valueData.point.filter(
       (item) => item.purpose == "性能"
     );
     if (xnArr.length) {
-      this.$store.dispatch(
-        "actionsDeviceFactor",
-        JSON.stringify(xnArr[0].deviceFactor)
-      );
+      this.$store.dispatch("actionsDeviceFactor", xnArr[0].deviceFactor);
+     
+      this.$store.dispatch("actionsDeviceFactorObj",  xnArr[0].deviceObj);
     }
     let fhArr = this.data.valueData.point.filter(
       (item) => item.purpose == "防护"

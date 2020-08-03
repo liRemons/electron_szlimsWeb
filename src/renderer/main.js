@@ -143,8 +143,8 @@ Vue.prototype.computeObj = computes;
 Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
 Vue.prototype.$updateAxios = axios.updateAxios;
-Vue.prototype.$isUpdate = false;
-Vue.prototype.version = "0.6";
+Vue.prototype.$isUpdate = true;
+Vue.prototype.version = "0.7";
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
   let index = "";
@@ -181,8 +181,6 @@ Vue.prototype.getFactor = function(val, arr) {
     result = parseFloat(
       ((max - min) * (val - valArr1[0])) / (valArr2[0] - valArr1[0]) + min
     );
-
-    console.log(result);
 
     // result = Intercept > 0 ? result : result.split('.')[0]
   } else {
