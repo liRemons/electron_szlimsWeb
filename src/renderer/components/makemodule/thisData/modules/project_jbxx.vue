@@ -485,7 +485,7 @@ export default {
           });
           return;
         }
-       
+
         if (purpose === "性能") {
           this.$store.dispatch("actionsDeviceFactor", rowObj.deviceFactor);
           this.$store.dispatch("actionsDeviceFactorObj", rowObj);
@@ -500,12 +500,8 @@ export default {
       this.nowItem.rows[2] = [rowObj.probeNum, rowObj.deviceNum];
       this.nowItem.rows[3] = [rowObj.correctNum, rowObj.correctNum1];
       this.nowItem.rows[4] = [
-        new Date(rowObj.correctTime.replace(/-/g, "/")).format(
-          "yyyy/MM/dd hh:mm:ss"
-        ),
-        new Date(rowObj.correctTime1.replace(/-/g, "/")).format(
-          "yyyy/MM/dd hh:mm:ss"
-        ),
+        rowObj.correctTime.split(" ")[0],
+        rowObj.correctTime1 && rowObj.correctTime1.split(" ")[0],
       ];
       this.nowItem.rows[5] = rowObj.id;
       this.nowItem.deviceFactor = rowObj.deviceFactor;
@@ -556,21 +552,22 @@ export default {
       "actionsPurposeDetection",
       this.data.valueData.purposeDetection
     );
-    
+
     let xnArr = this.data.valueData.point.filter(
       (item) => item.purpose == "性能"
     );
     if (xnArr.length) {
-      this.$store.dispatch("actionsDeviceFactor", xnArr[0].deviceFactor);
-     
-      this.$store.dispatch("actionsDeviceFactorObj",  xnArr[0].deviceObj);
+      // this.$store.dispatch("actionsDeviceFactor", xnArr[0].deviceFactor);
+      this.$store.commit("saveDeviceFactor", xnArr[0].deviceFactor);
+      this.$store.commit("saveDeviceFactorObj", xnArr[0].deviceObj);
+      // this.$store.dispatch("actionsDeviceFactorObj",  xnArr[0].deviceObj);
     }
     let fhArr = this.data.valueData.point.filter(
       (item) => item.purpose == "防护"
     );
     if (fhArr.length) {
       this.$store.commit("changePurposeFH", "防护");
-      this.$store.dispatch("actionsDeviceFactor2", fhArr[0].deviceFactor);
+      this.$store.commit("saveDeviceFactor2", fhArr[0].deviceFactor);
     }
   },
 };
