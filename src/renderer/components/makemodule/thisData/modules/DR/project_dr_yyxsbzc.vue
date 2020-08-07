@@ -3,7 +3,7 @@
     style="text-align: center;line-height: 30px; padding-top: 10px;"
     class="___relative"
   >
-    <div :class="{ eventCover: target !== '0' }"></div>
+    <div :class="{ eventCover:!ableInput }"></div>
     <div>
       <div
         style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 10px; min-height: 30px;"
@@ -143,7 +143,7 @@
 <script>
 window.hh = {
   name: "project_dr_yyxsbzc",
-  props: ["data", "jsonString", "target"],
+  props: ["data","ableInput", "jsonString", "target"],
   data() {
     return {
       content1:

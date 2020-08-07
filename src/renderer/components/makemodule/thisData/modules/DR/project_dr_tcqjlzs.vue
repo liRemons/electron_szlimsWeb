@@ -1,6 +1,6 @@
 <template>
   <div style="line-height: 30px; padding-top: 10px;" class="___relative">
-    <div :class="{ eventCover: target !== '0' }"></div>
+    <div :class="{ eventCover:!ableInput }"></div>
     <div style="text-align: center;">
       <div
         style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
@@ -262,7 +262,7 @@
 <script>
 export default {
   name: "project_dr_tcqjlzs",
-  props: ["data", "jsonString", "target"],
+  props: ["data","ableInput", "jsonString", "target"],
   data() {
     return {
       showInput: false

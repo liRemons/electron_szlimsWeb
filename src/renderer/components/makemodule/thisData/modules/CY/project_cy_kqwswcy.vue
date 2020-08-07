@@ -7,7 +7,8 @@
       }}{{ data.valueData.detectionLimitPieces }} &nbsp;&nbsp;&nbsp;&nbsp;
       检测依据:{{ data.valueData.sysStandardNum }}
     </div>
-    <table class="myTable">
+    <table class="myTable ___relative">
+      <div :class="{ eventCover: !ableInput }"></div>
       <tr class="delLine">
         <td style="width: 150px;">
           样品编号
@@ -75,7 +76,7 @@
         </td>
         <td>
           <myInput v-model="item.Remarks"></myInput>
-          <div class="___relative" v-if="target ==0">
+          <div class="___relative" v-if="target ==0&&ableInput">
             <utilBar
               :data="data"
               :index="index"
@@ -149,7 +150,7 @@
 <script>
 export default {
   name: "project_cy_kqwswcy",
-  props: ["data", "jsonString", "target", "task"],
+  props: ["data", "jsonString", "target", "task","ableInput"],
   data() {
     return {
       selectItem: "",

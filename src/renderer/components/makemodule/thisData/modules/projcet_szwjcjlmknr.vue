@@ -6,99 +6,7 @@
     :id="data.valueData.testProjectId"
   >
     <div :class="{ eventCover: !ableInput }"></div>
-    <!--<div class="modules_1_tableBox ___relative">
-				<div class="___relative ___module_frame_Box" style="border-top: solid 1px black;">
-						<div class="___relative borderBottom">
-								<div class="___absolute Full tc borderRight" style="width: 80px;">
-										<span class="heightCenter3">序号</span>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 180px;left:80px;">
-										<span class="heightCenter3">检测点位置</span>
-								</div>
-								<div class="___relative" style="left:260px;">
-										<div style="width: 200px;" class="___relative borderRight">
-												<div style="width: 200px;" class="___relative borderBottom">
-														<div class="tc" style="height:32px;">
-																<div class="___relative">
-																		<span class="___absolute" style="left: 30px;">测量值（单位:</span>
-																		<selectModel @returnVal="changeCompany"
-																								 class="___relative"
-																								 :Judge="true"
-																								 style="left: 45px;"
-																								 :special="1"
-																								 :receive="''"
-																								 :single="true"
-																								 :rows="false"
-																								 :transmitText="data.valueData.company"
-																								 :list="company" :Obj="''">
-																		</selectModel>
-																		<span class="___absolute" style="left:165px; top: 0px;">)</span>
-																</div>
-														</div>
-												</div>
-												<div style="width: 200px;" class="___relative">&nbsp;
-														<div style="width: 33.333%;" :class="index!=2 ? 'borderRight':''"
-																 :style="{left:(index*33.333)+'%'}" v-for="(item,index) in 3"
-																 class="___absolute tc t0 Full">
-																<div>{{index+1}}</div>
-														</div>
-												</div>
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 150px;left:460px;">
-										<span class="heightCenter3" style="line-height: 16px;">*报告值(单<br>位：{{data.valueData.company}})</span>
-								</div>
-								<div class="___absolute Full tc" style="width: 100px;right: 0">
-										<span class="heightCenter3">标准差</span>
-								</div>
-						</div>
-						<div class="___relative" :class="index!=data.valueData.point.length-1 ? 'borderBottom':''"
-								 v-for="(item,index) in data.valueData.point">
-								<div class="___relative tc borderRight" style="width: 80px;">
-										<div class="___relative w100">
-												<div class="tc" style="height:32px;">
-														<span>{{item.index}}</span>
-												</div>
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 180px;left:80px;">
-										<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg">
-												{{item.rows[0]}}
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 200px;left:260px;">&nbsp;
-										<div style="width: 33.333%;" class="___absolute borderRight tc t0 Full">
-												<divModel v-model="item.rows[1]" style="width:100%;text-align: center;"
-																	class="Full warp2 rowsInput2 hide focusBg"></divModel>
-										</div>
-										<div style="width: 33.333%;left:33.333%" class="___absolute borderRight tc t0 Full">
-												<divModel v-model="item.rows[2]" style="width:100%;text-align: center;"
-																	class="Full warp2 rowsInput2 hide focusBg"></divModel>
-										</div>
-										<div style="width: 33.333%;left:66.666%" class="___absolute tc t0 Full">
-												<divModel v-model="item.rows[3]" style="width:100%;text-align: center;"
-																	class="Full warp2 rowsInput2 hide focusBg"></divModel>
-										</div>
-								</div>
-								<div class="___absolute Full tc borderRight" style="width: 150px;left:460px;">
-										<divModel v-model="item.rows[4]"
-															style="width:100%;text-align: center;"
-															class="Full warp2 rowsInput2 hide focusBg"
-															:edit="false"
-															:is-computer="true"
-															:computers="changeNum(item.rows[1],item.rows[2],item.rows[3],index)"
-															:computerFormula="'gs11'">
-										</divModel>
-								</div>
-								<div class="___absolute Full tc" style="width: 100px;right: 0">
-										<div style="width:100%;text-align: center;" class="Full warp2 rowsInput2 hide focusBg">
-												{{item.rows[5]}}
-										</div>
-								</div>
-						</div>
-				</div>
-		</div>-->
-    <table class="myTable" style="width: 712px">
+    <table class="myTable" style="width: 712px;">
       <tr>
         <td width="170">
           重复测量次数
@@ -123,12 +31,12 @@
       </tr>
     </table>
 
-    <table class="myTable" style="width: 712px">
+    <table class="myTable" style="width: 712px;">
       <tr class="delLine">
         <td rowspan="2">序号</td>
         <td rowspan="2" width="200">检测点位置</td>
         <td
-          :colspan="data.valueData.testPoinrNum.filter(item => item).length"
+          :colspan="data.valueData.testPoinrNum.filter((item) => item).length"
           style="width: 250px;"
         >
           <div class="___relative">
@@ -147,7 +55,7 @@
               :Obj="''"
             >
             </selectModel>
-            <span class="___absolute" style="left:165px; top: 0px;">)</span>
+            <span class="___absolute" style="left: 165px; top: 0px;">)</span>
           </div>
         </td>
         <td rowspan="2">
@@ -207,7 +115,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      company: ["μSv/h", "nSv/h"]
+      company: ["μSv/h", "nSv/h"],
     };
   },
   props: [
@@ -220,7 +128,7 @@ export default {
     "watchSign",
     "isTemplate",
     "ableInput",
-    "target"
+    "target",
   ],
   methods: {
     modularShow() {
@@ -256,10 +164,10 @@ export default {
             total / judgeNum.length
           ).toFixed(2);
         }
-        if(num1==''&&num2==''&&num3==''){
-        this.data.valueData.point[index].rows[4] = ''
-        this.data.valueData.point[index].rows[5] = ''
-      }
+        if (num1 == "" && num2 == "" && num3 == "") {
+          this.data.valueData.point[index].rows[4] = "";
+          this.data.valueData.point[index].rows[5] = "";
+        }
       } catch (e) {}
     },
     judgeNum(arr) {
@@ -313,37 +221,37 @@ export default {
           }
         });
       });
-    }
+    },
   },
   computed: {
     ...mapState({
-      surgeon: state => state.StomatologyLinkage.surgeon
-    })
+      surgeon: (state) => state.StomatologyLinkage.surgeon,
+    }),
   },
   watch: {
     surgeon() {
       this.modularShow();
     },
-    "data.valueData.testNum": function(val) {
+    "data.valueData.testNum": function (val) {
       if (val === "1") {
         this.data.valueData.testPoinrNum = [true, false, false];
       } else if (val === "3") {
         this.data.valueData.testPoinrNum = [true, true, true];
       }
     },
-    "data.valueData.testPoinrNum": function(arr) {
+    "data.valueData.testPoinrNum": function (arr) {
       if (this.target === "0") {
         arr.forEach((item, index) => {
           if (item === false) {
-            this.data.valueData.point.forEach(item2 => {
+            this.data.valueData.point.forEach((item2) => {
               item2.rows[index + 1] = "";
             });
           }
         });
       }
-    }
+    },
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

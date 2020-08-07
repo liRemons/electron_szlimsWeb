@@ -100,7 +100,7 @@
                   :showing="taskData.showing"
                   :watchSign="watchSign"
                   :isTemplate="isTemplate"
-                  :ableInput="target === '0'"
+                  :ableInput="ableInput"
                   :auxiliaryArr="auxiliaryArr"
                   :mainArr="mainArr"
                   :headInput="headInput"
@@ -234,6 +234,8 @@ export default {
   data() {
     return {
       heads,
+      staffId: "",
+      delCreateTime: "",
       btnFlag: true,
       modules,
       aObjectsIndex: "",
@@ -288,6 +290,7 @@ export default {
       contentArray: [],
       SampleNumJudge: true,
       requestNo: 0,
+      docPass: 0,
     };
   },
   props: {
@@ -652,6 +655,34 @@ export default {
           }
         });
     },
+    // 修改历史记录
+    getHistoryInit() {
+      this.$nextTick(() => {
+        if (this.docPass == 1) {
+          document.querySelectorAll(".__functionBox").forEach((item) => {
+            item.style.display = "none";
+          });
+          document.querySelectorAll(".leftBtn").forEach((item) => {
+            item.style.display = "none";
+          });
+
+          this.readFile(JSON.parse(getToken()), "noPass");
+          this.readFileEvent().then((reson) => {
+            let noPass = JSON.parse(reson);
+            noPass.list.forEach((item) => {
+              if (item.taskId == this.task.id && !item.history) {
+                item.history = this.getHistory();
+              }
+            });
+            let dataList = {
+              taskId: "noPass",
+              list: noPass.list,
+            };
+            this.whrite(dataList, JSON.parse(getToken()));
+          });
+        }
+      });
+    },
     // 仪器查询    单位ID
     InstrumentQuery(taskId, subCompanyId) {
       if (this.$route.params.target == 0) {
@@ -679,6 +710,7 @@ export default {
             that.$set(item.data.valueData, "deviceData2", res.data);
           });
           that.componentFlag = true;
+          that.getHistoryInit();
           let data = res.data;
           let data_fz = res.data_fz;
           that.deviceData = data;
@@ -704,15 +736,16 @@ export default {
       //0 不可修改 1 只能修改头数据 3可以修改所有数据
       this.InstrumentQuery(this.task.id, this.task.subCompanyId);
       this.pass = this.task.pass;
+      this.docPass = this.task.docPass;
       this.taskData.disWs = this.task.deviceMainId;
       this.taskData.id = this.task.id;
       if (this.pass == 1 || this.pass == 3) {
         // 0是未审核，1是未通过，2是通过，3是未上传
-        if (this.pass == 1) {
+        if (this.pass == 1 && this.docPass == 1) {
           if (this.android == "hide") {
             this.headInput = true;
             this.isTemplate = false;
-            this.ableInput = true;
+            this.ableInput = false;
           } else {
             this.ipdEdit = "ipdEdit";
           }
@@ -957,6 +990,8 @@ export default {
             if (this.task.deviceMainId == 4) {
               let reason = `取消对${obj.testProjectChineseName}的检测, 原因是${value}。`;
               this.reasonMsgArr.push({
+                staffId: JSON.parse(getToken()).id,
+                createTime: this.MethodsRe.dateFormat(),
                 testprojectName: obj.testProjectChineseName,
                 reason,
                 testProjectId: obj.testProjectId,
@@ -970,6 +1005,8 @@ export default {
             } else {
               let reason = `取消对${obj.testProjectChineseName}的检测, 原因是${value}。`;
               this.reasonMsgArr.push({
+                staffId: JSON.parse(getToken()).id,
+                createTime: this.MethodsRe.dateFormat(),
                 testprojectName: obj.testProjectChineseName,
                 reason,
                 testProjectId: obj.testProjectId,
@@ -1318,6 +1355,8 @@ export default {
 
         let reason = `取消对${this.deleteObj.data.valueData.testProjectChineseName}的检测, 原因是${this.reasonMsg}。`;
         this.reasonMsgArr.push({
+          staffId: JSON.parse(getToken()).id,
+          createTime: this.MethodsRe.dateFormat(),
           testprojectName: this.deleteObj.data.valueData.testProjectChineseName,
           reason,
         });
@@ -1613,7 +1652,7 @@ export default {
         this.unitUrl.filter((item) => this.taskData.id == item.id)[0].unitUrl
       );
       getImageBase64Data(
-        "http://120.77.153.63:8022" + this.taskData.unitUrl
+        "http://120.77.153.63:8033" + this.taskData.unitUrl
       ).then((res) => {
         this.taskData.showing[0][0]["data"]["valueData"][
           "imgBase64Three"

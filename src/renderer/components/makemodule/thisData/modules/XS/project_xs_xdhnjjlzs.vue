@@ -1,152 +1,199 @@
 <template>
-	<div class="___relative">
-		<div :class="{eventCover:target==='4'}"></div>
-		<projectHead v-if="headShow()" :data="data" :target="target" :col="10"></projectHead>
-		<table class="myTable" ref="ben">
-
-			<tr class="delLine">
-				<td rowspan="2">样品编号</td>
-				<td rowspan="2">样品名称</td>
-				<td colspan="2">
-					<myInput style="width:40px;border-bottom: 1px solid;height: 26px;"
-									 v-model="data.valueData.sysDilutionDegree"></myInput>
-					℃培养
-					<myInput style="width:40px;border-bottom: 1px solid;height: 26px;"
-									 v-model="data.valueData.sysDilutionHour"></myInput>
-					h后各稀释度平皿计数(CFU)
-				</td>
-				<td rowspan="2">
-					<myInput style="width:40px;border-bottom: 1px solid;height: 26px;"
-									 v-model="data.valueData.sysDilutionDegree"></myInput>
-					℃培养
-					<myInput style="width:40px;border-bottom: 1px solid;height: 26px;"
-									 v-model="data.valueData.sysDilutionHour"></myInput>
-					h后<br>滤膜平皿计数(CFU)
-				</td>
-				<td rowspan="2">报告值(CFU/件)</td>
-			</tr>
-			<tr>
-				<td>1</td>
-				<td>2</td>
-			</tr>
-			<tr v-for="(item, index) in data.valueData.point" :key="index">
-				<td><!--样品编号-->
-					{{name(item)}}
-				</td>
-				<td>
-					<span>{{item.sampleName}}</span>
-				</td>
-				<td>
-					<myInput @change.native="changeNum(index)" style="text-align: center" v-model="item.item1"
-									 :defaultValue="item.item1"></myInput>
-				</td>
-				<td>
-					<myInput @change.native="changeNum(index)" style="text-align: center" v-model="item.item2"
-									 :defaultValue="item.item2"></myInput>
-				</td>
-				<td>
-					<myInput @change.native="changeNum(index)" style="text-align: center" v-model="item.item3"
-									 :defaultValue="item.item3"></myInput>
-				</td>
-				<td style="line-height:32px;">
-					<span>{{item.sysReport}}</span>
-				</td>
-			</tr>
-			<tr>
-				<td>备注</td>
-				<td colspan="5">
-					<myInput v-model="data.valueData.remarks" :defaultValue="data.valueData.remarks"></myInput>
-				</td>
-			</tr>
-		</table>
-	</div>
+  <div class="___relative">
+    <div :class="{ eventCover: target === '4' }"></div>
+    <projectHead
+      v-if="headShow()"
+      :data="data"
+      :target="target"
+      :col="10"
+    ></projectHead>
+    <table class="myTable" ref="ben">
+      <tr class="delLine">
+        <td rowspan="2">样品编号</td>
+        <td rowspan="2">样品名称</td>
+        <td colspan="2">
+          <myInput
+            style="width: 40px; border-bottom: 1px solid; height: 26px;"
+            v-model="data.valueData.sysDilutionDegree"
+          ></myInput>
+          ℃培养
+          <myInput
+            style="width: 40px; border-bottom: 1px solid; height: 26px;"
+            v-model="data.valueData.sysDilutionHour"
+          ></myInput>
+          h后各稀释度平皿计数(CFU)
+        </td>
+        <td rowspan="2">
+          <myInput
+            style="width: 40px; border-bottom: 1px solid; height: 26px;"
+            v-model="data.valueData.sysDilutionDegree"
+          ></myInput>
+          ℃培养
+          <myInput
+            style="width: 40px; border-bottom: 1px solid; height: 26px;"
+            v-model="data.valueData.sysDilutionHour"
+          ></myInput>
+          h后<br />滤膜平皿计数(CFU)
+        </td>
+        <td rowspan="2">报告值(CFU/件)</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>2</td>
+      </tr>
+      <tr v-for="(item, index) in data.valueData.point" :key="index">
+        <td>
+          <!--样品编号-->
+          {{ name(item) }}
+        </td>
+        <td>
+          <span>{{ item.sampleName }}</span>
+        </td>
+        <td>
+          <myInput
+            @change.native="changeNum(index)"
+            style="text-align: center;"
+            v-model="item.item1"
+            :defaultValue="item.item1"
+          ></myInput>
+        </td>
+        <td>
+          <myInput
+            @change.native="changeNum(index)"
+            style="text-align: center;"
+            v-model="item.item2"
+            :defaultValue="item.item2"
+          ></myInput>
+        </td>
+        <td>
+          <myInput
+            @change.native="changeNum(index)"
+            style="text-align: center;"
+            v-model="item.item3"
+            :defaultValue="item.item3"
+          ></myInput>
+        </td>
+        <td style="line-height: 32px;">
+          <span>{{ item.sysReport }}</span>
+        </td>
+      </tr>
+      <tr>
+        <td>备注</td>
+        <td colspan="5">
+          <myInput
+            v-model="data.valueData.remarks"
+            :defaultValue="data.valueData.remarks"
+          ></myInput>
+        </td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
-  import projectHead from "../../project_head";
+import projectHead from "../../project_head";
 
-  export default {
-    data() {
-      return {
-        showTime: false,
-        devices: [],
-        testTiem: ""
+export default {
+  data() {
+    return {
+      showTime: false,
+      devices: [],
+      testTiem: "",
+    };
+  },
+  components: {
+    projectHead,
+  },
+  props: [
+    "ipdTemplate",
+    "data",
+    "pageNumber",
+    "thisPageIndex",
+    "jsonString",
+    "showing",
+    "watchSign",
+    "isTemplate",
+    "ableInput",
+    "target",
+    "detectionLimitObj",
+  ],
+  methods: {
+    headShow() {
+      if (this.pageNumber > 0) {
+        if (this.thisPageIndex == 0) {
+          let showlLen = this.showing[this.pageNumber - 1].length - 1;
+          if (
+            this.showing[this.pageNumber - 1][showlLen].to !==
+            this.data.valueData.testProject
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          if (
+            this.showing[this.pageNumber][this.thisPageIndex - 1].to !==
+            this.data.valueData.testProject
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      } else {
+        return true;
       }
     },
-    components: {
-      projectHead
+    isNumber(val) {
+      if (parseFloat(val).toString() == "NaN") {
+        return false;
+      } else {
+        return true;
+      }
     },
-    props: ['ipdTemplate', 'data', 'pageNumber', 'thisPageIndex', 'jsonString', 'showing', 'watchSign', 'isTemplate', 'ableInput', 'target', 'detectionLimitObj'],
-    methods: {
-      headShow() {
-        if (this.pageNumber > 0) {
-          if (this.thisPageIndex == 0) {
-            let showlLen = this.showing[this.pageNumber - 1].length - 1;
-            if (this.showing[this.pageNumber - 1][showlLen].to !== this.data.valueData.testProject) {
-              return true
-            } else {
-              return false
-            }
+    changeNum(index) {
+      let item1 = parseFloat(this.data.valueData.point[index].item1);
+      let item2 = parseFloat(this.data.valueData.point[index].item2);
+      let item3 = this.data.valueData.point[index].item3;
+      if (this.isNumber(item1) && this.isNumber(item2) && item3 != "") {
+        let result = "";
+        if (this.isNumber(item3)) {
+          if (item1 === 0 && item2 === 0 && item3 === 0) {
+            result = "＜1";
           } else {
-            if (this.showing[this.pageNumber][this.thisPageIndex - 1].to !== this.data.valueData.testProject) {
-              return true
-            } else {
-              return false
-            }
+            result = (item1 + item2) / 2 + parseFloat(item3);
           }
-        } else {
-          return true;
+        } else if ([item3].includes("多不可计")) {
+          result = ((item1 + item2) / 2) * 50;
         }
-      },
-      isNumber(val) {
-        if (parseFloat(val).toString() == "NaN") {
-          return false;
-        } else {
-          return true;
-        }
-      },
-      changeNum(index) {
-        let item1 = parseFloat(this.data.valueData.point[index].item1);
-        let item2 = parseFloat(this.data.valueData.point[index].item2);
-        let item3 = this.data.valueData.point[index].item3;
-        if (this.isNumber(item1) && this.isNumber(item2) && item3 != '') {
-          let result = '';
-          if (this.isNumber(item3)) {
-            if (item1 === 0 && item2 === 0 && item3 === 0) {
-              result = '＜1';
-            } else {
-              result = (((item1 + item2) / 2) + parseFloat(item3));
-            }
-          } else if ([item3].includes('多不可计')) {
-            result = (((item1 + item2) / 2) * 50);
+        if (this.isNumber(result)) {
+          if (result >= 100) {
+            result = parseFloat(result).num2e();
+          } else {
+            result = parseFloat(result).toFixed46(0);
+            result = result < 1 ? "＜1" : result;
           }
-          if (this.isNumber(result)) {
-            if (result >= 100) {
-              result = parseFloat(result).num2e()
-            } else {
-              result = parseFloat(result).toFixed46(0);
-              result = result < 1 ? '＜1' : result;
-            }
-          }
-          this.data.valueData.point[index].sysReport = result;
-        } else {
-          this.data.valueData.point[index].sysReport = '';
         }
-      },
-      name(item) {
-        let name = `${item.sampleNum}${item.sampleNumIndex ? item.sampleNumIndex : ''}${item.parallelLetter}`;
-        return name.replace(/\s*/g, "");
-      },
+        this.data.valueData.point[index].sysReport = result;
+      } else {
+        this.data.valueData.point[index].sysReport = "";
+      }
     },
-    computed: {},
-    mounted() {
-      setTimeout(() => {
-        this.$forceUpdate();
-      }, 300)
-    }
-  }
+    name(item) {
+      let name = `${item.sampleNum}${
+        item.sampleNumIndex ? item.sampleNumIndex : ""
+      }${item.parallelLetter}`;
+      return name.replace(/\s*/g, "");
+    },
+  },
+  computed: {},
+  mounted() {
+    setTimeout(() => {
+      this.$forceUpdate();
+    }, 300);
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

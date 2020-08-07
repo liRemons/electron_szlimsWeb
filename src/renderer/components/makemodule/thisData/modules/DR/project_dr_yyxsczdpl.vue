@@ -1,6 +1,6 @@
 <template>
     <div style="text-align: center;line-height: 30px; padding-top: 10px;" class="___relative">
-        <div :class="{eventCover: target !== '0'}"></div>
+        <div :class="{eventCover:!ableInput}"></div>
         <div>
             <div style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 10px;">
                 有用线束垂直度偏离
@@ -57,7 +57,7 @@
 <script>
     export default {
         name: "project_dr_yyxsczdpl",
-        props: ['data', 'target'],
+        props: ['data',"ableInput", 'target'],
         watch: {
             "data.valueData.circleResult": function (value) {
                 if(value === "大圆内"){

@@ -244,6 +244,7 @@ export default {
             task.pass == "正在录入"
           );
         });
+
         this.localDataFenYe = this.toTwoArr(this.localData, this.pageSize);
         let fileData = JSON.parse(JSON.stringify(this.localData));
         let arr = [];
@@ -411,6 +412,31 @@ export default {
             taskId: "enteringList",
             list: [],
           };
+          let noPass = {
+            taskId: "noPass",
+            list: [],
+          };
+          this.readFile(JSON.parse(getToken()), "noPass");
+          this.readFileEvent().then((reson) => {
+            let ids = [];
+            if (reson) {
+              noPass.list = JSON.parse(reson).list;
+              ids = noPass.list.map((item) => item.taskId);
+            }
+
+            data.forEach((item) => {
+              if (
+                item.tasks.tasks[0].docPass == 1 &&
+                (ids.length ? !ids.includes(item.tasks.tasks[0].id) : true)
+              ) {
+                noPass.list.push({
+                  taskId: item.tasks.tasks[0].id,
+                });
+              }
+            });
+            this.whrite(noPass, JSON.parse(getToken()));
+          });
+
           let enteringListInit = JSON.parse(JSON.stringify(data));
           enteringListInit.map((item) => {
             item.taskList["data"] = item.tasks.tasks[0].data;
@@ -679,7 +705,8 @@ export default {
         this.readDir(JSON.parse(getToken()));
         this.readDirEvent().then((res) => {
           res.forEach((item) => {
-            this.delFile(item.split(".")[0], JSON.parse(getToken()));
+            if (item !== "noPass.json")
+              this.delFile(item.split(".")[0], JSON.parse(getToken()));
           });
           this.$message.success("删除成功");
           this.localDataFenYe = [];

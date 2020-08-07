@@ -150,6 +150,73 @@ app.on("activate", () => {
     createWindow();
   }
 });
+// 对文件进行增删改查函数
+// =========================================start
+// 创建文件夹
+function mkdir(fileName) {
+  fs.exists(fileName, function(e) {
+    if (e) {
+    } else {
+      fs.mkdir(fileName, function(err) {
+        if (err) {
+          return console.error(err);
+        }
+      });
+    }
+  });
+}
+// 读取文件夹
+function readdir(path, event) {
+  fs.readdir(path, (err, files) => {
+    if (err) {
+      event.sender.send("readDirEvent", false);
+    } else {
+      event.sender.send("readDirEvent", files);
+    }
+  });
+}
+// 读文件
+function readFile(path, event) {
+  fs.readFile(path, "utf8", (err, data) => {
+    if (err) {
+      event.sender.send("readFileEvent", false);
+    } else {
+      event.sender.send("readFileEvent", data);
+    }
+  });
+}
+// 写文件
+function writeFile(path, data, event) {
+  fs.writeFile(path, JSON.stringify(data), "utf8", (err, data) => {
+    if (err) {
+      event.sender.send("writeFileEvent", false);
+    } else {
+      event.sender.send("writeFileEvent", true);
+    }
+  });
+}
+// 清除文件夹
+function delDir(path) {
+  let files = [];
+  if (fs.existsSync(path)) {
+    files = fs.readdirSync(path);
+    files.forEach((file, index) => {
+      let curPath = path + "/" + file;
+      if (fs.statSync(curPath).isDirectory()) {
+        delDir(curPath); //递归删除文件夹
+      } else {
+        fs.unlinkSync(curPath); //删除文件
+      }
+    });
+    fs.rmdirSync(path);
+  }
+}
+// ========================================end
+
+// 注册或发送的事件
+// ========================================start
+
+// 顶部菜单操作START+++++++++++
 ipcMain.on("unmaximize", (event, arg) => {
   mainWindow.unmaximize();
   event.sender.send("isMaximized", false);
@@ -164,83 +231,48 @@ ipcMain.on("mini", (event, arg) => {
 
 ipcMain.on("close", (event, arg) => {
   mainWindow.close();
-  // event.preventDefault();
-  // event.sender.send('action', 'exiting');
 });
-ipcMain.on("reqaction", (event, arg) => {
-  console.log("zhu jin cheng:", arg);
-  switch (arg) {
-    case "exit":
-      app.exit(); // 退出所有窗口，注意这里使用 app.quit() 无效
-      break;
-  }
+// END+++++++++++++++++
+
+// 模拟localStorage  START++++++++++++
+// 存数据
+ipcMain.on("setStorage", (event, arg) => {
+  let file = path.join(
+    `C:/Program Files/szlimsLocal/${arg.staffPhone}`,
+    "localStorage.json"
+  );
+  writeFile(file, arg.data, event);
 });
-function mkdir(fileName) {
-  fs.exists(fileName, function(e) {
-    if (e) {
-    } else {
-      fs.mkdir(fileName, function(err) {
-        if (err) {
-          return console.error(err);
-        }
-      });
-    }
-  });
-}
+// 取数据
+ipcMain.on("getStorage", (event, staffPhone) => {
+  let file = path.join(
+    `C:/Program Files/szlimsLocal/${staffPhone}`,
+    "localStorage.json"
+  );
+  readFile(file, event);
+});
+
+// END +++++++++++++++++++
 mkdir("./data");
 mkdir(`C:/Program Files/szlimsLocal/`);
 ipcMain.on("mkdir", function(event, arg) {
   mkdir(`./data/${arg.staffPhone}`);
   mkdir(`C:/Program Files/szlimsLocal/${arg.staffPhone}`);
-  let file = path.join(
-    `C:/Program Files/szlimsLocal/${arg.staffPhone}`,
-    "localStorage.json"
-  );
-  setTimeout(() => {
-    fs.writeFile(file, "", "utf8", (err, data) => {});
-  }, 1000);
 });
 
 // 读取文件
 ipcMain.on("readFile", function(event, arg) {
-  // arg是从渲染进程返回来的数据
-  fs.readFile(
-    `./data/${arg.staffPhone}/${arg.taskId}.json`,
-    "utf8",
-    (err, data) => {
-      if (err) {
-        event.sender.send("readFileEvent", false);
-      } else {
-        event.sender.send("readFileEvent", data);
-      }
-    }
-  );
+  readFile(`./data/${arg.staffPhone}/${arg.taskId}.json`, event);
 });
 // 读取文件夹
 ipcMain.on("readDir", function(event, arg) {
-  fs.readdir(`./data/${arg.staffPhone}`, (err, files) => {
-    if (err) {
-      event.sender.send("readDirEvent", false);
-    } else {
-      event.sender.send("readDirEvent", files);
-    }
-  });
+  readdir(`./data/${arg.staffPhone}`, event);
 });
-
+// 写文件
 ipcMain.on("writeFile", function(event, arg) {
-  fs.writeFile(
-    `./data/${arg.staff.staffPhone}/${arg.taskId}.json`,
-    JSON.stringify(arg),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        event.sender.send("writeFileEvent", false);
-      } else {
-        event.sender.send("writeFileEvent", true);
-      }
-    }
-  );
+  writeFile(`./data/${arg.staff.staffPhone}/${arg.taskId}.json`, arg, event);
 });
+// 删除单个文件
 ipcMain.on("delFile", function(event, arg) {
   fs.unlink(`./data/${arg.staffPhone}/${arg.taskId}.json`, (err, data) => {
     if (err) {
@@ -250,46 +282,12 @@ ipcMain.on("delFile", function(event, arg) {
     }
   });
 });
+// 清理缓存，将创建的文件及文件夹全部删除
 ipcMain.on("delDir", function(event, arg) {
   delDir("./data");
   delDir("C:/Program Files/szlimsLocal");
-  function delDir(path) {
-    let files = [];
-    if (fs.existsSync(path)) {
-      files = fs.readdirSync(path);
-      files.forEach((file, index) => {
-        let curPath = path + "/" + file;
-        if (fs.statSync(curPath).isDirectory()) {
-          delDir(curPath); //递归删除文件夹
-        } else {
-          fs.unlinkSync(curPath); //删除文件
-        }
-      });
-      fs.rmdirSync(path);
-    }
-  }
   mkdir(`C:/Program Files/szlimsLocal/`);
   mkdir("./data");
 });
-/*隐藏electron创建的菜单栏*/
-// Menu.setApplicationMenu(null);
 
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
+// =========================================end

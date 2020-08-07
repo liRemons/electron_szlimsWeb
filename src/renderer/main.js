@@ -14,7 +14,7 @@ import { ipcRenderer, remote } from "electron";
 import "viewerjs/dist/viewer.css";
 import axios from "./utils/request";
 import Viewer from "v-viewer";
-import MethodsRe from 'methods-remons'
+import MethodsRe from "methods-remons";
 Vue.use(Viewer, {
   defaultOptions: {
     zIndex: 9999,
@@ -134,9 +134,9 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$message = Message;
-Vue.prototype.MethodsRe=MethodsRe
+Vue.prototype.MethodsRe = MethodsRe;
 Vue.prototype.$ = $;
-Vue.prototype.hostUrl = "http://120.77.153.63:8022";
+Vue.prototype.hostUrl = "http://120.77.153.63:8033";
 Vue.prototype.global = global;
 Vue.prototype.$ipcRenderer = ipcRenderer;
 Vue.prototype.computeObj = computes;
@@ -304,6 +304,67 @@ Vue.prototype.detectionType = function(val) {
   } else {
     return "";
   }
+};
+// Vue.prototype.getHistory = function() {
+//   let historyList = [];
+//   document.querySelectorAll(".historyParent").forEach((item) => {
+//     let obj = {
+//       values: [],
+//       title: item.getElementsByClassName("historyTitle")[0].innerText,
+//     };
+//     Array.prototype.forEach.call(
+//       item.getElementsByClassName("historyValue"),
+//       (el) => {
+//         obj.values.push(el.innerText);
+//       }
+//     );
+//     historyList.push(obj);
+//   });
+//   return historyList
+// };
+// 获取当前可能修改记录
+Vue.prototype.getHistory = function() {
+  let historyList = [];
+  document.querySelectorAll(".editHistory").forEach((item) => {
+    let obj = {
+      values: [],//模块下的每一项
+      project: item
+        .getElementsByClassName("editHistoryProject")[0]
+        .innerText.trim(),
+    };
+    Array.prototype.forEach.call(
+      item.getElementsByClassName("editHistoryTitle"),
+      (el) => {
+        // 修改值的标题
+        obj.values.push({ title: el.textContent.trim() });
+      }
+    );
+
+    Array.prototype.forEach.call(
+      item.getElementsByClassName("editHistoryValue"),
+      (el, index) => {
+        // 修改的值
+        if (obj.values[index].title == "主要参数") {
+          let int = el.textContent.includes("mAs") ? "mAs" : "mA";
+          let text = el.textContent
+            .replace(/[^0-9]/gi, ",")
+            .trim()
+            .split(",")
+            .filter((a) => a);
+          obj.values[index].value = `${text[0]}kV ${text[1]}${int}`;
+        } else {
+          if (el.tagName == "INPUT") {
+            obj.values[index].value = el.value.trim();
+          }else{
+            obj.values[index].value = el.textContent.trim();
+          }
+         
+        }
+      }
+    );
+    historyList.push(obj);
+  });
+  return historyList;
 };
 const myVue = new Vue({
   components: { App },

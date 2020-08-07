@@ -96,15 +96,17 @@
         <td>{{ item.index }}</td>
         <td width="80">
           <div v-if="!item.isSzpbt || target !== '0'">
-            {{ item.rows[0] }}
+            <!-- {{ item.rows[0] }} -->
+            {{ item.name }}
           </div>
-          <myInput v-else v-model="item.rows[0]"></myInput>
+          <myInput v-else v-model="item.name"></myInput>
         </td>
         <td width="50">
           <div v-if="!item.isSzpbt || target !== '0'">
-            {{ item.rows[9] }}
+            <!-- {{ item.rows[9] }} -->
+            {{ item.location }}
           </div>
-          <myInput v-else v-model="item.rows[9]"></myInput>
+          <myInput v-else v-model="item.location"></myInput>
         </td>
         <td v-if="data.valueData.testPoinrNum[0]">
           <divModel
@@ -198,15 +200,25 @@ export default {
     init(arr) {
       let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];
       arr.forEach((item) => {
+        let name=JSON.parse(JSON.stringify(item.rows[0]))
+        this.$set(item,'name',name)
         if (arr1.includes(item.rows[0])) {
-          item.rows[9] = "/";
+          item.location = "/";
+          // item.rows[9] = "/";
+        } else {
+          item.location
+            ? ""
+            : (item.location = item.name.split("(")[1]
+                ? item.name.split("(")[1].split(")")[0]
+                : "");
         }
-        item.rows[9]
-          ? ""
-          : (item.rows[9] = item.rows[0].split("(")[1]
-              ? item.rows[0].split("(")[1].split(")")[0]
-              : "");
-        item.rows[0] = item.rows[0].split("(")[0];
+        item.name = item.rows[0].split("(")[0];
+        // item.rows[9]
+        //   ? ""
+        //   : (item.rows[9] = item.rows[0].split("(")[1]
+        //       ? item.rows[0].split("(")[1].split(")")[0]
+        //       : "");
+        // item.rows[0] = item.rows[0].split("(")[0];
       });
       this.$forceUpdate();
     },
@@ -258,7 +270,7 @@ export default {
         });
       } else {
         this.data.valueData.point[b].rows.forEach((item, index) => {
-          if (index > 0 && index < 6) {
+          if (index > 0 && index < 7) {
             this.data.valueData.point[b].rows[index] = "/";
           } else if (index == 8) {
             this.data.valueData.point[b].rows[7] = val;

@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box historyValue">
     <!--数字框-->
     <section
       :class="{ redBox: showRedBox }"

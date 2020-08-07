@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="___relative">
     <div :class="{ eventCover: !ableInput }"></div>
     <div class="modules_1_tableBox ___relative mt20">
       <p style="line-height: 16px;">三、检测数据</p>

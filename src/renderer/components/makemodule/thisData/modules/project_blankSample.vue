@@ -1,5 +1,6 @@
 <template>
   <div class="___relative">
+     <div :class="{ eventCover: !ableInput }"></div>
     <table class="myTable">
       <tr>
         <td width="80" :rowspan="data.valueData.point.length + 1">空白样品</td>
@@ -23,11 +24,11 @@
             @getList="getListArr"
             :input="false"
             :multiSelect="true"
-            style="line-height: 32px"
+            style="line-height: 32px;"
             :receive="''"
             :transmitText="
               item.testProjects.length > 0
-                ? item.testProjects.map(ite => ite.name).toString()
+                ? item.testProjects.map((ite) => ite.name).toString()
                 : ''
             "
             :list="selectTestProjectArr"
@@ -37,7 +38,7 @@
           <div v-else>
             {{
               item.testProjects.length > 0
-                ? item.testProjects.map(ite => ite.name).toString()
+                ? item.testProjects.map((ite) => ite.name).toString()
                 : ""
             }}
           </div>
@@ -65,18 +66,18 @@
         </td>
         <td>
           <myInput
-            style="text-align: center"
+            style="text-align: center;"
             v-model="item.sampleName"
           ></myInput>
         </td>
         <td>
           <myInput
-            style="text-align: center"
+            style="text-align: center;"
             v-model="item.sampleQuantity"
           ></myInput>
         </td>
         <td>
-          <myInput v-model="item.remark" style="text-align: center"></myInput>
+          <myInput v-model="item.remark" style="text-align: center;"></myInput>
           <!--<div class="___absolute toolBar" v-if="target === '0'" :style="{ top: index * 32 + 35 + 'px', width: 4 * 30 + 'px'}">
 							<div class="___relative">
 									<div class="___absolute btnHover" style="width: 30px; cursor: pointer;" @click="add(index)">+</div>
@@ -85,14 +86,14 @@
 									<div class="___absolute btnHover" title="生成新的空白编号" :style="{width: '30px', cursor: 'pointer', left: '90px'}" @click="generateSampleNum(item)">B</div>
 							</div>
 					</div>-->
-          <div class="___absolute" style="left: 905px;" v-if="btnFlag">
+          <div class="___absolute" style="left: 905px;" v-if="btnFlag&&ableInput">
             <utilBar
               :data="data"
               :index="index"
               :barNum="[0, 1]"
               :jsonString="jsonString"
               class="___absolute"
-              style="left: 245px;top: -28px;"
+              style="left: 245px; top: -28px;"
             >
             </utilBar>
             <div
@@ -102,7 +103,7 @@
                 width: '30px',
                 cursor: 'pointer',
                 left: '325px',
-                top: '-28px'
+                top: '-28px',
               }"
               @click="judageNew(item)"
             >
@@ -115,7 +116,7 @@
                 width: '30px',
                 cursor: 'pointer',
                 left: '365px',
-                top: '-28px'
+                top: '-28px',
               }"
               @click="generateSampleNum(item)"
             >
@@ -133,13 +134,13 @@ import { querySameDayBlankSample, querySampleNum } from "@/api/local";
 
 export default {
   name: "project_blankSample",
-  props: ["data", "jsonString", "target",'btnFlag'],
+  props: ["data", "jsonString", "target", "btnFlag","ableInput"],
   data() {
     return {
       selectTestProjectArr: [],
       nowYear: "",
       numObj: "",
-      beUseBlank: []
+      beUseBlank: [],
     };
   },
   watch: {},
@@ -156,9 +157,9 @@ export default {
 
       let data = {
         sampleNumType: 4,
-        sampleNumSize: 1
+        sampleNumSize: 1,
       };
-      querySampleNum(data).then(res => {
+      querySampleNum(data).then((res) => {
         if (res.success) {
           let sampleNums = res.sampleNums;
           item.sampleNum = sampleNums[0];
@@ -180,7 +181,7 @@ export default {
     add(index) {
       let keys = Object.keys(this.data.valueData.point[index]);
       let obj = {};
-      keys.forEach(key => {
+      keys.forEach((key) => {
         obj[key] = "";
       });
       obj.pointId = uuid();
@@ -192,7 +193,7 @@ export default {
         this.$confirm("确认删除吗？", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          modal: false
+          modal: false,
         }).then(({}) => {
           this.data.valueData.point.splice(index, 1);
           this.$emit("deleteSample", item);
@@ -202,10 +203,10 @@ export default {
 
     getBeUseSample() {
       querySameDayBlankSample()
-        .then(res => {
+        .then((res) => {
           this.beUseBlank = res.data;
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
@@ -218,32 +219,29 @@ export default {
     },
     getListArr() {
       let testProjectArr = this.jsonString.filter(
-        item =>
+        (item) =>
           item.data.height._normal.carried &&
           item.data.valueData.testProjectType === 2 &&
           item.data.valueData.sysTestProjectName !== "project_sysdong"
       );
 
-      this.selectTestProjectArr = testProjectArr.map(item => {
+      this.selectTestProjectArr = testProjectArr.map((item) => {
         return {
           id: item.data.valueData.testProjectId,
-          name: item.data.valueData.testProjectChineseName
+          name: item.data.valueData.testProjectChineseName,
         };
       });
-    }
+    },
   },
 
   mounted() {
-    this.nowYear = new Date()
-      .getFullYear()
-      .toString()
-      .substring(2, 4);
+    this.nowYear = new Date().getFullYear().toString().substring(2, 4);
     this.numObj = JSON.myParse(sessionStorage.getItem("numObj"));
     this.getBeUseSample();
   },
   beforeDestroy() {
     window.sampleNum4 = "";
-  }
+  },
 };
 </script>
 

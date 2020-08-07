@@ -1,6 +1,6 @@
 <template>
     <div style="line-height: 30px; padding-top: 10px;" class="___relative">
-        <div :class="{eventCover: target !== '0'}"></div>
+        <div :class="{eventCover:!ableInput}"></div>
         <div style="text-align: center;">
             <div style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 10px;">
                 光野与照射野四边的偏离/cm
@@ -79,7 +79,7 @@
 <script>
     export default {
         name: "project_dr_gyyzssbdpl",
-        props: ['data', 'target'],
+        props: ['data',"ableInput", 'target'],
         methods: {
             setValue(flag){
                 let value = Number(this.data.valueData.point[0].rows[flag + 1]);

@@ -7,21 +7,42 @@
     <div :class="{ eventCover: !ableInput }"></div>
     <div class="modules_1_tableBox ___relative mt20">
       <div
-        style="border: 1px solid black;width: 710px;height: 32px; line-height: 32px;"
+        style="
+          border: 1px solid black;
+          width: 710px;
+          height: 32px;
+          line-height: 32px;
+        "
         class="tc"
       >
         <p>机房窗数量</p>
       </div>
       <div
-        v-show="show&&btnFlag"
-        class="___absolute  el-icon-arrow-down"
-        style="left: 760px; top: 0px; color:gray; font-size: 28px; cursor: pointer; width: 50px; height: 50px;"
+        v-show="show && btnFlag"
+        class="___absolute el-icon-arrow-down"
+        style="
+          left: 760px;
+          top: 0px;
+          color: gray;
+          font-size: 28px;
+          cursor: pointer;
+          width: 50px;
+          height: 50px;
+        "
         @click="toFold"
       ></div>
       <div
-        v-show="!show&&btnFlag"
+        v-show="!show && btnFlag"
         class="___absolute el-icon-arrow-right"
-        style="left: 760px; top: 0px; color:gray; font-size: 28px; cursor: pointer; width: 50px; height: 50px;"
+        style="
+          left: 760px;
+          top: 0px;
+          color: gray;
+          font-size: 28px;
+          cursor: pointer;
+          width: 50px;
+          height: 50px;
+        "
         @click="toNoFold"
       ></div>
       <div v-if="showList">
@@ -32,19 +53,19 @@
           <div class="___relative">
             <div class="___relative borderBottom">
               <div style="width: 50px;" class="borderRight">
-                <div class="tc" style="height:32px;">
+                <div class="tc" style="height: 32px;">
                   <span>序号</span>
                 </div>
               </div>
             </div>
             <div
-              style="width:440px;left:50px;"
+              style="width: 440px; left: 50px;"
               class="tc borderRight ___absolute t0 Full"
             >
               <span>名称</span>
             </div>
             <div
-              style="width:220px;left:490px;"
+              style="width: 220px; left: 490px;"
               class="tc borderRight ___absolute t0 Full"
             >
               <span>窗尺寸</span>
@@ -62,48 +83,58 @@
             :class="
               index != data.valueData.point.length - 1 ? 'borderBottom' : ''
             "
-            style="line-height: 32px"
+            style="line-height: 32px;"
             v-for="(item, index) in data.valueData.point"
-            :key="index+'b'"
+            :key="index + 'b'"
           >
             <div class="___relative">
               <div style="width: 50px;" class="borderRight">
-                <div class="tc" style="height:34px;">
+                <div class="tc" style="height: 34px;">
                   <span>{{ item.index }}</span>
                 </div>
               </div>
             </div>
             <div
-              style="width:440px;left:50px;"
+              style="width: 440px; left: 50px;"
               class="tc borderRight ___absolute t0 Full"
             >
               <divModel
                 v-model="item.rows[0]"
-                style="width:100%;text-align: center;"
+                style="width: 100%; text-align: center;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
             </div>
             <div
-              style="width:220px;left:490px;"
+              style="width: 220px; left: 490px;"
               class="tc borderRight ___absolute t0 Full"
             >
-              <div class="___absolute Full" style="width: 50%">
+              <div class="___absolute Full" style="width: 50%;">
                 <divModel
                   v-model="item.rows[1]"
                   :computers="isInteger(item.rows[1], index, 1)"
-                  style="width:60%;text-align: center; height: 30px; border-bottom: 1px solid black;"
+                  style="
+                    width: 60%;
+                    text-align: center;
+                    height: 30px;
+                    border-bottom: 1px solid black;
+                  "
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
-                <span class="___absolute" style="right:10px;">cm*</span>
+                <span class="___absolute" style="right: 10px;">cm*</span>
               </div>
-              <div class="___absolute Full" style="width: 50%;left:50%">
+              <div class="___absolute Full" style="width: 50%; left: 50%;">
                 <divModel
                   v-model="item.rows[2]"
                   :computers="isInteger(item.rows[2], index, 2)"
-                  style="width:60%;text-align: center; height: 30px; border-bottom: 1px solid black;"
+                  style="
+                    width: 60%;
+                    text-align: center;
+                    height: 30px;
+                    border-bottom: 1px solid black;
+                  "
                   class="Full warp2 rowsInput2 hide focusBg"
                 ></divModel>
-                <span class="___absolute" style="right:10px;">cm</span>
+                <span class="___absolute" style="right: 10px;">cm</span>
               </div>
             </div>
             <!-- <div style="width:170px;left:370px; line-height: 16px;" class="tc borderRight ___absolute t0 Full">
@@ -130,15 +161,15 @@
               class="__functionBox"
               v-if="
                 index != data.valueData.point.length - 1 &&
-                  ipdTemplate == 'ipdTemplate' &&
-                  target == 0
+                ipdTemplate == 'ipdTemplate' &&
+                target == 0
               "
-              style="top:6px;right:-70px;width: 20px;z-index:100"
+              style="top: 6px; right: -70px; width: 20px; z-index: 100;"
             >
               <div
                 class="__functionButton6"
                 @dblclick="reduce(index)"
-                style="right:0;"
+                style="right: 0;"
               >
                 <span>-</span>
               </div>
@@ -147,21 +178,21 @@
         </div>
         <div
           class="__functionBox"
-          style="right:-155px;width: 110px;"
+          style="right: -155px; width: 110px;"
           v-if="ipdTemplate == 'ipdTemplate' && target == 0"
         >
           <!-- ******** 功能模块 ********** -->
           <div
             class="__functionButton6"
             @dblclick="reduce(data.valueData.point.length - 1)"
-            style="left:5px;"
+            style="left: 5px;"
           >
             <span>-</span>
           </div>
           <div
             class="__functionButton6"
             @click="sure"
-            style="left:30px;font-size: 14px;"
+            style="left: 30px; font-size: 14px;"
           >
             <span class="el-icon-search"></span>
           </div>
@@ -285,7 +316,7 @@ export default {
               let rows = [];
               direction.forEach((val, num) => {
                 let obj = [
-                  item.rows[0] + "(" + val + ")",
+                  item.rows[0] +"(" + val + ")",
                   item.rows[3],
                   item.rows[4],
                   "",
@@ -315,6 +346,7 @@ export default {
               completeArr.push({ rows: [...rows] });
             }
           });
+          console.log(completeArr)
           this.$notify({
             type: "success",
             message: "生成成功"

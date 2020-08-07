@@ -325,7 +325,7 @@ export default {
               ];
             } else {
               obj = [
-                item.rows[0] + "(" + "" + ")",
+                item.rows[0],
                 "",
                 item.rows[4],
                 "",

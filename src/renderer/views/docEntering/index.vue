@@ -506,6 +506,7 @@ export default {
       importData: {},
       unitUrl: [],
       deleteData: [],
+      historyEdit: [],
       deleteDialog: false,
       staffName: "",
       unitInvalidDuration: 0.5,
@@ -546,7 +547,49 @@ export default {
           .catch(() => {});
       }
     },
+    getHistoryEdit() {
+      this.readFile(JSON.parse(getToken()), "noPass");
+      this.readFileEvent().then((res) => {
+        let data;
+        let staffId = JSON.parse(res).staff.id;
+        JSON.parse(res).list.forEach((item) => {
+          if (item.taskId == this.$route.params.ids) {
+            data = item;
+          }
+        });
+        let historyEdit = [];
+        // 判断是否修改过值
+        data &&
+          this.getHistory().forEach((item, index) => {
+            data.history.forEach((a) => {
+              if (item.project == a.project) {
+                a.values.forEach((b, index) => {
+                  if (b.value !== item.values[index].value) {
+                    historyEdit.push({
+                      project: a.project,
+                      title: b.title,
+                      value: b.value,
+                      staffId: staffId,
+                      editValue: item.values[index].value,
+                    });
+                  }
+                });
+              }
+            });
+          });
+        historyEdit.forEach((item) => {
+          item.taskId = this.$route.params.ids;
+          item.createTime = this.MethodsRe.dateFormat();
+          item.explain = `将 ${item.project} 模块中的 ${item.title} 的值由 ${item.value} 更改为 ${item.editValue}`;
+        });
+        this.historyEdit = historyEdit;
+      });
+    },
     submitSongshen() {
+      if (this.tasks[0].docPass == 1) {
+        this.getHistoryEdit();
+      }
+
       this.$confirm(
         "请确认未录入数据的检测参数，现场检测条件不适用时，必须选择删除模块！！！",
         "提示",
@@ -1030,8 +1073,7 @@ export default {
       });
       if (flag) {
         if (result && result2) {
-          
-        }else{
+        } else {
           this.$notify({
             type: "error",
             message: "签名照或点位图未上传！",
@@ -1051,6 +1093,26 @@ export default {
                 type: "success",
                 message: response.msg,
               });
+              // 平台打回的历史记录
+              if (this.tasks[0].docPass == 1) {
+                this.readFile(JSON.parse(getToken()), "noPass");
+                this.readFileEvent().then((reson) => {
+                  let noPass = JSON.parse(reson);
+                  if (noPass) {
+                    noPass.list.forEach((item, index) => {
+                      if (item.taskId == this.ids[0]) {
+                        noPass.list.splice(index, 1);
+                      }
+                    });
+                    let dataList = {
+                      taskId: "noPass",
+                      list: noPass.list,
+                    };
+                    this.whrite(dataList, JSON.parse(getToken()));
+                  }
+                });
+              }
+
               this.delFile(JSON.parse(getToken()), this.ids.toString());
               this.$router.push("/local/upload");
             } else {
@@ -1100,7 +1162,19 @@ export default {
           }
         });
       });
-      // console.log("上传的模板数据1", this.templateArr);
+      // 平台打回修改的历史记录
+      if (this.tasks[0].docPass == 1) {
+        let historyEdit = this.templateArr.filter(
+          (item) => item.testProject == "historyEdit"
+        );
+        if (historyEdit.length == 0 && this.historyEdit.length) {
+          this.templateArr.push({
+            testProject: "historyEdit",
+            data: this.historyEdit,
+          });
+        }
+      }
+
       if (tasktemp.disWs == "4") {
         addGwCyTaskData(
           tasktemp.id,

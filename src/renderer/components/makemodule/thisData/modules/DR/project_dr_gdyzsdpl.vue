@@ -1,6 +1,6 @@
 <template>
   <div style="line-height: 30px;" class="___relative project_dr_gdyzsdpl">
-    <div :class="{ eventCover: target !== '0' }"></div>
+    <div :class="{ eventCover:!ableInput }"></div>
     <div style="text-align: center;">
       <div
         style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
@@ -220,7 +220,7 @@ export default {
       rxppsy_ys_flag: true
     };
   },
-  props: ["data", "jsonString", "target"],
+  props: ["data","ableInput", "jsonString", "target"],
   computed: {
     ...mapState({
       deviceFactor: state => state.StomatologyLinkage.deviceFactor,

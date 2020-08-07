@@ -1,58 +1,58 @@
 <template>
   <div>
     <div :class="{ _normalHeight_: true }" class="___relative">
-      <div :class="{ eventCover: !ableInput }"></div>
-      <div class="modules_1_tableBox ___relative mt20">
+      <div :class="{ eventCover: !headInput }"></div>
+      <div class="modules_1_tableBox ___relative mt20 editHistory">
         <div class="___relative tc">
           <p style="font-size: 24px;">
             深圳市瑞达检测技术有限公司<br />检测原始记录
           </p>
         </div>
         <p style="line-height: 16px;">一、基本信息</p>
-        <p style="line-height: 16px;">1.1委托单位信息</p>
+        <p style="line-height: 16px;" class="editHistoryProject">1.1委托单位信息</p>
         <div
           class="___relative ___module_frame_Box"
           style="border-top: solid 1px black;"
         >
-          <div class="___relative borderBottom">
+          <div class="___relative borderBottom ">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
-                <div class="tc">委托单位名称</div>
+                <div class="tc editHistoryTitle">委托单位名称</div>
               </div>
             </div>
             <div style="width: 619px; left: 91px;" class="___absolute t0 Full">
               <divModel
                 v-model="data.valueData.entrustedUnitName"
                 style="width: 100%; text-align: center;"
-                class="Full warp2 rowsInput2 hide focusBg"
+                class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
               ></divModel>
             </div>
           </div>
-          <div class="___relative borderBottom">
+          <div class="___relative borderBottom ">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
-                <div class="tc">受检单位名称</div>
+                <div class="tc editHistoryTitle">受检单位名称</div>
               </div>
             </div>
             <div style="width: 619px; left: 91px;" class="___absolute t0 Full">
               <divModel
                 v-model="data.valueData.UnitExaminationName"
                 style="width: 100%; text-align: center;"
-                class="Full warp2 rowsInput2 hide focusBg"
+                class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
               ></divModel>
             </div>
           </div>
           <div class="___relative borderBottom">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
-                <div class="tc">受检单位地址</div>
+                <div class="tc editHistoryTitle">受检单位地址</div>
               </div>
             </div>
             <div style="width: 619px; left: 91px;" class="___absolute t0 Full">
               <divModel
                 v-model="data.valueData.UnitExaminationAddress"
                 style="width: 100%; text-align: center;"
-                class="Full warp2 rowsInput2 hide focusBg"
+                class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
               ></divModel>
             </div>
           </div>
@@ -100,6 +100,7 @@
           class="___relative ___module_frame_Box"
           style="border-top: solid 1px black;"
         >
+          <div :class="{ eventCover: !ableInput }"></div>
           <div class="___relative borderBottom">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
@@ -229,6 +230,7 @@
             </div>
           </div>
           <div class="___relative">
+            <div :class="{ eventCover: !ableInput }"></div>
             <div style="width: 90px;" class="borderRight ___absolute t0 Full">
               <div class="tc heightCenter3" style="cursor: pointer;">
                 主要检测仪器
@@ -326,7 +328,7 @@
                   class="tc Full ___absolute t0"
                 >
                   <i
-                    v-if="target === '0'"
+                    v-if="target == 0 && ableInput"
                     class="el-icon-close"
                     style="cursor: pointer;"
                     v-show="showDel(item)"
@@ -336,7 +338,7 @@
                 <div
                   style="width: 150px; right: -200px;"
                   class="tc Full ___absolute t0"
-                  v-show="true && target === '0'"
+                  v-show="true && target == 0 && ableInput"
                 >
                   <el-autocomplete
                     v-model="item.nowDevice"
@@ -414,6 +416,7 @@ export default {
     "ableInput",
     "task",
     "target",
+    "headInput",
   ],
   filters: {
     filterTime(time) {

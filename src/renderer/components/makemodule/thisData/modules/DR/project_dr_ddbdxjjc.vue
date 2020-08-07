@@ -1,6 +1,6 @@
 <template>
   <div style="line-height: 30px; padding-top: 10px;" class="___relative">
-    <div :class="{ eventCover: target !== '0' }"></div>
+    <div :class="{ eventCover:!ableInput }"></div>
     <div>
       <div style="text-align: center;">
         <div
@@ -214,7 +214,7 @@
 <script>
 export default {
   name: "project_dr_ddbdxjjc",
-  props: ["data", "jsonString", "target"],
+  props: ["data","ableInput", "jsonString", "target"],
   data() {
     return {
       list: [

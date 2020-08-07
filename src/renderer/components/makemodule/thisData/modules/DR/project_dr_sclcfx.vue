@@ -3,7 +3,7 @@
     class="___relative"
     style="text-align: center;line-height: 30px; padding-top: 10px;"
   >
-    <div :class="{ eventCover: target !== '0' }"></div>
+    <div :class="{ eventCover:!ableInput }"></div>
 
     <div>
       <div
@@ -133,7 +133,7 @@
 <script>
 export default {
   name: "project_dr_sclcfx",
-  props: ["data", "jsonString", "target"],
+  props: ["data","ableInput", "jsonString", "target"],
   data() {
     return {
       content1:

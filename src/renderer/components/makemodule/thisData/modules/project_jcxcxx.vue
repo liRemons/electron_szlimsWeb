@@ -1,12 +1,12 @@
 <template>
   <div
     :class="{ _normalHeight_: true }"
-    class="___relative"
+    class="___relative editHistory"
     :id="data.valueData.testProjectId"
   >
-    <div :class="{ eventCover: !ableInput }"></div>
+    <div :class="{ eventCover: !headInput }"></div>
     <div class="modules_1_tableBox ___relative mt10">
-      <p style="line-height: 16px;">二、检测现场信息</p>
+      <p style="line-height: 16px;" class="editHistoryProject">二、检测现场信息</p>
       <div
         class="___relative ___module_frame_Box"
         style="border-top: solid 1px black;"
@@ -14,7 +14,7 @@
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="borderRight">
             <div style="height: 32px;">
-              <div class="tc">设备名称</div>
+              <div class="tc editHistoryTitle">设备名称</div>
             </div>
           </div>
           <div
@@ -25,27 +25,27 @@
               v-model="data.valueData.deviceName"
               ref="deviceName"
               style="width: 100%; text-align: center; font-size: 12px;"
-              class="Full warp2 rowsInput2 hide focusBg"
+              class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
           <div
             style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
-            <div class="tc">设备型号</div>
+            <div class="tc editHistoryTitle">设备型号</div>
           </div>
           <div style="width: 238px; right: 0;" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.deviceModel"
               style="width: 100%; text-align: center;"
-              class="Full warp2 rowsInput2 hide focusBg"
+              class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="borderRight">
             <div style="height: 32px;">
-              <div class="tc">设备编号</div>
+              <div class="tc editHistoryTitle">设备编号</div>
             </div>
           </div>
           <div
@@ -55,34 +55,34 @@
             <divModel
               v-model="data.valueData.deviceNum"
               style="width: 100%; text-align: center;"
-              class="Full warp2 rowsInput2 hide focusBg"
+              class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
           <div
             style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
-            <div class="tc">生产厂家</div>
+            <div class="tc editHistoryTitle">生产厂家</div>
           </div>
           <div style="width: 238px; right: 0;" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.manufacturer"
               style="width: 100%; text-align: center;"
-              class="Full warp2 rowsInput2 hide focusBg"
+              class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
           <div style="width: 140px;" class="borderRight">
             <div style="height: 35px;">
-              <div class="tc">主要参数</div>
+              <div class="tc editHistoryTitle">主要参数</div>
             </div>
           </div>
           <div
             style="width: 190px; left: 141px;"
-            class="___absolute t0 Full borderRight"
+            class="___absolute t0 Full borderRight editHistoryValue"
           >
-            <div class="___absolute Full" style="width: 50%;">
+            <div class="___absolute Full " style="width: 50%;">
               <divModel
                 v-model="data.valueData.mainParameterkV"
                 :computers="
@@ -94,7 +94,7 @@
                   height: 30px;
                   border-bottom: 1px solid black;
                 "
-                class="Full warp2 rowsInput2 hide focusBg"
+                class="Full warp2 rowsInput2 hide focusBg "
               ></divModel>
               <span style="margin-left: 70%;">kV</span>
             </div>
@@ -113,6 +113,8 @@
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
               <div style="margin-left: 50%;">
+                <!-- 为了取到innerText值，留修改记录 -->
+                <span v-show="false">{{data.valueData.mainParametermAutil}}</span>
                 <selectModel
                   @returnVal="changeMainParametermAutil"
                   :Judge="true"
@@ -120,7 +122,7 @@
                   :receive="''"
                   :single="true"
                   :rows="false"
-                  :transmitText="'mA'"
+                  :transmitText="data.valueData.mainParametermAutil"
                   :list="['mA', 'mAs']"
                   :Obj="''"
                 ></selectModel>
@@ -131,13 +133,13 @@
             style="width: 140px; left: 331px;"
             class="___absolute t0 Full borderRight"
           >
-            <div class="tc">所在场所</div>
+            <div class="tc editHistoryTitle">所在场所</div>
           </div>
           <div style="width: 238px; right: 0;" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.location"
               style="width: 100%; text-align: center;"
-              class="Full warp2 rowsInput2 hide focusBg"
+              class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
         </div>
@@ -153,10 +155,12 @@
           >
             <div class="heightCenter3">
               <divModel
+                v-if="ableInput"
                 v-model="data.valueData.ballNum"
                 style="width: 100%; text-align: center; height: 32px;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
+              <span v-else>{{ data.valueData.ballNum }}</span>
             </div>
           </div>
           <div
@@ -171,6 +175,7 @@
           >
             <div v-for="(item, index) in deviceType" class="___relative ml5">
               <el-radio
+                :disabled="!ableInput"
                 @change="radio"
                 v-model="data.valueData.deviceType"
                 :label="item"
@@ -180,6 +185,7 @@
         </div>
         <div v-for="(item, index) in data.valueData.point">
           <div class="___relative borderBottom">
+            <div :class="{ eventCover: !ableInput }"></div>
             <div style="width: 140px;" class="borderRight">
               <div style="height: 32px;">
                 <div class="tc">曝光模式</div>
@@ -235,6 +241,7 @@
           </div>
         </div>
         <div class="___relative borderBottom">
+          <div :class="{ eventCover: !ableInput }"></div>
           <div style="width: 140px;" class="___absolute t0 Full borderRight">
             <div class="tc heightCenter3">设备状态</div>
           </div>
@@ -481,6 +488,7 @@ export default {
     "ableInput",
     "task",
     "target",
+    "headInput",
   ],
   methods: {
     // 是不是整数

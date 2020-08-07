@@ -331,6 +331,7 @@ export default {
       hanle(this); //this指向Array
       return arr;
     };
+    // 重写sessionStorage，localStorage  START================
     sessionStorage: {
       setItem: (key, value) => {
         let data = {
@@ -346,6 +347,36 @@ export default {
         this.$store.commit("SESSIONSTORAGE_REMOVE", key);
       };
     }
+    localStorage.setItem = (key, value) => {
+      let staffPhone = getToken() && JSON.parse(getToken()).staffPhone;
+      if (staffPhone) {
+        this.$ipcRenderer.send("getStorage", staffPhone);
+        this.readFileEvent().then((res) => {
+          let data = JSON.parse(res);
+          data[key] = value;
+          this.$ipcRenderer.send("setStorage", {
+            staffPhone,
+            data,
+          });
+        });
+      }
+    };
+    let this_=this
+    async function get() {
+      let staffPhone = getToken() && JSON.parse(getToken()).staffPhone;
+      if (staffPhone) {
+        this_.$ipcRenderer.send("getStorage", staffPhone);
+        let data = await this_.readFileEvent();
+        return data
+      }
+    }
+    localStorage.getItem = (key) => {
+     console.log( get())
+    };
+    //=============================END
+    // setTimeout(() => {
+    //   localStorage.getItem("bb")
+    // }, 1000);
     Number.prototype.toFixed46 = function (
       decimalPlaces,
       Judge = false,

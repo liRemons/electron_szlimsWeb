@@ -1,6 +1,6 @@
 <template>
   <div style="padding-top: 10px;" class="___relative">
-    <div :class="{ eventCover: target !== '0' }"></div>
+    <div :class="{ eventCover:!ableInput }"></div>
     <div>
       <table class="myTable">
         <tr>
@@ -212,7 +212,7 @@
 <script>
 export default {
   name: "project_dr_tcq",
-  props: ["data", "target", "jsonString"],
+  props: ["data","ableInput", "target", "jsonString"],
   methods: {
     returnVal(val, key) {
       this.$store.commit('changeNumberOfDetectors',val)

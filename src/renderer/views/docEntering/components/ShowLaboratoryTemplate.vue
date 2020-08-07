@@ -399,7 +399,7 @@ export default {
       // } catch (e) {
       //   return "";
       // }
-      return 'http://120.77.153.63:8002'+this.sampleData.showing[0][0]["data"]["valueData"].recordStaffUrl
+      return 'http://120.77.153.63:8003'+this.sampleData.showing[0][0]["data"]["valueData"].recordStaffUrl
     },
 
     imgSrc2() {
@@ -411,7 +411,7 @@ export default {
       // } catch (e) {
       //   return "";
       // }
-      return 'http://120.77.153.63:8002'+this.sampleData.showing[0][0]["data"]["valueData"].checkStaffUrl
+      return 'http://120.77.153.63:8003'+this.sampleData.showing[0][0]["data"]["valueData"].checkStaffUrl
     }
   },
   methods: {
@@ -1395,7 +1395,7 @@ export default {
         this.sampleData.showing[0][0].data.valueData = res;
         this.sampleData.showing[0][0].data.valueData.point = [""];
         this.sampleData.showing[0][0].data.valueData.getSysSampleData = 0;
-        let imgUrl = "http://120.77.153.63:8002" + res.recordStaffUrl;
+        let imgUrl = "http://120.77.153.63:8003" + res.recordStaffUrl;
         this.getBase64(
           imgUrl,
           this.sampleData.showing[0][0].data.valueData,

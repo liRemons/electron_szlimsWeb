@@ -1,6 +1,6 @@
 <template>
   <div class="___relative" style="padding-top: 20px;">
-    <div :class="{ eventCover: target != 0 }"></div>
+    <div :class="{ eventCover: !ableInput }"></div>
     <table border="1" class="myTableReset _normalHeight_">
       <tr>
         <th align="left" class="p20">

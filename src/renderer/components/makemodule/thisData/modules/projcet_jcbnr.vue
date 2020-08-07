@@ -83,9 +83,10 @@
           </td>
           <td width="100">
             <div v-if="!item.isSzpbt || target !== '0'">
-              {{ item.rows[0] }}
+              <!-- {{ item.rows[0] }} -->
+              {{ item.name }}
             </div>
-            <myInput v-else v-model="item.rows[0]"></myInput>
+            <myInput v-else v-model="item.name"></myInput>
           </td>
           <td width="50">
             <divModel v-model="item.rows[1]"></divModel>
@@ -192,13 +193,15 @@ export default {
         if (arr1.includes(item.rows[0])) {
           item.rows[1] = "/";
         }
+        let name = JSON.parse(JSON.stringify(item.rows[0]));
+        this.$set(item, "name", name);
         if (item.rows[1]) {
         } else {
-          if (item.rows[0]) {
-            item.rows[1] = item.rows[0].split("(")[1]
-              ? item.rows[0].split("(")[1].split(")")[0]
+          if (item.name) {
+            item.rows[1] = item.name.split("(")[1]
+              ? item.name.split("(")[1].split(")")[0]
               : "";
-            item.rows[0] = item.rows[0].split("(")[0];
+            item.name = item.rows[0].split("(")[0];
           }
         }
       });
