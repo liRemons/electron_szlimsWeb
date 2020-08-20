@@ -183,14 +183,13 @@ export default {
           updateVersion: this.updateVersion,
           version: this.version,
         });
-        if (
-          Number(this.updateVersion.split(".")[0]) >
-          Number(this.version.split(".")[0])
-        ) {
+        let version = this.version.split(".");
+        let updateVersion = this.updateVersion.split(".");
+        if (Number(updateVersion[0]) > Number(version[0])) {
           this.updateflag = true;
         } else if (
-          Number(this.updateVersion.split(".")[1]) >
-          Number(this.version.split(".")[1])
+          Number(updateVersion[0]) > Number(version[0]) &&
+          Number(updateVersion[1]) > Number(version[1])
         ) {
           this.updateflag = true;
           this.apkUrl = res.data.data[0].apkUrl;
@@ -361,17 +360,17 @@ export default {
         });
       }
     };
-    let this_=this
+    let this_ = this;
     async function get() {
       let staffPhone = getToken() && JSON.parse(getToken()).staffPhone;
       if (staffPhone) {
         this_.$ipcRenderer.send("getStorage", staffPhone);
         let data = await this_.readFileEvent();
-        return data
+        return data;
       }
     }
     localStorage.getItem = (key) => {
-     console.log( get())
+      console.log(get());
     };
     //=============================END
     // setTimeout(() => {

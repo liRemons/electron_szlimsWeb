@@ -136,7 +136,7 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$message = Message;
 Vue.prototype.MethodsRe = MethodsRe;
 Vue.prototype.$ = $;
-Vue.prototype.hostUrl = "http://120.77.153.63:8022";
+Vue.prototype.hostUrl = "http://120.77.153.63:8033";
 Vue.prototype.global = global;
 Vue.prototype.$ipcRenderer = ipcRenderer;
 Vue.prototype.computeObj = computes;
@@ -144,7 +144,7 @@ Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
 Vue.prototype.$updateAxios = axios.updateAxios;
 Vue.prototype.$isUpdate = true;
-Vue.prototype.version = "0.9";
+Vue.prototype.version = "1.0";
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
   let index = "";
@@ -288,10 +288,20 @@ Vue.prototype.getRange = function(val, arr) {
   }
   return result;
 };
+// 一位小数，不足补0
 Vue.prototype.IntegerAdd0 = function(val) {
   if (!isNaN(val)) {
     if ((val + "").split(".").length == 1) {
       val += ".0";
+    }
+  }
+  return val;
+};
+// 两位小数，不足补0
+Vue.prototype.IntegerAdd2 = function(val) {
+  if (!isNaN(val)) {
+    if ((val + "").split(".")[1].length == 1) {
+      val += "0";
     }
   }
   return val;
@@ -327,7 +337,7 @@ Vue.prototype.getHistory = function() {
   let historyList = [];
   document.querySelectorAll(".editHistory").forEach((item) => {
     let obj = {
-      values: [],//模块下的每一项
+      values: [], //模块下的每一项
       project: item
         .getElementsByClassName("editHistoryProject")[0]
         .innerText.trim(),
@@ -355,10 +365,9 @@ Vue.prototype.getHistory = function() {
         } else {
           if (el.tagName == "INPUT") {
             obj.values[index].value = el.value.trim();
-          }else{
+          } else {
             obj.values[index].value = el.textContent.trim();
           }
-         
         }
       }
     );

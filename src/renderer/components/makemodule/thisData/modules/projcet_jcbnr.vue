@@ -201,9 +201,10 @@ export default {
             item.rows[1] = item.name.split("(")[1]
               ? item.name.split("(")[1].split(")")[0]
               : "";
-            item.name = item.rows[0].split("(")[0];
+           
           }
         }
+         item.name = item.rows[0].split("(")[0];
       });
       this.$forceUpdate();
     },

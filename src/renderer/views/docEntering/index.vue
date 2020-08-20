@@ -120,7 +120,11 @@
         v-if="target == 4 && isSelect === '0'"
         >不通过</el-button
       >
-      <el-button size="mini" type="danger" v-if="target == 0" @click="end"
+      <el-button
+        size="mini"
+        type="danger"
+        v-if="target == 0 && (tasks[0] ? tasks[0].docPass !== 1 : true)"
+        @click="end"
         >检测结束</el-button
       >
 
@@ -391,7 +395,7 @@
         :step="0.5"
       ></el-input-number>
       <div style="margin-top: 30px;">
-        <el-button round @click="unitInvalidDuration = false">取消</el-button>
+        <el-button round @click="signatureTimeDialog = false">取消</el-button>
         <el-button type="primary" round @click="longSignature">确定</el-button>
       </div>
     </el-dialog>
@@ -531,6 +535,7 @@ export default {
         })
           .then(() => {
             this.entryEndTime = this.MethodsRe.dateFormat();
+            this.importData.tasks.tasks[0].endTime=this.entryEndTime
             this.$message.success("结束时间生成成功");
           })
           .catch(() => {});
@@ -542,6 +547,7 @@ export default {
         })
           .then(() => {
             this.entryEndTime = this.MethodsRe.dateFormat();
+             this.importData.tasks.tasks[0].endTime=this.entryEndTime
             this.$message.success("结束时间生成成功");
           })
           .catch(() => {});

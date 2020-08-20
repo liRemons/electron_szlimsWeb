@@ -346,7 +346,6 @@ export default {
               completeArr.push({ rows: [...rows] });
             }
           });
-          console.log(completeArr)
           this.$notify({
             type: "success",
             message: "生成成功"

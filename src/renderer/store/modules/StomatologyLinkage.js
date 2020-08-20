@@ -30,7 +30,6 @@ const StomatologyLinkage = {
     NumberOfDetectors: "",
   },
   mutations: {
-    
     changePurposeFH(state, data) {
       state.purposeFH = data;
     },
@@ -52,6 +51,7 @@ const StomatologyLinkage = {
     },
     saveWindowArr(state, payload) {
       state.windowArr = payload;
+      console.log(payload)
     },
     saveDoorArr(state, payload) {
       state.doorArr = payload;
@@ -74,6 +74,17 @@ const StomatologyLinkage = {
 
     saveJudgePorjectName(state, payload) {
       let data = [];
+      function stateType(data, type) {
+        data.forEach((item) => {
+          item.type=type
+        });
+        return data;
+      }
+      state.workArr = stateType(state.workArr, "work");
+      state.windowArr = stateType(state.windowArr, "window");
+      state.doorArr = stateType(state.doorArr, "door");
+      state.wallArr = stateType(state.wallArr, "wall");
+      state.buildingArr = stateType(state.buildingArr, "building");
       state.syntheticData = [];
       if (
         state.purposeDetection === "豁免检测" ||
@@ -99,6 +110,7 @@ const StomatologyLinkage = {
               "",
               item.rows[item.rows.length - 1],
             ],
+            type:item.type,
             isSzpbt: item.isSzpbt,
           };
           state.syntheticData.push(obj);
@@ -159,22 +171,7 @@ const StomatologyLinkage = {
     },
   },
   actions: {
-    getHistory(state, data) {
-      let historyList = [];
-      document.querySelectorAll(".historyParent").forEach((item) => {
-        let values = [];
-        Array.prototype.forEach.call(
-          item.getElementsByClassName("historyValue"),
-          (el) => {
-            values.push(el.innerText);
-          }
-        );
-        historyList.push({
-          title: item.getElementsByClassName("historyTitle")[0].innerText,
-          value: values,
-        });
-      });
-    },
+    
     actionsPurposeDetection({ commit }, payload) {
       commit("savePurposeDetection", payload);
     },

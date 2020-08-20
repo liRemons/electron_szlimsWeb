@@ -200,8 +200,8 @@ export default {
     init(arr) {
       let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];
       arr.forEach((item) => {
-        let name=JSON.parse(JSON.stringify(item.rows[0]))
-        this.$set(item,'name',name)
+        let name = JSON.parse(JSON.stringify(item.rows[0]));
+        this.$set(item, "name", name);
         if (arr1.includes(item.rows[0])) {
           item.location = "/";
           // item.rows[9] = "/";
@@ -275,6 +275,7 @@ export default {
           } else if (index == 8) {
             this.data.valueData.point[b].rows[7] = val;
           }
+          this.data.valueData.point[b].rows[6] = val;
         });
       }
       this.$forceUpdate();

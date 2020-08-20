@@ -1,6 +1,6 @@
 <template>
   <div class="___relative" style="padding-top: 20px;">
-    <div :class="{ eventCover: !ableInput }"></div>
+    <div :class="{ eventCover: target != 0 }"></div>
     <table border="1" class="myTableReset _normalHeight_">
       <tr>
         <th align="left" colspan="7" class="p20">
@@ -209,72 +209,54 @@ export default {
       });
       return total / calculation.length;
     },
-    changeNum(index, num0, num1, num2, num3) {
-      setTimeout(() => {
-        try {
-          let arr = [num1, num2, num3];
-          arr.forEach((item, index) => {
-            if (
-              this.isNumber(item) &&
-              this.deviceFactorObj.deviceFactor_gdy instanceof Array &&
-              this.deviceFactorObj.deviceFactor_gdy.length > 0
-            ) {
-              this.confirmFactor[index] = this.getFactor(
-                item,
-                this.deviceFactorObj.deviceFactor_gdy
-              );
-            }
-          });
-          if (
-            arr.some((item, index, array) => {
-              return this.isNumber(item);
-            })
-          ) {
-            let result = [];
-            let retain = [];
-            this.confirmFactor.forEach((item, num) => {
-              if (this.isNumber(item)) {
-                result.push(item * arr[num]);
-                retain.push(
-                  arr[num].split(".").length > 1
-                    ? arr[num].split(".")[1].length
-                    : 0
-                );
-              }
-            });
-            let min = Math.min(...retain);
-            this.data.valueData.point[index].rows[4] = this.average(
-              result
-            ).toFixed46(min);
-            if (
-              String(this.data.valueData.point[index].rows[4]).split(".")
-                .length == 1
-            ) {
-              this.data.valueData.point[index].rows[4] =
-                this.data.valueData.point[index].rows[4] + ".0";
-            }
-          }
-          if (
-            this.isNumber(num0) &&
-            this.isNumber(this.data.valueData.point[index].rows[4])
-          ) {
-            this.data.valueData.point[index].rows[5] = (
-              ((this.data.valueData.point[index].rows[4] - num0) / num0) *
-              100
-            ).toFixed46(1);
-          }
 
-          if (
-            String(this.data.valueData.point[index].rows[5]).split(".")
-              .length == 1
-          ) {
-            this.data.valueData.point[index].rows[5] =
-              this.data.valueData.point[index].rows[5] + ".0";
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }, 100);
+    changeNum(index, num0, num1, num2, num3) {
+      if (num0 == "" || num1 == "" || num2 == "" || num3 == "") {
+        return;
+      }
+      let value = this.deviceFactorObj.deviceFactor_gdy.map((item) =>
+        Number(item.value.split("/")[1])
+      );
+      value.sort((a, b) => a - b);
+      let maxValue = value[0];
+      let minValue = value[value.length - 1];
+      let deviceFactor_gdy = [];
+      this.deviceFactorObj &&
+        this.deviceFactorObj.deviceFactor_gdy.forEach((item, index) => {
+          deviceFactor_gdy[index] = {
+            value1: item.value.split("/")[0],
+            value2: item.value.split("/")[1],
+          };
+        });
+      deviceFactor_gdy.sort((a, b) => a.value1 - b.value1);
+      let instrumentArea = [{ An: num1 }, { An: num2 }, { An: num3 }];
+      instrumentArea.forEach((item) => {
+        // A2 > 值 > A1
+        // 大值
+        item.A2 = deviceFactor_gdy.find(
+          (a) => Number(a.value2) > Number(item.An)
+        );
+        // 小值
+        let A1 = deviceFactor_gdy.filter(
+          (a) => Number(a.value2) < Number(item.An)
+        );
+
+        A1.length && (item.A1 = A1[A1.length - 1]);
+        item.Bn = (
+          ((item.An - item.A1.value2) * (item.A2.value1 - item.A1.value1)) /
+            (item.A2.value2 - item.A1.value2) +
+          Number(item.A1.value1)
+        ).toFixed46(2);
+      });
+      this.data.valueData.point[index].rows[4] = this.IntegerAdd2(
+        (instrumentArea.reduce((pre, cur) => pre + cur.Bn, 0) / 3).toFixed46(2)
+      );
+      this.data.valueData.point[index].rows[5] = this.IntegerAdd0(
+        (
+          ((this.data.valueData.point[index].rows[4] - num0) / num0) *
+          100
+        ).toFixed46(1)
+      );
     },
     reduce(index) {
       if (this.data.valueData.point.length > 1) {

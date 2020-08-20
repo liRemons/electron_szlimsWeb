@@ -159,8 +159,8 @@
           <div
             class="__functionBox"
             v-if="
-              index != data.valueData.point.length - 1 &&
-              ipdTemplate == 'ipdTemplate'
+              (index != data.valueData.point.length - 1 &&
+              ipdTemplate == 'ipdTemplate')&& target == 0
             "
             style="right: -70px; width: 20px; z-index: 100;"
           >

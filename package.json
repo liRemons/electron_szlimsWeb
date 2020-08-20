@@ -1,6 +1,6 @@
 {
   "name": "szlims-winapp",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "author": "",
   "description": "杭州湘亭科技提供技术支持",
   "license": "MIT",
@@ -16,14 +16,15 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js"
   },
   "build": {
-    "productName": "深圳市瑞达智能检测系统用户端正式版",
+    "productName": "深圳市瑞达智能检测系统用户端",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "include":"./install.nsh"
     },
     "extraResources": {
       "from": "./static/finger",

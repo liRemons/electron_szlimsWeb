@@ -2389,9 +2389,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 330,
+        fixed: 350,
         value: function(obj) {
-          return 330;
+          return 350;
         },
       },
       _short: {

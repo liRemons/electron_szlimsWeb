@@ -160,7 +160,7 @@
                 style="width: 100%; text-align: center; height: 32px;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <span v-else>{{ data.valueData.ballNum }}</span>
+              <div  style="width:100%;text-align:center" v-else>{{ data.valueData.ballNum }}</div>
             </div>
           </div>
           <div
@@ -1001,7 +1001,7 @@ export default {
       }
       this.$emit("changeJson", [...usedData]);
 
-      this.$store.dispatch("actionsClear", completeArr);
+      // this.$store.dispatch("actionsClear", completeArr);
       this.$store.dispatch("actionsSetTestprojectId", true);
 
       this.$store.dispatch("actionsSurgeon");

@@ -665,6 +665,9 @@ export default {
           document.querySelectorAll(".leftBtn").forEach((item) => {
             item.style.display = "none";
           });
+          document.querySelectorAll(".el-icon-arrow-down").forEach((item) => {
+            item.style.display = "none";
+          });
 
           this.readFile(JSON.parse(getToken()), "noPass");
           this.readFileEvent().then((reson) => {
@@ -763,13 +766,46 @@ export default {
       let projectLength = "";
       let projectData = "";
       let contentArray = [];
+       this.$store.dispatch("actionsClear");
       if (this.task.data != null) {
         projectLength = JSON.myParse(this.task.data).length;
         projectData = JSON.myParse(this.task.data);
+        let projcet_jgysnrPoint = [];
+        let projcet_jcbnrPoint = [];
+        let work, window, door, wall, building;
+        projectData.forEach((item) => {
+          if (item.testProject == "projcet_jgysnr") {
+            projcet_jgysnrPoint.push(...item.point);
+            window = projcet_jgysnrPoint.filter((a) => a.type == "window");
+            work = projcet_jgysnrPoint.filter((a) => a.type == "work");
+            door = projcet_jgysnrPoint.filter((a) => a.type == "door");
+            wall = projcet_jgysnrPoint.filter((a) => a.type == "wall");
+            building = projcet_jgysnrPoint.filter((a) => a.type == "building");
+          } else if (item.testProject == "projcet_jcbnr") {
+            projcet_jcbnrPoint.push(...item.point);
+            window = projcet_jcbnrPoint.filter((a) => a.type == "window");
+            work = projcet_jcbnrPoint.filter((a) => a.type == "work");
+            door = projcet_jcbnrPoint.filter((a) => a.type == "door");
+            wall = projcet_jcbnrPoint.filter((a) => a.type == "wall");
+            building = projcet_jcbnrPoint.filter((a) => a.type == "building");
+          }
+          if (
+            item.testProject == "projcet_jgysnr" ||
+            item.testProject == "projcet_jcbnr"
+          ) {
+            console.log(work, window, door, wall, building);
+            work.length && this.$store.commit("saveWorkArr", work);
+            window.length && this.$store.commit("saveWindowArr", window);
+            door.length && this.$store.commit("saveDoorArr", door);
+            wall.length && this.$store.commit("saveWallArr", wall);
+            building.length && this.$store.commit("savebuildingArr", building);
+          }
+        });
         for (let i = 0; i < projectLength; i++) {
           contentArray.push(projectData[i].testProject);
         }
       } else {
+       
         contentArray = JSON.myParse(this.task.testProjectList);
         contentArray.forEach((item, index) => {
           if (
@@ -1652,7 +1688,7 @@ export default {
         this.unitUrl.filter((item) => this.taskData.id == item.id)[0].unitUrl
       );
       getImageBase64Data(
-        "http://120.77.153.63:8022" + this.taskData.unitUrl
+        "http://120.77.153.63:8033" + this.taskData.unitUrl
       ).then((res) => {
         this.taskData.showing[0][0]["data"]["valueData"][
           "imgBase64Three"
@@ -1748,7 +1784,6 @@ export default {
     // console.log(this.task.detectionTime)
     this.refre = true;
     //获取任务开始录入时间
-    console.log(this.task.startTime);
     if (this.task.startTime == null) {
       let entryStartTime = _dateFormat("now", "Y-M-D h:m:s");
       this.task.startTime = entryStartTime;
