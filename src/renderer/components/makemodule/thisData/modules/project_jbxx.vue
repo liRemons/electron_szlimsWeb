@@ -207,7 +207,7 @@
             >
               <div
                 style="
-                  line-height: 1rem;
+                  line-height: 8px;
                   word-break: break-all;
                   white-space: pre-wrap;
                   font-size: 12px;

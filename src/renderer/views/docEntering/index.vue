@@ -535,7 +535,7 @@ export default {
         })
           .then(() => {
             this.entryEndTime = this.MethodsRe.dateFormat();
-            this.importData.tasks.tasks[0].endTime=this.entryEndTime
+            this.importData.tasks.tasks[0].endTime = this.entryEndTime;
             this.$message.success("结束时间生成成功");
           })
           .catch(() => {});
@@ -547,7 +547,7 @@ export default {
         })
           .then(() => {
             this.entryEndTime = this.MethodsRe.dateFormat();
-             this.importData.tasks.tasks[0].endTime=this.entryEndTime
+            this.importData.tasks.tasks[0].endTime = this.entryEndTime;
             this.$message.success("结束时间生成成功");
           })
           .catch(() => {});
@@ -1065,6 +1065,7 @@ export default {
     toUpload(signature) {
       // return
       let flag = false;
+      // 点位图
       let result = this.tasks.some((item) => {
         if (item.deviceMainId == 4) {
           return false;
@@ -1072,18 +1073,20 @@ export default {
           return item.pointUrl;
         }
       });
+      // 签名
       let result2 = this.tasks.some((item) => item.unitUrl);
       // console.log(result, result2);
       this.tasks.forEach((item) => {
-        item.isDocImg !== 0 ? (flag = true) : "";
+        // isDocImg   0是报告不需要图，1是报告需要图，2是报告需要现场上传的图
+        item.isDocImg ? (flag = true) : "";
       });
+      if (!result2) {
+        this.$message.warning("请上传受检单位签名照");
+        return;
+      }
       if (flag) {
-        if (result && result2) {
-        } else {
-          this.$notify({
-            type: "error",
-            message: "签名照或点位图未上传！",
-          });
+        if (!result) {
+          this.$message.warning("请上传点位图");
           return;
         }
       }

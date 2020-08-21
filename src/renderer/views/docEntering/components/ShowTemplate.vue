@@ -793,7 +793,6 @@ export default {
             item.testProject == "projcet_jgysnr" ||
             item.testProject == "projcet_jcbnr"
           ) {
-            console.log(work, window, door, wall, building);
             work.length && this.$store.commit("saveWorkArr", work);
             window.length && this.$store.commit("saveWindowArr", window);
             door.length && this.$store.commit("saveDoorArr", door);
@@ -1098,7 +1097,6 @@ export default {
               Math.random() + "init" + Math.random();
             result.groundName = modelObj.groundName;
             result.showName = modelObj.showName;
-            console.log(obj, "obj");
             this.dataFormat(result, obj, this.task);
             modelObj.push(result);
           }
@@ -1276,8 +1274,9 @@ export default {
           });
           template.valueData.detectionTime = _dateFormat("now", "Y-M-D  h:m:s");
           try {
+              console.log(JSON.myParse(task["assessArr"]),'aaa')
             template.valueData.assessArr = JSON.myParse(task["assessArr"])
-              .map((item) => item.evaluateProjectName)
+              .map((item) => item.evaluateName)
               .toString();
           } catch (e) {
             template.valueData.assessArr = "";
