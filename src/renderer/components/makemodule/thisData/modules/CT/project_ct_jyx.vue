@@ -114,7 +114,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>与中心插值</td>
+					<td>与中心差值</td>
 					<td>/</td>
 					<td>{{data.valueData.F}}</td>
 					<td>{{data.valueData.G}}</td>

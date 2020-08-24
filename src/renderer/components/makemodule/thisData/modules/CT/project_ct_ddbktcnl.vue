@@ -207,11 +207,12 @@
             ></myInput>
           </td>
           <td v-if="index == 0" rowspan="3">
-            <myInput
+            {{item.I}}
+            <!-- <myInput
               style="text-align: center"
               v-model="item.I"
               :defaultValue="item.I"
-            ></myInput>
+            ></myInput> -->
           </td>
         </tr>
       </table>
@@ -266,7 +267,7 @@ export default {
         .filter(i => i != "")
         .map(z => Number(z));
       this.data.valueData.point.forEach(
-        i => (i.I = (eval(harr.join("+")) / 3).toFixed46(1))
+        i => (i.I =this.IntegerAdd2 ((eval(harr.join("+")) / 3).toFixed46(2)))
       );
     },
     noShowInput(el, index) {

@@ -529,10 +529,10 @@ export default [{
     height: { //模块高度
       _normal: {
         carried: true,
-        fixed: 390,
+        fixed: 411,
         confirm: true,
         value: function (obj) {
-          return 390;
+          return 411;
         }
       },
       _short: {

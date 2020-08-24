@@ -26,7 +26,7 @@ export default {
       if (this.reg) {
         this.reg == "[^0-9./]"
           ? (this.$refs.myBox.value = Number(
-              e.target.value.replace(/[^\d.]/g, "")
+              e.target.value.replace(/[^(\-?)\d+(\.\d+)]/g, "")
             ))
           : "";
         this.$emit("input", this.$refs.myBox.value);

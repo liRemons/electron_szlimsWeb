@@ -1033,12 +1033,12 @@ export default {
         this.$refs.templateHTML[0].$el.innerHTML
       ).then((res) => {
         this.signatureTimeDialog = false;
-        this.copyText =
-          this.hostUrl +
+        this.copyText =encodeURI
+         ( this.hostUrl +
           "/signature?url=" +
           res.url +
           "&id=" +
-          this.tasks[0].id;
+          this.tasks[0].id);
         this.copyDialog = true;
 
         updateUnitGenerateTime(
