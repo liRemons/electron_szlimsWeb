@@ -9,12 +9,14 @@
           </p>
         </div>
         <p style="line-height: 16px;">一、基本信息</p>
-        <p style="line-height: 16px;" class="editHistoryProject">1.1委托单位信息</p>
+        <p style="line-height: 16px;" class="editHistoryProject">
+          1.1委托单位信息
+        </p>
         <div
           class="___relative ___module_frame_Box"
           style="border-top: solid 1px black;"
         >
-          <div class="___relative borderBottom ">
+          <div class="___relative borderBottom">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
                 <div class="tc editHistoryTitle">委托单位名称</div>
@@ -28,7 +30,7 @@
               ></divModel>
             </div>
           </div>
-          <div class="___relative borderBottom ">
+          <div class="___relative borderBottom">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
                 <div class="tc editHistoryTitle">受检单位名称</div>
@@ -503,7 +505,7 @@ export default {
       this.nowItem.rows[2] = [rowObj.probeNum, rowObj.deviceNum];
       this.nowItem.rows[3] = [rowObj.correctNum, rowObj.correctNum1];
       this.nowItem.rows[4] = [
-        rowObj.correctTime.split(" ")[0],
+        rowObj.correctTime && rowObj.correctTime.split(" ")[0],
         rowObj.correctTime1 && rowObj.correctTime1.split(" ")[0],
       ];
       this.nowItem.rows[5] = rowObj.id;

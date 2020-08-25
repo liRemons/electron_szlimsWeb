@@ -1853,6 +1853,7 @@ export default [
         {
           exposureMode: "",
           harnessDirection: "",
+          checked:true
         },
       ],
       deviceStatus: "",
@@ -1860,6 +1861,7 @@ export default [
       sonOperation: "",
       surgeonNum: "",
       siteEnvironment: "",
+      
     },
     height: {
       //模块高度

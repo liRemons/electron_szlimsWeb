@@ -6,7 +6,9 @@
   >
     <div :class="{ eventCover: !headInput }"></div>
     <div class="modules_1_tableBox ___relative mt10">
-      <p style="line-height: 16px;" class="editHistoryProject">二、检测现场信息</p>
+      <p style="line-height: 16px;" class="editHistoryProject">
+        二、检测现场信息
+      </p>
       <div
         class="___relative ___module_frame_Box"
         style="border-top: solid 1px black;"
@@ -82,7 +84,7 @@
             style="width: 190px; left: 141px;"
             class="___absolute t0 Full borderRight editHistoryValue"
           >
-            <div class="___absolute Full " style="width: 50%;">
+            <div class="___absolute Full" style="width: 50%;">
               <divModel
                 v-model="data.valueData.mainParameterkV"
                 :computers="
@@ -94,7 +96,7 @@
                   height: 30px;
                   border-bottom: 1px solid black;
                 "
-                class="Full warp2 rowsInput2 hide focusBg "
+                class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
               <span style="margin-left: 70%;">kV</span>
             </div>
@@ -114,7 +116,9 @@
               ></divModel>
               <div style="margin-left: 50%;">
                 <!-- 为了取到innerText值，留修改记录 -->
-                <span v-show="false">{{data.valueData.mainParametermAutil}}</span>
+                <span v-show="false">{{
+                  data.valueData.mainParametermAutil
+                }}</span>
                 <selectModel
                   @returnVal="changeMainParametermAutil"
                   :Judge="true"
@@ -160,7 +164,9 @@
                 style="width: 100%; text-align: center; height: 32px;"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <div  style="width:100%;text-align:center" v-else>{{ data.valueData.ballNum }}</div>
+              <div style="width: 100%; text-align: center;" v-else>
+                {{ data.valueData.ballNum }}
+              </div>
             </div>
           </div>
           <div
@@ -236,6 +242,11 @@
                 style="right: 0;"
               >
                 <span>-</span>
+              </div>
+              <div class="___absolute" style="right: -200px;">
+                <el-checkbox v-model="data.valueData.point[index].checked"
+                  >机房屏蔽体现场调查</el-checkbox
+                >
               </div>
             </div>
           </div>
@@ -438,8 +449,17 @@
         >
           <span>-</span>
         </div>
+
         <div class="__functionButton6" @click="increase">
           <span>+</span>
+        </div>
+        <div class="___absolute" style="right: -177px;">
+          <el-checkbox
+            v-model="
+              data.valueData.point[data.valueData.point.length - 1].checked
+            "
+            >机房屏蔽体现场调查</el-checkbox
+          >
         </div>
       </div>
       <div
@@ -473,6 +493,7 @@ export default {
       exposureModeList: [],
       modules: modules,
       testing: "",
+      checked: true,
     };
   },
   props: [
@@ -512,6 +533,7 @@ export default {
       let obj = {
         exposureMode: "",
         harnessDirection: "",
+        checked: true,
       };
       this.data.valueData.point.push(obj);
       this.$emit("redefinition");
@@ -609,6 +631,7 @@ export default {
         let obj = {
           exposureMode: "",
           harnessDirection: "",
+          checked: true,
         };
         this.data.valueData.point = [obj];
       }
@@ -754,7 +777,7 @@ export default {
     setResolvingPower() {
       let data = [];
       this.data.valueData.point.forEach((item, index) => {
-        if (item.exposureMode != "") {
+        if (item.exposureMode != "" && item.checked) {
           if (
             item.exposureMode === "全景扫描" ||
             item.exposureMode === "头颅摄影"
@@ -819,7 +842,7 @@ export default {
       );
       this.jsonString.forEach((item, index) => {
         if (item.data.name === "project_jcxcxx") {
-          dataArr.push(...item.data.valueData.point);
+          dataArr.push(...item.data.valueData.point.filter((a) => a.checked));
         }
         if (
           item.to === "projcet_jcbt" ||
@@ -881,6 +904,7 @@ export default {
         projcetArr[0].valueData.deviceState = "开机";
         projcetArr[0].valueData.exposureMode = dataArr[i].exposureMode;
         projcetArr[0].valueData.harnessDirection = dataArr[i].harnessDirection;
+        projcetArr[0].valueData.checked = dataArr[i].checked;
         let jcbt = JSON.myParse(
           JSON.stringify({
             to: projcetArr[0].name,
@@ -899,6 +923,7 @@ export default {
         let completed = [];
         projcetArr[2].valueData.exposureMode = dataArr[i].exposureMode;
         projcetArr[2].valueData.harnessDirection = dataArr[i].harnessDirection;
+        projcetArr[2].valueData.checked = dataArr[i].checked;
         let jgyst = JSON.myParse(
           JSON.stringify({
             to: projcetArr[2].name,
@@ -1102,10 +1127,12 @@ export default {
           let obj = {
             exposureMode: "",
             harnessDirection: "",
+            checked: true,
           };
           this.data.valueData.point = [obj];
         }
       }
+      console.log(this.data.valueData.point);
     }, 1000);
   },
 };

@@ -20,12 +20,9 @@
       </tr>
       <tr>
         <td class="p20 tl" colspan="7" style="line-height: 16px;">
-          对于口内牙片机，将探测器置于靠近限束筒出口的位置；对于全景摄影功能的口外机，将探测器置于影像接收器外壳表面；
-          对于头颅摄影功能的口外机，将探测器置于次级光阑外侧，
-          确保探测器位于主射束中心轴并使探测器表面与主射束中心轴 垂直。
-          校准平均值=管电压测量值平均值×a1-a0，a1=，a0=
-          ，a0和a1依有效的计量部门证书按线性回归拟合方程求
-          得；相对偏差=（校准平均值-管电压预设值）/管电压预设值×100%。
+          校准平均值等于3次管电压测量值求平均值后，平均值依有效的计量部门检定/校准证书的校准结果进行校准后的结果。公式如下：依校准证书可知电压档为A1（送计量院校准仪器的读数）时，相应的校准值为B1（计量部门标准器的读数）。电压档为A2（送计量院校准仪器的读数）时，相应的校准值为B2（计量部门标准器的读数），现在管电压3次测量的平均值An位于A1和A2之间，则管电压校准平均值Bn
+          =（An- A1）*（B2 - B1 ）/（A2 - A1 ）+ B1。
+          相对偏差=（校准平均值-管电压预设值）/管电压预设值×100%。
         </td>
       </tr>
 
@@ -214,12 +211,6 @@ export default {
       if (num0 == "" || num1 == "" || num2 == "" || num3 == "") {
         return;
       }
-      let value = this.deviceFactorObj.deviceFactor_gdy.map((item) =>
-        Number(item.value.split("/")[1])
-      );
-      value.sort((a, b) => a - b);
-      let maxValue = value[0];
-      let minValue = value[value.length - 1];
       let deviceFactor_gdy = [];
       this.deviceFactorObj &&
         this.deviceFactorObj.deviceFactor_gdy.forEach((item, index) => {
@@ -229,29 +220,20 @@ export default {
           };
         });
       deviceFactor_gdy.sort((a, b) => a.value1 - b.value1);
-      let instrumentArea = [{ An: num1 }, { An: num2 }, { An: num3 }];
-      instrumentArea.forEach((item) => {
-        // A2 > 值 > A1
-        // 大值
-        item.A2 = deviceFactor_gdy.find(
-          (a) => Number(a.value2) > Number(item.An)
-        );
-        // 小值
-        let A1 = deviceFactor_gdy.filter(
-          (a) => Number(a.value2) < Number(item.An)
-        );
-
-        A1.length && (item.A1 = A1[A1.length - 1]);
-        item.Bn = (
-          ((item.An - item.A1.value2) * (item.A2.value1 - item.A1.value1)) /
-            (item.A2.value2 - item.A1.value2) +
-          Number(item.A1.value1)
-        ).toFixed46(2);
-      });
+      let An = (Number(num1) + Number(num2) + Number(num3)) / 3;
+      let min = [...deviceFactor_gdy]
+        .reverse()
+        .find((item) => An > item.value2);
+      let max = deviceFactor_gdy.find((item) => An < item.value2);
+      let A1 = +min.value2;
+      let B2 = +max.value1;
+      let B1 = +min.value1;
+      let A2 = +max.value2;
+      let Bn = ((An - A1) * (B2 - B1)) / (A2 - A1) + B1;
       this.data.valueData.point[index].rows[4] = this.IntegerAdd2(
-        (instrumentArea.reduce((pre, cur) => pre + cur.Bn, 0) / 3).toFixed46(2)
+        Bn.toFixed46(2)
       );
-      this.data.valueData.point[index].rows[5] = this.IntegerAdd0(
+      this.data.valueData.point[index].rows[5] = this.IntegerAdd2(
         (
           ((this.data.valueData.point[index].rows[4] - num0) / num0) *
           100
