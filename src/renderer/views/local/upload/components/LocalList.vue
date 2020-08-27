@@ -321,7 +321,7 @@ export default {
       if (row) {
         let that = this;
         if (row.unitUrl) {
-          let src = "http://120.77.153.63:8033" + row.unitUrl;
+          let src = that.hostUrl + row.unitUrl;
           let image = new Image();
           image.crossOrigin = "";
           image.src = src;
@@ -334,9 +334,9 @@ export default {
         } else {
           store.dispatch("TemplateAction", "show");
           // if (row.unitUrl && row.pointUrl) {
-            that.$router.push(`/local/doc-entering/3/${row.taskId}`);
+          that.$router.push(`/local/doc-entering/3/${row.taskId}`);
           // if (row.pointUrl) {
-            
+
           // } else {
           //   this.$notify({
           //     type: "warning",
@@ -357,7 +357,7 @@ export default {
       let data = { taskId: this.nowRow.taskId, type: 1 };
       val.upload(
         v2,
-        "http://120.77.153.63:8033/upload_image",
+        `${this.hostUrl}/upload_image`,
         this.fileSuccess2,
         this.fileError2,
         data
@@ -369,7 +369,7 @@ export default {
       if (this.multipleSelection.length <= 0) {
         this.$notify({
           type: "warning",
-          message: "请选择",
+          message: "请选择需要上传的任务",
         });
         return;
       }

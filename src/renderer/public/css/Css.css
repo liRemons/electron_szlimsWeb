@@ -1760,7 +1760,7 @@ body::-webkit-scrollbar-track {
 }
 
 .tc {
-  text-align: center;
+  text-align: center !important;
 }
 
 .tl {
@@ -2338,4 +2338,10 @@ body::-webkit-scrollbar-track {
 .project_dr_jxkjfbl ._normalInput_{
   white-space: normal;
   height: 100px !important;
+}
+
+
+.flex_around{
+  display: flex;
+  justify-content: space-around;
 }

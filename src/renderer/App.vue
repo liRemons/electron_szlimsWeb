@@ -183,14 +183,8 @@ export default {
           updateVersion: this.updateVersion,
           version: this.version,
         });
-        let version = this.version.split(".");
-        let updateVersion = this.updateVersion.split(".");
-        if (Number(updateVersion[0]) > Number(version[0])) {
-          this.updateflag = true;
-        } else if (
-          Number(updateVersion[0]) > Number(version[0]) &&
-          Number(updateVersion[1]) > Number(version[1])
-        ) {
+
+        if (Number(this.updateVersion) > Number(this.version)) {
           this.updateflag = true;
           this.apkUrl = res.data.data[0].apkUrl;
         } else {

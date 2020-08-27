@@ -40,7 +40,7 @@
       </el-carousel>
     </div>
 
-    <div style="position: fixed; right: 3vw; top: 90vh;">
+    <div style="position: fixed; right: 3vw; top:90vh;z-index:2001">
       <el-button @click="clearSelected">取消选择</el-button>
       <!-- <el-button type="danger" @click="cancelSamples">退样</el-button> -->
       <el-button type="primary" @click="entry">接样</el-button>

@@ -51,7 +51,6 @@ const StomatologyLinkage = {
     },
     saveWindowArr(state, payload) {
       state.windowArr = payload;
-      console.log(payload)
     },
     saveDoorArr(state, payload) {
       state.doorArr = payload;
@@ -76,7 +75,7 @@ const StomatologyLinkage = {
       let data = [];
       function stateType(data, type) {
         data.forEach((item) => {
-          item.type=type
+          item.type = type;
         });
         return data;
       }
@@ -110,7 +109,7 @@ const StomatologyLinkage = {
               "",
               item.rows[item.rows.length - 1],
             ],
-            type:item.type,
+            type: item.type,
             isSzpbt: item.isSzpbt,
           };
           state.syntheticData.push(obj);
@@ -133,7 +132,6 @@ const StomatologyLinkage = {
       state.doorArr = [];
       state.wallArr = [];
       state.buildingArr = [];
-
       state.surgeon = false;
     },
 
@@ -171,7 +169,6 @@ const StomatologyLinkage = {
     },
   },
   actions: {
-    
     actionsPurposeDetection({ commit }, payload) {
       commit("savePurposeDetection", payload);
     },

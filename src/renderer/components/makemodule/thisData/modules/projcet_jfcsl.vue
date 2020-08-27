@@ -308,6 +308,7 @@ export default {
         } else {
           let completeArr = [];
           let direction = ["上侧", "下侧", "左侧", "右侧", "中部"];
+           
           dataArr.forEach((item, index) => {
             let cubicMetre =
               parseFloat(item.rows[1]) * parseFloat(item.rows[2]);
@@ -350,6 +351,7 @@ export default {
             type: "success",
             message: "生成成功"
           });
+        
           this.$store.dispatch("actionsWindowArr", completeArr);
         }
       } else {

@@ -1731,6 +1731,7 @@ export default [
     switch: true,
     isHead: true,
     valueData: {
+      endTime:"",
       testProject: "project_jbxx",
       multipleId: 0,
       entrustedUnitName: "",

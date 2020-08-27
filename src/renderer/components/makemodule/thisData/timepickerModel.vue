@@ -1,9 +1,10 @@
 <template>
   <div class="box_warpper tc">
-    <div class="heightCenter3" style="height:32px;width: 100%;">
+    <div class="heightCenter3" style="height: 32px; width: 100%;">
       <span>{{ time }}</span
       >&nbsp;
       <el-time-picker
+        style="width: 100%; height: 30px;"
         class="time"
         v-model="time"
         value-format="HH:mm"
@@ -19,7 +20,7 @@ export default {
   props: ["showTime", "data"],
   data() {
     return {
-      time: ""
+      time: "",
     };
   },
   filters: {
@@ -27,7 +28,7 @@ export default {
       if (time) {
         return time.split(" ")[1];
       }
-    }
+    },
   },
   methods: {
     changeTime(val) {
@@ -35,17 +36,17 @@ export default {
       this.$emit("setTime", val);
       this.data.SamplingTime =
         new Date().format("yyyy-MM-dd") + " " + this.data.time;
-    }
+    },
   },
   watch: {
     showTime(val) {
       this.time = val;
-    }
+    },
   },
   components: {},
   mounted() {
     this.time = this.showTime;
-  }
+  },
 };
 </script>
 

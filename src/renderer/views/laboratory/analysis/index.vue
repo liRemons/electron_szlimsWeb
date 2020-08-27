@@ -20,7 +20,7 @@
         :initial-index="analysisInitial_index"
       >
         <el-carousel-item :key="1" label="理化">
-          <div style="margin-bottom: 10px; height: 66vh; overflow-y: auto;">
+          <div style="margin-bottom: 10px; height: 100%; overflow-y: auto;">
             <my-table
               ref="myt"
               style="min-height: 66vh;"
@@ -30,7 +30,7 @@
           </div>
         </el-carousel-item>
         <el-carousel-item :key="2" label="放射">
-          <div style="margin-bottom: 20px; height: 66vh; overflow-y: auto;">
+          <div style="margin-bottom: 20px; height: 100%; overflow-y: auto;">
             <my-table
               :data="dataFangshe"
               style="min-height: 65vh;"
@@ -39,7 +39,7 @@
           </div>
         </el-carousel-item>
         <el-carousel-item :key="3" label="微生物">
-          <div style="margin-bottom: 20px; height: 66vh; overflow-y: auto;">
+          <div style="margin-bottom: 20px; height: 100%; overflow-y: auto;">
             <my-table
               :data="dataWeishenghu"
               style="min-height: 65vh;"
@@ -50,7 +50,7 @@
       </el-carousel>
     </div>
 
-    <div style="position: fixed; right: 5vw; top: 90vh;">
+    <div style="position: fixed; right: 5vw; top:90vh;z-index:2001">
       <el-button @click="clearSelected">取消选择</el-button>
       <el-button
         v-show="nowPage === '正在分析'"
@@ -646,7 +646,11 @@ export default {
   padding-right: 85vw;
 }
 
+</style>
+
+<style >
 .el-carousel__container {
-  min-height: 68vh !important;
+  height: 66vh !important;
 }
+  
 </style>

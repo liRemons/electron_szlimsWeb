@@ -230,6 +230,7 @@ import {
 } from "@/api/local";
 import { mapState } from "vuex";
 import { currentTime } from "@/utils/dateTime.js";
+import { count } from "console";
 export default {
   data() {
     return {
@@ -334,7 +335,7 @@ export default {
 
       let NumberOfDetectors;
       let createdDetector = [];
-      // 当 DR 探测器数量 选择 2 时，以下项目为两个- start-------------------------------
+      // 当 DR 探测器数量 选择 2 时，以下项目为2个---- START-------------------------------
       let createdDetectorName = [
         "project_dr_xhcttx", //信号传递特性（STP）
         "project_dr_kszs", //DR暗噪声
@@ -405,7 +406,7 @@ export default {
           (value) => Object.keys(value).length !== 0
         );
       }
-      // ----------------------------------------------end----------------------------
+      // ---------------------------END----------------------------
       this.jsonString.forEach((item, index) => {
         let obj = {};
         let findIndex = redefinitionArr.findIndex((val) => {
@@ -582,6 +583,7 @@ export default {
         }
       });
       this.jsonString = [];
+
       this.jsonString = decompose;
       this.$forceUpdate();
       this.Reset();
@@ -710,7 +712,11 @@ export default {
                 (a) => a.testProjectId == item.data.valueData.testProjectId
               )
             );
-            that.$set(item.data.valueData, "deviceData2", res.data);
+            that.$set(
+              item.data.valueData,
+              "deviceData2",
+              that.MethodsRe.removeArrRepeat(res.data, "id")
+            );
           });
           that.componentFlag = true;
           that.getHistoryInit();
@@ -766,7 +772,7 @@ export default {
       let projectLength = "";
       let projectData = "";
       let contentArray = [];
-       this.$store.dispatch("actionsClear");
+      this.$store.dispatch("actionsClear");
       if (this.task.data != null) {
         projectLength = JSON.myParse(this.task.data).length;
         projectData = JSON.myParse(this.task.data);
@@ -804,7 +810,6 @@ export default {
           contentArray.push(projectData[i].testProject);
         }
       } else {
-       
         contentArray = JSON.myParse(this.task.testProjectList);
         contentArray.forEach((item, index) => {
           if (
@@ -1274,7 +1279,6 @@ export default {
           });
           template.valueData.detectionTime = _dateFormat("now", "Y-M-D  h:m:s");
           try {
-              console.log(JSON.myParse(task["assessArr"]),'aaa')
             template.valueData.assessArr = JSON.myParse(task["assessArr"])
               .map((item) => item.evaluateName)
               .toString();
@@ -1676,6 +1680,7 @@ export default {
     this.$eventBus.$on("redefinition", () => {
       this.redefinition("");
     });
+    this.$eventBus.$off("jcxcxxEvent");
 
     this.isTemplate = true;
     this.ipdTemplate = "ipdTemplate";
@@ -1686,9 +1691,7 @@ export default {
         "unitUrl",
         this.unitUrl.filter((item) => this.taskData.id == item.id)[0].unitUrl
       );
-      getImageBase64Data(
-        "http://120.77.153.63:8033" + this.taskData.unitUrl
-      ).then((res) => {
+      getImageBase64Data(this.hostUrl + this.taskData.unitUrl).then((res) => {
         this.taskData.showing[0][0]["data"]["valueData"][
           "imgBase64Three"
         ] = res;

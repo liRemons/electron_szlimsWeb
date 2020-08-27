@@ -514,12 +514,12 @@ export default {
   methods: {
     // 是不是整数
     isInteger(val, type) {
-      if (val % 1 !== 0) {
-        this.$nextTick(() => {
-          this.data.valueData[type] = "";
-          this.$message.warning("请输入整数");
-        });
-      }
+      // if (val % 1 !== 0) {
+      //   this.$nextTick(() => {
+      //     this.data.valueData[type] = "";
+      //     this.$message.warning("请输入整数");
+      //   });
+      // }
     },
     // 保留一位小数，不足补0
     Fixed1(val, type) {
@@ -667,7 +667,7 @@ export default {
         this.$message.error("您未选择防护仪器");
         return;
       }
-
+      // this.$store.commit('saveClear')
       if (this.data.valueData.surgeonNum != "") {
         if (this.data.valueData.surgeonNum <= 10) {
           let dataArr = [];
@@ -777,7 +777,7 @@ export default {
     setResolvingPower() {
       let data = [];
       this.data.valueData.point.forEach((item, index) => {
-        if (item.exposureMode != "" && item.checked) {
+        if (item.exposureMode != "") {
           if (
             item.exposureMode === "全景扫描" ||
             item.exposureMode === "头颅摄影"
@@ -1037,6 +1037,7 @@ export default {
 
       if (flag !== 1) {
         this.importData.isCreate = true;
+
         this.$notify({
           type: "success",
           message: "生成成功",
@@ -1132,7 +1133,6 @@ export default {
           this.data.valueData.point = [obj];
         }
       }
-      console.log(this.data.valueData.point);
     }, 1000);
   },
 };

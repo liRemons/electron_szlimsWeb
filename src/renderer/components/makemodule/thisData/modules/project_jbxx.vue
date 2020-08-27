@@ -167,12 +167,13 @@
                 <div class="tc">检测时间</div>
               </div>
             </div>
-            <div style="width: 619px; left: 91px;" class="___absolute t0 Full">
-              <divModel
-                v-model="data.valueData.detectionTime"
-                style="width: 100%; text-align: center;"
-                class="Full warp2 rowsInput2 hide focusBg"
-              ></divModel>
+            <div
+              style="width: 619px; left: 91px;"
+              class="___absolute t0 Full flex_around"
+            >
+              <divModel v-model="data.valueData.detectionTime"></divModel>
+              <div>-</div>
+              <divModel v-model="data.valueData.endTime"></divModel>
             </div>
           </div>
           <div class="___relative borderBottom">
@@ -458,7 +459,7 @@ export default {
     getLocalDevice(queryString, cb) {
       let res = this.importData.device;
       if (this.devices.length >= 0) {
-        this.devices = res.data;
+        this.devices = this.MethodsRe.removeArrRepeat(res.data, "id");
         let results = queryString
           ? this.devices.filter(
               (item) => item.deviceNum.indexOf(queryString) !== -1

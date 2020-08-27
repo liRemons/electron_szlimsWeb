@@ -4,6 +4,14 @@
     class="___relative"
     :id="data.valueData.testProjectId"
   >
+    <el-button
+      size="mini"
+      style="position: absolute; top: 0; right: -100px;"
+      @dblclick.native="empty"
+      v-if="target == 0"
+    >
+      清空
+    </el-button>
     <div :class="{ eventCover: !ableInput }"></div>
     <table class="myTable" style="width: 712px;">
       <tr>
@@ -154,6 +162,7 @@
         <td>
           <div style="width: 100%; text-align: center;">
             <selectModel
+              v-if="flag"
               @returnVal="changeRemark($event, index)"
               :Judge="true"
               class="___absolute"
@@ -182,6 +191,7 @@ export default {
     return {
       company: ["μSv/h", "nSv/h"],
       remark: ["无法到达", "不适用", "/"],
+      flag: true,
     };
   },
   props: [
@@ -197,6 +207,22 @@ export default {
     "target",
   ],
   methods: {
+    empty() {
+      this.flag = false;
+      this.$nextTick(() => {
+        let point = this.data.valueData.point;
+        point.forEach((item, index) => {
+          item.rows.forEach((a, b) => {
+            if (b == 0 || b == 8) {
+            } else {
+              item.rows[b] = "";
+            }
+          });
+        });
+        this.flag = true;
+        this.$forceUpdate();
+      });
+    },
     init(arr) {
       let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];
       arr.forEach((item) => {
@@ -213,6 +239,7 @@ export default {
                 : "");
         }
         item.name = item.rows[0].split("(")[0];
+        
         // item.rows[9]
         //   ? ""
         //   : (item.rows[9] = item.rows[0].split("(")[1]
@@ -220,6 +247,7 @@ export default {
         //       : "");
         // item.rows[0] = item.rows[0].split("(")[0];
       });
+      // this.$store.commit('saveClear')
       this.$forceUpdate();
     },
     modularShow() {
@@ -295,9 +323,9 @@ export default {
         judgeNum.forEach((item, index) => {
           total += Math.pow(item - average, 2);
         });
-        this.data.valueData.point[index].rows[7] = Math.sqrt(
-          total / judgeNum.length
-        ).toFixed(2);
+        // this.data.valueData.point[index].rows[7] = this.IntegerAdd2(
+        //   Math.sqrt(total / judgeNum.length).toFixed(2)
+        // );
       }
       if (num1 == "" && num2 == "" && num3 == "") {
         this.data.valueData.point[index].rows[4] = "";
@@ -356,6 +384,9 @@ export default {
       }
     },
     "data.valueData.point": function (arr) {
+      // this.data.valueData.point.forEach(item=>{
+      //   item
+      // })
       this.init(arr);
     },
   },

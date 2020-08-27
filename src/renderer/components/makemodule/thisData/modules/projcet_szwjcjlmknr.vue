@@ -150,9 +150,9 @@ export default {
           (item, index) => item.to === "projcet_szwjcjlmkt"
         ).data.valueData.calibrationFactor;
         if (this.isNumber(calibration) && this.isNumber(average)) {
-          this.data.valueData.point[index].rows[4] = (
+          this.data.valueData.point[index].rows[4] = this.IntegerAdd2((
             average * parseFloat(calibration)
-          ).toFixed(2);
+          ).toFixed(2));
         }
         if (this.isNumber(average)) {
           let total = 0;
@@ -160,9 +160,9 @@ export default {
           judgeNum.forEach((item, index) => {
             total += Math.pow(item - average, 2);
           });
-          this.data.valueData.point[index].rows[5] = Math.sqrt(
+          this.data.valueData.point[index].rows[5] = this.IntegerAdd2(Math.sqrt(
             total / judgeNum.length
-          ).toFixed(2);
+          ).toFixed(2));
         }
         if (num1 == "" && num2 == "" && num3 == "") {
           this.data.valueData.point[index].rows[4] = "";

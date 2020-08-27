@@ -527,30 +527,36 @@ export default {
   },
   methods: {
     end() {
+      const time = () => {
+        this.entryEndTime = this.MethodsRe.dateFormat();
+        this.$nextTick(() => {
+          this.importData.tasks.tasks[0].endTime = this.entryEndTime;
+          this.taskDatas[0].showing.forEach((item) => {
+            item.forEach((a) => {
+              if (a.to == "project_jbxx") {
+                a.data.valueData.endTime = this.entryEndTime;
+              }
+            });
+          });
+          this.$message.success("结束时间生成成功");
+        });
+      };
       if (this.entryEndTime) {
         this.$confirm("已有结束时间，确认结束?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
-        })
-          .then(() => {
-            this.entryEndTime = this.MethodsRe.dateFormat();
-            this.importData.tasks.tasks[0].endTime = this.entryEndTime;
-            this.$message.success("结束时间生成成功");
-          })
-          .catch(() => {});
+        }).then(() => {
+          time();
+        });
       } else {
         this.$confirm("确认结束?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
-        })
-          .then(() => {
-            this.entryEndTime = this.MethodsRe.dateFormat();
-            this.importData.tasks.tasks[0].endTime = this.entryEndTime;
-            this.$message.success("结束时间生成成功");
-          })
-          .catch(() => {});
+        }).then(() => {
+          time();
+        });
       }
     },
     getHistoryEdit() {
@@ -595,7 +601,6 @@ export default {
       if (this.tasks[0].docPass == 1) {
         this.getHistoryEdit();
       }
-
       this.$confirm(
         "请确认未录入数据的检测参数，现场检测条件不适用时，必须选择删除模块！！！",
         "提示",
@@ -1033,12 +1038,9 @@ export default {
         this.$refs.templateHTML[0].$el.innerHTML
       ).then((res) => {
         this.signatureTimeDialog = false;
-        this.copyText =encodeURI
-         ( this.hostUrl +
-          "/signature?url=" +
-          res.url +
-          "&id=" +
-          this.tasks[0].id);
+        this.copyText = encodeURI(
+          this.hostUrl + "/signature?url=" + res.url + "&id=" + this.tasks[0].id
+        );
         this.copyDialog = true;
 
         updateUnitGenerateTime(
@@ -1155,6 +1157,18 @@ export default {
       this.templateArr = [];
       showing.forEach((item) => {
         item.forEach((a) => {
+          if (a.to == "project_ct_cjcgpc") {
+            a.data.valueData.remark = "";
+            let remark = [];
+            let point = a.data.valueData.point;
+            let s1 = point.filter((b) => b.scope == "s<1").length;
+            let s2 = point.filter((b) => b.scope == "2mm≥s≥1m").length;
+            let s3 = point.filter((b) => b.scope == "s＞2mm").length;
+            s1 == 0 && remark.push(" 无 s<1 的层厚范围 ");
+            s2 == 0 && remark.push(" 无 2mm≥s≥1m 的层厚范围 ");
+            s3 == 0 && remark.push(" 无 s＞2mm 的层厚范围 ");
+            a.data.valueData.remark = remark.join(",");
+          }
           if (a.data.height._normal.carried === true) {
             if (a.data.isHead) {
               //签名存在头模块里面

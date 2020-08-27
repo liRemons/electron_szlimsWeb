@@ -19,7 +19,7 @@
           >
             <el-button
               v-if="target == 1"
-              style="margin-bottom:10px;margin-left:10px; margin-top: 40px;"
+              style="margin-bottom: 10px; margin-left: 10px; margin-top: 40px;"
               >上传检测样品图谱
             </el-button>
           </el-upload>
@@ -78,7 +78,12 @@
           <div style="margin-top: 40px; margin-left: 35px;">
             <el-popover placement="bottom-end" trigger="click">
               <div
-                style="height: 370px; width: 370px;text-align: right; padding-top: 20px;"
+                style="
+                  height: 370px;
+                  width: 370px;
+                  text-align: right;
+                  padding-top: 20px;
+                "
               >
                 <el-row>
                   <span>乙苯：</span>
@@ -90,7 +95,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '乙苯', 0);
                       }
                     "
@@ -107,7 +112,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '乙酸丁酯', 1);
                       }
                     "
@@ -126,7 +131,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '对二甲苯+间二甲苯', 2);
                       }
                     "
@@ -143,7 +148,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '正十一烷', 3);
                       }
                     "
@@ -160,7 +165,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '苯', 4);
                       }
                     "
@@ -177,7 +182,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '苯乙烯', 5);
                       }
                     "
@@ -194,7 +199,7 @@
                     "
                     placeholder="请选择"
                     @select="
-                      val => {
+                      (val) => {
                         changeMyCurve(val, '邻二甲苯', 6);
                       }
                     "
@@ -303,7 +308,7 @@ import {
   querySysDeviceData,
   querySysSampleData,
   toQuerySysSampleTemporaryStorageData,
-  queryTestProjectAnalysisItemData
+  queryTestProjectAnalysisItemData,
 } from "@/api/laboratory";
 
 export default {
@@ -344,7 +349,7 @@ export default {
         _short: 0,
         _up: 0,
         _down: 0,
-        _delete: 0
+        _delete: 0,
       },
       refre: false,
       myCurveArr: ["", "", "", "", "", "", ""],
@@ -357,7 +362,7 @@ export default {
       nowCur4: "",
       nowCur5: "",
       nowCur6: "",
-      nowCur7: ""
+      nowCur7: "",
     };
   },
   props: {
@@ -366,7 +371,7 @@ export default {
     testProject: Object,
     android: String,
     target: [Number, String],
-    AllFengFlag: Object
+    AllFengFlag: Object,
   },
   computed: {
     testProjectTitle() {
@@ -399,7 +404,10 @@ export default {
       // } catch (e) {
       //   return "";
       // }
-      return 'http://120.77.153.63:8003'+this.sampleData.showing[0][0]["data"]["valueData"].recordStaffUrl
+      return (
+        this.imgUrl +
+        this.sampleData.showing[0][0]["data"]["valueData"].recordStaffUrl
+      );
     },
 
     imgSrc2() {
@@ -411,13 +419,15 @@ export default {
       // } catch (e) {
       //   return "";
       // }
-      return 'http://120.77.153.63:8003'+this.sampleData.showing[0][0]["data"]["valueData"].checkStaffUrl
-    }
+      return (
+        this.imgUrl +
+        this.sampleData.showing[0][0]["data"]["valueData"].checkStaffUrl
+      );
+    },
   },
   methods: {
     // 显示这个示例
     showExample() {
-      
       this.$store.dispatch(
         "ChangeInspectionTime",
         this.testProject.inspectionTime
@@ -453,7 +463,7 @@ export default {
       if (content[0].name == "project_systvoc" && this.target != "4") {
         content = [{ name: "project_systvoc1" }];
         let height = 125;
-        _that.testProject.value.forEach(item => {
+        _that.testProject.value.forEach((item) => {
           if (item.isParallel) {
             let dataLength = "";
             let dataStart = 0;
@@ -471,7 +481,7 @@ export default {
                 dataLength,
                 item: item,
                 dataStart,
-                hasAll: false
+                hasAll: false,
               });
               height = 0; //跳到第二页
               dataStart = dataLength;
@@ -482,7 +492,7 @@ export default {
                 item: item,
                 dataLength: 20 - dataLength,
                 dataStart,
-                hasAll: true
+                hasAll: true,
               });
               height = (20 - dataLength) * 31; //第二页行高
             } else {
@@ -493,7 +503,7 @@ export default {
                 dataLength: 20,
                 item: item,
                 dataStart,
-                hasAll: true
+                hasAll: true,
               });
             }
           } else {
@@ -511,7 +521,7 @@ export default {
                 dataLength: dataLength,
                 item: item,
                 dataStart,
-                hasAll: false
+                hasAll: false,
               });
               dataStart = dataLength; //数据开始位置
               height = 0;
@@ -522,7 +532,7 @@ export default {
                 dataLength: 10 - dataLength,
                 item: item,
                 dataStart,
-                hasAll: true
+                hasAll: true,
               });
             } else {
               content.push({
@@ -532,16 +542,16 @@ export default {
                 item: item,
                 dataLength: 10,
                 dataStart,
-                hasAll: true
+                hasAll: true,
               });
             }
           }
         });
         let sampleNum = [];
-        this.testProject.value.forEach(item => {
+        this.testProject.value.forEach((item) => {
           let sampleObj = {
             sampleNum: item.labSampleNum,
-            sampleNumIndex: item.sampleNumIndex
+            sampleNumIndex: item.sampleNumIndex,
           };
           if (item.isParallel) {
             sampleObj.isParallelSample = 1;
@@ -554,11 +564,11 @@ export default {
           sampleNum.push(sampleObj);
         });
 
-        querySysDeviceData(sampleNum).then(res => {
+        querySysDeviceData(sampleNum).then((res) => {
           this.SampleDataArr = [];
           let arr = [];
-          sampleNum.forEach(item => {
-            let arr2 = res.data.filter(item2 => {
+          sampleNum.forEach((item) => {
+            let arr2 = res.data.filter((item2) => {
               return (
                 item2.labSampleNum === item.sampleNum &&
                 item2.sampleNumIndex === item.sampleNumIndex
@@ -567,8 +577,8 @@ export default {
             arr.push(arr2);
           });
 
-          let sampleNum2 = sampleNum.map(item => item.sampleNum);
-          let sampleNumIndexs = sampleNum.map(item => item.sampleNumIndex);
+          let sampleNum2 = sampleNum.map((item) => item.sampleNum);
+          let sampleNumIndexs = sampleNum.map((item) => item.sampleNumIndex);
           sampleNum2.forEach((item, index) => {
             let oneSampleData = [];
             res.data.forEach((item2, index2) => {
@@ -580,7 +590,7 @@ export default {
               }
             });
 
-            oneSampleData.forEach(item => {
+            oneSampleData.forEach((item) => {
               let nameArr = item.sysSampleNum.split("-");
               item.parallelWindArea = sampleNum[index].parallelWindArea;
               item.parallelWindArea1 = sampleNum[index].parallelWindArea1;
@@ -600,7 +610,7 @@ export default {
               sysSampleId: oneSampleData[0].sysSampleId,
               suckConcentration: "",
               blankConcentration: "",
-              blankPeakArea: ""
+              blankPeakArea: "",
             };
 
             let name = oneSampleData[0].parallelLetter;
@@ -639,22 +649,22 @@ export default {
         content.push({ name: "project_systvoc4" });
         this.getModelObj(content);
       } else if (this.target == 4) {
-        let sampleNums = this.testProject.value.map(item => item.sysSampleId);
-        querySysSampleData(sampleNums).then(res => {
+        let sampleNums = this.testProject.value.map((item) => item.sysSampleId);
+        querySysSampleData(sampleNums).then((res) => {
           content = [];
           content.unshift({ name: _that.testProject.value[0].headModelName });
           for (let i = 0; i < res.standards.length; i++) {
             content.push({ name: "project_sysjq_standard", index: i });
           }
           let sampleNums = [];
-          this.testProject.value.forEach(item => {
+          this.testProject.value.forEach((item) => {
             if (item.blankSample === 0) {
               sampleNums.push(item.labSampleNum);
             }
           });
           if (_that.testProject.modelName == "project_systvoc") {
             content.push({ name: "project_systvoc5" });
-            sampleNums.forEach(item => {
+            sampleNums.forEach((item) => {
               content.push({ name: "project_systvoc4", sampleNum: item });
             });
           } else {
@@ -679,12 +689,12 @@ export default {
         bus.$emit("getTuPuUrl", res.url);
         this.$notify({
           type: "success",
-          message: res.msg
+          message: res.msg,
         });
       } else {
         this.$notify({
           type: "warning",
-          message: res.msg
+          message: res.msg,
         });
       }
     },
@@ -706,11 +716,11 @@ export default {
         "project_wsw_jl_ejxscm2",
         "project_wsw_jl_ejxs25cm2",
         "project_wsw_jl_sjxs50cm2",
-        "project_wsw_jl_mbpjsf"
+        "project_wsw_jl_mbpjsf",
       ];
       allowArr = allowArr.concat(wswArr);
 
-      let index = allowArr.findIndex(item => item === modelName);
+      let index = allowArr.findIndex((item) => item === modelName);
 
       if (index !== -1) {
         return false;
@@ -720,15 +730,16 @@ export default {
     },
 
     querySearchAsync(queryString, cb, title) {
-      console.log(title, "curVu");
       let arr = [];
-      this.curveArr.map(item => {
+      console.log(this.curveArr,title)
+      this.curveArr.map((item) => {
         if (item.materialCurveName == title) {
           arr = item.curves;
           // this.curveName=item.materialName
         }
       });
       let restaurants = arr;
+      // console.log(restaurants,'restaurants')
       let results = queryString
         ? restaurants.filter(this.createStateFilter(queryString))
         : restaurants;
@@ -736,7 +747,8 @@ export default {
     },
 
     createStateFilter(queryString) {
-      return state => {
+      return (state) => {
+        console.log(state,'state')
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
@@ -762,7 +774,7 @@ export default {
       let redefinitionArr = [];
       this.jsonString.forEach((item, index) => {
         let obj = {};
-        let findIndex = redefinitionArr.findIndex(val => {
+        let findIndex = redefinitionArr.findIndex((val) => {
           return (
             val.to === item.to &&
             val.data.valueData.multipleId === item.data.valueData.multipleId
@@ -777,7 +789,7 @@ export default {
           let point = JSON.myParse(JSON.stringify(item.data.valueData.point));
           redefinitionArr[findIndex].data.valueData.point = [
             ...redefinitionArr[findIndex].data.valueData.point,
-            ...point
+            ...point,
           ];
         }
       });
@@ -787,7 +799,7 @@ export default {
         let projcet = {
           to: item.to,
           type: null,
-          data: JSON.myParse(JSON.stringify(item.data))
+          data: JSON.myParse(JSON.stringify(item.data)),
         };
 
         let surplusPoint = [];
@@ -909,7 +921,7 @@ export default {
           obj = []; //处理target是数组的情况
         }
         copyed_objs.push({ target: target, copyTarget: obj });
-        Object.keys(target).forEach(key => {
+        Object.keys(target).forEach((key) => {
           if (obj[key]) {
             return;
           }
@@ -932,7 +944,7 @@ export default {
     ) {
       data = JSON.myParse(JSON.stringify(data));
       let objData = {};
-      let valData = this.modules.find(mod => mod.name == name);
+      let valData = this.modules.find((mod) => mod.name == name);
 
       let valueObj = data.value;
 
@@ -967,7 +979,7 @@ export default {
         let myBlankSample = data.value[0].myBlankSample;
         if (name == "project_systvoc1") {
           let keys = Object.keys(valData.valueData);
-          keys.forEach(item => {
+          keys.forEach((item) => {
             if (data.value[0][item]) {
               valData.valueData[item] = data.value[0][item];
             }
@@ -1028,7 +1040,7 @@ export default {
       }
 
       let allowArr = ["project_systvoc"];
-      let index = allowArr.findIndex(item => name.indexOf(item) !== -1);
+      let index = allowArr.findIndex((item) => name.indexOf(item) !== -1);
       if (index === -1) {
         let data2 = this.$store.getters.analysisData;
         // if (data2 === "" || data2 === null) {
@@ -1040,7 +1052,7 @@ export default {
             let item = arr2[0];
             let keys = Object.keys(item);
 
-            keys.forEach(key => {
+            keys.forEach((key) => {
               if (arr[i].hasOwnProperty(key) === false) {
                 arr[i][key] = item[key];
               }
@@ -1049,15 +1061,15 @@ export default {
 
           valData.valueData.point = arr;
 
-          valData.valueData.point.forEach(item => {
+          valData.valueData.point.forEach((item) => {
             item.modelName = valData.valueData.testProject;
             item.testProjectName = valData.projectName;
           });
         } else {
           valData.valueData.point = this.$store.getters.analysisData.filter(
-            item => item.sampleNum.indexOf("KB") == -1
+            (item) => item.sampleNum.indexOf("KB") == -1
           );
-          valData.valueData.point.forEach(item => {
+          valData.valueData.point.forEach((item) => {
             item.item1 = item.sysItem1;
             item.item2 = item.sysItem2;
             item.item3 = item.sysItem3;
@@ -1080,17 +1092,17 @@ export default {
     },
     //查询曲线
     toQueryAllCurve() {
-      queryAllCurve(this.testProject.testProjectId).then(res => {
+      queryAllCurve(this.testProject.testProjectId).then((res) => {
         if (res.success) {
-          res.datas.forEach(item => {
-            item.curves.map(a => {
+          res.datas.forEach((item) => {
+            item.curves.map((a) => {
               a.createtime = a.createtime.replace(/\s+/g, "-");
               a.value = a.curveNum;
             });
           });
           let arr = JSON.parse(JSON.stringify(res.datas));
           this.curveArr = JSON.parse(JSON.stringify(res.datas));
-          arr.map(item => {
+          arr.map((item) => {
             if (item.materialCurveName == this.testProjectTitle) {
               this.curveOptions = item.curves;
               // this.curveName=item.materialName
@@ -1100,7 +1112,7 @@ export default {
         } else {
           this.$notify({
             type: "warning",
-            message: "曲线获取失败"
+            message: "曲线获取失败",
           });
         }
       });
@@ -1129,17 +1141,16 @@ export default {
     },
 
     dataFormat(templateName, modelResult, index, nowObj, flag = true) {
-      
       modelResult.valueData.multipleId = templateName.name + Math.random();
       /*如果isDeviceData这个字段是true， 自动使用仪器数据*/
       //给需要使用仪器数据的模板isDeviceData设为true
       if (modelResult.isDeviceData && this.target === "1") {
         let sampleNum = [];
 
-        this.testProject.value.forEach(item => {
+        this.testProject.value.forEach((item) => {
           let sampleObj = {
             sampleNum: item.labSampleNum,
-            sampleNumIndex: item.sampleNumIndex
+            sampleNumIndex: item.sampleNumIndex,
           };
           if (item.isParallel) {
             sampleObj.isParallelSample = 1;
@@ -1148,14 +1159,14 @@ export default {
           }
           sampleNum.push(sampleObj);
         });
-        querySysDeviceData(sampleNum).then(res => {
+        querySysDeviceData(sampleNum).then((res) => {
           if (res.success) {
             let benData = res.data.filter(
-              item => item.testProject.trim() == modelResult.projectName
+              (item) => item.testProject.trim() == modelResult.projectName
             );
-            this.jsonString.forEach(item2 => {
-              item2.data.valueData.point.forEach(item3 => {
-                let obj = benData.find(item => {
+            this.jsonString.forEach((item2) => {
+              item2.data.valueData.point.forEach((item3) => {
+                let obj = benData.find((item) => {
                   return (
                     item.sysSampleNum == item3.labSampleNum &&
                     item.parallelLetter == item3.parallelLetter &&
@@ -1181,11 +1192,11 @@ export default {
         queryTestProjectAnalysisItemData(
           modelResult.valueData.point[0].testProjectId
         )
-          .then(res => {
-            this.jsonString.forEach(item2 => {
+          .then((res) => {
+            this.jsonString.forEach((item2) => {
               if (item2.to === "project_wsw_dx") {
                 let point = [];
-                item2.data.valueData.point.forEach(item3 => {
+                item2.data.valueData.point.forEach((item3) => {
                   let analysisItems = res.data;
                   let itemId = uuid();
                   analysisItems.forEach((item4, index) => {
@@ -1215,35 +1226,36 @@ export default {
                     point.push(obj);
                   });
                 });
-                
-                if(point.length){
+
+                if (point.length) {
                   item2.data.valueData.point = point;
-                }else{
-                //  item2.data.valueData.point= modelResult.valueData.point
+                } else {
+                  //  item2.data.valueData.point= modelResult.valueData.point
                 }
               }
             });
           })
-          .catch(e => {
+          .catch((e) => {
             console.log(e);
           });
       }
     },
     changeTvoc2() {
       let tvoc2s = this.jsonString.filter(
-        item => item.to === "project_systvoc2" || item.to === "project_systvoc3"
+        (item) =>
+          item.to === "project_systvoc2" || item.to === "project_systvoc3"
       );
-      tvoc2s.forEach(item => {
+      tvoc2s.forEach((item) => {
         let sysSampleNum = item.data.valueData.point[0].sysSampleNum;
         let sampleNumIndex = item.data.valueData.point[0].sampleNumIndex;
         let multipleId = item.data.valueData.multipleId;
 
         let mytvoc2s = tvoc2s.filter(
-          item2 =>
+          (item2) =>
             item2.data.valueData.point[0].sysSampleNum === sysSampleNum &&
             item2.data.valueData.allPoint[0].sampleNumIndex === sampleNumIndex
         );
-        mytvoc2s.forEach(item => {
+        mytvoc2s.forEach((item) => {
           item.data.valueData.multipleId = multipleId;
         });
       });
@@ -1256,7 +1268,7 @@ export default {
       _that.jsonString = [];
       let analysis = sessionStorage.getItem("analysis");
       content.forEach((item, index) => {
-        let modelResult = _that.modules.find(mod => mod.name == item.name);
+        let modelResult = _that.modules.find((mod) => mod.name == item.name);
         if (modelResult) {
           modelResult.valueData.modelName = modelResult.valueData.testProject;
           modelResult = _that.deepCopy(modelResult);
@@ -1277,14 +1289,14 @@ export default {
               );
               if (_that.$store.getters.analysisData) {
                 let arr = _that.$store.getters.analysisData.filter(
-                  item => item.sampleNum.indexOf("KB") !== -1
+                  (item) => item.sampleNum.indexOf("KB") !== -1
                 );
-                arr.forEach(item => {
+                arr.forEach((item) => {
                   if (modelResult.valueData.testResults)
                     modelResult.valueData.testResults.push({
                       noEdit: true,
                       sampleNum: item.sampleNum,
-                      testResult: item.testResult
+                      testResult: item.testResult,
                     });
                 });
               }
@@ -1297,7 +1309,7 @@ export default {
           }
           obj.push(modelResult);
         } else {
-          let modelResult = _that.heads.find(mod => mod.name == item.name);
+          let modelResult = _that.heads.find((mod) => mod.name == item.name);
           if (modelResult) {
             modelResult.valueData.modelName = modelResult.valueData.testProject;
             modelResult = _that.deepCopy(modelResult);
@@ -1322,7 +1334,7 @@ export default {
         let json = {
           to: val.name,
           type: null,
-          data: val
+          data: val,
         };
         _that.jsonString.push(json);
       });
@@ -1346,7 +1358,7 @@ export default {
           }
         } else {
           let keys = Object.keys(item.data.valueData);
-          keys.forEach(key => {
+          keys.forEach((key) => {
             if (key === "point") {
               if (item.to.includes("tvoc")) {
                 item.data.valueData["point"] = this.hasReviewData[
@@ -1391,11 +1403,11 @@ export default {
     },
 
     getSysSampleData(sampleNums, modelResult) {
-      querySysSampleData(sampleNums).then(res => {
+      querySysSampleData(sampleNums).then((res) => {
         this.sampleData.showing[0][0].data.valueData = res;
         this.sampleData.showing[0][0].data.valueData.point = [""];
         this.sampleData.showing[0][0].data.valueData.getSysSampleData = 0;
-        let imgUrl = "http://120.77.153.63:8003" + res.recordStaffUrl;
+        let imgUrl = this.imgUrl + res.recordStaffUrl;
         this.getBase64(
           imgUrl,
           this.sampleData.showing[0][0].data.valueData,
@@ -1425,11 +1437,11 @@ export default {
       image.src = img;
       image.setAttribute("crossOrigin", "Anonymous");
       if (img) {
-        image.onload = function() {
+        image.onload = function () {
           obj[name] = getBase64Image(image);
         };
       }
-    }
+    },
   },
 
   created() {
@@ -1462,9 +1474,9 @@ export default {
     this.showExample();
 
     // 还原数据啥的   设置数据，模块名，检测项目名
-    bus.$on("reductionData", data => {
+    bus.$on("reductionData", (data) => {
       this.jsonString[0].data.valueData.point = data;
-      this.jsonString[0].data.valueData.point.forEach(item => {
+      this.jsonString[0].data.valueData.point.forEach((item) => {
         item.modelName = this.jsonString[0].data.valueData.testProject;
         item.testProjectName = this.jsonString[0].data.projectName;
       });
@@ -1473,7 +1485,7 @@ export default {
     setTimeout(() => {
       this.changeTvoc2();
     }, 500);
-  }
+  },
 };
 </script>
 
@@ -1483,10 +1495,10 @@ export default {
   text-align: left;
   overflow-y: scroll;
 }
-.jianceImg{
+.jianceImg {
   width: 120px;
 }
-.pageFoot_1{
+.pageFoot_1 {
   margin-left: 20px;
 }
 </style>

@@ -261,6 +261,7 @@ export default {
         message: "生成成功"
       });
       this.$store.dispatch("actionsWorkArr", completeArr);
+      
     },
     returnVal(val, obj, special) {
       if (special == 1) {

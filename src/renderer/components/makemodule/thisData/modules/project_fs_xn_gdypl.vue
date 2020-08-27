@@ -225,6 +225,9 @@ export default {
         .reverse()
         .find((item) => An > item.value2);
       let max = deviceFactor_gdy.find((item) => An < item.value2);
+      if (!min || !max) {
+        return;
+      }
       let A1 = +min.value2;
       let B2 = +max.value1;
       let B1 = +min.value1;

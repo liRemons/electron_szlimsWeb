@@ -139,6 +139,7 @@ export default [{
     correct: "重建层厚偏差",
     pointId: window.uuid(),
     foreverId: window.uuid(), //永久的id 用于重复样
+    remark:'',
     point: [{
       scope: 's<1',
       A: '',

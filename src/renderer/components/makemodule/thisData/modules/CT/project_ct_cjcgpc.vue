@@ -65,7 +65,10 @@
           <!-- <td colspan="2">{{ item.scope }}</td> -->
           <td colspan="2">
             <selectModel
-              @returnVal="returnVal"
+              @returnVal="
+                (val, name, ModelIndex) =>
+                  returnVal(val, name, ModelIndex, index)
+              "
               :Judge="true"
               :special="'0'"
               :transmitText="item.scope"
@@ -153,6 +156,20 @@
           <td>{{ item.J }}</td>
           <td>{{ item.K }}</td>
         </tr>
+        <tr>
+          <td colspan="13">
+            <span class="bold">备注</span>
+          </td>
+        </tr>
+        <tr class="tl">
+          <td colspan="13">
+            <myInput
+              style="text-align: center;"
+              v-model="data.valueData.remark"
+              :defaultValue="data.valueData.remark"
+            ></myInput>
+          </td>
+        </tr>
       </table>
     </div>
   </div>
@@ -163,9 +180,11 @@ export default {
   data() {
     return {
       showInput: false,
-      list: [],
+      list: ["s<1", "2mm≥s≥1m", "s＞2mm", "/"],
+      copyList: ["s<1", "2mm≥s≥1m", "s＞2mm", "/"],
     };
   },
+  watch: {},
   computed: {},
   props: [
     "ipdTemplate",
@@ -183,18 +202,22 @@ export default {
   ],
   filters: {},
   methods: {
-    returnVal(val, name, index) {
-      Object.keys(this.data.valueData.point[index]).forEach((item) => {
-        let data = ["scope", "AColor", "index"];
-        if (item == "scope") {
-          this.data.valueData.point[index].scope = val;
-        }
-        if (!data.includes(item) && val == "/") {
-          this.data.valueData.point[index][item] = "/";
-        } else if (!data.includes(item) && val !== "/") {
-          this.data.valueData.point[index][item] = "";
-        }
-      });
+    returnVal(val, name, modelIndex, index) {
+      setTimeout(() => {
+        this.initModel();
+      }, 100);
+      if (this.data.valueData.point[index].scope)
+        Object.keys(this.data.valueData.point[index]).forEach((item) => {
+          let data = ["scope", "AColor", "index"];
+          if (item == "scope") {
+            this.data.valueData.point[index].scope = val;
+          }
+          if (!data.includes(item) && val == "/") {
+            this.data.valueData.point[index][item] = "/";
+          } else if (!data.includes(item) && val !== "/") {
+            this.data.valueData.point[index][item] = "";
+          }
+        });
       this.$forceUpdate();
     },
     noShowInput(el, index) {
@@ -305,11 +328,16 @@ export default {
           break;
       }
     },
+    initModel() {
+      let list = this.data.valueData.point.map((item) => item.scope);
+      this.list = this.copyList.filter((item) => {
+        return !list.includes(item);
+      });
+      this.list.includes("/") ? "" : this.list.push("/");
+    },
   },
   mounted() {
-    this.list = [];
-    this.list = this.data.valueData.point.map((item) => item.scope);
-    this.list.push("/");
+    this.initModel();
   },
 };
 </script>

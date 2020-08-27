@@ -2,6 +2,14 @@
   <div :id="data.valueData.testProjectId">
     <div :class="{ _normalHeight_: true }" class="___relative">
       <div :class="{ eventCover: !ableInput }"></div>
+      <el-button
+        size="mini"
+        style="position: absolute; top: 0; right: -100px;"
+        @dblclick.native="empty"
+        v-if="target==0"
+      >
+        清空
+      </el-button>
       <table class="myTable" style="width: 710px;">
         <tr>
           <td width="202">重复测量次数</td>
@@ -141,6 +149,7 @@
           </td>
           <td :colspan="!JudgePhotography ? 2 : 1">
             <selectModel
+              v-if="flag"
               @returnVal="changeRemark($event, index)"
               :Judge="true"
               class="___absolute"
@@ -169,6 +178,7 @@ export default {
     return {
       company: ["μSv/h", "nSv/h"],
       remark: ["无法到达", "不适用", "/"],
+      flag: true,
     };
   },
   props: [
@@ -187,6 +197,22 @@ export default {
     // this.init(this.data.valueData.point);
   },
   methods: {
+    empty() {
+      this.flag = false;
+      this.$nextTick(() => {
+        let point = this.data.valueData.point;
+        point.forEach((item, index) => {
+          item.rows.forEach((a, b) => {
+            if (b == 0 || b == 1 || b == 9) {
+            } else {
+              item.rows[b] = "";
+            }
+          });
+        });
+        this.flag=true;
+        this.$forceUpdate()
+      });
+    },
     init(arr) {
       let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];
       arr.forEach((item) => {
@@ -201,10 +227,9 @@ export default {
             item.rows[1] = item.name.split("(")[1]
               ? item.name.split("(")[1].split(")")[0]
               : "";
-           
           }
         }
-         item.name = item.rows[0].split("(")[0];
+        item.name = item.rows[0].split("(")[0];
       });
       this.$forceUpdate();
     },
@@ -250,15 +275,17 @@ export default {
             multipleId == item.data.valueData.multipleId
         ).data.valueData.calibrationFactor;
         if (this.isNumber(calibration) && this.isNumber(average)) {
-          this.data.valueData.point[index].rows[6] = (
-            average * parseFloat(calibration)
-          ).toFixed46(2);
+          this.data.valueData.point[index].rows[6] = this.IntegerAdd2(
+            (average * parseFloat(calibration)).toFixed46(2)
+          );
         }
         if (this.isNumber(this.timeExposure)) {
-          this.data.valueData.point[index].rows[7] = (
-            this.data.valueData.point[index].rows[6] *
-            (this.timeExposure / 1000)
-          ).toFixed46(2);
+          this.data.valueData.point[index].rows[7] = this.IntegerAdd2(
+            (
+              this.data.valueData.point[index].rows[6] *
+              (this.timeExposure / 1000)
+            ).toFixed46(2)
+          );
         }
         if (this.isNumber(average)) {
           let total = 0;
