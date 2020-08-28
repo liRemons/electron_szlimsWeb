@@ -230,7 +230,6 @@ import {
 } from "@/api/local";
 import { mapState } from "vuex";
 import { currentTime } from "@/utils/dateTime.js";
-import { count } from "console";
 export default {
   data() {
     return {
@@ -584,6 +583,8 @@ export default {
       });
       this.jsonString = [];
 
+      // this.jfpbtData(decompose); //修复重复数据屏蔽体现场调查   (失败)
+
       this.jsonString = decompose;
       this.$forceUpdate();
       this.Reset();
@@ -605,7 +606,48 @@ export default {
         }
       });
     },
-
+    // =====================修复重复数据屏蔽体现场调查==(修复失败)=======START
+    jfpbtData(decompose) {
+      let arr1 = [],
+        arr2 = [],
+        jcxcxxPoint = [];
+      decompose.forEach((item, index) => {
+        if (item.to == "projcet_jgyst") {
+          arr1.push(index);
+        }
+        if (item.to == "projcet_jgysnr") {
+          arr2.push(index);
+        }
+        if (item.to == "project_jcxcxx") {
+          jcxcxxPoint = item.data.valueData.point;
+        }
+      });
+      decompose.forEach((item) => {
+        arr2.forEach((a) => {
+          arr1.forEach((c) => {
+            if (a > c) {
+              decompose[a].data.valueData.exposureMode =
+                decompose[c].data.valueData.exposureMode;
+              decompose[a].data.valueData.harnessDirection =
+                decompose[c].data.valueData.harnessDirection;
+            }
+          });
+        });
+      });
+      decompose.forEach((item, index) => {
+        if (item.to == "projcet_jgysnr") {
+          jcxcxxPoint.forEach((a, b) => {
+            if (
+              item.data.valueData.exposureMode == a.exposureMode &&
+              item.data.valueData.harnessDirection == a.harnessDirection
+            ) {
+              item.data.valueData.jcxcxxIndex = b;
+            }
+          });
+        }
+      });
+    },
+    // ========================================================END
     success(msg) {
       this.$notify({
         title: "成功",
@@ -660,15 +702,20 @@ export default {
     // 修改历史记录
     getHistoryInit() {
       this.$nextTick(() => {
+        const dispalyNone = (className) => {
+          document.querySelectorAll(`.${className}`).forEach((item) => {
+            item.style.display = "none";
+          });
+        };
         if (this.docPass == 1) {
-          document.querySelectorAll(".__functionBox").forEach((item) => {
-            item.style.display = "none";
-          });
-          document.querySelectorAll(".leftBtn").forEach((item) => {
-            item.style.display = "none";
-          });
-          document.querySelectorAll(".el-icon-arrow-down").forEach((item) => {
-            item.style.display = "none";
+          let displayNoneArr = [
+            "__functionBox",
+            "leftBtn",
+            "emptyBtn",
+            "el-icon-arrow-down",
+          ];
+          displayNoneArr.forEach((item) => {
+            dispalyNone(item);
           });
 
           this.readFile(JSON.parse(getToken()), "noPass");

@@ -33,13 +33,13 @@
 					<td class="___relative">
 						<myInput style="text-align: center" v-model="item.result" :defaultValue="item.result"></myInput>
 						<utilBar
-						v-if="btnFlag"
+						v-if="btnFlag&&target==0"
 										:data="data"
 										:index="index"
 										:barNum="[limit(), item.isPrototype ? 1: '', 3, 4, item.isPrototype ? 5: '']"
 										:jsonString="jsonString"
 										:whiteList="['sampleName','flow','flowTime','volume','samplingDianWei','dishSize','Remarks']"
-										class="___absolute"
+										class="___absolute leftBtn"
 										style="left: 245px;top: 5px;"
 						></utilBar>
 					</td>

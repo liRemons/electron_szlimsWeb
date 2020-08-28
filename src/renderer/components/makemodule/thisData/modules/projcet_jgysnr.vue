@@ -5,9 +5,10 @@
     :id="data.valueData.testProjectId"
   >
     <el-button
+      class="emptyBtn"
       size="mini"
       style="position: absolute; top: 0; right: -100px;"
-      @dblclick.native="empty"
+      @click="empty"
       v-if="target == 0"
     >
       清空
@@ -192,6 +193,7 @@ export default {
       company: ["μSv/h", "nSv/h"],
       remark: ["无法到达", "不适用", "/"],
       flag: true,
+      jcxcxxPointLength: "",
     };
   },
   props: [
@@ -207,7 +209,7 @@ export default {
     "target",
   ],
   methods: {
-    empty() {
+    emptyEvent() {
       this.flag = false;
       this.$nextTick(() => {
         let point = this.data.valueData.point;
@@ -221,6 +223,15 @@ export default {
         });
         this.flag = true;
         this.$forceUpdate();
+      });
+    },
+    empty() {
+      this.$confirm("清空后不可恢复!", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.emptyEvent();
       });
     },
     init(arr) {
@@ -239,7 +250,7 @@ export default {
                 : "");
         }
         item.name = item.rows[0].split("(")[0];
-        
+
         // item.rows[9]
         //   ? ""
         //   : (item.rows[9] = item.rows[0].split("(")[1]
@@ -384,13 +395,20 @@ export default {
       }
     },
     "data.valueData.point": function (arr) {
-      // this.data.valueData.point.forEach(item=>{
-      //   item
-      // })
       this.init(arr);
     },
   },
   mounted() {
+    // this.$nextTick(() => {
+    //   this.jsonString.forEach((item) => {
+    //     if (item.to == "project_jcxcxx") {
+    //       this.jcxcxxPointLength = item.data.valueData.point.length;
+    //     }
+    //   });
+    //   if (this.data.valueData.jcxcxxIndex == this.jcxcxxPointLength - 1) {
+    //     this.emptyEvent();
+    //   }
+    // });
     this.init(this.data.valueData.point);
   },
 };

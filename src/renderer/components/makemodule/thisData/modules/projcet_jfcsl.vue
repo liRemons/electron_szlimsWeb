@@ -227,10 +227,10 @@ export default {
         "0.125",
         "0.0625",
         "0.05",
-        "0.025"
+        "0.025",
       ],
       showList: true,
-      show: true
+      show: true,
     };
   },
   props: [
@@ -245,7 +245,7 @@ export default {
     "ableInput",
     "target",
     "importData",
-    "btnFlag"
+    "btnFlag",
   ],
   methods: {
     isInteger(val, index, rowIndex) {
@@ -301,14 +301,13 @@ export default {
 
         nameArr.push(item.rows[0]);
       });
-      if (nameArr.every(item => item != "")) {
+      if (nameArr.every((item) => item != "")) {
         let set = new Set(nameArr);
         if (Array.from(set).length < nameArr.length) {
           this.err("名称不能重复");
         } else {
           let completeArr = [];
           let direction = ["上侧", "下侧", "左侧", "右侧", "中部"];
-           
           dataArr.forEach((item, index) => {
             let cubicMetre =
               parseFloat(item.rows[1]) * parseFloat(item.rows[2]);
@@ -317,7 +316,7 @@ export default {
               let rows = [];
               direction.forEach((val, num) => {
                 let obj = [
-                  item.rows[0] +"(" + val + ")",
+                  item.rows[0] + "(" + val + ")",
                   item.rows[3],
                   item.rows[4],
                   "",
@@ -326,7 +325,7 @@ export default {
                   "",
                   "",
                   "",
-                  item.myId + "_" + num
+                  item.myId + "_" + num,
                 ];
                 rows.push({ rows: obj });
               });
@@ -342,16 +341,16 @@ export default {
                 "",
                 "",
                 "",
-                item.myId + "_" + completeArr.length
+                item.myId + "_" + completeArr.length,
               ];
               completeArr.push({ rows: [...rows] });
             }
           });
           this.$notify({
             type: "success",
-            message: "生成成功"
+            message: "生成成功",
           });
-        
+
           this.$store.dispatch("actionsWindowArr", completeArr);
         }
       } else {
@@ -361,12 +360,12 @@ export default {
     err(msg) {
       this.$notify({
         type: "error",
-        message: msg
+        message: msg,
       });
     },
     increase() {
       let obj = {
-        rows: ["", "", "", "", ""]
+        rows: ["", "", "", "", ""],
       };
       this.data.valueData.point.push(obj);
       this.$emit("redefinition");
@@ -383,14 +382,14 @@ export default {
     },
     getIndex(index) {
       this.patternIndex = index;
-    }
+    },
   },
   computed: {
     ...mapState({
-      JudgePhotography: state => state.StomatologyLinkage.JudgePhotography
-    })
+      JudgePhotography: (state) => state.StomatologyLinkage.JudgePhotography,
+    }),
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

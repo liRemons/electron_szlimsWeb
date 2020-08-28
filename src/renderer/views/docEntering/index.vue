@@ -1930,13 +1930,9 @@ export default {
       // 给tab 选项卡赋值
       _this.tabArray = _this.labtemplate;
 
-      getMan(2)
-        .then((res) => {
-          this.allPerson = res.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      getMan(2).then((res) => {
+        this.allPerson = res.data;
+      });
 
       /*有些检测项目数据是仪器导入的, 不需要暂存*/
       let modelName = labtemplate[0].modelName;
@@ -1961,13 +1957,9 @@ export default {
       }
 
       _this.initSamples();
-      getMan(2)
-        .then((res) => {
-          this.allPerson = res.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      getMan(2).then((res) => {
+        this.allPerson = res.data;
+      });
       this.ids = _this.samples.map((item) => item.id);
       _this.tabArray = _this.labtemplate;
       this.tasks = this.tabArray;

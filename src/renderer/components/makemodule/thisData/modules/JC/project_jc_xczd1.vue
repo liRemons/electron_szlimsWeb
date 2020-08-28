@@ -118,7 +118,7 @@
             </div>
           </td>
           <td class="___relative tc">
-            <div>{{ (item.correction, item.algorithm) | toDot }}</div>
+            <div>{{ item.correction | toDot(item.algorithm) }}</div>
           </td>
           <td
             v-if="item.noShow"

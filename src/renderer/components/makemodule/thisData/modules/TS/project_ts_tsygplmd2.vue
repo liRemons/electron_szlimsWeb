@@ -58,7 +58,7 @@
           <td class="___relative">
             <span>{{ item.result }}</span>
             <utilBar
-            v-if="btnFlag"
+            v-if="btnFlag && target==0"
               :data="data"
               :index="index"
               :barNum="[
@@ -78,7 +78,7 @@
                 'dishSize',
                 'Remarks'
               ]"
-              class="___absolute"
+              class="___absolute leftBtn"
               style="left: 210px;top: 5px;"
             ></utilBar>
           </td>

@@ -3,7 +3,14 @@
     <div :class="{ _normalHeight_: true }" class="___relative">
       <div :class="{ eventCover: !ableInput }"></div>
       <div
-        style="border: 1px solid black; line-height: 32px; text-align: left; padding-left: 10px; border-top: none;border-bottom:none"
+        style="
+          border: 1px solid black;
+          line-height: 32px;
+          text-align: left;
+          padding-left: 10px;
+          border-top: none;
+          border-bottom: none;
+        "
       >
         检测项目：{{ data.valueData.testProjectChineseName
         }}{{ data.valueData.detectionLimitPieces }} &nbsp;&nbsp;&nbsp;&nbsp;
@@ -37,7 +44,7 @@
           <td class="___relative tc" style="width: 80px;">
             <span>检测结果</span>
           </td>
-          <td class="___relative tc" style="width: 70px;line-height:16px;">
+          <td class="___relative tc" style="width: 70px; line-height: 16px;">
             <span>检测结果<br />平均值</span>
           </td>
           <td class="___relative tc" style="width: 80px;">
@@ -82,14 +89,14 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
+              style="text-align: center;"
               v-model="item.point"
               :defaultValue="item.point"
             ></myInput>
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
+              style="text-align: center;"
               v-model="item.reading[0]"
               :defaultValue="item.reading[0]"
               @change.native="changeNum(index)"
@@ -97,7 +104,7 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
+              style="text-align: center;"
               v-model="item.reading[1]"
               :defaultValue="item.reading[1]"
               @change.native="changeNum(index)"
@@ -105,7 +112,7 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
+              style="text-align: center;"
               v-model="item.reading[2]"
               :defaultValue="item.reading[2]"
               @change.native="changeNum(index)"
@@ -113,7 +120,7 @@
             <div
               class="___absolute toolBar"
               v-if="target === '0'"
-              style="left: 630px;top:0; width: 62px;"
+              style="left: 630px; top: 0; width: 62px;"
             >
               <div
                 title="往指定行后面增加一行"
@@ -133,7 +140,7 @@
             </div>
           </td>
           <td class="___relative tc">
-            <div>{{ (item.correction, item.algorithm )| toDot }}</div>
+            <div>{{ item.correction | toDot(item.algorithm) }}</div>
           </td>
           <td
             v-if="item.noShow"
@@ -157,7 +164,7 @@
             <timePickerModel
               :showTime="item.time"
               :data="item"
-              @setTime="time => (item.time = time)"
+              @setTime="(time) => (item.time = time)"
             />
           </td>
           <td
@@ -167,7 +174,7 @@
           >
             <querySelect
               v-model="item.deviceNum"
-              style="width:78px;"
+              style="width: 78px;"
               v-if="target === '0'"
               ref="querySelect"
               :num="index"
@@ -188,7 +195,7 @@
             :rowspan="item.heBingLength"
           >
             <myInput
-              style="text-align: center"
+              style="text-align: center;"
               v-model="item.remarks"
               :defaultValue="item.remarks"
               @change.native="
@@ -200,7 +207,7 @@
             ></myInput>
             <div
               class="___absolute toolBar"
-              style="left: 240px;top:0; width: 180px;"
+              style="left: 240px; top: 0; width: 180px;"
             >
               <div
                 title="往指定行后面增加一行"
@@ -294,7 +301,7 @@
       </el-form>
       <div style="text-align: right; margin-right: 50px;">
         <el-button
-          style="margin-top: 15px; margin-left:470px;"
+          style="margin-top: 15px; margin-left: 470px;"
           type="primary"
           @click="sureSampleNum"
           >确定</el-button
@@ -319,9 +326,9 @@ export default {
         "对角线布点",
         "梅花布点",
         "均匀布点",
-        "其它"
+        "其它",
       ],
-      myggcspoint: []
+      myggcspoint: [],
     };
   },
   computed: {},
@@ -337,7 +344,7 @@ export default {
     "ableInput",
     "task",
     "target",
-    "deviceData"
+    "deviceData",
   ],
   filters: {
     toDot(correction, algorithm) {
@@ -352,7 +359,7 @@ export default {
         num = "/";
       }
       return num;
-    }
+    },
   },
   methods: {
     getIdPoint(keyArr, id) {
@@ -531,12 +538,12 @@ export default {
         let keyArr = [
           {
             key: "result",
-            value: ""
+            value: "",
           },
           {
             key: "resultAverage",
-            value: ""
-          }
+            value: "",
+          },
         ];
         this.getIdPoint(keyArr, this.data.valueData.point[index].heBingId);
       }
@@ -575,24 +582,24 @@ export default {
         let keyArr = [
           {
             key: "method",
-            value: method
+            value: method,
           },
           {
             key: "SampleTools",
-            value: SampleTools
+            value: SampleTools,
           },
           {
             key: "deviceNum",
-            value: deviceNum
+            value: deviceNum,
           },
           {
             key: "algorithm",
-            value: algorithm
+            value: algorithm,
           },
           {
             key: "factorArr",
-            value: val.deviceFactor
-          }
+            value: val.deviceFactor,
+          },
         ];
         this.getIdPoint(keyArr, this.data.valueData.point[index].heBingId);
       }
@@ -644,12 +651,12 @@ export default {
         let keyArr = [
           {
             key: "result",
-            value: ""
+            value: "",
           },
           {
             key: "resultAverage",
-            value: ""
-          }
+            value: "",
+          },
         ];
         this.getIdPoint(keyArr, this.data.valueData.point[index + 1].heBingId);
       } else if (Judge === 2) {
@@ -684,7 +691,7 @@ export default {
         this.$confirm("确认删除吗？", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          modal: false
+          modal: false,
         }).then(({}) => {
           this.data.valueData.point.splice(index, 1);
           this.reset();
@@ -735,12 +742,12 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-      keys.forEach(item => {
+      keys.forEach((item) => {
         if (copy === "copyAll") {
           this.data.valueData.point[index][item] = newObjData[item];
         } else {
           let noCopy = this.data.noCopyArr;
-          let result = noCopy.some(key => key === item);
+          let result = noCopy.some((key) => key === item);
           if (newObjData[item] && result === false) {
             this.data.valueData.point[index][item] = newObjData[item];
           }
@@ -760,7 +767,7 @@ export default {
       if (this.selectItem.sampleNum == "") {
         this.$notify({
           type: "warning",
-          message: "样品编号为空"
+          message: "样品编号为空",
         });
         return;
       }
@@ -822,33 +829,33 @@ export default {
       }
     },
     clearPingXing() {
-      this.jsonString.forEach(item => {
+      this.jsonString.forEach((item) => {
         if (
           item.data.valueData.testProjectId ===
           this.data.valueData.testProjectId
         ) {
           let result = item.data.valueData.point.some(
-            item2 => item2.foreverId === this.selectItem.foreverId
+            (item2) => item2.foreverId === this.selectItem.foreverId
           );
           if (result) {
             let arr = item.data.valueData.point.filter(
-              item3 => item3.foreverId !== this.selectItem.foreverId
+              (item3) => item3.foreverId !== this.selectItem.foreverId
             );
             item.data.valueData.point = arr;
           }
         }
       });
-    }
+    },
   },
   watch: {
-    "data.valueData.heBingChange": function() {
+    "data.valueData.heBingChange": function () {
       this.heBing();
-    }
+    },
   },
   mounted() {
-    this.$eventBus.$on("getSampleAddres", address => {
+    this.$eventBus.$on("getSampleAddres", (address) => {
       this.myggcspoint = address;
-      this.data.valueData.point.forEach(item => {
+      this.data.valueData.point.forEach((item) => {
         if (item.SampleAddress == "") {
           item.SampleAddress = this.myggcspoint[0];
         }
@@ -857,7 +864,7 @@ export default {
     setTimeout(() => {
       this.heBing();
     }, 10);
-  }
+  },
 };
 </script>
 

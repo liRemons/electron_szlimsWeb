@@ -3,10 +3,11 @@
     <div :class="{ _normalHeight_: true }" class="___relative">
       <div :class="{ eventCover: !ableInput }"></div>
       <el-button
+        class="emptyBtn"
         size="mini"
         style="position: absolute; top: 0; right: -100px;"
-        @dblclick.native="empty"
-        v-if="target==0"
+        @click="empty"
+        v-if="target == 0"
       >
         清空
       </el-button>
@@ -198,20 +199,28 @@ export default {
   },
   methods: {
     empty() {
-      this.flag = false;
-      this.$nextTick(() => {
-        let point = this.data.valueData.point;
-        point.forEach((item, index) => {
-          item.rows.forEach((a, b) => {
-            if (b == 0 || b == 1 || b == 9) {
-            } else {
-              item.rows[b] = "";
-            }
+      this.$confirm("清空后不可恢复!", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.flag = false;
+          this.$nextTick(() => {
+            let point = this.data.valueData.point;
+            point.forEach((item, index) => {
+              item.rows.forEach((a, b) => {
+                if (b == 0 || b == 1 || b == 9) {
+                } else {
+                  item.rows[b] = "";
+                }
+              });
+            });
+            this.flag = true;
+            this.$forceUpdate();
           });
-        });
-        this.flag=true;
-        this.$forceUpdate()
-      });
+        })
+        .catch(() => {});
     },
     init(arr) {
       let arr1 = ["工作人员操作位", "管线洞口", "观察窗"];

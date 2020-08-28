@@ -2347,6 +2347,7 @@ export default [
       testPoinrNum: [true, true, true],
       testNum: 3,
       company: "μSv/h",
+      // count:0,
       point: [
         {
           rows: ["", "", "", "", "", "", "", ""],
