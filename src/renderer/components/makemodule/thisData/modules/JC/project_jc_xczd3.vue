@@ -206,6 +206,7 @@
               "
             ></myInput>
             <div
+            v-if="target ==0"
               class="___absolute toolBar"
               style="left: 240px; top: 0; width: 180px;"
             >

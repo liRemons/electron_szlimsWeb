@@ -598,6 +598,7 @@ export default {
       });
     },
     submitSongshen() {
+       this.deleteData = [];
       if (this.tasks[0].docPass == 1) {
         this.getHistoryEdit();
       }
@@ -619,7 +620,7 @@ export default {
             .flat()
             .filter((item) => item.to == "project_deleteReason");
           if (data.length) {
-            this.deleteData = data[0].data.valueData.point;
+            this.deleteData = data.map((item) => item.data.valueData.point).flat();
           } else {
             this.deleteData = [];
           }

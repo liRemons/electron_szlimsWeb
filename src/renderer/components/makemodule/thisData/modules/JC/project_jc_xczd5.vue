@@ -115,7 +115,7 @@
 					<td v-if="item.noShow" class="___relative tc" :rowspan="item.heBingLength">
 						<querySelect v-model="item.deviceNum"
 												 style="width:78px;"
-												 v-if="target === '0'"
+												 v-if="target ==0"
 												 ref="querySelect"
 												 :num="index"
 												 :list="deviceData"
@@ -132,7 +132,7 @@
 						<myInput style="text-align: center" v-model="item.remarks"
 										 :defaultValue="item.remarks"
 										 @change.native="getIdPoint([{key:'remarks',value:item.remarks}],item.heBingId)"></myInput>
-						<div class="___absolute toolBar" style="left: 220px;top:0; width: 180px;">
+						<div class="___absolute toolBar" style="left: 220px;top:0; width: 180px;" v-if="target ==0">
 							<div title="往指定行后面增加一行" class="___absolute tc" @click="addRow(index,2,item.heBingId)">+</div>
 							<div title="删除当前行"
 									 class="___absolute tc"

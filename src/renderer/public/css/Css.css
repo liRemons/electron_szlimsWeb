@@ -198,7 +198,12 @@ body {
 }
 
 #pageBox {
-  width: 1120px;
+  width: 770px;
+  margin: 0 auto;
+}
+
+#pageBox2{
+  width: 1170px;
   margin: 0 auto;
 }
 
@@ -2344,4 +2349,27 @@ body::-webkit-scrollbar-track {
 .flex_around{
   display: flex;
   justify-content: space-around;
+}
+
+
+.timepickerModel {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32px;
+
+  
+}
+
+.timepickerModel .time {
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
 }

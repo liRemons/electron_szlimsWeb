@@ -19,8 +19,10 @@
         </td>
         <td rowspan="2">样品数量</td>
         <td colspan="5">
-          <div style="width:60px;display: inline-block;vertical-align:middle;">
-            <div v-if="target == 1" style="line-height:32px;">
+          <div
+            style="width: 60px; display: inline-block; vertical-align: middle;"
+          >
+            <div v-if="target == 1" style="line-height: 32px;">
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
@@ -36,11 +38,11 @@
               >
               </selectModel>
               <myInput
-                style="text-align: center"
+                style="text-align: center;"
                 v-else
                 v-model="data.valueData.sysDilutionDegree"
                 @change.native="
-                  el => {
+                  (el) => {
                     noShowInput(el, 0);
                   }
                 "
@@ -49,8 +51,10 @@
             <div v-else>{{ data.valueData.sysDilutionDegree }}</div>
           </div>
           <span>℃培养</span>
-          <div style="width:60px;display: inline-block;vertical-align:middle;">
-            <div v-if="target == 1" style="line-height:32px;">
+          <div
+            style="width: 60px; display: inline-block; vertical-align: middle;"
+          >
+            <div v-if="target == 1" style="line-height: 32px;">
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
@@ -66,11 +70,11 @@
               >
               </selectModel>
               <myInput
-                style="text-align: center"
+                style="text-align: center;"
                 v-else
                 v-model="data.valueData.sysDilutionHour"
                 @change.native="
-                  el => {
+                  (el) => {
                     noShowInput(el, 1);
                   }
                 "
@@ -78,7 +82,7 @@
             </div>
             <div v-else>{{ data.valueData.sysDilutionHour }}</div>
           </div>
-          h后平皿计数（CFU）
+          后平皿计数（CFU）
         </td>
         <td rowspan="2" colspan="2">
           报告值
@@ -92,7 +96,7 @@
         <td>4</td>
         <td>5</td>
       </tr>
-      <tr v-for="(item, index) in data.valueData.point" :key="item.pointId">
+      <tr v-for="item in data.valueData.point" :key="item.pointId">
         <td colspan="2" @click="generateSampleNum(data.valueData.point)">
           {{ name(item) }}
         </td>
@@ -153,12 +157,12 @@
         </td>
 
         <td colspan="2">
-          <div style="height:100%">{{ item.sysReport }}</div>
+          <div style="height: 100%;">{{ item.sysReport }}</div>
         </td>
       </tr>
       <tr>
-        <td colspan="2" style="border-right:none">备注:</td>
-        <td colspan="11" style="border-left:none">
+        <td colspan="2" style="border-right: none;">备注:</td>
+        <td colspan="11" style="border-left: none;">
           <myInput v-model="data.valueData.remarks"></myInput>
         </td>
       </tr>
@@ -183,10 +187,10 @@ export default {
     "ableInput",
     "bs",
     "target",
-    "detectionLimitObj"
+    "detectionLimitObj",
   ],
   components: {
-    projectHead
+    projectHead,
   },
   data() {
     return {
@@ -199,26 +203,26 @@ export default {
       showInput2: false,
       ggcspoint: [],
       nowShowTimeBox: "",
-      devices: []
+      devices: [],
     };
   },
   computed: {
     myggcspoint() {
       if (this.ggcspoint.length > 0) {
-        return this.ggcspoint.map(item => item.sampleAddress);
+        return this.ggcspoint.map((item) => item.sampleAddress);
       } else {
         return [];
       }
-    }
+    },
   },
   watch: {
     myggcspoint() {
-      this.data.valueData.point.forEach(item => {
+      this.data.valueData.point.forEach((item) => {
         if (item.SampleAddress == "") {
           item.SampleAddress = this.myggcspoint[0];
         }
       });
-    }
+    },
   },
   methods: {
     headShow() {
@@ -288,11 +292,11 @@ export default {
           item4 != 0 ||
           item5 != 0
         ) {
-          let arr = [item1, item2, item3, item4, item5].filter(i =>
+          let arr = [item1, item2, item3, item4, item5].filter((i) =>
             that.isNumber(i)
           );
           // 求数组的平均值
-          const average = arr =>
+          const average = (arr) =>
             arr.reduce((acc, val) => acc + val, 0) / arr.length;
 
           item.sysReport = Math.ceil(average(arr));
@@ -316,7 +320,7 @@ export default {
         this.$confirm("确认删除吗？", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          modal: false
+          modal: false,
         }).then(({}) => {
           this.data.valueData.point.splice(index, 1);
           this.$emit("deleteSample", item);
@@ -334,12 +338,12 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-      keys.forEach(item => {
+      keys.forEach((item) => {
         if (copy === "copyAll") {
           this.data.valueData.point[index][item] = newObjData[item];
         } else {
           let noCopy = this.data.noCopyArr;
-          let result = noCopy.some(key => key === item);
+          let result = noCopy.some((key) => key === item);
           if (newObjData[item] && result === false) {
             this.data.valueData.point[index][item] = newObjData[item];
           }
@@ -371,18 +375,18 @@ export default {
     },
 
     clearPingXing() {
-      this.jsonString.forEach(item => {
+      this.jsonString.forEach((item) => {
         if (
           item.data.valueData.testProjectId ===
           this.data.valueData.testProjectId
         ) {
           let result = item.data.valueData.point.some(
-            item2 => item2.foreverId === this.selectItem.foreverId
+            (item2) => item2.foreverId === this.selectItem.foreverId
           );
 
           if (result) {
             let arr = item.data.valueData.point.filter(
-              item3 => item3.foreverId !== this.selectItem.foreverId
+              (item3) => item3.foreverId !== this.selectItem.foreverId
             );
             item.data.valueData.point = arr;
           }
@@ -390,7 +394,7 @@ export default {
       });
     },
     getDetailData() {
-      let ggcs = this.jsonString.find(item => item.to == "head_ggcs");
+      let ggcs = this.jsonString.find((item) => item.to == "head_ggcs");
       if (ggcs) {
         this.ggcspoint = ggcs.data.valueData.point;
       }
@@ -425,7 +429,7 @@ export default {
       if (this.selectItem.sampleNum == "") {
         this.$notify({
           type: "warning",
-          message: "样品编号为空"
+          message: "样品编号为空",
         });
         return;
       }
@@ -464,15 +468,15 @@ export default {
       }
 
       this.$emit("redefinition");
-    }
+    },
   },
   mounted() {
     this.getDetailData();
-
-    this.$eventBus.$on("getDevice", device => {
+    console.log(this.data.valueData.point,'poont')
+    this.$eventBus.$on("getDevice", (device) => {
       this.devices = device;
     });
-  }
+  },
 };
 </script>
 

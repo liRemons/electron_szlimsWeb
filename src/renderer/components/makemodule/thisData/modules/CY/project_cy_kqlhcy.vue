@@ -110,7 +110,9 @@
           </div>
         </td>
         <td>
+          
           <querySelect
+            v-if="target==0"
             v-model="item.deviceNum"
             ref="querySelect"
             style="width: 90px;"
@@ -120,6 +122,7 @@
             @getSelectItem="returnVal2"
             :name="'deviceNum'"
           ></querySelect>
+          <span v-else>{{item.deviceNum}}</span>
         </td>
         <td>
           <myInput v-model="item.Remarks"></myInput>

@@ -4,7 +4,7 @@
     class="showTemplateBox"
     :class="ipdTemplate == 'ipdTemplate' ? 'box_warpper' : ''"
   >
-    <div id="pageBox">
+    <div id="pageBox2">
       <!-- 打印区域 -->
 
       <div class="filler _noprint"></div>
@@ -703,7 +703,6 @@ export default {
     },
     showCurve() {
       let modelName = this.testProject.modelName;
-      console.log(modelName);
       let allowArr = ["project_sysdong"];
       let wswArr = [
         "project_wsw_ypjcxx",
@@ -1108,7 +1107,6 @@ export default {
               // this.curveName=item.materialName
             }
           });
-          console.log(this.curveOptions);
         } else {
           this.$notify({
             type: "warning",

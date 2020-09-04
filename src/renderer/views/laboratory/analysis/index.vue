@@ -50,7 +50,7 @@
       </el-carousel>
     </div>
 
-    <div style="position: fixed; right: 5vw; top:90vh;z-index:2001">
+    <div style="position: fixed; right: 5vw; top: 90vh; z-index: 2001;">
       <el-button @click="clearSelected">取消选择</el-button>
       <el-button
         v-show="nowPage === '正在分析'"
@@ -78,7 +78,7 @@
           >上次样品</el-radio
         >
       </div>
-      <div v-if="radio === '1'">
+      <div v-if="radio == 1">
         <div
           class="paralleBoxPingXing"
           v-if="testProjectName == 'project_systvoc'"
@@ -145,7 +145,11 @@
         <div class="paralleBoxPingXing" v-else>
           <div>请勾选平行样</div>
           <div>
-            <el-checkbox-group :disabled="labelIndex==2" v-model="checkedParallelSample" size="mini">
+            <el-checkbox-group
+              :disabled="labelIndex == 2"
+              v-model="checkedParallelSample"
+              size="mini"
+            >
               <el-checkbox
                 @change="changeCheckBox"
                 v-for="item in samplesArr"
@@ -179,7 +183,7 @@
         <el-col :span="2" :offset="11">
           <el-button @click="toImportFile = false">取 消</el-button>
         </el-col>
-        <el-col :span="1" style="margin-left: 10px">
+        <el-col :span="1" style="margin-left: 10px;">
           <el-button type="primary" @click="toImportFile = false"
             >确 定</el-button
           >
@@ -194,7 +198,7 @@ import {
   querySubmittedSample,
   toQuerySysSampleTemporaryStorageData,
   querySysSampleData,
-  updateSampleAnalysisStaff
+  updateSampleAnalysisStaff,
 } from "@/api/laboratory";
 import store from "@/store";
 import myTable from "@/views/components/myTable";
@@ -202,7 +206,7 @@ import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
-      labelIndex:"",
+      labelIndex: "",
       analysisInitial_index: 0,
       template: [], //检测项目数组
       samplesArr: [],
@@ -222,18 +226,18 @@ export default {
       select: [],
       defaultProps: {
         children: "value",
-        label: "name"
+        label: "name",
       },
       selectParallelSample: false,
       nowTestProject: "",
       checkedParallelSample: [], //被选择的平行样
       toImportFile: false,
       sampleIds: [],
-      analysis:""
+      analysis: "",
     };
   },
   components: {
-    myTable
+    myTable,
   },
   created() {
     let analysis = sessionStorage.getItem("analysisLabel");
@@ -251,17 +255,17 @@ export default {
       : this.nowPage === "正在分析"
       ? this.toQuerySubmittedSample(6)
       : this.toQuerySubmittedSample(3);
-      this.analysis=sessionStorage.getItem("analysisLabel")
+    this.analysis = sessionStorage.getItem("analysisLabel");
   },
   methods: {
     changeCarousel(index) {
-      this.labelIndex=index
+      this.labelIndex = index;
       sessionStorage.setItem("analysisInitial_index", index);
       this.$eventBus.$emit("clearSelect");
     },
     //获取4 是已分析 5是未分析
     toQuerySubmittedSample(state) {
-      querySubmittedSample(state, JSON.parse(getToken()).id).then(res => {
+      querySubmittedSample(state, JSON.parse(getToken()).id).then((res) => {
         if (res.dataWeishenghu) {
           this.dataWeishenghu = res.dataWeishenghu;
         }
@@ -285,11 +289,11 @@ export default {
         ) {
           let selectedNodes = this.$refs[arr[j]].getCheckedNodes();
           let select = selectedNodes.filter(
-            item => item.testProjectId != undefined
+            (item) => item.testProjectId != undefined
           );
           this.select = this.select.concat(select);
           let template = selectedNodes.filter(
-            item => item.hasOwnProperty("id") && item.hasOwnProperty("value")
+            (item) => item.hasOwnProperty("id") && item.hasOwnProperty("value")
           );
           for (let i = 0; i < template.length; i++) {
             this.template.push(template[i]);
@@ -299,16 +303,16 @@ export default {
     },
 
     entry() {
-      let nowAnaly=this.nowPage
-      sessionStorage.setItem('analysis',nowAnaly)
+      let nowAnaly = this.nowPage;
+      sessionStorage.setItem("analysis", nowAnaly);
       this.dataWeishenghu2 = [];
       this.dataFangshe2 = [];
       this.dataLihua2 = [];
       this.template = [];
       let arr = ["dataWeishenghu", "dataFangshe", "dataLihua"];
-      arr.forEach(arrItem => {
+      arr.forEach((arrItem) => {
         if (this[arrItem] && this[arrItem].length > 0) {
-          this[arrItem].forEach(item => {
+          this[arrItem].forEach((item) => {
             if (item.isSelected) {
               this[arrItem + "2"].push(item);
             }
@@ -319,33 +323,33 @@ export default {
         JSON.stringify([
           ...this.dataWeishenghu2,
           ...this.dataFangshe2,
-          ...this.dataLihua2
+          ...this.dataLihua2,
         ])
       );
       if (this.template <= 0) {
         this.$notify({
           type: "warning",
-          message: "请选择检测项目!"
+          message: "请选择检测项目!",
         });
         return;
       }
       this.sampleNumId = [];
-      this.template.forEach(item => {
-        item.value.forEach(a => {
+      this.template.forEach((item) => {
+        item.value.forEach((a) => {
           this.sampleNumId.push(a.id);
         });
       });
       for (let i = 0; i < this.template.length; i++) {
         let id = this.template[i].testProjectId;
-        let result = this.template.every(item => item.testProjectId === id);
+        let result = this.template.every((item) => item.testProjectId === id);
         if (result === false) {
           let msg =
-           nowAnaly === "待分析" || nowAnaly === "正在分析"
+            nowAnaly === "待分析" || nowAnaly === "正在分析"
               ? "请选择相同检测项目分析!"
               : "请选择相同检测项目查看!";
           this.$notify({
             type: "warning",
-            message: msg
+            message: msg,
           });
           return;
         }
@@ -354,14 +358,14 @@ export default {
       this.testProjectName = this.template[0].modelName;
       this.testProjectChieseName = this.template[0].name;
       this.samplesArr = [];
-      this.template.forEach(item => {
+      this.template.forEach((item) => {
         let blankSamples = JSON.parse(
-          JSON.stringify(item.value.filter(item => item.blankSample === 1))
+          JSON.stringify(item.value.filter((item) => item.blankSample === 1))
         );
         let publicSamples = JSON.parse(
-          JSON.stringify(item.value.filter(item => item.blankSample === 0))
+          JSON.stringify(item.value.filter((item) => item.blankSample === 0))
         );
-        publicSamples.forEach(item2 => {
+        publicSamples.forEach((item2) => {
           if (blankSamples instanceof Array) {
             item2.myBlankSample = blankSamples;
           } else {
@@ -371,7 +375,7 @@ export default {
         item.value = publicSamples;
       });
 
-      this.template.forEach(item => {
+      this.template.forEach((item) => {
         let newItem = JSON.myParse(JSON.stringify(item));
         this.samplesArr = this.samplesArr.concat(newItem.value);
       });
@@ -383,10 +387,10 @@ export default {
         this.selectParallelSample = true;
       } else {
         this.selectParallelSample = false;
-        let sampleNums = this.template[0].value.map(item => item.sysSampleId);
-        querySysSampleData(sampleNums).then(res => {
+        let sampleNums = this.template[0].value.map((item) => item.sysSampleId);
+        querySysSampleData(sampleNums).then((res) => {
           if (res.success) {
-            res.samples.forEach(item => {
+            res.samples.forEach((item) => {
               try {
                 item.myBlankSample = JSON.parse(item.blankSampleArr);
               } catch (e) {
@@ -406,18 +410,18 @@ export default {
           } else {
             this.$notify({
               type: "warning",
-              message: "获取数据失败!"
+              message: "获取数据失败!",
             });
           }
         });
       }
-      this.samplesArr.forEach(item => {
+      this.samplesArr.forEach((item) => {
         item.isParallel = false;
       });
     },
 
     changeCheckBox() {
-      this.template[0].value.forEach(item => {
+      this.template[0].value.forEach((item) => {
         let id = item.id;
         if (this.checkedParallelSample.indexOf(id) !== -1) {
           item.isParallel = true;
@@ -433,9 +437,9 @@ export default {
       this.dataLihua2 = [];
       this.template = [];
       let arr = ["dataWeishenghu", "dataFangshe", "dataLihua"];
-      arr.forEach(arrItem => {
+      arr.forEach((arrItem) => {
         if (this[arrItem] && this[arrItem].length > 0) {
-          this[arrItem].forEach(item => {
+          this[arrItem].forEach((item) => {
             if (item.isSelected) {
               this[arrItem + "2"].push(item);
             }
@@ -446,43 +450,45 @@ export default {
         JSON.stringify([
           ...this.dataWeishenghu2,
           ...this.dataFangshe2,
-          ...this.dataLihua2
+          ...this.dataLihua2,
         ])
       );
       if (this.template.length == 0) {
         this.$notify({
           type: "warning",
-          message: "请选择分析项目!"
+          message: "请选择分析项目!",
         });
         return;
       }
 
       this.sampleNumId = [];
-      this.template.forEach(item => {
-        item.value.forEach(a => {
+      this.template.forEach((item) => {
+        item.value.forEach((a) => {
           this.sampleNumId.push(a.id);
         });
       });
       this.$confirm("确定退回?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          updateSampleAnalysisStaff(this.sampleNumId.join(","), 2).then(res => {
-            if (res.success) {
-              this.$message.success("退回成功");
-              this.toQuerySubmittedSample(6);
-            } else {
-              this.$message.error("失败");
+          updateSampleAnalysisStaff(this.sampleNumId.join(","), 2).then(
+            (res) => {
+              if (res.success) {
+                this.$message.success("退回成功");
+                this.toQuerySubmittedSample(6);
+              } else {
+                this.$message.error("失败");
+              }
             }
-          });
+          );
         })
         .catch(() => {});
     },
     // 去录入
     toEntry() {
-      let sysSampleIds = this.template[0].value.map(item => item.sysSampleId);
+      let sysSampleIds = this.template[0].value.map((item) => item.sysSampleId);
       // return
       store.dispatch("ChangeSaveAnalysisData", null);
       // 录入上次样品
@@ -490,22 +496,24 @@ export default {
         this.sampleNumId.join(","),
         JSON.parse(getToken()).id,
         1
-      ).then(res => {});
+      ).then((res) => {});
       if (this.radio == 2) {
-        let sysSampleIds = this.template[0].value.map(item => item.sysSampleId);
-        this.template[0].value.map(item => {
-          item.myBlankSample.map(a => {
+        let sysSampleIds = this.template[0].value.map(
+          (item) => item.sysSampleId
+        );
+        this.template[0].value.map((item) => {
+          item.myBlankSample.map((a) => {
             sysSampleIds.push(a.id);
           });
         });
 
         // this.sampleNumId
-        toQuerySysSampleTemporaryStorageData(sysSampleIds).then(res => {
+        toQuerySysSampleTemporaryStorageData(sysSampleIds).then((res) => {
           if (!res.data.length) {
             this.$message.error("暂无样品");
             return;
           }
-          res.data.forEach(item => {
+          res.data.forEach((item) => {
             item.labSampleNum ? (item.sampleNum = item.labSampleNum) : "";
             try {
               item.myBlankSample = JSON.parse(item.blankSampleArr);
@@ -515,7 +523,7 @@ export default {
           });
           if (this.testProjectName == "project_systvoc") {
             let result = true;
-            this.template[0].value.forEach(item => {
+            this.template[0].value.forEach((item) => {
               if (item.isParallel) {
                 if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
                   result = false;
@@ -542,7 +550,7 @@ export default {
         // 录入本次样品
         if (this.testProjectName == "project_systvoc") {
           let result = true;
-          this.template[0].value.forEach(item => {
+          this.template[0].value.forEach((item) => {
             if (item.isParallel) {
               if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
                 result = false;
@@ -561,7 +569,7 @@ export default {
           } else {
             this.$notify({
               type: "warning",
-              message: "请输入总峰面积"
+              message: "请输入总峰面积",
             });
             return;
           }
@@ -615,8 +623,8 @@ export default {
         sessionStorage.setItem("analysis", "正在分析");
         this.toQuerySubmittedSample(6);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -645,12 +653,10 @@ export default {
   margin-bottom: 15px;
   padding-right: 85vw;
 }
-
 </style>
 
 <style >
 .el-carousel__container {
   height: 66vh !important;
 }
-  
 </style>

@@ -309,7 +309,8 @@
         this.data.valueData.testDeviceCheckBox = valueArr.map(item => item.id);
       }
     },
-    mounted: function () {
+    mounted () {
+      
       queryByPurpose('实验室').then(res => {
         if (res.success) {
           this.devices = res.data;

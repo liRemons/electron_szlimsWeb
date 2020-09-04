@@ -5,6 +5,7 @@
         trigger="click"
         indicator-position="outside"
         :autoplay="false"
+        style="height:100%"
       >
         <el-carousel-item :key="1" label="理化">
           <div style="margin-bottom: 10px;height:100%; overflow-y: auto;">

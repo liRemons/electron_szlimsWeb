@@ -1,5 +1,5 @@
 <template>
-  <div class="box_warpper tc">
+  <div class="timepickerModel tc">
     <div class="heightCenter3" style="height: 32px; width: 100%;">
       <span>{{ time }}</span
       >&nbsp;
@@ -51,23 +51,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.box_warpper {
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 32px;
 
-  .time {
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 999;
-  }
-}
 </style>

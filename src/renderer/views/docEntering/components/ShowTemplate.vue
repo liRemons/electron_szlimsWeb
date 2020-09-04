@@ -42,7 +42,10 @@
       </div>
     </div>
 
-    <div id="pageBox">
+    <div
+    v-if="pageBox"
+    :id="getId(taskData.showing[0][0].data.switch)"
+    >
       <!-- 打印区域 -->
       <div class="filler _noprint"></div>
       <!-- 间隔 -->
@@ -234,6 +237,7 @@ export default {
   data() {
     return {
       heads,
+      pageBox:false,
       staffId: "",
       delCreateTime: "",
       btnFlag: true,
@@ -1021,8 +1025,19 @@ export default {
       this.todayDate = this.jsonString[0].data.valueData.todayDate;
       this.operation();
       this.redefinition();
-
+      this.$nextTick(()=>{
+        this.pageBox=true
+      })
+    
       // this.Reset();
+    },
+    getId(data){
+      if(data){
+        return 'pageBox'
+      }else{
+         return 'pageBox2'
+      }
+     
     },
     changeJson(data) {
       this.jsonString = data;
