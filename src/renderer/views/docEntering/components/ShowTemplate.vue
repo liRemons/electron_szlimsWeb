@@ -915,8 +915,9 @@ export default {
 
       let obj = [];
       this.taskData.showing = [];
-
       this.jsonString = [];
+      // console.log(contentArray,'contentArray')
+      //     console.log( this.heads,'heads')
       for (let i = 0; i < contentArray.length; i++) {
         // 获取模块
         let result1 = this.modules.find(
@@ -937,7 +938,6 @@ export default {
             if (contentArray[i].testProjectChineseName)
               result1.valueData.testProjectChineseName =
                 contentArray[i].testProjectChineseName;
-
             if (contentArray[i].detectionLimitPieces)
               result1.valueData.detectionLimitPieces =
                 contentArray[i].detectionLimitPieces;
@@ -964,10 +964,10 @@ export default {
             result1.showName = contentArray[i].showName;
             this.dataFormat(result1, contentArray[i], this.task);
           }
-
           obj.push(result1);
         } else {
           //头模块
+          
           let result2 = this.heads.find(
             (mod) =>
               mod.name ==

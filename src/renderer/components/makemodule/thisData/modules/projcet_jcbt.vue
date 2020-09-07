@@ -211,8 +211,8 @@ export default {
     // 判断是否整数
     blurNum(val, type) {
       if (Number(val) % 1 !== 0) {
-        this.$message.warning("请输入整数");
-        this.data.valueData[type] = "";
+        // this.$message.warning("请输入整数");
+        // this.data.valueData[type] = "";
       }
     },
     isNumber(val) {

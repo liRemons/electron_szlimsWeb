@@ -176,7 +176,6 @@ import { getToken } from "@/utils/auth";
 import { getLocalData, toUpdateIsDocImg, uploadImg } from "@/api/local";
 import store from "@/store";
 import Viewer from "viewerjs";
-import "viewerjs/dist/viewer.css";
 import signature from "../../../components/signature/index";
 
 export default {
