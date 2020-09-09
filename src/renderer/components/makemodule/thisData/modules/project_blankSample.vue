@@ -1,13 +1,11 @@
 <template>
   <div class="___relative">
-     <div :class="{ eventCover: !ableInput }"></div>
+    <div :class="{ eventCover: !ableInput }"></div>
     <table class="myTable">
       <tr>
         <td width="80" :rowspan="data.valueData.point.length + 1">空白样品</td>
         <td width="300">检测项目</td>
-        <td width="100">
-          样品编号
-        </td>
+        <td width="100">样品编号</td>
         <td width="200">样品名称</td>
         <td width="80">样品数量</td>
         <td width="150">备注</td>
@@ -24,7 +22,7 @@
             @getList="getListArr"
             :input="false"
             :multiSelect="true"
-            style="line-height: 32px;"
+            style="line-height: 32px"
             :receive="''"
             :transmitText="
               item.testProjects.length > 0
@@ -65,19 +63,36 @@
           </div>
         </td>
         <td>
+          <selectModel
+            style="line-height: 32px"
+            @returnVal="(a) => returnVal(a, index)"
+            :Judge="true"
+            v-if="!item.showInput"
+            :special="index"
+            :transmitText="item.sampleName"
+            :multi-select="false"
+            :input="false"
+            :receive="'sampleName'"
+            :single="true"
+            :rows="false"
+            :list="['现场空白', '运输空白', '对照空白', '试剂空白', '其他']"
+            :Obj="''"
+          >
+          </selectModel>
           <myInput
-            style="text-align: center;"
+            v-else
+            style="text-align: center"
             v-model="item.sampleName"
           ></myInput>
         </td>
         <td>
           <myInput
-            style="text-align: center;"
+            style="text-align: center"
             v-model="item.sampleQuantity"
           ></myInput>
         </td>
         <td>
-          <myInput v-model="item.remark" style="text-align: center;"></myInput>
+          <myInput v-model="item.remark" style="text-align: center"></myInput>
           <!--<div class="___absolute toolBar" v-if="target === '0'" :style="{ top: index * 32 + 35 + 'px', width: 4 * 30 + 'px'}">
 							<div class="___relative">
 									<div class="___absolute btnHover" style="width: 30px; cursor: pointer;" @click="add(index)">+</div>
@@ -86,14 +101,18 @@
 									<div class="___absolute btnHover" title="生成新的空白编号" :style="{width: '30px', cursor: 'pointer', left: '90px'}" @click="generateSampleNum(item)">B</div>
 							</div>
 					</div>-->
-          <div class="___absolute" style="left: 905px;" v-if="btnFlag&&ableInput">
+          <div
+            class="___absolute"
+            style="left: 905px"
+            v-if="btnFlag && ableInput"
+          >
             <utilBar
               :data="data"
               :index="index"
               :barNum="[0, 1]"
               :jsonString="jsonString"
               class="___absolute"
-              style="left: 245px; top: -28px;"
+              style="left: 245px; top: -28px"
             >
             </utilBar>
             <div
@@ -134,7 +153,7 @@ import { querySameDayBlankSample, querySampleNum } from "@/api/local";
 
 export default {
   name: "project_blankSample",
-  props: ["data", "jsonString", "target", "btnFlag","ableInput"],
+  props: ["data", "jsonString", "target", "btnFlag", "ableInput"],
   data() {
     return {
       selectTestProjectArr: [],
@@ -232,12 +251,23 @@ export default {
         };
       });
     },
+    returnVal(a, b) {
+      if(a=='其他'){
+        this.data.valueData.point[b].showInput=true
+        this.$forceUpdate()
+        return
+      }
+      this.data.valueData.point[b].sampleName = a;
+    },
   },
 
   mounted() {
     this.nowYear = new Date().getFullYear().toString().substring(2, 4);
     this.numObj = JSON.myParse(sessionStorage.getItem("numObj"));
     this.getBeUseSample();
+    this.data.valueData.point.forEach((item) => {
+      item.showInput == undefined && (item.showInput = false);
+    });
   },
   beforeDestroy() {
     window.sampleNum4 = "";

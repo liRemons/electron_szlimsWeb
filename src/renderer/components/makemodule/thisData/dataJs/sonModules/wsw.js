@@ -156,7 +156,7 @@ export default [{
       testProject: 'project_wsw_jl_kqcjf',
       id: '',
       sysReport: '',
-      testResults: [{sampleNum: '实验室空白对照', testResult: '', noEdit: true}],
+      testResults: [{sampleNum: '实验室空白对照', testResult: '', noEdit: true,showInput:true}],
       mustWrite: ['sysTestingTime', 'testDeviceCheckBox'], //必填项字段名
       sysTestingTime: "", // 实验室检测日期
       sysTestingEndTime: "",

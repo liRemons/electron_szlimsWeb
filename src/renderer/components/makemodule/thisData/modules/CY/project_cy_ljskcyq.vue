@@ -40,7 +40,7 @@
           </div>
         </td>
         <td style="width: 150px;">采样地点</td>
-        <td style="width: 90px;">样品名称</td>
+        <td style="width: 90px;" v-if="data.valueData.isSampleName">样品名称</td>
         <td style="width: 100px;">采样流量(L/min)</td>
         <td style="width: 95px;">采样时长(min)</td>
         <td style="width: 90px;">采样体积(L)</td>
@@ -71,7 +71,7 @@
             :Obj="''"
           ></selectModel>
         </td>
-        <td>
+        <td v-if="data.valueData.isSampleName">
           <myInput v-model="item.sampleName"></myInput>
         </td>
         <td>
@@ -130,11 +130,11 @@
               :data="data"
               :index="index"
               :barNum="[
-                0,
+                item.isPrototype ? 0: '',
                 item.isPrototype ? 1 : '',
                 3,
                 4,
-                item.isPrototype ? 5 : '',
+                5 ,
                 item.isPrototype ? 6 : '',
               ]"
               :jsonString="jsonString"

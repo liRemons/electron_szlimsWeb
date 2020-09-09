@@ -221,6 +221,7 @@
           :class="{ page: true, _print: true, ableInput: ableInput }"
         >
           <!-- 真打印区域 -->
+          <div class="projectName">检测项目：{{projectName}}</div>
           <div class="pageCode">
             第 {{ pageNumber + 1 }} 页 / 共 {{ sampleData.showing.length }} 页
           </div>
@@ -310,7 +311,7 @@ import {
   toQuerySysSampleTemporaryStorageData,
   queryTestProjectAnalysisItemData,
 } from "@/api/laboratory";
-
+import {mapState} from 'vuex'
 export default {
   data() {
     return {
@@ -363,6 +364,7 @@ export default {
       nowCur5: "",
       nowCur6: "",
       nowCur7: "",
+      projectName:""
     };
   },
   props: {
@@ -374,6 +376,9 @@ export default {
     AllFengFlag: Object,
   },
   computed: {
+    ...mapState({
+      labtemplate:state=>state.laboratory.labtemplate
+    }),
     testProjectTitle() {
       switch (this.sample.modelName) {
         case "project_systvoc":
@@ -395,15 +400,6 @@ export default {
     },
 
     imgSrc() {
-      // checkStaffUrl
-      // try {
-      //   let src = this.sampleData.showing[0][0]["data"]["valueData"][
-      //     "shiYanJianCe"
-      //   ];
-      //   return src;
-      // } catch (e) {
-      //   return "";
-      // }
       return (
         this.imgUrl +
         this.sampleData.showing[0][0]["data"]["valueData"].recordStaffUrl
@@ -411,14 +407,6 @@ export default {
     },
 
     imgSrc2() {
-      // try {
-      //   let src = this.sampleData.showing[0][0]["data"]["valueData"][
-      //     "shiShenHe"
-      //   ];
-      //   return src;
-      // } catch (e) {
-      //   return "";
-      // }
       return (
         this.imgUrl +
         this.sampleData.showing[0][0]["data"]["valueData"].checkStaffUrl
@@ -428,17 +416,12 @@ export default {
   methods: {
     // 显示这个示例
     showExample() {
+      this.projectName=this.labtemplate[0].name
       this.$store.dispatch(
         "ChangeInspectionTime",
         this.testProject.inspectionTime
       );
       let _that = this;
-      // console.log(this.sample, "sample");
-      // console.log(this.sampleData, "sampleData");
-      // console.log(this.testProject, "testProject");
-      // console.log(this.android, "android");
-      // console.log(this.target, "target");
-      // console.log(this.AllFengFlag, "AllFengFlag");
       //检出限和检出限单位
       this.detectionLimitObj.detectionLimit = this.testProject.value[0].detectionLimit;
       this.detectionLimitObj.detectionLimitPieces = this.testProject.value[0].detectionLimitPieces;
@@ -681,7 +664,7 @@ export default {
       } else {
         this.getModelObj(content, false);
       }
-      // console.log("渲染的模板名称", content);
+     
     },
 
     uploadTuPuSuccess(res) {

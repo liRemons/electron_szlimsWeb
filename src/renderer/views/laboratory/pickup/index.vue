@@ -166,7 +166,10 @@ export default {
   padding-bottom: 8px;
   text-indent: 8px;
 }
-.el-carousel__container {
+</style>
+
+<style>
+  .el-carousel__container {
   min-height: 68vh !important;
 }
 </style>

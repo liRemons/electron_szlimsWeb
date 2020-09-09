@@ -236,7 +236,7 @@ export default [{
       _normal: {
         carried: true,
         value: function (obj) {
-          return 346 + (obj.point.length * 32);
+          return 392 + (obj.point.length * 33);
         }
       }
     }

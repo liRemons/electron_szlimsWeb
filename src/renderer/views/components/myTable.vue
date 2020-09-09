@@ -2,7 +2,7 @@
   <el-card>
     <div align="left">
       <h3 v-if="data.length > 0">{{ title }}</h3>
-      <h3 v-else>{{ title }} ( <span style="color: red;">暂无数据</span> )</h3>
+      <h3 v-else>{{ title }} ( <span style="color: red">暂无数据</span> )</h3>
     </div>
     <div class="tableHead">
       <!--一级表头-->
@@ -14,19 +14,14 @@
           @change="changeAllRowValue"
         ></el-checkbox>
       </div>
-      <div style="flex: 3; margin-left: 18px;" class="colName">送检日期</div>
-
-      <div style="flex: 3; margin-left: 5px;" class="colName">检测项目</div>
+      <div style="flex: 3; margin-left: 18px" class="colName">送检日期</div>
+      <div style="flex: 3; margin-left: 5px" class="colName">检测项目</div>
       <div style="flex: 3" class="colName">检测依据</div>
-      <div style="flex: 0.4;" class="colName"></div>
+      <div style="flex: 0.4" class="colName"></div>
     </div>
     <div v-if="data.length > 0">
       <div class="tableBody" v-for="(item, index) in data" :key="index">
-        <div
-          class="tableRow"
-          style="user-select: none;"
-          @click="toggleChildTable('oneLevel' + index)"
-        >
+        <div class="tableRow" style="user-select: none">
           <!--一级值-->
           <div style="flex: 0.25" class="colVal">{{ index + 1 }}</div>
           <div style="flex: 0.15">
@@ -37,35 +32,46 @@
               "
             ></el-checkbox>
           </div>
-          <i style="flex: 0.15" :class="arrow('oneLevel' + index)"></i>
+          <i
+            @click="toggleChildTable('oneLevel' + index)"
+            style="flex: 0.15"
+            :class="arrow('oneLevel' + index)"
+          ></i>
           <div style="flex: 3" class="colVal">{{ item.inspectionTime }}</div>
 
           <div style="flex: 3" class="colVal">{{ item.name }}</div>
           <div style="flex: 3" class="colVal">
             {{ item.standardNum }} {{ item.standardUseTerms }}
           </div>
-          <div style="flex: 0.4;" class="colName">
-            <span style="color: red;" v-if="showTitle(item.value)">被退回</span>
+          <div style="flex: 0.4" class="colName">
+            <el-button
+              type="danger"
+              @click="wtReturnSample(item)"
+              size="mini"
+              v-if="item.projectName == '委托送样'"
+              >退样</el-button
+            >
+            <span style="color: red" v-if="showTitle(item.value)">被退回</span>
           </div>
         </div>
         <div v-show="showChildTable('oneLevel' + index)">
           <div class="tableHead">
             <!--二级头-->
-            <div style="flex: 1; margin-left: 190px;" class="colName">序号</div>
-            <div style="flex: 1.80; margin-left: 0px;" class="colName">
+            <div style="flex: 1; margin-left: 190px" class="colName">序号</div>
+            <div style="flex: 1.8; margin-left: 0px" class="colName">
               样品编号
             </div>
-            <div style="flex: 1.7; margin-left: 40px;" class="colName">
+            <div style="flex: 1.7; margin-left: 40px" class="colName">
               样品名称
             </div>
-            <div style="flex: 2; margin-left: 25px;" class="colName">
+            <div style="flex: 2; margin-left: 25px" class="colName">
               样品数量
             </div>
-            <div style="flex: 1; margin-left: 0px;" class="colName">
+            <div style="flex: 1; margin-left: 0px" class="colName">
               样品载体
             </div>
             <div
-              style="flex: 1; margin-left: 0px;"
+              style="flex: 1; margin-left: 0px"
               class="colName"
               v-if="$route.path == '/laboratory/pickUp'"
             >
@@ -89,7 +95,7 @@
               :style="{ color: item2.sampleState === 6 ? 'red' : 'black' }"
             >
               <!--二级值-->
-              <div style="flex: 0.85; margin-left: 200px;">
+              <div style="flex: 0.85; margin-left: 200px">
                 {{ index2 + 1 }}
               </div>
 
@@ -106,13 +112,19 @@
               >
                 {{ item2.sampleCarrier }}
               </div>
-              <div style="flex: 1;" class="colName">
-                <span v-if="item2.sampleState === 6" style="color: red;">{{
+              <div style="flex: 1" class="colName">
+                <span v-if="item2.sampleState === 6" style="color: red">{{
                   item2.reason
                 }}</span>
                 <span v-else></span>
               </div>
-              <div v-if="$route.path == '/laboratory/pickUp'" style="flex: 1;">
+              <div
+                v-if="
+                  item.projectName !== '委托送样' &&
+                  $route.path == '/laboratory/pickUp'
+                "
+                style="flex: 1"
+              >
                 <el-button
                   type="danger"
                   @click="cancelSamples(item2.id)"
@@ -125,13 +137,14 @@
         </div>
       </div>
     </div>
-    <div v-else style="min-height: 40vh;"></div>
+    <div v-else style="min-height: 40vh"></div>
   </el-card>
 </template>
 
 <script>
 import {
-  updateSampleStateReason
+  updateSampleStateReason,
+  updateEntrustGiveSampleReturn,
 } from "@/api/laboratory";
 import { getToken } from "@/utils/auth";
 export default {
@@ -141,17 +154,17 @@ export default {
     return {
       showOneLevelTable: [],
       checked: [],
-      allRowValue: false
+      allRowValue: false,
     };
   },
   watch: {
     data: {
-      handler: function() {
+      handler: function () {
         let clearResult = this.$store.state.laboratory.clearSelect;
         if (clearResult) {
-          this.data.forEach(item => {
+          this.data.forEach((item) => {
             item.isSelected = "";
-            item.value.forEach(item2 => {
+            item.value.forEach((item2) => {
               item2.isSelected = "";
             });
           });
@@ -159,8 +172,8 @@ export default {
           this.$store.dispatch("ClearSelect", false);
         }
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {},
   methods: {
@@ -172,22 +185,22 @@ export default {
         inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
         inputErrorMessage: "格式不正确",
         inputType: "textarea",
-        showInput: true
+        showInput: true,
       })
         .then(({ value }) => {
           let labPickSampleStaffId = JSON.myParse(getToken()).id;
           updateSampleStateReason(id, 9, labPickSampleStaffId, value).then(
-            res => {
+            (res) => {
               if (res.success) {
                 this.$notify({
                   message: res.msg,
-                  type: "success"
+                  type: "success",
                 });
                 this.$emit("toQuerySubmittedSample");
               } else {
                 this.$notify({
                   message: res.msg,
-                  type: error
+                  type: error,
                 });
               }
             }
@@ -221,27 +234,17 @@ export default {
       }
     },
     showTitle(rowArr) {
-      return rowArr.some(item => item.sampleState === 6);
+      return rowArr.some((item) => item.sampleState === 6);
     },
     isSingle(item) {
-      // this.data.forEach(item => {
-      //   if (item.isSelected === true) {
-      //     item.isSelected = false;
-      //   }
-      // });
-      // this.changeCheckBox(false);
-
-      // item.isSelected = true;
-      // this.changeCheckBox(true);
-
       this.$forceUpdate();
     },
     changeCheckBox(flag) {
       this.$forceUpdate();
       if (flag) {
-        this.data.forEach(item => {
+        this.data.forEach((item) => {
           if (item.isSelected === true) {
-            item.value.forEach(item2 => {
+            item.value.forEach((item2) => {
               if (item2.isSelected !== true) {
                 item2.isSelected = true;
               }
@@ -249,9 +252,9 @@ export default {
           }
         });
       } else {
-        this.data.forEach(item => {
+        this.data.forEach((item) => {
           if (item.isSelected === false) {
-            item.value.forEach(item2 => {
+            item.value.forEach((item2) => {
               if (item2.isSelected !== false) {
                 item2.isSelected = false;
               }
@@ -263,17 +266,17 @@ export default {
     changeCheckBox2() {
       this.$forceUpdate();
 
-      this.data.forEach(item => {
+      this.data.forEach((item) => {
         if (item.isSelected === true) {
           if (item.value.length >= 0) {
-            let result = item.value.every(item2 => item2.isSelected == false);
+            let result = item.value.every((item2) => item2.isSelected == false);
             if (result) {
               item.isSelected = false;
             }
           }
         } else {
           if (item.value.length >= 0) {
-            let result = item.value.every(item2 => item2.isSelected == true);
+            let result = item.value.every((item2) => item2.isSelected == true);
             if (result) {
               item.isSelected = true;
             }
@@ -282,29 +285,59 @@ export default {
       });
     },
     changeAllRowValue(val) {
-      this.data.forEach(item => {
+      this.data.forEach((item) => {
         item.isSelected = val;
-        item.value.forEach(item2 => {
+        item.value.forEach((item2) => {
           item2.isSelected = val;
         });
       });
-    }
+    },
+    wtReturnSample(data) {
+      console;
+      let ids = data.value.map((item) => item.id);
+      let staffId = JSON.myParse(getToken()).id;
+      this.$prompt("将打回此项目下的所有样品，请输入打回原因", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
+        inputErrorMessage: "不能为空",
+        inputType: "textarea",
+        showInput: true,
+      }).then(({ value }) => {
+        fn(value);
+      });
+
+      async function fn(value) {
+        let res = await updateEntrustGiveSampleReturn(
+          ids.join(","),
+          staffId,
+          value
+        );
+        if (res.success) {
+          this.$message.success(res.msg);
+          this.$emit("toQuerySubmittedSample");
+        } else {
+          this.$message.error(res.msg);
+        }
+      }
+    },
   },
   mounted() {
     this.$eventBus.$on("clearSelect", () => {
       this.allRowValue = "";
-      this.data.forEach(item => {
+      this.data.forEach((item) => {
         item.isSelected = "";
-        item.value.forEach(item2 => {
+        item.value.forEach((item2) => {
           item2.isSelected = "";
         });
       });
       this.$forceUpdate();
     });
-    this.data.map(item => {
+    this.data.map((item) => {
       this.$set(item, "unfoldSign", false);
     });
-  }
+  },
 };
 </script>
 

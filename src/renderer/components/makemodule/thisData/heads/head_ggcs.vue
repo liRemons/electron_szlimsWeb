@@ -15,63 +15,63 @@
         <table class="myTable">
           <tr>
             <td class="editHistoryTitle">受检单位名称</td>
-            <td colspan="4">
+            <td colspan="10">
               <myInput
-                style="text-align: center;"
-                 class="editHistoryValue"
+                style="text-align: center"
+                class="editHistoryValue"
                 v-model="data.valueData.checkUnitName"
               ></myInput>
             </td>
-            <td class="editHistoryTitle">委托单位名称</td>
-            <td colspan="5" >
+           
+          </tr>
+          <tr>
+             <td class="editHistoryTitle">委托单位名称</td>
+            <td colspan="10">
               <myInput
-               class="editHistoryValue"
-                style="text-align: center;"
+                class="editHistoryValue"
+                style="text-align: center"
                 v-model="data.valueData.clientUnitName"
               ></myInput>
               <!-- <span class="editHistoryValue">{{data.valueData.clientUnitName}}</span> -->
             </td>
           </tr>
           <tr>
-            <td colspan="1" class="editHistoryTitle">受检单位地址</td>
-            <td colspan="10">
-              <myInput
-                style="text-align: center;"
-                 class="editHistoryValue"
-                v-model="data.valueData.checkUnitAddress"
-              ></myInput>
+            <td colspan="1" rowspan="2" class="editHistoryTitle">
+              受检单位地址
             </td>
-          </tr>
-          <tr>
-            <td>检测对象</td>
-            <td colspan="2">
-              <myInput
+            <td colspan="6" rowspan="2" style="height:64px !important;">
+              <textarea
+                style="text-align: center;height:64px !important;width:98%;border:none;resize:none;"
+                class="editHistoryValue"
+                v-model="data.valueData.checkUnitAddress"
+              />
+            </td>
+            <td colspan="2">检测对象</td>
+            <td colspan="2"><myInput
                 v-if="ableInput"
-                style="text-align: center;"
+                style="text-align: center"
                 v-model="data.valueData.deviceTypeName"
               ></myInput>
-              <span v-else>{{ data.valueData.deviceTypeName }}</span>
-            </td>
-            <td>评价依据</td>
-            <td colspan="4">
-              <myInput
+              <span v-else>{{ data.valueData.deviceTypeName }}</span></td>
+          </tr>
+          <tr>
+            <td colspan="2">联系电话</td>
+            <td colspan="2"><myInput
                 v-if="ableInput"
-                style="text-align: center;"
-                v-model="data.valueData.assess"
-              ></myInput>
-              <span v-else>{{ data.valueData.assess }}</span>
-            </td>
-            <td>联系电话</td>
-            <td colspan="2">
-              <myInput
-                v-if="ableInput"
-                style="text-align: center;"
+                style="text-align: center"
                 v-model="data.valueData.checkUnitPhone"
               ></myInput>
-              <span v-else>{{ data.valueData.checkUnitPhone }}</span>
-            </td>
+              <span v-else>{{ data.valueData.checkUnitPhone }}</span></td>
           </tr>
-          <tr style="height: 64px;">
+          <tr style="height: 64px">
+            
+            <td>评价依据</td>
+            <td colspan="10">
+              <span >{{ data.valueData.assess }}</span>
+            </td>
+            
+          </tr>
+          <tr style="height: 64px">
             <td>采样依据</td>
             <td
               colspan="10"
@@ -92,24 +92,24 @@
         </table>
         <table class="myTable ___relative">
           <div :class="{ eventCover: !ableInput }"></div>
-          <tr class="delLine" style="height: 40px; line-height: 20px;">
-            <td colspan="10" style="text-align: left;">
+          <tr class="delLine" style="height: 40px; line-height: 20px">
+            <td colspan="10" style="text-align: left">
               <div class="___relative">
                 <div
                   class="___absolute"
-                  style="top: -8px; left: 18px; width: 80px;"
+                  style="top: -8px; left: 18px; width: 80px"
                 >
                   现场调查
                 </div>
                 <div
                   class="___absolute"
-                  style="top: -8px; left: 98px; width: 300px;"
+                  style="top: -8px; left: 98px; width: 300px"
                 >
                   <div class="___relative">
                     <div class="___absolute">（温湿度表仪器编号：</div>
                     <div
                       class="___absolute"
-                      style="left: 150px; border-bottom: 1px solid black;"
+                      style="left: 150px; border-bottom: 1px solid black"
                     >
                       <querySelect
                         v-model="data.valueData.deviceNum1"
@@ -135,7 +135,7 @@
                 </div>
                 <div
                   class="___absolute"
-                  style="top: -8px; left: 418px; width: 100px;"
+                  style="top: -8px; left: 418px; width: 100px"
                 >
                   <div class="___relative">
                     <div class="___absolute">气压表仪器编号：</div>
@@ -166,14 +166,14 @@
                       ></querySelect>
                       <div v-else>{{ data.valueData.deviceNum1 | toDot }}</div>
                     </div>
-                    <div class="___absolute" style="left: 280px;">）</div>
+                    <div class="___absolute" style="left: 280px">）</div>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
           <tr>
-            <td style="width: 250px;">采样/检测地点</td>
+            <td style="width: 250px">采样/检测地点</td>
             <td>区域面积m²</td>
             <td>温度℃</td>
             <td>湿度%(RH)</td>
@@ -187,7 +187,7 @@
           <tr
             v-for="(poi, index) in data.valueData.point"
             :key="poi.pointId"
-            style="line-height: 32px;"
+            style="line-height: 32px"
           >
             <td>
               <divModel
@@ -240,7 +240,7 @@
                   :single="true"
                   :rows="false"
                   v-if="!poi.showInput"
-                  style="border: none;"
+                  style="border: none"
                   :special="index"
                   :Judge="true"
                   :input="false"
@@ -253,7 +253,7 @@
                 <myInput
                   v-else
                   v-model="poi.localtionState"
-                  style="text-align: center;"
+                  style="text-align: center"
                   @change.native="
                     (el) => {
                       noShowInput(el, poi, 'showInput');
@@ -270,7 +270,7 @@
                   @returnVal="changeDoorState"
                   :single="true"
                   :rows="false"
-                  style="border: none;"
+                  style="border: none"
                   v-if="!poi.showInput2"
                   :special="index"
                   :Judge="true"
@@ -284,7 +284,7 @@
                 <myInput
                   v-else
                   v-model="poi.doorState"
-                  style="text-align: center;"
+                  style="text-align: center"
                   @change.native="
                     (el) => {
                       noShowInput(el, poi, 'showInput2');
@@ -302,7 +302,7 @@
                   :single="true"
                   :rows="false"
                   v-if="!poi.showInput3"
-                  style="border: none;"
+                  style="border: none"
                   :special="index"
                   :Judge="true"
                   :input="false"
@@ -322,7 +322,7 @@
                 <myInput
                   v-else
                   v-model="poi.windState"
-                  style="text-align: center;"
+                  style="text-align: center"
                   @change.native="
                     (el) => {
                       noShowInput(el, poi, 'showInput3');
@@ -337,7 +337,7 @@
               <div v-if="target == 0">
                 <selectModel
                   @returnVal="changeDoorState"
-                  style="border: none;"
+                  style="border: none"
                   :single="true"
                   :rows="false"
                   v-if="!poi.showInput4"
@@ -353,7 +353,7 @@
                 <myInput
                   v-else
                   v-model="poi.shineState"
-                  style="text-align: center;"
+                  style="text-align: center"
                   @change.native="
                     (el) => {
                       noShowInput(el, poi, 'showInput4');
@@ -374,7 +374,7 @@
                   :barNum="[0, 1, 2]"
                   :jsonString="jsonString"
                   class="___absolute"
-                  style="left: 161px; top: -28px;"
+                  style="left: 161px; top: -28px"
                 ></utilBar>
               </div>
             </td>

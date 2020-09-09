@@ -34,7 +34,7 @@
           </div>
         </td>
         <td style="width: 200px;">采样地点</td>
-        <td style="width: 180px;">样品名称</td>
+        <td style="width: 180px;" v-if="data.valueData.isSampleName">样品名称</td>
         <td style="width: 150px;">暴露时间(min)</td>
         <td style="width: 150px;">样品数量</td>
         <td style="width: 150px;">采样点位</td>
@@ -61,7 +61,7 @@
             :Obj="''"
           ></selectModel>
         </td>
-        <td>
+        <td v-if="data.valueData.isSampleName">
           <myInput v-model="item.sampleName"></myInput>
         </td>
         <td>
@@ -81,17 +81,17 @@
               :data="data"
               :index="index"
               :barNum="[
-                0,
+                item.isPrototype ? 0 : '',
                 item.isPrototype ? 1 : '',
                 3,
                 4,
-                item.isPrototype ? 5 : '',
+             5 ,
                 item.isPrototype ? 6 : ''
               ]"
               :jsonString="jsonString"
               :whiteList="['sampleName', 'flow', 'Remarks']"
               class="___absolute"
-              style="left: 162px;top: -28px;"
+              style="left: 230px;top: -28px;"
             ></utilBar>
           </div>
         </td>

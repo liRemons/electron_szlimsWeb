@@ -1,15 +1,15 @@
 <template>
   <div class="entering-container">
-    <div class="___absolute" style="width: 30px; top: 86px; left: 140px;">
+    <div class="___absolute" style="width: 30px; top: 86px; left: 140px">
       <i class="el-icon-loading" v-show="showSaveLog"></i>
     </div>
 
     <!--存放按钮的div-->
-    <div style="text-align: right; padding-right: 10vw;" class="floatMybar">
+    <div style="text-align: right; padding-right: 10vw" class="floatMybar">
       <el-button
         @click="back()"
         size="mini"
-        style="margin-left: 160px;"
+        style="margin-left: 160px"
         type="danger"
         >返回</el-button
       >
@@ -35,7 +35,7 @@
 
       <el-button
         @click="showModuleOption"
-        style="position: fixed; left: 4.2vw; top: 25vh;"
+        style="position: fixed; left: 4.2vw; top: 25vh"
         size="mini"
         type="primary"
         round
@@ -45,13 +45,23 @@
 
       <el-button
         @click="showBook"
-        style="position: fixed; right: 4.1vw; top: 25vh;"
+        style="position: fixed; right: 4.1vw; top: 25vh"
         size="mini"
         type="primary"
         round
         v-if="target == 0 || target == 2 || target == 3"
         >索引
       </el-button>
+      <!-- <el-button
+        @click="dcUpload"
+        style="position: fixed; right: 4.1vw; top: 30vh"
+        size="mini"
+        type="primary"
+        round
+       
+        >上传文件
+      </el-button> -->
+      <input type="file" @change="fileImport" id="file" style="display: none" />
 
       <el-button
         @click="temporaryData"
@@ -335,11 +345,11 @@
           v-model="reason"
         >
         </el-input>
-        <div style="text-align: right;">
+        <div style="text-align: right">
           <el-button
             @click="decideNoPass"
             type="primary"
-            style="margin-top: 50px;"
+            style="margin-top: 50px"
             >确定</el-button
           >
         </div>
@@ -353,10 +363,10 @@
         :modal="false"
         width="90%"
       >
-        <div style="min-height: 700px; padding-left: 2vw;">
+        <div style="min-height: 700px; padding-left: 2vw">
           <show-curve-template
             :templateContent="templateContent"
-            style="width: 800px;"
+            style="width: 800px"
             ref="curveTemplate"
           />
         </div>
@@ -367,7 +377,7 @@
       title="以下项目您取消了检测，请确认"
       :visible.sync="deleteDialog"
     >
-      <el-table :data="deleteData" style="width: 100%;">
+      <el-table :data="deleteData" style="width: 100%">
         <el-table-column prop="testprojectName" label="项目"> </el-table-column>
         <el-table-column prop="reason" label="原因"> </el-table-column>
       </el-table>
@@ -394,7 +404,7 @@
         :min="0.1"
         :step="0.5"
       ></el-input-number>
-      <div style="margin-top: 30px;">
+      <div style="margin-top: 30px">
         <el-button round @click="signatureTimeDialog = false">取消</el-button>
         <el-button type="primary" round @click="longSignature">确定</el-button>
       </div>
@@ -598,7 +608,7 @@ export default {
       });
     },
     submitSongshen() {
-       this.deleteData = [];
+      this.deleteData = [];
       if (this.tasks[0].docPass == 1) {
         this.getHistoryEdit();
       }
@@ -620,7 +630,9 @@ export default {
             .flat()
             .filter((item) => item.to == "project_deleteReason");
           if (data.length) {
-            this.deleteData = data.map((item) => item.data.valueData.point).flat();
+            this.deleteData = data
+              .map((item) => item.data.valueData.point)
+              .flat();
           } else {
             this.deleteData = [];
           }
@@ -986,11 +998,7 @@ export default {
     //实验室审核
     toShiYanReview(result, id) {
       let labPickSampleStaffId = JSON.myParse(getToken()).id;
-      updateSampleStateFinger(
-        this.ids.toString(),
-        7,
-        labPickSampleStaffId
-      ).then((res) => {
+      updateSampleStateFinger(this.ids.toString(), 7, id[0]).then((res) => {
         if (res.success) {
           this.$notify({
             type: "success",
@@ -1066,19 +1074,11 @@ export default {
     },
     //上传
     toUpload(signature) {
-      // return
       let flag = false;
       // 点位图
-      let result = this.tasks.some((item) => {
-        if (item.deviceMainId == 4) {
-          return false;
-        } else {
-          return item.pointUrl;
-        }
-      });
+      let result = this.tasks.some((item) => item.pointUrl);
       // 签名
       let result2 = this.tasks.some((item) => item.unitUrl);
-      // console.log(result, result2);
       this.tasks.forEach((item) => {
         // isDocImg   0是报告不需要图，1是报告需要图，2是报告需要现场上传的图
         item.isDocImg ? (flag = true) : "";
@@ -1747,6 +1747,12 @@ export default {
         "-",
         "/"
       );
+      let point = this.sampleDatas[0].showing[0][0].data.valueData.point.filter(
+        (item) => item.sysAnalysisItem
+      );
+      let sysAnalysisResult = point
+        .map((item) => item.sysAnalysisResult !== " " && item.sysAnalysisResult)
+        .filter((item) => item);
       if (sysTestingTime) {
         if (Math.max(...meetTime) < new Date(sysTestingTime).getTime()) {
           if (
@@ -1773,6 +1779,13 @@ export default {
               this.$notify({
                 type: "warning",
                 message: "请选择曲线",
+              });
+              return;
+            }
+            if (point.length > sysAnalysisResult.length) {
+              this.$notify({
+                type: "warning",
+                message: "有分析结果未填写",
               });
               return;
             }
@@ -1896,6 +1909,28 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    dcUpload() {
+      document.querySelector("#file").click();
+    },
+    fileImport() {
+      //获取读取我文件的File对象
+      var selectedFile = document.getElementById("file").files[0];
+      var name = selectedFile.name; //读取选中文件的文件名
+      var size = selectedFile.size; //读取选中文件的大小
+
+      var reader = new FileReader(); //这是核心,读取操作就是由它完成.
+      reader.readAsText(selectedFile, "gb2312"); //读取文件的内容,也可以读取文件的URL
+      let arr = [],
+        newArr = [];
+      reader.onload = function () {
+        //当读取完成后回调这个函数,然后此时文件的内容存储到了result中,直接操作即可
+        arr = this.result.split(/[\n]/);
+        arr.forEach((item) => {
+          newArr.push(item.split("	"));
+        });
+        console.log(newArr);
+      };
     },
   },
 

@@ -271,12 +271,17 @@ body::-webkit-scrollbar-track {
   top: 10px;
 }
 
-.pageCode {
+.pageCode,.projectName {
   font-size: 14px;
   color: gray;
   position: absolute;
   right: 40px;
   top: 10px;
+}
+
+
+.projectName{
+  left: 40px;
 }
 
 .pageCode2 {

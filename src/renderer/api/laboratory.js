@@ -430,5 +430,19 @@ export function queryBySysDeviceType(sysDeviceType) {
   });
 }
 
-
-
+// 退回委托送样样品
+export function updateEntrustGiveSampleReturn(
+  sampleIds,
+  staffId,
+  returnReason
+) {
+  return service({
+    url: "/updateEntrustGiveSampleReturn",
+    method: "post",
+    data: {
+      sampleIds,
+      staffId,
+      returnReason,
+    },
+  });
+}

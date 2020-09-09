@@ -326,6 +326,7 @@ export default {
           ...this.dataLihua2,
         ])
       );
+    
       if (this.template <= 0) {
         this.$notify({
           type: "warning",

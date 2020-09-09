@@ -173,9 +173,9 @@ export default {
       // let content = this.$refs.box.textContent;
       
       let value = this.$refs.box.textContent;
-      if (this.isNumBox) {
-        this.$refs.box.textContent = Number(value.replace(/[^\d.]/g, ""));
-      }
+      // if (this.isNumBox) {
+      //   this.$refs.box.textContent = Number(value.replace(/[^\d.]/g, ""));
+      // }
       this.$emit('change',  this.$refs.box.textContent);
     },
     changeNum(e) {

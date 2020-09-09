@@ -20,9 +20,9 @@
         <td rowspan="2">样品数量</td>
         <td colspan="5">
           <div
-            style="width: 60px; display: inline-block; vertical-align: middle;"
+            style="width: 60px; display: inline-block; vertical-align: middle"
           >
-            <div v-if="target == 1" style="line-height: 32px;">
+            <div v-if="target == 1" style="line-height: 32px">
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
@@ -38,7 +38,7 @@
               >
               </selectModel>
               <myInput
-                style="text-align: center;"
+                style="text-align: center"
                 v-else
                 v-model="data.valueData.sysDilutionDegree"
                 @change.native="
@@ -52,9 +52,9 @@
           </div>
           <span>℃培养</span>
           <div
-            style="width: 60px; display: inline-block; vertical-align: middle;"
+            style="width: 60px; display: inline-block; vertical-align: middle"
           >
-            <div v-if="target == 1" style="line-height: 32px;">
+            <!-- <div v-if="target == 1" style="line-height: 32px">
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
@@ -70,8 +70,8 @@
               >
               </selectModel>
               <myInput
-                style="text-align: center;"
                 v-else
+                style="text-align: center"
                 v-model="data.valueData.sysDilutionHour"
                 @change.native="
                   (el) => {
@@ -79,8 +79,8 @@
                   }
                 "
               ></myInput>
-            </div>
-            <div v-else>{{ data.valueData.sysDilutionHour }}</div>
+            </div> -->
+            <div>{{ data.valueData.sysDilutionHour }}</div>
           </div>
           后平皿计数（CFU）
         </td>
@@ -157,12 +157,12 @@
         </td>
 
         <td colspan="2">
-          <div style="height: 100%;">{{ item.sysReport }}</div>
+          <div style="height: 100%">{{ item.sysReport }}</div>
         </td>
       </tr>
       <tr>
-        <td colspan="2" style="border-right: none;">备注:</td>
-        <td colspan="11" style="border-left: none;">
+        <td colspan="2" style="border-right: none">备注:</td>
+        <td colspan="11" style="border-left: none">
           <myInput v-model="data.valueData.remarks"></myInput>
         </td>
       </tr>
@@ -172,7 +172,7 @@
 
 <script>
 import projectHead from "./project_head";
-
+import { mapState } from "vuex";
 export default {
   name: "project_wsw_jl_kqcyqf",
   props: [
@@ -207,6 +207,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      cultureTime: (state) => state.laboratory.cultureTime,
+    }),
     myggcspoint() {
       if (this.ggcspoint.length > 0) {
         return this.ggcspoint.map((item) => item.sampleAddress);
@@ -216,6 +219,15 @@ export default {
     },
   },
   watch: {
+    cultureTime() {
+      this.showInput2 = true;
+      if (this.cultureTime <= 45) {
+        this.data.valueData.sysDilutionHour = Math.ceil(this.cultureTime) + "h";
+      } else {
+        this.data.valueData.sysDilutionHour =
+          Math.ceil(this.cultureTime / 24) + "d";
+      }
+    },
     myggcspoint() {
       this.data.valueData.point.forEach((item) => {
         if (item.SampleAddress == "") {
@@ -472,7 +484,7 @@ export default {
   },
   mounted() {
     this.getDetailData();
-    console.log(this.data.valueData.point,'poont')
+    console.log(this.data.valueData.point, "poont");
     this.$eventBus.$on("getDevice", (device) => {
       this.devices = device;
     });

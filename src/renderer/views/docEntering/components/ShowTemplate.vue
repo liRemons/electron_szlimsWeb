@@ -1028,7 +1028,16 @@ export default {
       this.$nextTick(()=>{
         this.pageBox=true
       })
-    
+      // 是否应该显示样品名称————————————————
+      let projectNameIsFlag=['空气理化采样','六级筛孔采样器','空气微生物采样'];
+      this.jsonString.forEach(item=>{
+        if(projectNameIsFlag.includes(item.data.projectName)){
+          item.data.valueData.isSampleName=false
+        }else{
+           item.data.valueData.isSampleName=true
+        }
+      })
+      // ————————————————————————————————————
       // this.Reset();
     },
     getId(data){

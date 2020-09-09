@@ -237,13 +237,13 @@ export default {
           file.type === "image/png" ||
           file.type === "image/jpeg" ||
           file.type === "image/jpg";
-        const isLt2M = file.size / 1024 / 1024 < 1;
+        const isLt2M = file.size / 4096 / 1024 < 1;
         if (!isJPG) {
           this.$message.error("只能上传图片格式!");
           return reject();
         }
         if (!isLt2M) {
-          this.$message.error("上传大小不能超过 1MB!");
+          this.$message.error("上传大小不能超过 4MB!");
           return reject();
         }
         resolve();

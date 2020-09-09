@@ -15,8 +15,10 @@
         <td rowspan="2">样品名称</td>
         <td rowspan="2">采样面积（cm²）</td>
         <td colspan="4">
-          <div style="width:60px;display: inline-block;vertical-align:middle;">
-            <div v-if="target == 1" style="line-height:32px;">
+          <div
+            style="width: 60px; display: inline-block; vertical-align: middle"
+          >
+            <div v-if="target == 1" style="line-height: 32px">
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
@@ -36,7 +38,7 @@
                 v-else
                 v-model="data.valueData.sysDilutionDegree"
                 @change.native="
-                  el => {
+                  (el) => {
                     noShowInput(el, 0);
                   }
                 "
@@ -45,8 +47,10 @@
             <div v-else>{{ data.valueData.sysDilutionDegree }}</div>
           </div>
           <span>℃培养</span>
-          <div style="width:60px;display: inline-block;vertical-align:middle;">
-            <div v-if="target == 1" style="line-height:32px;">
+          <div
+            style="width: 60px; display: inline-block; vertical-align: middle"
+          >
+            <!-- <div v-if="target == 1" style="line-height: 32px">
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
@@ -66,15 +70,15 @@
                 v-else
                 v-model="data.valueData.sysDilutionHour"
                 @change.native="
-                  el => {
+                  (el) => {
                     noShowInput(el, 1);
                   }
                 "
               ></myInput>
-            </div>
-            <div v-else>{{ data.valueData.sysDilutionHour }}</div>
+            </div> -->
+            <div>{{ data.valueData.sysDilutionHour }}</div>
           </div>
-          <span>h后各稀释度平皿计数（CFU）</span>
+          <span>后各稀释度平皿计数（CFU）</span>
         </td>
         <td rowspan="2">报告值CFU/25cm²</td>
       </tr>
@@ -117,7 +121,7 @@
           ></myInput>
         </td>
         <td>
-          <div style="height:100%">{{ item.sysReport }}</div>
+          <div style="height: 100%">{{ item.sysReport }}</div>
         </td>
       </tr>
     </table>
@@ -127,7 +131,7 @@
 <script>
 import { queryByPurpose } from "@/api/laboratory";
 import projectHead from "./project_head";
-
+import { mapState } from "vuex";
 export default {
   name: "project_wsw_jl_ejxscm2",
   props: [
@@ -142,12 +146,12 @@ export default {
     "ableInput",
     "bs",
     "target",
-    "detectionLimitObj"
+    "detectionLimitObj",
   ],
 
   data() {
     return {
-      index_jsonString: function() {
+      index_jsonString: function () {
         // 获取当前模块在jsonString中的索引
         let result = this.thisPageIndex;
         for (let i = 0; i < this.pageNumber; i++) {
@@ -160,13 +164,28 @@ export default {
       testTiem: "",
       checked: false,
       showInput: false,
-      showInput2: false
+      showInput2: false,
     };
   },
   components: {
-    projectHead
+    projectHead,
   },
-  watch: {},
+  computed: {
+    ...mapState({
+      cultureTime: (state) => state.laboratory.cultureTime,
+    }),
+  },
+  watch: {
+    cultureTime() {
+      this.showInput2 = true;
+      if (this.cultureTime <= 45) {
+        this.data.valueData.sysDilutionHour = Math.ceil(this.cultureTime) + "h";
+      } else {
+        this.data.valueData.sysDilutionHour =
+          Math.ceil(this.cultureTime / 24) + "d";
+      }
+    },
+  },
   methods: {
     headShow() {
       if (this.pageNumber > 0) {
@@ -229,14 +248,10 @@ export default {
       let item2 = Number(item.item2 == "/" ? 0 : item.item2);
       let item3 = Number(item.item3 == "/" ? 0 : item.item3);
       let item4 = Number(item.item4 == "/" ? 0 : item.item4);
-      console.log(item1, item2, item3, item4);
-      console.log(item.item1, item.item2, item.item3, item.item4);
       let volume = Number(item.volume);
       let count = 0;
       if (!Number.isNaN(volume) && volume != 0) {
-        console.log("true1");
         if (item1 != 0 || item2 != 0 || item3 != 0 || item4 != 0) {
-          console.log("true2");
           if (
             item1 >= 30 &&
             item1 <= 300 &&
@@ -251,7 +266,6 @@ export default {
               ((item1 + item2 + item3 + item4) / 0.22 / volume) *
               25
             ).toFixed46(0);
-            console.log("四舍六入之后的值", item.sysReport);
             if (item.sysReport > 100)
               item.sysReport = Number(item.sysReport).num2e();
           } else if (
@@ -265,12 +279,10 @@ export default {
               (item4 <= 30 && item4 >= 300))
           ) {
             // 前两个满足，后面有一个满足
-            console.log("前两个满足，后面有一个满足");
             item.sysReport = (
               ((item1 + item2 + item3 + item4) / 0.21 / volume) *
               25
             ).toFixed46(0);
-            console.log("四舍六入之后的值", item.sysReport);
             if (item.sysReport > 100)
               item.sysReport = Number(item.sysReport).num2e();
           } else if (
@@ -284,12 +296,10 @@ export default {
               (item2 <= 30 && item2 >= 300))
           ) {
             // 后两个满足，前面有一个满足
-            console.log("后两个满足，前面有一个满足");
             item.sysReport = (
               ((item1 + item2 + item3 + item4) / 0.12 / volume) *
               25
             ).toFixed46(0);
-            console.log("四舍六入之后的值", item.sysReport);
             if (item.sysReport > 100)
               item.sysReport = Number(item.sysReport).num2e();
           } else if (
@@ -302,7 +312,6 @@ export default {
               ((((item1 + item2) / 2) * 10) / volume) *
               25
             ).toFixed46(0);
-            console.log("四舍六入之后的值", item.sysReport);
             if (item.sysReport > 100)
               item.sysReport = Number(item.sysReport).num2e();
           } else if (
@@ -315,7 +324,6 @@ export default {
               ((((item3 + item4) / 2) * 100) / volume) *
               25
             ).toFixed46(0);
-            console.log("四舍六入之后的值", item.sysReport);
             if (item.sysReport > 100)
               item.sysReport = Number(item.sysReport).num2e();
           } else if (
@@ -323,9 +331,7 @@ export default {
             (item1 < 30 && item2 < 30 && item3 < 30 && item4 < 30)
           ) {
             //10 的 前两个大于或都小于30~300范围时，选择最接近30或300的稀释度进行计算
-            console.log(
-              "10 的 前两个大于或都小于30~300范围时，选择最接近30或300的稀释度进行计算"
-            );
+
             if (item1 > 300) {
               if (item1 - 300 < item3 - 300) {
                 item.sysReport = (
@@ -347,7 +353,6 @@ export default {
               }
             } else {
               // 小于30
-              console.log("前两个小于30吗");
               if (30 - item1 < 30 - item3) {
                 item.sysReport = (
                   ((((item1 + item2) / 2) * 10) / volume) *
@@ -371,9 +376,6 @@ export default {
             (item1 > 300 && item2 > 300 && item3 < 30 && item4 < 30) ||
             (item1 < 30 && item2 < 30 && item3 > 300 && item4 > 300)
           ) {
-            console.log(
-              "前两个满足 若两个连续稀释度的平均值其中一个大于300，一个小于30，选择最小稀释度进行计算"
-            );
             // 前两个满足 若两个连续稀释度的平均值其中一个大于300，一个小于30，选择最小稀释度进行计算
             item.sysReport = (
               ((((item1 + item2) / 2) * 100) / volume) *
@@ -390,7 +392,6 @@ export default {
       } else {
         item.sysReport = "采样面积值无效";
       }
-      console.log(2);
       this.$forceUpdate();
     },
     name(item) {
@@ -475,7 +476,7 @@ export default {
       let obj = {
         windowLength: "",
         windowWidth: "",
-        windowNum: ""
+        windowNum: "",
       };
       this.jsonString[this.index_jsonString()].data.valueData.point.push(obj);
       this.$emit("update:jsonString");
@@ -535,13 +536,13 @@ export default {
       if (val === "正常") {
         this.data.valueData.sysSampleStateDetail = "";
       }
-    }
+    },
   },
   mounted() {
-    queryByPurpose("实验室").then(res => {
+    queryByPurpose("实验室").then((res) => {
       if (res.success) {
         this.devices = res.data;
-        this.devices.forEach(item => {
+        this.devices.forEach((item) => {
           item.showName =
             item.deviceName + " " + item.deviceModel + " " + item.deviceNum;
         });
@@ -550,14 +551,14 @@ export default {
     let inp = document.getElementsByClassName("inp");
     let that = this;
     for (let i = 0; i < inp.length; i++) {
-      inp[i].onclick = function(e) {
+      inp[i].onclick = function (e) {
         let index = e.target.getAttribute("index");
         let result = e.target.checked;
         let isCheckBox = e.target.isCheckBox;
         that.$emit("selectedBox", { isCheckBox, index, result });
       };
     }
-  }
+  },
 };
 </script>
 

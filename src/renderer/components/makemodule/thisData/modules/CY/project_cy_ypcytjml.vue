@@ -16,13 +16,13 @@
     <table class="myTable ___relative">
       <div :class="{ eventCover: !ableInput }"></div>
       <tr class="delLine">
-        <td style="width: 150px;">
+        <td style="width: 150px">
           样品编号
           <div>
             <div
               title="复制该检测项目下所有样品"
               class="myBtn"
-              style="margin-bottom: 2px; margin-left: 30px;"
+              style="margin-bottom: 2px; margin-left: 30px"
               @click="computeObj.copyAllSample(data.valueData)"
             >
               <span>c</span>
@@ -31,7 +31,7 @@
               <div
                 title="粘贴样品"
                 class="___absolute myBtn"
-                style="top: -30px; left: 90px;"
+                style="top: -30px; left: 90px"
                 @click="computeObj.pasteAllSample(data.valueData)"
               >
                 <span>p</span>
@@ -39,9 +39,11 @@
             </div>
           </div>
         </td>
-        <td style="width: 250px;">采样地点</td>
-        <td style="width: 250px;">样品名称</td>
-        <td style="width: 250px;">样品采样（体积mL）</td>
+        <td style="width: 250px">采样地点</td>
+        <td style="width: 250px" v-if="data.valueData.isSampleName">
+          样品名称
+        </td>
+        <td style="width: 250px">样品采样（体积mL）</td>
         <td>备注</td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point" :key="item.pointId">
@@ -53,7 +55,7 @@
             @returnVal="returnVal"
             :single="true"
             :rows="false"
-            style="line-height: 30px;"
+            style="line-height: 30px"
             :special="index"
             :Judge="true"
             :input="false"
@@ -65,7 +67,7 @@
             :Obj="''"
           ></selectModel>
         </td>
-        <td>
+        <td v-if="data.valueData.isSampleName">
           <myInput v-model="item.sampleName"></myInput>
         </td>
         <td>
@@ -79,16 +81,16 @@
               :data="data"
               :index="index"
               :barNum="[
-                0,
+                item.isPrototype ? 0 : '',
                 item.isPrototype ? 1 : '',
                 3,
                 4,
-                item.isPrototype ? 5 : '',
+               5 ,
                 item.isPrototype ? 6 : '',
               ]"
               :jsonString="jsonString"
               class="___absolute"
-              style="left: 245px; top: -28px;"
+              style="left: 245px; top: -28px"
             ></utilBar>
           </div>
         </td>
@@ -132,9 +134,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <div style="text-align: right; margin-right: 50px;">
+      <div style="text-align: right; margin-right: 50px">
         <el-button
-          style="margin-top: 15px; margin-left: 470px;"
+          style="margin-top: 15px; margin-left: 470px"
           type="primary"
           @click="sureSampleNum"
           >确定
@@ -147,7 +149,7 @@
 <script>
 export default {
   name: "project_cy_ypcytjml",
-  props: ["data", "jsonString", "target", "task","ableInput"],
+  props: ["data", "jsonString", "target", "task", "ableInput"],
   data() {
     return {
       selectItem: "",

@@ -23,17 +23,18 @@ export default {
       this.$emit("input", value);
     },
     limit(e) {
-      if (this.reg) {
-        this.reg == "[^0-9./]"
-          ? (this.$refs.myBox.value = Number(
-              e.target.value.replace(/[^(\-?)\d+(\.\d+)]/g, "")
-            ))
-          : "";
-        this.$emit("input", this.$refs.myBox.value);
-        // let value = e.target.value;
-        // let val = new RegExp(this.reg, 'g');
-        // e.target.value = value.replace(val, '');
-      }
+      // md改来改去，自己随便输吧，不限制了
+      // if (this.reg) {
+      //   this.reg == "[^0-9./]"
+      //     ? (this.$refs.myBox.value = Number(
+      //         e.target.value.replace(/[^(\-?)\d+(\.\d+)]/g, "")
+      //       ))
+      //     : "";
+      //   this.$emit("input", this.$refs.myBox.value);
+      //   // let value = e.target.value;
+      //   // let val = new RegExp(this.reg, 'g');
+      //   // e.target.value = value.replace(val, '');
+      // }
     }
   },
   mounted() {

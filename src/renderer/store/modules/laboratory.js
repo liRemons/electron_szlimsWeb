@@ -6,9 +6,13 @@ const laboratory = {
     analysisData: null,
     inspectionTime: "",
     // 录入界面
-    deviceType:''
+    deviceType: "",
+    cultureTime: "",
   },
   mutations: {
+    CHANGETIME: (state, time) => {
+      state.cultureTime = time;
+    },
     UPDATE_LAB_TEMPLATE: (state, labtemplate) => {
       state.labtemplate = labtemplate;
     },
@@ -24,9 +28,9 @@ const laboratory = {
     inspectionTime: (state, value) => {
       state.inspectionTime = value;
     },
-    UPDATE_DEVICETYPE:(state,data)=>{
-      state.deviceType=data
-    }
+    UPDATE_DEVICETYPE: (state, data) => {
+      state.deviceType = data;
+    },
   },
   actions: {
     UpdateLabTemplate({ commit }, labtemplate) {
