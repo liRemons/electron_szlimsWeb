@@ -54,7 +54,7 @@
       </el-button>
       <!-- <el-button
         @click="dcUpload"
-        style="position: fixed; right: 4.1vw; top: 30vh"
+        style="position: fixed; left: 4.1vw; top: 18vh"
         size="mini"
         type="primary"
         round
@@ -1914,7 +1914,7 @@ export default {
       document.querySelector("#file").click();
     },
     fileImport() {
-      //获取读取我文件的File对象
+      //获取读取文件的File对象
       var selectedFile = document.getElementById("file").files[0];
       var name = selectedFile.name; //读取选中文件的文件名
       var size = selectedFile.size; //读取选中文件的大小

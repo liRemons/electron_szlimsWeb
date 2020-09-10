@@ -22,10 +22,9 @@
                 v-model="data.valueData.checkUnitName"
               ></myInput>
             </td>
-           
           </tr>
           <tr>
-             <td class="editHistoryTitle">委托单位名称</td>
+            <td class="editHistoryTitle">委托单位名称</td>
             <td colspan="10">
               <myInput
                 class="editHistoryValue"
@@ -39,37 +38,49 @@
             <td colspan="1" rowspan="2" class="editHistoryTitle">
               受检单位地址
             </td>
-            <td colspan="6" rowspan="2" style="height:64px !important;">
+            <td colspan="6" rowspan="2" style="height: 64px !important">
               <textarea
-                style="text-align: center;height:64px !important;width:98%;border:none;resize:none;"
+                v-if="target == 0"
+                style="
+                  text-align: center;
+                  height: 64px !important;
+                  width: 98%;
+                  border: none;
+                  resize: none;
+                "
                 class="editHistoryValue"
                 v-model="data.valueData.checkUnitAddress"
               />
+              <span v-else>{{ data.valueData.checkUnitAddress }}</span>
             </td>
             <td colspan="2">检测对象</td>
-            <td colspan="2"><myInput
+            <td colspan="2">
+              <myInput
                 v-if="ableInput"
                 style="text-align: center"
                 v-model="data.valueData.deviceTypeName"
               ></myInput>
-              <span v-else>{{ data.valueData.deviceTypeName }}</span></td>
+              <span v-else>{{ data.valueData.deviceTypeName }}</span>
+            </td>
           </tr>
           <tr>
             <td colspan="2">联系电话</td>
-            <td colspan="2"><myInput
+            <td colspan="2">
+              <myInput
                 v-if="ableInput"
                 style="text-align: center"
                 v-model="data.valueData.checkUnitPhone"
               ></myInput>
-              <span v-else>{{ data.valueData.checkUnitPhone }}</span></td>
+              <span v-else>{{ data.valueData.checkUnitPhone }}</span>
+            </td>
           </tr>
           <tr style="height: 64px">
-            
             <td>评价依据</td>
-            <td colspan="10">
-              <span >{{ data.valueData.assess }}</span>
-            </td>
-            
+            <td
+              style="text-align: left; padding: 4px"
+              colspan="10"
+              v-html="assess"
+            ></td>
           </tr>
           <tr style="height: 64px">
             <td>采样依据</td>
@@ -81,9 +92,8 @@
                 word-break: break-all;
                 white-space: pre-wrap;
               "
-            >
-              {{ data.valueData.standard }}
-            </td>
+              v-html="standard"
+            ></td>
           </tr>
           <!-- <tr style="height: 64px;">
 					<td>检测依据</td>
@@ -400,6 +410,8 @@ export default {
         return result;
       },
       showDoor: false,
+      standard: "",
+      assess: "",
     };
   },
   props: [
@@ -546,8 +558,10 @@ export default {
     },
   },
   mounted() {
-    console.log(this.data);
-    //this.data.valueData.standard = this.data.valueData.standard.split(',');
+    let arr = this.data.valueData.standard.split(",");
+    this.standard = arr.map((item) => item + "<br/>").join("");
+    let assessArr = this.data.valueData.assess.split(",");
+    this.assess = assessArr.map((item) => item + "<br/>").join("");
   },
 };
 </script>

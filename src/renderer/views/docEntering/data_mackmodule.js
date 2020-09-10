@@ -26,10 +26,10 @@ export default {
     categoryOptions: [],
 
     pass: "",
-    // url:'http://192.168.1.198:8003',
+    // url:'http://192.168.1.198:8002',
     imgUrl: "http://118.178.18.106:8080/roms/",
     winAppUrl: 'http://xtroms.com:2222',
-    url: 'http://118.178.18.106:8003',
+    url: 'http://118.178.18.106:8002',
     debug: false, //是否开启页面主要区域背景色调试, 如果开启, 则将页面主要区域的背景色变成灰色(原来是白色), 方便调试
     toShowTable: '', //控制本页面的子组件显示情况
     isTemplate: false, //是否是实例页面(实例页面背景颜色不是白色)

@@ -11,7 +11,8 @@
     >
       检测项目：{{ data.valueData.testProjectChineseName
       }}{{ data.valueData.detectionLimitPieces }} &nbsp;&nbsp;&nbsp;&nbsp;
-      检测依据:{{data.valueData.sysStandardName}}{{ data.valueData.sysStandardNum }}
+      检测依据:{{ data.valueData.sysStandardName
+      }}{{ data.valueData.sysStandardNum }}
     </div>
     <table class="myTable ___relative">
       <div :class="{ eventCover: !ableInput }"></div>
@@ -22,7 +23,7 @@
             <div
               title="复制该检测项目下所有样品"
               class="myBtn"
-              style="margin-bottom: 2px; margin-left: 10px;"
+              style="margin-bottom: 2px; margin-left: 10px"
               @click="computeObj.copyAllSample(data.valueData)"
             >
               <span>c</span>
@@ -31,7 +32,7 @@
               <div
                 title="粘贴样品"
                 class="___absolute myBtn"
-                style="top: -30px; left: 55px;"
+                style="top: -30px; left: 55px"
                 @click="computeObj.pasteAllSample(data.valueData)"
               >
                 <span>p</span>
@@ -39,14 +40,14 @@
             </div>
           </div>
         </td>
-        <td style="width: 150px;">采样地点</td>
-        <td style="width: 90px;" v-if="data.valueData.isSampleName">样品名称</td>
-        <td style="width: 100px;">采样流量(L/min)</td>
-        <td style="width: 95px;">采样时长(min)</td>
-        <td style="width: 90px;">采样体积(L)</td>
-        <td style="width: 90px;">采样点位</td>
-        <td style="width: 90px;">温度(℃)</td>
-        <td style="width: 100px;">采样时间(时:分)</td>
+        <td style="width: 150px">采样地点</td>
+        <td style="width: 90px" v-if="data.valueData.isSampleName">样品名称</td>
+        <td style="width: 100px">采样流量(L/min)</td>
+        <td style="width: 95px">采样时长(min)</td>
+        <td style="width: 90px">采样体积(L)</td>
+        <td style="width: 90px">采样点位</td>
+        <td style="width: 90px">温度(℃)</td>
+        <td style="width: 100px">采样时间(时:分)</td>
         <td>仪器编号</td>
         <td>备注</td>
       </tr>
@@ -59,7 +60,7 @@
             @returnVal="returnVal"
             :single="true"
             :rows="false"
-            style="line-height: 30px;"
+            style="line-height: 30px"
             :special="index"
             :Judge="true"
             :input="false"
@@ -93,7 +94,7 @@
           <div class="___relative">
             <div
               @click="toShowTimeBox(index)"
-              style="text-align: center; line-height: 32px; height: 30px;"
+              style="text-align: center; line-height: 32px; height: 30px"
             >
               {{ computeObj.myTime(item) }}
             </div>
@@ -110,38 +111,44 @@
           </div>
         </td>
         <td>
-          
           <querySelect
-            v-if="target==0"
+            v-if="target == 0"
             v-model="item.deviceNum"
             ref="querySelect"
-            style="width: 90px;"
+            style="width: 90px"
             :num="index"
             :list="devices"
             :defaultValue="item.deviceNum"
             @getSelectItem="returnVal2"
             :name="'deviceNum'"
           ></querySelect>
-          <span v-else>{{item.deviceNum}}</span>
+          <span v-else>{{ item.deviceNum }}</span>
         </td>
         <td>
           <myInput v-model="item.Remarks"></myInput>
-          <div class="___relative" v-if="target == 0&&ableInput">
+          <div class="___relative" v-if="target == 0 && ableInput">
             <utilBar
               :data="data"
               :index="index"
               :barNum="[
-                  item.isPrototype ?0 : '',
-                item.isPrototype ? 1 : '',
+                ((!item.isPrototype || !item.sampleNumIndex) &&
+                  (!data.valueData.point[index + 1]
+                    ? true
+                    : data.valueData.point[index + 1].sampleNum !==
+                      item.sampleNum)) ||
+                item.sampleNum == ''
+                  ? 0
+                  : '',
+                !item.sampleNumIndex ? 1 : '',
                 3,
                 4,
-                5 ,
+                5,
                 item.isPrototype ? 6 : '',
               ]"
               :jsonString="jsonString"
               :whiteList="['sampleName', 'flow', 'samplingDianWei']"
               class="___absolute leftBtn"
-              style="left: 143px; top: -28px;"
+              style="left: 143px; top: -28px"
             ></utilBar>
           </div>
         </td>
@@ -185,9 +192,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <div style="text-align: right; margin-right: 50px;">
+      <div style="text-align: right; margin-right: 50px">
         <el-button
-          style="margin-top: 15px; margin-left: 470px;"
+          style="margin-top: 15px; margin-left: 470px"
           type="primary"
           @click="sureSampleNum"
           >确定
@@ -409,7 +416,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.data.valueData)
+    console.log(this.data.valueData);
     this.getDetailData();
   },
 };

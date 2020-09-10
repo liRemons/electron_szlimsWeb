@@ -130,11 +130,18 @@
               :data="data"
               :index="index"
               :barNum="[
-                item.isPrototype ? 0: '',
-                item.isPrototype ? 1 : '',
+                ((!item.isPrototype || !item.sampleNumIndex) &&
+                  (!data.valueData.point[index + 1]
+                    ? true
+                    : data.valueData.point[index + 1].sampleNum !==
+                      item.sampleNum)) ||
+                item.sampleNum == ''
+                  ? 0
+                  : '',
+                !item.sampleNumIndex ? 1 : '',
                 3,
                 4,
-                5 ,
+                5,
                 item.isPrototype ? 6 : '',
               ]"
               :jsonString="jsonString"

@@ -254,9 +254,15 @@ export default {
 
       newObjData.pointId = window.uuid();
       newObjData.foreverId = window.uuid();
-
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
+      let sampleNumArr = this.data.valueData.point.map(
+        (item) => item.sampleNum + item.sampleNumIndex
+      );
+      if (sampleNumArr.includes(newObjData.sampleNum)) {
+        this.$message.warning("同一检测项目下不得含有相同的样品编号");
+        newObjData.sampleNum = "";
+      }
       keys.forEach((item) => {
         if (copy === "copyAll") {
           this.data.valueData.point[index][item] = newObjData[item];
@@ -264,7 +270,7 @@ export default {
           let noCopy = this.data.noCopyArr;
           let result = noCopy.some((key) => key === item);
           // && result === false
-          if (newObjData[item] ) {
+          if (newObjData[item]) {
             this.data.valueData.point[index][item] = newObjData[item];
           }
         }
