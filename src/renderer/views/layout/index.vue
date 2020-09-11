@@ -4,7 +4,7 @@
       <el-header class="header">
         <el-row>
           <el-col :span="7">
-            <span class="title" style="font-family: SimSun;"
+            <span class="title" style="font-family: SimSun"
               >深圳市瑞达智能检测系统用户端</span
             >
           </el-col>
@@ -15,7 +15,7 @@
               background-color="#545c64"
               text-color="#fff"
               active-text-color="#ffd04b"
-              style="user-select: none;"
+              style="user-select: none"
               :default-active="activeItem"
               router
             >
@@ -57,12 +57,12 @@
           </el-col>
           <el-col :span="4">
             <div class="back" @click="back">
-              <span class="cancel">返回</span>
+              <span class="cancel">返回主界面</span>
             </div>
           </el-col>
         </el-row>
       </el-header>
-      <div style="height:60px"></div>
+      <div style="height: 60px"></div>
       <el-main class="main">
         <router-view />
       </el-main>
@@ -76,12 +76,12 @@ export default {
     return {
       data: null,
       uploadShow: false,
-      multipleSelection: []
+      multipleSelection: [],
     };
   },
   methods: {
     storageRouter() {
-      sessionStorage.setItem("TolocalNo",1)
+      sessionStorage.setItem("TolocalNo", 1);
       sessionStorage.removeItem("analysisInitial_index");
       sessionStorage.removeItem("laboratoryUpload_initialIndex");
       sessionStorage.removeItem("flag");
@@ -126,7 +126,7 @@ export default {
           this.$confirm("此处返回可能造成您的数据丢失, 是否继续?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "error"
+            type: "error",
           })
             .then(() => {
               this.$router.push("/");
@@ -137,7 +137,7 @@ export default {
           this.$router.push("/");
         }
       }
-    }
+    },
   },
   computed: {
     activeItem() {
@@ -145,12 +145,12 @@ export default {
     },
     menuState() {
       return this.$route.path.indexOf("local") === -1 ? false : true;
-    }
+    },
   },
   created() {
     this.storageRouter();
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

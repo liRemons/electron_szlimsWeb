@@ -11,7 +11,7 @@
         size="mini"
         style="margin-left: 160px"
         type="danger"
-        >返回</el-button
+        >返回上一步</el-button
       >
       <el-button
         @click="TemporaryStorage(false)"

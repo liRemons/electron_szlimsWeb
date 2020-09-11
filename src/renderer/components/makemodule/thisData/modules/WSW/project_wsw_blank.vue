@@ -3,13 +3,28 @@
     <tr v-for="(item, index) in data.valueData.testResults" class="delLine">
       <td v-if="item.noEdit">
         <div v-if="item.noEdit">
-          {{ item.sampleNum }}
+          <selectModel
+            v-if="index == 0"
+            style="line-height: 32px"
+            @returnVal="(a) => returnVal2(a, index)"
+            :Judge="true"
+            :special="1"
+            :transmitText="item.sampleNum"
+            :multi-select="false"
+            :receive="'id'"
+            :single="true"
+            :rows="false"
+            :list="['实验室空白对照', '阳性对照', '阴性对照']"
+            :Obj="''"
+          >
+          </selectModel>
         </div>
+
         <myInput v-else v-model="item.sampleNum"></myInput>
       </td>
-      <td class="___relative" style="line-height: 32px;" v-if="item.noEdit">
+      <td class="___relative" style="line-height: 32px" v-if="item.noEdit">
         <selectModel
-          @returnVal="(a)=>returnVal(a,index)"
+          @returnVal="(a) => returnVal(a, index)"
           :Judge="true"
           :special="1"
           v-if="item.showInput"
@@ -18,7 +33,7 @@
           :receive="'id'"
           :single="true"
           :rows="false"
-          :list="['未检出', '无菌落生长',  '自定义']"
+          :list="['未检出', '无菌落生长', '自定义']"
           :Obj="''"
         >
         </selectModel>
@@ -53,12 +68,12 @@ export default {
   props: ["data"],
   data() {
     return {
-      flag:true
-    }
+      flag: true,
+    };
   },
   methods: {
     addRow(index) {
-      let row = { sampleNum: "", testResult: "", noEdit: false };
+      let row = { sampleNum: "", testResult: "", noEdit: true };
       this.data.valueData.testResults.push(row);
     },
     delRow(index) {
@@ -73,11 +88,16 @@ export default {
         this.data.valueData.testResults.splice(index, 1);
       }
     },
-    returnVal(a,b){
-      if(a=='自定义'){
-        this.data.valueData.testResults[b].showInput=false
+    returnVal(a, b) {
+      if (a == "自定义") {
+        this.data.valueData.testResults[b].showInput = false;
       }
-    }
+    },
+    returnVal2(a, b) {
+      if (a == "自定义") {
+        this.data.valueData.testResults[b].showInput2 = false;
+      }
+    },
   },
   mounted() {
     let blanks = [];
@@ -109,12 +129,14 @@ export default {
     } catch (e) {
       blanks = [];
     }
-    this.data.valueData.testResults.forEach(item=>{
-      if(item.showInput==undefined){
-        item.showInput=true
+    this.data.valueData.testResults.forEach((item) => {
+      if (item.showInput == undefined) {
+        item.showInput = true;
       }
-    })
-
+      if (item.showInput2 == undefined) {
+        item.showInput2 = true;
+      }
+    });
   },
 };
 </script>
