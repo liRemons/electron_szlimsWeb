@@ -11,21 +11,27 @@
     <table class="myTable">
       <tr>
         <td>样品编号</td>
-        <td>样品名称</td>
-        <td>分析项</td>
+        <td :colspan="projectName == '委托送样' && 2">样品名称</td>
+        <td :colspan="projectName == '委托送样' && 2">分析项</td>
         <td>分析结果</td>
-        <td colspan="2">报告结果</td>
+        <td colspan="2" v-if="projectName !== '委托送样'">报告结果</td>
         <td>单位</td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point">
         <td v-if="item.realItem" :rowspan="item.analysisItemsLength">
           {{ name(item) }}
         </td>
-        <td v-if="item.realItem" :rowspan="item.analysisItemsLength">
+        <td
+          :colspan="projectName == '委托送样' && 2"
+          v-if="item.realItem"
+          :rowspan="item.analysisItemsLength"
+        >
           {{ item.sampleName }}
         </td>
-        <td>{{ item.sysAnalysisItem }}</td>
-        <td style="line-height: 32px;">
+        <td :colspan="projectName == '委托送样' && 2">
+          {{ item.sysAnalysisItem }}
+        </td>
+        <td style="line-height: 32px">
           <selectModel
             @returnVal="returnVal"
             :Judge="true"
@@ -50,14 +56,14 @@
             v-else
             v-model="item.sysAnalysisResult"
             @change.native="
-              el => {
+              (el) => {
                 noShowInput(el, index);
               }
             "
           ></myInput>
         </td>
         <td
-          v-if="item.realItem"
+          v-if="item.realItem && projectName !== '委托送样'"
           :rowspan="item.analysisItemsLength"
           :colspan="
             item.sysReportCount !== null &&
@@ -66,7 +72,7 @@
               ? 1
               : 2
           "
-          style="line-height: 32px;"
+          style="line-height: 32px"
         >
           <selectModel
             @returnVal="returnVal2"
@@ -86,8 +92,8 @@
         <td
           v-if="
             item.realItem &&
-              item.sysReportCount &&
-              item.sysReportCount.indexOf('自定义') !== -1
+            item.sysReportCount &&
+            item.sysReportCount.indexOf('自定义') !== -1
           "
           :rowspan="item.analysisItemsLength"
         >
@@ -97,13 +103,13 @@
           {{ item.detectionLimitPieces }}
         </td>
       </tr>
-      <td colspan="7" style="line-height: 32px;">
+      <td colspan="7" style="line-height: 32px">
         <div class="___relative">
-          <div class="___absolute" style="width: 50px;">备注：</div>
+          <div class="___absolute" style="width: 50px">备注：</div>
           <myInput
             v-model="data.valueData.remarks"
             class="___absolute"
-            style="left: 50px; width: 1047px;"
+            style="left: 50px; width: 1047px"
           ></myInput>
         </div>
       </td>
@@ -120,6 +126,7 @@ export default {
     "ipdTemplate",
     "data",
     "pageNumber",
+    "projectName",
     "thisPageIndex",
     "jsonString",
     "showing",
@@ -128,16 +135,16 @@ export default {
     "ableInput",
     "bs",
     "target",
-    "detectionLimitObj"
+    "detectionLimitObj",
   ],
   data() {
     return {
       showInput: false,
-      list: ["检出", "不合格自定义输入", "未检出", "合格自定义输入"]
+      list: ["检出", "不合格自定义输入", "未检出", "合格自定义输入"],
     };
   },
   components: {
-    projectHead
+    projectHead,
   },
   methods: {
     headShow() {
@@ -206,9 +213,9 @@ export default {
     },
 
     returnVal2(val, itemId) {
-      this.jsonString.forEach(item => {
+      this.jsonString.forEach((item) => {
         if (item.to === "project_wsw_dx") {
-          item.data.valueData.point.forEach(item2 => {
+          item.data.valueData.point.forEach((item2) => {
             if (item2.itemId === itemId && item2.realItem) {
               this.$set(item2, "sysReportCount", val);
               if (val.indexOf("自定义") === -1) {
@@ -221,13 +228,13 @@ export default {
           });
         }
       });
-    }
+    },
   },
   mounted() {
     let _this = this;
     setTimeout(() => {
       let sampleNumArr = [];
-      this.data.valueData.point.forEach(item => {
+      this.data.valueData.point.forEach((item) => {
         item.realItem = false;
         if (item.sampleNum != "") {
           sampleNumArr.push(this.name(item));
@@ -235,7 +242,7 @@ export default {
       });
 
       let resetSampleNumArr = Array.from(new Set(sampleNumArr));
-      resetSampleNumArr.forEach(item => {
+      resetSampleNumArr.forEach((item) => {
         let sum = 0;
         sampleNumArr.forEach((val, num) => {
           if (item === val) {
@@ -243,17 +250,17 @@ export default {
           }
         });
         this.data.valueData.point
-          .filter(val => this.name(val) === item)
-          .forEach(val => {
+          .filter((val) => this.name(val) === item)
+          .forEach((val) => {
             val.analysisItemsLength = sum;
           });
         this.data.valueData.point.find(
-          val => this.name(val) === item
+          (val) => this.name(val) === item
         ).realItem = true;
         this.$forceUpdate();
       });
     }, 1000);
-  }
+  },
 };
 </script>
 

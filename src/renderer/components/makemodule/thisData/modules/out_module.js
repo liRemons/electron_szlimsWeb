@@ -224,7 +224,8 @@ import project_dc_dchjxpclbg from './DC/project_dc_dchjxpclbg'
 import project_dc_dctj from './DC/project_dc_dctj'
 import project_dc_yysmc from './DC/project_dc_yysmc'
 
-
+// 点位图
+import project_point from './project_point'
 export default {
   install: function (Vue) {
     Vue.component('project_xpczsyzz', Project_xpczsyzz);
@@ -452,5 +453,9 @@ export default {
     Vue.component('project_xs_grsbmxjjlzs', project_xs_grsbmxjjlzs);
     Vue.component('project_xs_wtgzhbmjlzs', project_xs_wtgzhbmjlzs);
     Vue.component('project_xs_syjlzs', project_xs_syjlzs);
+
+    // 点位图
+    Vue.component('project_point', project_point);
+    
   }
 };

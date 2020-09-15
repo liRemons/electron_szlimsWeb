@@ -1,17 +1,17 @@
 <template>
   <div
     class="___relative hoverFinger"
-    style="width: 100%;height:32px; cursor: pointer"
+    style="width: 100%; height: 32px; cursor: pointer"
   >
     <div v-if="Judge" class="___relative">
       <div
         v-if="input && test"
         @dblclick="showSelet(1)"
-        style="width:100%;height:32px;"
+        style="width: 100%; height: 32px"
       >
         <divModel
           v-model="showText"
-          style="width:100%;"
+          style="width: 100%"
           class="Full hide focusBg tc"
         ></divModel>
       </div>
@@ -20,12 +20,12 @@
         @click="showSelet(2)"
         class="_normalInput_ ___relative tc"
         :class="rows ? 'rowsInput4' : ''"
-        style="width: 100%;height:32px;"
+        style="width: 100%; height: 32px"
       >
         <div class="___absolute" style="width: 90%">
           {{ showText }}
         </div>
-        <div class="___absolute" style="width: 10%; margin-left: 78%;">
+        <div class="___absolute" style="width: 10%; margin-left: 78%">
           <i v-if="!show" class="el-icon-caret-right"></i>
           <i v-else class="el-icon-caret-bottom"></i>
         </div>
@@ -33,16 +33,23 @@
       <div
         class="instrumentSelcet ___absolute"
         v-if="show"
-        style="width: 100%;top:32px;left:-1px; z-index: 9999999;user-select: none;"
+        style="
+          width: 100%;
+          top: 32px;
+          left: -1px;
+          z-index: 9999999;
+          user-select: none;
+        "
       >
         <div
-          style="padding: 9px 10px 9px 10px;"
+          style="padding: 9px 10px 9px 10px"
           :class="{
             selected: showSelected(item),
-            selected2: checkSelect(item)
+            selected2: checkSelect(item),
           }"
           v-for="(item, index) in list"
           @click.stop="statr(index)"
+          :key="index + 'showSelected'"
         >
           {{ Obj != "" ? item[Obj] : item }}
         </div>
@@ -70,7 +77,7 @@ export default {
     "watchTransmitText",
     "disabled",
     "multiSelect",
-    "repeat"
+    "repeat",
   ],
   data() {
     return {
@@ -80,7 +87,7 @@ export default {
       showText: "",
       transmitJudge: true,
       selectedObj: "",
-      multiArr: []
+      multiArr: [],
     };
   },
   filters: {},
@@ -102,7 +109,7 @@ export default {
       this.show = false;
       if (this.single) {
         this.selection = [
-          this.Obj != "" ? this.list[index][this.Obj] : this.list[index]
+          this.Obj != "" ? this.list[index][this.Obj] : this.list[index],
         ];
         this.selectedObj = this.list[index];
       } else if (this.multiSelect) {
@@ -111,7 +118,7 @@ export default {
         let index2 = "";
         if (this.selection.length > 0) {
           index2 = this.multiArr.findIndex(
-            item => item.id == this.list[index].id
+            (item) => item.id == this.list[index].id
           );
         }
         if (index2 !== -1 && index2 !== "") {
@@ -124,9 +131,9 @@ export default {
       } else {
         let str =
           this.Obj != "" ? this.list[index][this.Obj] : this.list[index];
-        if (this.selection.findIndex(x => x === str) != -1) {
+        if (this.selection.findIndex((x) => x === str) != -1) {
           this.selection.splice(
-            this.selection.findIndex(x => x === str),
+            this.selection.findIndex((x) => x === str),
             1
           );
         } else {
@@ -153,7 +160,7 @@ export default {
           this.$notify({
             title: "错误",
             type: "error",
-            message: "请勿重复选择"
+            message: "请勿重复选择",
           });
         }
       }
@@ -171,7 +178,7 @@ export default {
       this.transmitJudge = false;
     },
     showSelected(item) {
-      let index = this.multiArr.findIndex(item2 => item2.id === item.id);
+      let index = this.multiArr.findIndex((item2) => item2.id === item.id);
       if (index !== -1) {
         return true;
       } else {
@@ -192,7 +199,7 @@ export default {
           return false;
         }
       }
-    }
+    },
   },
   components: {},
   watch: {
@@ -214,7 +221,7 @@ export default {
         this.showText = newValue;
         this.transmitJudge = false;
       }
-    }
+    },
   },
   mounted() {
     setTimeout(() => {
@@ -226,7 +233,7 @@ export default {
         this.give();
       }, 100);
     });
-  }
+  },
 };
 </script>
 

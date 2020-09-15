@@ -1,5 +1,5 @@
 <template>
-  <div class="___relative" style="padding-top: 20px;">
+  <div class="___relative" style="padding-top: 20px">
     <div :class="{ eventCover: !ableInput }"></div>
     <table border="1" class="myTableReset _normalHeight_">
       <tr>
@@ -19,7 +19,7 @@
         <th class="p20 tc" colspan="7">检测及计算方法</th>
       </tr>
       <tr>
-        <td class="p20 tl" colspan="7" style="line-height: 16px;">
+        <td class="p20 tl" colspan="7" style="line-height: 16px">
           检测方法同管电压指示的偏离项目。以设备常用成人曝光条件进行检测。加载时间的偏离
           （ms）=加载时间测量平均值-加载时间。加载时间的偏离（%）=（加载时间测量平均值-
           加载时间）/加载时间×100%。
@@ -28,12 +28,12 @@
       <tr>
         <th colspan="7" align="center">
           <div class="___relative">
-            <div class="___absolute" style="left: 300px;">检测结果 /</div>
+            <div class="___absolute" style="left: 300px">检测结果 /</div>
             <div>
               <selectModel
                 @returnVal="returnVal"
                 :Judge="true"
-                style="left: 30px; width: 50px;"
+                style="left: 30px; width: 50px"
                 :multi-select="false"
                 :receive="''"
                 :single="true"
@@ -63,35 +63,35 @@
         <td>
           <divModel
             v-model="item.rows[0]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[1]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[2]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[3]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[4]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
             :edit="false"
             :is-computer="true"
@@ -110,7 +110,7 @@
         </td>
         <td>
           <div
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           >
             {{ item.rows[5] }}
@@ -118,7 +118,7 @@
         </td>
         <td class="___relative">
           <div
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           >
             {{ item.rows[6] }}
@@ -129,12 +129,12 @@
               index != data.valueData.point.length - 1 &&
               ipdTemplate == 'ipdTemplate'
             "
-            style="right: -70px; width: 20px; z-index: 100;"
+            style="right: -70px; width: 20px; z-index: 100"
           >
             <div
               class="__functionButton6"
               @dblclick="reduce(index)"
-              style="right: 0;"
+              style="right: 0"
             >
               <span>-</span>
             </div>
@@ -148,7 +148,7 @@
         <td colspan="7">
           <divModel
             v-model="data.valueData.remarks"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
@@ -157,13 +157,13 @@
 
     <div
       class="__functionBox"
-      style="bottom: 69px;"
+      style="bottom: 69px"
       v-if="ipdTemplate == 'ipdTemplate' && target == 0"
     >
       <div
         class="__functionButton6"
         @dblclick="reduce(data.valueData.point.length - 1)"
-        style="right: 30px;"
+        style="right: 30px"
       >
         <span>-</span>
       </div>
@@ -290,12 +290,14 @@ export default {
       );
       if (this.isNumber(average) && this.isNumber(loadingTime)) {
         this.data.valueData.point[index].rows[4] = average;
+        let rows5 = (this.data.valueData.point[index].rows[5] = (
+          average - loadingTime
+        ).toFixed46(3, false, true));
         this.data.valueData.point[index].rows[5] = (
           average - loadingTime
         ).toFixed46(2, false, true);
         if (this.data.valueData.unit == "s") {
-          this.data.valueData.point[index].rows[5] =
-            this.data.valueData.point[index].rows[5] * 1000;
+          this.data.valueData.point[index].rows[5] = rows5 * 1000;
         }
         this.data.valueData.point[index].rows[6] = (
           ((average - loadingTime) / loadingTime) *

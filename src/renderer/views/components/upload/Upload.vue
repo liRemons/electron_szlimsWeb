@@ -17,9 +17,9 @@
       >
       </el-option>
     </el-select>
-    <h2 style="margin-bottom: 10px; margin-top: 6vh;">录入指纹</h2>
+    <h2 style="margin-bottom: 10px; margin-top: 6vh">录入指纹</h2>
 
-    <div class="flex">
+    <div class="flex" v-if="hideBtn">
       <div
         class="card"
         :style="{ background: bg }"
@@ -33,7 +33,7 @@
         >
           点击录入
         </div>
-        <div v-if="item.result" style="color:#67c23a">
+        <div v-if="item.result" style="color: #67c23a">
           <i class="el-icon-success"></i>匹配成功
         </div>
         <div v-else>
@@ -41,14 +41,16 @@
           <img src="../../../assets/img/fingerprint1.png" v-else />
         </div>
 
-        <el-tag class="___absolute" style="bottom:-40px">{{
+        <el-tag class="___absolute" style="bottom: -40px">{{
           item.staffName
         }}</el-tag>
       </div>
     </div>
-    <div style="margin-top: 20px; text-align: right;">
+    <div style="margin-top: 20px; text-align: right">
       <!-- <el-button class="btn" @click="getcheckFingerprint">录入指纹</el-button> -->
-      <el-button @click="matchFingerprint" type="primary">确定</el-button>
+      <el-button @click="matchFingerprint" type="primary" v-if="hideBtn"
+        >确定</el-button
+      >
     </div>
   </div>
 </template>
@@ -68,7 +70,7 @@ export default {
     "person",
     "showFingerprintFlag",
     "tasksArrCheck",
-    "limit"
+    "limit",
   ],
   data() {
     return {
@@ -78,10 +80,11 @@ export default {
       fingerprint: {},
       staffFingerprints: "",
       flag: false,
+      hideBtn: true,
       fingerprintMsg: "",
       bg: "#f0f9eb",
       fingerBox: [],
-      boxIndex: ""
+      boxIndex: "",
     };
   },
   watch: {
@@ -108,10 +111,10 @@ export default {
         this.$message.success("匹配成功");
         this.$set(this.fingerBox[this.boxIndex], "result", true);
         this.fingerprintMsg = msg;
-        let submitFlag = this.fingerBox.filter(item => item.result);
+        let submitFlag = this.fingerBox.filter((item) => item.result);
         if (submitFlag.length == this.fingerBox.length) {
-          let id = this.fingerBox.map(item => item.id);
-          let checkStaffName = this.fingerBox.map(item => item.staffName);
+          let id = this.fingerBox.map((item) => item.id);
+          let checkStaffName = this.fingerBox.map((item) => item.staffName);
           this.$emit("fingerResult", true, id, checkStaffName);
         }
       } else if (
@@ -125,22 +128,29 @@ export default {
         this.$message.error("匹配失败");
         this.showFingerprintFlag ? this.finger(this.staffFingerprints[0]) : "";
       }
-    }
+    },
   },
 
   computed: {
     getFingerprintCode() {
       this.fingerprint = this.$store.state.fingerprint;
       return this.fingerprint.fingerprintCode;
-    }
+    },
   },
   methods: {
     change(a) {
+      if (a.length == this.person.length && this.target == 0) {
+        this.$message.error("全部选择后会导致审核界面无法复核");
+        this.hideBtn = false;
+        return;
+      } else {
+        this.hideBtn = true;
+      }
       this.fingerBox = [];
-      a.forEach(item => {
+      a.forEach((item) => {
         this.fingerBox.push(this.person[item]);
       });
-      this.fingerBox.forEach(item => {
+      this.fingerBox.forEach((item) => {
         item.flagImg = true;
       });
       this.flag = false;
@@ -169,7 +179,7 @@ export default {
       if (this.selectIndex !== "") {
         let id = [];
         let name = [];
-        this.selectIndex.forEach(item => {
+        this.selectIndex.forEach((item) => {
           id.push(this.person[item].id);
           name.push(this.person[item].staffName);
         });
@@ -177,10 +187,10 @@ export default {
       } else {
         this.$emit("fingerResult", true, this.nowMan.id);
       }
-    }
+    },
   },
   mounted() {
-    this.person.forEach(item => {
+    this.person.forEach((item) => {
       item["flagImg"] = true;
       if (this.target == 0 || this.target == 2) {
         if (this.tasksArrCheck[0].tasks[0].recordStaffId) {
@@ -194,12 +204,12 @@ export default {
       }
     });
     //获取所有检测员
-    getMan(0).then(res => {
+    getMan(0).then((res) => {
       let nowManId = JSON.myParse(getToken()).id;
       let mans = res.data;
-      this.nowMan = mans.find(item => item.id === nowManId);
+      this.nowMan = mans.find((item) => item.id === nowManId);
     });
-  }
+  },
 };
 </script>
 <style scoped>

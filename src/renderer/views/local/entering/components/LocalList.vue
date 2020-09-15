@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <div style="min-height: 60vh;">
+    <div style="min-height: 60vh">
       <el-table
         v-loading="listLoading"
         ref="multipleTable"
@@ -64,6 +64,16 @@
           label="原始记录表不通过原因"
           show-overflow-tooltip
         ></el-table-column>
+        <el-table-column width="200" label="附件下载">
+          <template slot-scope="props">
+            <a
+              v-show="props.row.docDisplayUrl"
+              download=""
+              :href="imgUrl + '/' + props.row.docDisplayUrl"
+              >附件下载</a
+            >
+          </template>
+        </el-table-column>
         <el-table-column width="130" label="删除数据">
           <template slot-scope="props">
             <el-button
@@ -78,7 +88,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div style="margin-bottom: 10vh; margin-top: 10px;">
+    <div style="margin-bottom: 10vh; margin-top: 10px">
       <el-pagination
         @current-change="changeCurrentPage"
         @size-change="handleSizeChange"

@@ -268,7 +268,7 @@ export default {
         }
       });
       dataArr.forEach((item, index) => {
-        if (item.v2.includes(Identification)) {
+        if (item.v2&&item.v2.includes(Identification)) {
           let arr = [item.v4, item.v5, item.v6, item.v7, item.v8];
           this.data.valueData.point.push({
             pointId: window.uuid(),

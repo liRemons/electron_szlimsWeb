@@ -5601,6 +5601,36 @@ export default [
     },
   },
   {
+    name: "project_point",
+    projectName: "点位图",
+    switch: false,
+    type: null,
+    publicData: [], //本模块的公共数据
+    //添加行使用的模板数据
+    valueData: {
+      //模块内容键值对
+      testProject: "project_point",
+      testProjectChineseName: "点位图",
+    },
+    height: {
+      //模块高度
+      _normal: {
+        confirm: true,
+        carried: true,
+        fixed: 600,
+        value: function(obj) {
+          return 600;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
     name: "project_dr_bgsjzsdpl",
     projectName: "曝光时间指示的偏离",
     type: null,

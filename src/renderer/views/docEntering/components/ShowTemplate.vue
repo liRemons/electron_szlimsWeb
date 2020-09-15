@@ -4,19 +4,19 @@
     class="showTemplateBox"
     :class="ipdTemplate == 'ipdTemplate' ? 'box_warpper' : ''"
   >
-    <div class="contents" v-if="showBookValue" style="background: transparent;">
+    <div class="contents" v-if="showBookValue" style="background: transparent">
       <span class="closeContent" @click="showBookValue = false">X</span>
       <p
         v-for="(item, index) in aObjects"
         :key="index"
-        style="padding-bottom: 10px; padding-left: 20px;"
+        style="padding-bottom: 10px; padding-left: 20px"
       >
         {{ index + 1 }}、
         <a
           :href="'#' + item.id"
           @click="aObjectsIndex = index"
           :style="aObjectsIndex === index ? { color: 'red' } : {}"
-          style="text-decoration: none;"
+          style="text-decoration: none"
           >{{ item.name }}</a
         >
       </p>
@@ -25,13 +25,13 @@
     <div
       class="contents2"
       v-if="showModuleOption"
-      style="padding-left: 20px; background: transparent;"
+      style="padding-left: 20px; background: transparent"
     >
       <span class="closeContent" @click="showModuleOption = false">X</span>
       <div
         v-for="(item, index) in testContentArray"
         :key="index"
-        style="margin-bottom: 20px;"
+        style="margin-bottom: 20px"
       >
         <el-checkbox
           v-model="control[index]"
@@ -42,10 +42,7 @@
       </div>
     </div>
 
-    <div
-    v-if="pageBox"
-    :id="getId(taskData.showing[0][0].data.switch)"
-    >
+    <div v-if="pageBox" :id="getId(taskData.showing[0][0].data.switch)">
       <!-- 打印区域 -->
       <div class="filler _noprint"></div>
       <!-- 间隔 -->
@@ -55,7 +52,7 @@
         :key="pageNumber + 'taskDataShowing'"
       >
         <div
-          style="margin: 0 auto;"
+          style="margin: 0 auto"
           v-if="pageDataArray.length > 0"
           :class="{
             page: !pageDataArray[0].data.switch,
@@ -84,7 +81,7 @@
               v-for="(moduleJson, index) in pageDataArray"
               :key="index + 'pageDataArray'"
             >
-              <div v-if="findFirstXn(moduleJson)" style="margin-top: 10px;">
+              <div v-if="findFirstXn(moduleJson)" style="margin-top: 10px">
                 3.2、性能检测结果
               </div>
               <div v-if="componentFlag">
@@ -126,7 +123,7 @@
             检测 :
             <div :class="{ nameContainer1: true, mainContentBox_debug: debug }">
               <div
-                style="display: inline-block;"
+                style="display: inline-block"
                 v-if="
                   taskData.showing[0][0]['data']['valueData'][
                     'imgBase64'
@@ -142,7 +139,7 @@
                   :src="item"
                 />
               </div>
-              <div style="display: inline-block;" v-else>
+              <div style="display: inline-block" v-else>
                 <img
                   class="jianceImg"
                   :src="
@@ -237,7 +234,7 @@ export default {
   data() {
     return {
       heads,
-      pageBox:false,
+      pageBox: false,
       staffId: "",
       delCreateTime: "",
       btnFlag: true,
@@ -295,6 +292,7 @@ export default {
       SampleNumJudge: true,
       requestNo: 0,
       docPass: 0,
+      pointUrl: "",
     };
   },
   props: {
@@ -410,6 +408,11 @@ export default {
         );
       }
       // ---------------------------END----------------------------
+      // --------------------------START----------------
+      let dc = this.jsonString.filter((item) => item.to == "project_dc_jcxx")
+        .length;
+      // "project_dc_dchjcl"
+      // --------------------------END-----------------
       this.jsonString.forEach((item, index) => {
         let obj = {};
         let findIndex = redefinitionArr.findIndex((val) => {
@@ -592,6 +595,7 @@ export default {
       this.jsonString = decompose;
       this.$forceUpdate();
       this.Reset();
+
       //给组件设置index
       // let templateArr = ['projcet_szwjcjlmknr', 'projcet_gzwyzwtgxdk', 'projcet_jfcsl', 'projcet_jcjg', 'projcet_szpbt', 'projcet_jflslxgzdqk', 'projcet_jgysnr', 'projcet_jcbnr'];
       // this.setPointIndex(templateArr);
@@ -794,6 +798,8 @@ export default {
     // 显示这个示例
     showExample() {
       //0 不可修改 1 只能修改头数据 3可以修改所有数据
+      this.pointUrl = this.task.pointUrl;
+
       this.InstrumentQuery(this.task.id, this.task.subCompanyId);
       this.pass = this.task.pass;
       this.docPass = this.task.docPass;
@@ -880,6 +886,7 @@ export default {
           }
         });
         contentArray = contentArray.flat();
+
         contentArray.splice(0, 0, { name: this.task.headTestProjectName });
         if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
@@ -912,12 +919,13 @@ export default {
         }
         contentArray.push({ name: "project_deleteReason" });
       }
+      if (this.pointUrl) {
+        contentArray.push("project_point");
+      }
 
       let obj = [];
       this.taskData.showing = [];
       this.jsonString = [];
-      // console.log(contentArray,'contentArray')
-      //     console.log( this.heads,'heads')
       for (let i = 0; i < contentArray.length; i++) {
         // 获取模块
         let result1 = this.modules.find(
@@ -967,7 +975,6 @@ export default {
           obj.push(result1);
         } else {
           //头模块
-          
           let result2 = this.heads.find(
             (mod) =>
               mod.name ==
@@ -990,7 +997,20 @@ export default {
           }
         }
       }
+
+      obj.forEach((item) => {
+        if (item.name == "project_point") {
+          item.switch = obj[0].switch;
+          item.valueData = {
+            testProject: "project_point",
+            testProjectChineseName: "点位图",
+            pointUrl: this.pointUrl,
+            point: [],
+          };
+        }
+      });
       let middleArr = this.deepCopy(obj);
+
       middleArr.forEach((val, i) => {
         val.height._normal.value = obj[i].height._normal.value;
         if (obj[i].height._short)
@@ -1005,6 +1025,7 @@ export default {
         };
         this.jsonString.push(json);
       });
+
       if (!this.jsonString[0].data.valueData.hasOwnProperty("todayDate")) {
         this.jsonString[0].data.valueData.todayDate = _dateFormat(
           "now",
@@ -1025,28 +1046,33 @@ export default {
       this.todayDate = this.jsonString[0].data.valueData.todayDate;
       this.operation();
       this.redefinition();
-      this.$nextTick(()=>{
-        this.pageBox=true
-      })
+      this.$nextTick(() => {
+        this.pageBox = true;
+      });
       // 是否应该显示样品名称————————————————
-      let projectNameIsFlag=['空气理化采样','六级筛孔采样器','空气微生物采样'];
-      this.jsonString.forEach(item=>{
-        if(projectNameIsFlag.includes(item.data.projectName)){
-          item.data.valueData.isSampleName=false
-        }else{
-           item.data.valueData.isSampleName=true
+      let projectNameIsFlag = [
+        "空气理化采样",
+        "六级筛孔采样器",
+        "空气微生物采样",
+      ];
+      this.jsonString.forEach((item) => {
+        if (projectNameIsFlag.includes(item.data.projectName)) {
+          item.data.valueData.isSampleName = false;
+        } else {
+          item.data.valueData.isSampleName = true;
         }
-      })
+      });
+      console.log(this.jsonString);
+
       // ————————————————————————————————————
       // this.Reset();
     },
-    getId(data){
-      if(data){
-        return 'pageBox'
-      }else{
-         return 'pageBox2'
+    getId(data) {
+      if (data) {
+        return "pageBox";
+      } else {
+        return "pageBox2";
       }
-     
     },
     changeJson(data) {
       this.jsonString = data;
@@ -1383,6 +1409,9 @@ export default {
             }
           });
         }
+        case "project_dc_jcxx":
+          console.log(task);
+          break;
         case "project_cyhj":
           {
             template.valueData.point.forEach((item, index) => {

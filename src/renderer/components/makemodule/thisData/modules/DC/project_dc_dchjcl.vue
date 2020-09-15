@@ -204,6 +204,7 @@
       },
     },
     mounted() {
+			this.$emit('redefinition');
     }
   };
 </script>

@@ -19,7 +19,7 @@
           >
             <el-button
               v-if="target == 1"
-              style="margin-bottom: 10px; margin-left: 10px; margin-top: 40px;"
+              style="margin-bottom: 10px; margin-left: 10px; margin-top: 40px"
               >上传检测样品图谱
             </el-button>
           </el-upload>
@@ -38,7 +38,7 @@
           </div>
         </el-col>
         <el-col :span="5" v-if="target == 1 && showCurve()">
-          <el-form style="margin-left: 35px;">
+          <el-form style="margin-left: 35px">
             <el-form-item required :label="testProjectTitle">
               <!-- <el-select
                 @change="curveNameChange"
@@ -75,7 +75,7 @@
           :span="4"
           v-if="target == 1 && sample.modelName === 'project_systvoc'"
         >
-          <div style="margin-top: 40px; margin-left: 35px;">
+          <div style="margin-top: 40px; margin-left: 35px">
             <el-popover placement="bottom-end" trigger="click">
               <div
                 style="
@@ -105,7 +105,7 @@
                   乙酸丁酯：
                   <el-autocomplete
                     v-model="nowCur2"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px"
                     :clearable="true"
                     :fetch-suggestions="
                       (data, cb) => querySearchAsync(data, cb, '乙酸丁酯')
@@ -123,7 +123,7 @@
                   对二甲苯+间二甲苯：
                   <el-autocomplete
                     v-model="nowCur3"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px"
                     :clearable="true"
                     :fetch-suggestions="
                       (data, cb) =>
@@ -142,7 +142,7 @@
                   <el-autocomplete
                     v-model="nowCur4"
                     :clearable="true"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px"
                     :fetch-suggestions="
                       (data, cb) => querySearchAsync(data, cb, '正十一烷')
                     "
@@ -159,7 +159,7 @@
                   <el-autocomplete
                     v-model="nowCur5"
                     :clearable="true"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px"
                     :fetch-suggestions="
                       (data, cb) => querySearchAsync(data, cb, '苯')
                     "
@@ -176,7 +176,7 @@
                   <el-autocomplete
                     v-model="nowCur6"
                     :clearable="true"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px"
                     :fetch-suggestions="
                       (data, cb) => querySearchAsync(data, cb, '苯乙烯')
                     "
@@ -193,7 +193,7 @@
                   <el-autocomplete
                     v-model="nowCur7"
                     :clearable="true"
-                    style="margin-top: 10px;"
+                    style="margin-top: 10px"
                     :fetch-suggestions="
                       (data, cb) => querySearchAsync(data, cb, '邻二甲苯')
                     "
@@ -221,7 +221,7 @@
           :class="{ page: true, _print: true, ableInput: ableInput }"
         >
           <!-- 真打印区域 -->
-          <div class="projectName">检测项目：{{projectName}}</div>
+          <div class="projectName">检测项目：{{ projectName }}</div>
           <div class="pageCode">
             第 {{ pageNumber + 1 }} 页 / 共 {{ sampleData.showing.length }} 页
           </div>
@@ -235,6 +235,7 @@
               :data="moduleJson.data"
               :bs="bs"
               :xieLv="xieLv"
+              :projectName="projectObj"
               :regressionEquationValue1="regressionEquationValue1"
               :regressionEquationValue2="regressionEquationValue2"
               :regressionEquationValue3="regressionEquationValue3"
@@ -311,7 +312,7 @@ import {
   toQuerySysSampleTemporaryStorageData,
   queryTestProjectAnalysisItemData,
 } from "@/api/laboratory";
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -364,7 +365,8 @@ export default {
       nowCur5: "",
       nowCur6: "",
       nowCur7: "",
-      projectName:""
+      projectName: "",
+      projectObj:''
     };
   },
   props: {
@@ -377,7 +379,7 @@ export default {
   },
   computed: {
     ...mapState({
-      labtemplate:state=>state.laboratory.labtemplate
+      labtemplate: (state) => state.laboratory.labtemplate,
     }),
     testProjectTitle() {
       switch (this.sample.modelName) {
@@ -416,7 +418,8 @@ export default {
   methods: {
     // 显示这个示例
     showExample() {
-      this.projectName=this.labtemplate[0].name
+      this.projectName = this.labtemplate[0].name;
+      this.projectObj=this.labtemplate[0].projectName
       this.$store.dispatch(
         "ChangeInspectionTime",
         this.testProject.inspectionTime
@@ -664,7 +667,6 @@ export default {
       } else {
         this.getModelObj(content, false);
       }
-     
     },
 
     uploadTuPuSuccess(res) {
@@ -713,15 +715,14 @@ export default {
 
     querySearchAsync(queryString, cb, title) {
       let arr = [];
-      console.log(this.curveArr,title)
       this.curveArr.map((item) => {
-        if (item.materialCurveName == title) {
+        
+        if (item.materialCurveName.includes(title)) {
           arr = item.curves;
           // this.curveName=item.materialName
         }
       });
       let restaurants = arr;
-      // console.log(restaurants,'restaurants')
       let results = queryString
         ? restaurants.filter(this.createStateFilter(queryString))
         : restaurants;
@@ -730,7 +731,7 @@ export default {
 
     createStateFilter(queryString) {
       return (state) => {
-        console.log(state,'state')
+        console.log(state, "state");
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
@@ -749,7 +750,6 @@ export default {
         this.jsonString[0].data.switch ? 1010 : 670
       );
       this.sampleData.showing = arr[0].length > 0 ? arr : arr.slice(1);
-      // console.log(this.sampleData.showing);
     },
 
     redefinition(needPorjectName) {
@@ -831,9 +831,6 @@ export default {
               testResultsNum) /
               32
           );
-          // if (several > 2) {
-          //     several -= 2
-          // }
           if (point.length > several) {
             projcet.data.valueData.point = JSON.myParse(
               JSON.stringify(point.slice(0, several))
@@ -852,9 +849,6 @@ export default {
         let totalSubsidiary = Math.ceil(
           (height - projcet.data.height._normal.fixed) / 32
         );
-        // if (totalSubsidiary > 2) {
-        //     totalSubsidiary -= 2
-        // }
         let fatherData = [];
         let sonData = [];
         surplusPoint.forEach((val, num) => {

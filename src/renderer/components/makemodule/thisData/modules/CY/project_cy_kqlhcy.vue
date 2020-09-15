@@ -416,7 +416,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.data.valueData);
     this.getDetailData();
   },
 };

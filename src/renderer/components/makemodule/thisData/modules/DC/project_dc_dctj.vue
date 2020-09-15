@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -50,7 +51,16 @@ export default {
       sampleOption: "",
     };
   },
-  computed: {},
+  watch: {
+    dchjbgPoint(){
+      this.getElectromagnetismData();
+    }
+  },
+  computed: {
+    ...mapState({
+      dchjbgPoint: (state) => state.laboratory.dchjbgPoint,
+    }),
+  },
   props: [
     "ipdTemplate",
     "pageNumber",
@@ -85,21 +95,9 @@ export default {
       if (this.data.valueData.Judge) {
         this.data.valueData.Judge = false;
         // 方法已经写好data为接口数据
-        let data = {
-          v1: "1",
-          v2: "Cmcc GSM900",
-          v3: "934MHz-954MHz",
-          v4: "2.693",
-          v5: "2.693",
-          v6: "2.693",
-          v7: "2.693",
-          v8: "2.693",
-          v9: "mV/n",
-        };
-        let totalData = [];
-        for (let i = 0; i < 10; i++) {
-          totalData.push(data);
-        }
+       
+        let totalData = this.dchjbgPoint;
+        
         let obj = this.jsonString.find(
           (item, index) => item.to === "project_dc_dchjxpclbg"
         );
@@ -112,12 +110,13 @@ export default {
           this.gatThisVal(totalData);
           this.$set(obj.data.valueData, "point", totalData);
           this.$forceUpdate();
+          this.$emit('redefinition')
         }
       }
     },
   },
   mounted() {
-    this.getElectromagnetismData();
+    
   },
 };
 </script>

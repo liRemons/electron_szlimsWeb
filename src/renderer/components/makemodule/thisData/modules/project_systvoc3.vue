@@ -276,6 +276,7 @@
           item.sysConcentration = "";
         }
       });
+      console.log(this.data)
     }
   }
 </script>

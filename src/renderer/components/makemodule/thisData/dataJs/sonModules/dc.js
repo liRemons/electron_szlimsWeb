@@ -409,18 +409,7 @@ export default [
       foreverId: window.uuid(), //永久的id 用于重复样
       point: [
         {
-          v1: "11",
-          v2: "",
-          v3: "",
-          v4: "",
-          v5: "",
-          v6: "",
-          v7: "",
-          v8: "",
-          v9: "",
-        },
-        {
-          v1: "11",
+          v1: 1,
           v2: "",
           v3: "",
           v4: "",
@@ -532,9 +521,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 105,
+        fixed: 64,
         value: function(obj) {
-          return 105 + 32 * obj.point.length;
+          return 64 + 32 * obj.point.length;
         },
       },
       _short: {

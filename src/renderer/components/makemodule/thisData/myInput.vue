@@ -1,6 +1,13 @@
 <template>
-	<input   class="box" style="border:none;width:95%" ref="myBox" :placeholder="placeholder" @change="toInput" @blur="limit"
-				 :style="disable ? {background: '#FFCCFF'} : {}"></input>
+  <input
+    class="box"
+    style="border: none; width: 95%"
+    ref="myBox"
+    :placeholder="placeholder"
+    @change="toInput"
+    @blur="limit"
+    :style="disable ? { background: '#FFCCFF' } : {}"
+  />
 </template>
 
 <script>
@@ -10,12 +17,12 @@ export default {
   computed: {
     disable() {
       return this.$attrs.disabled;
-    }
+    },
   },
   watch: {
     defaultValue(val) {
       this.$refs.myBox.value = val;
-    }
+    },
   },
   methods: {
     toInput(e) {
@@ -35,7 +42,7 @@ export default {
       //   // let val = new RegExp(this.reg, 'g');
       //   // e.target.value = value.replace(val, '');
       // }
-    }
+    },
   },
   mounted() {
     this.$eventBus.$on("myInputRefre", () => {
@@ -43,7 +50,7 @@ export default {
         this.$forceUpdate();
       }, 100);
     });
-  }
+  },
 };
 </script>
 

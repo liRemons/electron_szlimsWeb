@@ -129,6 +129,7 @@
       :visible.sync="showAddCurve"
       size="tiny"
       width="60%"
+      :close-on-click-modal="false"
     >
       <el-form
         :inline="true"
@@ -989,7 +990,7 @@ export default {
       let a = Math.max(...finttIngArr.map(item => item[0]));
       index = finttIngArr.findIndex((item, index) => item[0] === a);
       let b = finttIngArr[index][1];
-      this.addCurve.coefficient = Math.sqrt(finttIngArr[index][0]);
+      this.addCurve.coefficient = Math.sqrt(finttIngArr[index][0]).toFixed46(4);
       this.addCurve.regressionEquationValue1 = finttIngArr[index][2];
       this.addCurve.regressionEquationValue2 = finttIngArr[index][3].split(
         `${this.addCurve.regressionEquationValue2}`
