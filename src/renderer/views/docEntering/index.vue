@@ -194,7 +194,7 @@
 
       <div v-if="target == 1 && inputFlag">
         <div
-          v-bind:key="key"
+          :key="key"
           v-for="(item, key) in labtemplate"
           v-show="key == currentTab"
         >
@@ -1613,7 +1613,7 @@ export default {
     //暂存数据
     TemporaryStorage(isbut = false, isReview) {
       let valueDatas = [];
-      console.log( this.sampleDatas)
+      console.log(this.sampleDatas);
       this.sampleDatas.forEach((item) => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {

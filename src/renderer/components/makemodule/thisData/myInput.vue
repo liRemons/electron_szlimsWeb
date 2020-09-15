@@ -30,7 +30,7 @@ export default {
       this.$emit("input", value);
     },
     limit(e) {
-      // md改来改去，自己随便输吧，不限制了
+      // 改来改去，md自己随便输吧，不限制了
       // if (this.reg) {
       //   this.reg == "[^0-9./]"
       //     ? (this.$refs.myBox.value = Number(

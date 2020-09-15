@@ -366,7 +366,7 @@ export default {
       nowCur6: "",
       nowCur7: "",
       projectName: "",
-      projectObj:''
+      projectObj: "",
     };
   },
   props: {
@@ -419,7 +419,7 @@ export default {
     // 显示这个示例
     showExample() {
       this.projectName = this.labtemplate[0].name;
-      this.projectObj=this.labtemplate[0].projectName
+      this.projectObj = this.labtemplate[0].projectName;
       this.$store.dispatch(
         "ChangeInspectionTime",
         this.testProject.inspectionTime
@@ -538,6 +538,7 @@ export default {
           let sampleObj = {
             sampleNum: item.labSampleNum,
             sampleNumIndex: item.sampleNumIndex,
+            sysSampleId: item.sysSampleId,
           };
           if (item.isParallel) {
             sampleObj.isParallelSample = 1;
@@ -581,6 +582,7 @@ export default {
               item.parallelWindArea = sampleNum[index].parallelWindArea;
               item.parallelWindArea1 = sampleNum[index].parallelWindArea1;
               item.parallelWindArea2 = sampleNum[index].parallelWindArea2;
+              item.sysSampleId = sampleNum[index].sysSampleId;
               if (nameArr.length >= 2) {
                 item.testProject = item.testProject + "-" + nameArr[1];
               }
@@ -716,7 +718,6 @@ export default {
     querySearchAsync(queryString, cb, title) {
       let arr = [];
       this.curveArr.map((item) => {
-        
         if (item.materialCurveName.includes(title)) {
           arr = item.curves;
           // this.curveName=item.materialName
@@ -1095,7 +1096,6 @@ export default {
 
     //曲线改变
     changeCurve(curve) {
-      console.log("曲线", curve);
       this.bs = 1 / curve.regressionEquationValue1;
       this.xieLv = curve.regressionEquationValue1;
       this.regressionEquationValue1 = curve.regressionEquationValue1;
@@ -1262,6 +1262,8 @@ export default {
                 item.hasAll,
                 item
               );
+              modelResult.valueData.sysSampleId =
+                item.item && item.item.sysSampleId;
               if (_that.$store.getters.analysisData) {
                 let arr = _that.$store.getters.analysisData.filter(
                   (item) => item.sampleNum.indexOf("KB") !== -1
@@ -1279,7 +1281,7 @@ export default {
             }
             //请求格式化数据
           }
-          if (_that.target === "4" && item.hasOwnProperty("sampleNum")) {
+          if (_that.target == 4 && item.hasOwnProperty("sampleNum")) {
             modelResult.valueData.divisionNum = item.sampleNum;
           }
           obj.push(modelResult);
@@ -1315,7 +1317,7 @@ export default {
       });
       this.Reset();
       //已分析使用
-      if (this.target === "4") {
+      if (this.target == 4) {
         //审核使用
         this.toSetValue();
       }

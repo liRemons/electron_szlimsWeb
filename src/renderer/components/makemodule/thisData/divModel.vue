@@ -215,7 +215,6 @@ export default {
     getComputerValue() {
       if (this.isComputer && this.computers.length > 0) {
         let computerFormula = this.computerFormula;
-
         var computeredValue = 0;
         switch (computerFormula) {
           case "gs0":
@@ -328,6 +327,7 @@ export default {
               break;
             }
           case "gs8":
+            console.log(this.computers)
             let sysSuckConcentration = [];
             let sysBlankConcentration = [];
             this.computers[0].forEach((item, index) => {
