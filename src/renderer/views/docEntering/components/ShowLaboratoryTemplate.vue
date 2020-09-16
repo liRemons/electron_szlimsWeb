@@ -24,14 +24,29 @@
             </el-button>
           </el-upload>
         </el-col>
-        <el-col :span="5" v-if="target == 1 && testProjectTitle == '甲苯'">
+        <el-col :span="8" v-if="target == 1 && testProjectTitle == '甲苯'">
           <div>
-            <el-form>
-              <el-form-item required label="空白总峰面积：">
+            <el-form inline label-position="top">
+              <el-form-item
+                required
+                label="空白总峰面积："
+                style="width: 130px"
+              >
                 <el-input
                   v-model="allFeng"
                   @input="changeAllFeng"
                   placeholder="请输入空白总峰面积"
+                ></el-input>
+              </el-form-item>
+              <el-form-item
+                required
+                label="空白目标物总峰面积之和"
+                style="width: 200px"
+              >
+                <el-input
+                  v-model="allFengGoal"
+                  @input="changeAllFengGoal"
+                  placeholder="请输入空白目标物总峰面积之和"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -240,6 +255,7 @@
               :regressionEquationValue2="regressionEquationValue2"
               :regressionEquationValue3="regressionEquationValue3"
               :allFeng="allFeng"
+              :allFengGoal="allFengGoal"
               :pageNumber="pageNumber"
               :thisPageIndex="index"
               :jsonString="jsonString"
@@ -337,6 +353,7 @@ export default {
       detectionLimitObj: {},
       oneSampleData: [],
       allFeng: "",
+      allFengGoal: "",
       fileNumber: "SZRD/LY424-01", //文件编号
       todayDate: _dateFormat("now", "Y 年 M 月 D 日"), //当前日期
       debug: false, //是否开启页面主要区域背景色调试, 如果开启, 则将页面主要区域的背景色变成灰色(原来是白色), 方便调试
@@ -552,7 +569,6 @@ export default {
         });
 
         querySysDeviceData(sampleNum).then((res) => {
-         
           this.SampleDataArr = [];
           let arr = [];
           sampleNum.forEach((item) => {
@@ -600,7 +616,6 @@ export default {
               suckConcentration: "",
               blankConcentration: "",
               blankPeakArea: "",
-             
             };
 
             let name = oneSampleData[0].parallelLetter;
@@ -627,7 +642,7 @@ export default {
             }
 
             this.SampleDataArr.push(oneSampleData);
-            console.log(this.SampleDataArr)
+            console.log(this.SampleDataArr);
           });
           this.getModelObj(content);
         });
@@ -1114,6 +1129,13 @@ export default {
         this.target == 1 && this.testProjectTitle == "甲苯"
       );
     },
+    changeAllFengGoal(data) {
+      this.$emit(
+        "changeAllFengGoal",
+        data,
+        this.target == 1 && this.testProjectTitle == "甲苯"
+      );
+    },
     toSelectedBox(item) {
       this.$emit("selectedBox", item);
     },
@@ -1480,5 +1502,9 @@ export default {
 }
 .pageFoot_1 {
   margin-left: 20px;
+}
+
+.el-form--label-top .el-form-item__label {
+  padding: 0;
 }
 </style>

@@ -770,7 +770,7 @@ export default {
             that.$set(
               item.data.valueData,
               "deviceData2",
-              that.MethodsRe.removeArrRepeat(res.data, "id")
+              that.$utils.removeArrRepeat(res.data, "id")
             );
           });
           that.componentFlag = true;
@@ -1128,7 +1128,7 @@ export default {
               let reason = `取消对${obj.testProjectChineseName}的检测, 原因是${value}。`;
               this.reasonMsgArr.push({
                 staffId: JSON.parse(getToken()).id,
-                createTime: this.MethodsRe.dateFormat(),
+                createTime: this.$utils.dateFormat(),
                 testprojectName: obj.testProjectChineseName,
                 reason,
                 testProjectId: obj.testProjectId,
@@ -1143,7 +1143,7 @@ export default {
               let reason = `取消对${obj.testProjectChineseName}的检测, 原因是${value}。`;
               this.reasonMsgArr.push({
                 staffId: JSON.parse(getToken()).id,
-                createTime: this.MethodsRe.dateFormat(),
+                createTime: this.$utils.dateFormat(),
                 testprojectName: obj.testProjectChineseName,
                 reason,
                 testProjectId: obj.testProjectId,
@@ -1495,7 +1495,7 @@ export default {
         let reason = `取消对${this.deleteObj.data.valueData.testProjectChineseName}的检测, 原因是${this.reasonMsg}。`;
         this.reasonMsgArr.push({
           staffId: JSON.parse(getToken()).id,
-          createTime: this.MethodsRe.dateFormat(),
+          createTime: this.$utils.dateFormat(),
           testprojectName: this.deleteObj.data.valueData.testProjectChineseName,
           reason,
         });

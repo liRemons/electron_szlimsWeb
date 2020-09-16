@@ -208,6 +208,7 @@
             @selectedBox="toSelectedBox"
             @selectedCurve="toSelectedCurve"
             @changeAllFeng="changeAllFeng"
+            @changeAllFengGoal="changeAllFengGoal"
             :AllFengFlag="AllFengFlag"
           />
         </div>
@@ -547,7 +548,7 @@ export default {
   methods: {
     end() {
       const time = () => {
-        this.entryEndTime = this.MethodsRe.dateFormat();
+        this.entryEndTime = this.$utils.dateFormat();
         this.$nextTick(() => {
           this.importData.tasks.tasks[0].endTime = this.entryEndTime;
           this.taskDatas[0].showing.forEach((item) => {
@@ -610,7 +611,7 @@ export default {
           });
         historyEdit.forEach((item) => {
           item.taskId = this.$route.params.ids;
-          item.createTime = this.MethodsRe.dateFormat();
+          item.createTime = this.$utils.dateFormat();
           item.explain = `将 ${item.project} 模块中的 ${item.title} 的值由 ${item.value} 更改为 ${item.editValue}`;
         });
         this.historyEdit = historyEdit;
@@ -1695,6 +1696,10 @@ export default {
       this.selectedCurve = item;
     },
     changeAllFeng(data, boolean) {
+      this.AllFeng = data;
+      this.AllFengFlag.flag = boolean;
+    },
+    changeAllFengGoal(data, boolean) {
       this.AllFeng = data;
       this.AllFengFlag.flag = boolean;
     },

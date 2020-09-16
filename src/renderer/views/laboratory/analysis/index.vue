@@ -83,12 +83,12 @@
           class="paralleBoxPingXing"
           v-if="testProjectName == 'project_systvoc'"
         >
-          <div>请勾选平行样</div>
+          <!-- <div>请勾选平行样</div> -->
 
           <el-row v-for="item in samplesArr" :key="item.id">
             <el-col :span="12">
               <div>
-                <el-checkbox-group v-model="checkedParallelSample" size="mini">
+                <el-checkbox-group v-model="checkedParallelSample" disabled size="mini">
                   <el-checkbox
                     @change="changeCheckBox"
                     :label="item.id"

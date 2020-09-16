@@ -49,24 +49,44 @@
 
         <td>
           <!--采样体积-->
-          <divModel v-model="item.volume" :edit="false"></divModel>
+          <divModel
+            v-if="showXieGan3(item)"
+            v-model="item.volume"
+            :edit="false"
+          ></divModel>
+          <span v-else></span>
         </td>
 
         <td>
           <!--采样点温度-->
-          <divModel v-model="item.temperature" :edit="false"></divModel>
+          <divModel
+            v-if="showXieGan3(item)"
+            v-model="item.temperature"
+            :edit="false"
+          ></divModel>
+          <span v-else></span>
         </td>
 
         <td>
           <!--采样点气压-->
-          <divModel v-model="item.atmosphericPressure" :edit="false"></divModel>
+          <divModel
+            v-if="showXieGan3(item)"
+            v-model="item.atmosphericPressure"
+            :edit="false"
+          ></divModel>
+          <span v-else></span>
         </td>
         <td>
           <!--标准体积-->
-          <divModel v-model="item.standardVo" :edit="false"></divModel>
+          <divModel
+            v-if="showXieGan3(item)"
+            v-model="item.standardVo"
+            :edit="false"
+          ></divModel>
+          <span v-else></span>
         </td>
 
-        <td v-if="showXieGan2(item) == 0">
+        <td v-if="showXieGan(item) == 0">
           <!--峰面积-->
           <divModel
             :edit="false"
@@ -76,12 +96,12 @@
             :computers="fen(data.valueData.allPoint, item)"
           ></divModel>
         </td>
-        <td v-else-if="showXieGan2(item) == 1">
+        <td v-else-if="showXieGan(item) == 1">
           <!--峰面积-->
           <divModel v-model="item.peakArea" :edit="false"></divModel>
         </td>
         <td v-else>
-          <div>/</div>
+          <div></div>
         </td>
 
         <td v-if="showXieGan(item) == 0">
@@ -99,10 +119,10 @@
           <divModel v-model="item.suckConcentration" :edit="false"></divModel>
         </td>
         <td v-else>
-          <div>/</div>
+          <div></div>
         </td>
 
-        <td v-if="showXieGan2(item) == 0">
+        <td v-if="showXieGan(item) == 0">
           <!--空白样品管组分含量-->
           <divModel
             v-model="item.blankConcentration"
@@ -113,27 +133,16 @@
           >
           </divModel>
         </td>
-        <td v-else-if="showXieGan2(item) == 1">
+        <td v-else-if="showXieGan(item) == 1">
           <divModel v-model="item.blankConcentration" :edit="false"></divModel>
         </td>
         <td v-else>
-          <div>/</div>
+          <div></div>
         </td>
 
         <td>
-          <divModel
-            v-model="item.sysConcentration"
-            :edit="false"
-            :is-computer="true"
-            :computerFormula="'gs8'"
-            :computers="
-              changeNum([
-                data.valueData.allPoint,
-                item,
-                data.valueData.sysSolutionMultiple,
-              ])
-            "
-          ></divModel>
+          <!--样品浓度-->
+          {{ item.sysConcentration }}
         </td>
 
         <td v-if="showXieGan3(item)">
@@ -171,6 +180,14 @@ export default {
       return nameArr[0] + this.data.valueData.point[0].sampleNumIndex;
     },
   },
+  watch: {
+    allFeng() {
+      this.concentration();
+    },
+    allFengGoal() {
+      this.concentration();
+    },
+  },
   props: [
     "ipdTemplate",
     "data",
@@ -185,6 +202,7 @@ export default {
     "regressionEquationValue2",
     "regressionEquationValue3",
     "allFeng",
+    "allFengGoal",
     "detectionLimitObj",
     "target",
   ],
@@ -245,29 +263,20 @@ export default {
         return [0];
       }
     },
-    fen(computers, item) {
-      let computers2 = computers.map((item) => item.peakArea);
-      let allValue = 0;
-      computers2.forEach((item, index) => {
-        if (index <= 7) {
-          allValue += Number(item);
-        }
-      });
-      let allValueTwo = Number(computers[0].parallelWindArea) - allValue;
+    fen(computers, data) {
+      let computers2 = computers
+        .filter(
+          (item) =>
+            !item.testProject.includes("总计") &&
+            !item.testProject.includes("其他")
+        )
+        .map((item) => Number(item.peakArea));
+      let allValueTwo =
+        Number(computers[0].parallelWindArea) - this.$utils.arrSUM(computers2);
       if (isNaN(allValueTwo)) allValueTwo = 0;
       return [allValueTwo];
     },
     showXieGan(item) {
-      let name = item.testProject;
-      if (name.indexOf("其他") != -1) {
-        return 0;
-      } else if (name.indexOf("总计") != -1) {
-        return 2;
-      } else {
-        return 1;
-      }
-    },
-    showXieGan2(item) {
       let name = item.testProject;
       if (name.indexOf("其他") != -1) {
         return 0;
@@ -286,39 +295,12 @@ export default {
       }
     },
     pingXingFeng(arr) {
-      try {
-        let result = 0;
-        arr.forEach((item, index) => {
-          if (index <= 7) {
-            result += Number(item.blankPeakArea);
-          }
-        });
-        let allFeng = "";
-        if (this.allFeng !== "") allFeng = this.allFeng;
-        if (this.isNumber(allFeng) && this.isNumber(result)) {
-          let result2 = Number(allFeng) - result;
-          return [
-            this.regressionEquationValue1,
-            this.regressionEquationValue2,
-            this.regressionEquationValue3,
-            result2,
-          ];
-        } else {
-          return [
-            this.regressionEquationValue1,
-            this.regressionEquationValue2,
-            this.regressionEquationValue3,
-            0,
-          ];
-        }
-      } catch (e) {
-        return [
-          this.regressionEquationValue1,
-          this.regressionEquationValue2,
-          this.regressionEquationValue3,
-          0,
-        ];
-      }
+      return [
+        this.regressionEquationValue1,
+        this.regressionEquationValue2,
+        this.regressionEquationValue3,
+        this.allFengGoal - this.allFeng,
+      ];
     },
     showBaoGao(item) {
       let sysReport = Number(item.sysConcentration).toFixed46(3);
@@ -336,6 +318,37 @@ export default {
         return item.sysReport;
       }
     },
+    concentration() {
+      this.data.valueData.point.forEach((item) => {
+        // 标准体积
+        item.standardVo = (
+          (Number(item.volume) * 273 * Number(item.atmosphericPressure)) /
+          (Number(item.temperature) + 273) /
+          101.3
+        ).toFixed46(3);
+        // 样品浓度
+        if (this.showXieGan3(item)) {
+          item.sysConcentration = (
+            (item.suckConcentration - item.blankConcentration) /
+            item.standardVo
+          ).toFixed46(5);
+        }
+      });
+      let sysConcentration = this.data.valueData.point
+        .map((item) => {
+          if (this.showXieGan3(item) && item) {
+            return Number( item.sysConcentration);
+          } else {
+            return 0;
+          }
+        })
+        .filter((item) => item > 0);
+      this.data.valueData.point.forEach((item) => {
+        if (!this.showXieGan3(item)) {
+          item.sysConcentration = this.$utils.arrSUM(sysConcentration);
+        }
+      });
+    },
   },
 
   mounted() {
@@ -344,23 +357,12 @@ export default {
     this.data.valueData.sysSampleId = this.data.valueData.allPoint[0].sysSampleId;
     this.data.valueData.mySample = this.mySample;
     this.data.valueData.point.forEach((item) => {
-      // 标准体积
-      item.standardVo = (
-        (Number(item.volume) * 273 * Number(item.atmosphericPressure)) /
-        (Number(item.temperature) + 273) /
-        101.3
-      ).toFixed46(3);
       let rowIndex = this.data.valueData.allPoint.findIndex(
         (item2) => item2.testProject == item.testProject
       );
       this.data.valueData.allPoint[rowIndex] = item;
     });
-
-    this.data.valueData.allPoint.forEach((item, index) => {
-      if (index <= 9) {
-        item.sysConcentration = "";
-      }
-    });
+    this.concentration();
   },
 };
 </script>

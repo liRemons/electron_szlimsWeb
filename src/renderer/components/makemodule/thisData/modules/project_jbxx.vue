@@ -459,7 +459,7 @@ export default {
     getLocalDevice(queryString, cb) {
       let res = this.importData.device;
       if (this.devices.length >= 0) {
-        this.devices = this.MethodsRe.removeArrRepeat(res.data, "id");
+        this.devices = this.$utils.removeArrRepeat(res.data, "id");
         let results = queryString
           ? this.devices.filter(
               (item) => item.deviceNum.indexOf(queryString) !== -1
