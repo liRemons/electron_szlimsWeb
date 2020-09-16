@@ -327,7 +327,6 @@ export default {
               break;
             }
           case "gs8":
-            console.log(this.computers)
             let sysSuckConcentration = [];
             let sysBlankConcentration = [];
             this.computers[0].forEach((item, index) => {

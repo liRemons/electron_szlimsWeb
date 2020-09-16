@@ -31,15 +31,16 @@
               : ""
           }}
         </th>
-        <th>采样体积V(L)</th>
-        <th>采样点温度t(℃)</th>
-        <th style="width: 110px">采样点气压p(kPa)</th>
+        <th>采样体积<br />V(L)</th>
+        <th>采样点温度<br />t(℃)</th>
+        <th style="width: 80px">采样点气压<br />p(kPa)</th>
+        <th style="width: 80px">标准体积<br />Vo(L)</th>
         <th style="width: 80px">峰面积</th>
-        <th style="width: 120px">解吸气浓度(μg/mL)</th>
-        <th style="width: 120px">空白气浓度(μg/mL)</th>
-        <th style="width: 120px">样品浓度ρ(mg/m3)</th>
-        <th style="width: 110px">报告值ρ(mg/m3)</th>
-        <th>相对相差(%)</th>
+        <th style="width: 100px">样品管组分含量<br />(μg/mL)</th>
+        <th style="width: 140px">空白样品管组分含量<br />(μg/mL)</th>
+        <th style="width: 120px">样品浓度<br />ρ(mg/m3)</th>
+        <th style="width: 110px">报告值<br />ρ(mg/m3)</th>
+        <th>相对相差<br />(%)</th>
       </tr>
 
       <tr v-for="(item, index) in data.valueData.point" :key="index">
@@ -59,6 +60,10 @@
         <td>
           <!--采样点气压-->
           <divModel v-model="item.atmosphericPressure" :edit="false"></divModel>
+        </td>
+        <td>
+          <!--标准体积-->
+          <divModel v-model="item.standardVo" :edit="false"></divModel>
         </td>
 
         <td v-if="showXieGan2(item) == 0">
@@ -80,7 +85,7 @@
         </td>
 
         <td v-if="showXieGan(item) == 0">
-          <!--解吸气浓度-->
+          <!--样品管组分含量-->
           <divModel
             v-model="item.suckConcentration"
             :edit="false"
@@ -98,7 +103,7 @@
         </td>
 
         <td v-if="showXieGan2(item) == 0">
-          <!--空白气浓度-->
+          <!--空白样品管组分含量-->
           <divModel
             v-model="item.blankConcentration"
             :edit="false"
@@ -115,11 +120,7 @@
           <div>/</div>
         </td>
 
-        <td v-if="showXieGan3(item)">
-          <!--样品浓度-->
-          <div>/</div>
-        </td>
-        <td v-else>
+        <td>
           <divModel
             v-model="item.sysConcentration"
             :edit="false"
@@ -343,6 +344,12 @@ export default {
     this.data.valueData.sysSampleId = this.data.valueData.allPoint[0].sysSampleId;
     this.data.valueData.mySample = this.mySample;
     this.data.valueData.point.forEach((item) => {
+      // 标准体积
+      item.standardVo = (
+        (Number(item.volume) * 273 * Number(item.atmosphericPressure)) /
+        (Number(item.temperature) + 273) /
+        101.3
+      ).toFixed46(3);
       let rowIndex = this.data.valueData.allPoint.findIndex(
         (item2) => item2.testProject == item.testProject
       );

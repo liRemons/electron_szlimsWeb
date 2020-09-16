@@ -552,6 +552,7 @@ export default {
         });
 
         querySysDeviceData(sampleNum).then((res) => {
+         
           this.SampleDataArr = [];
           let arr = [];
           sampleNum.forEach((item) => {
@@ -599,6 +600,7 @@ export default {
               suckConcentration: "",
               blankConcentration: "",
               blankPeakArea: "",
+             
             };
 
             let name = oneSampleData[0].parallelLetter;
@@ -625,6 +627,7 @@ export default {
             }
 
             this.SampleDataArr.push(oneSampleData);
+            console.log(this.SampleDataArr)
           });
           this.getModelObj(content);
         });
