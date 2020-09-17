@@ -337,7 +337,7 @@ export default {
       let sysConcentration = this.data.valueData.point
         .map((item) => {
           if (this.showXieGan3(item) && item) {
-            return Number( item.sysConcentration);
+            return Number(item.sysConcentration).toFixed46(5);
           } else {
             return 0;
           }

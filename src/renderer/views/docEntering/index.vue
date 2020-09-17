@@ -865,7 +865,6 @@ export default {
         let that = this;
         if (that.target == 1) {
           this.TemporaryStorage(true);
-
           return;
         }
         if (that.target == 2) {
@@ -1614,7 +1613,6 @@ export default {
     //暂存数据
     TemporaryStorage(isbut = false, isReview) {
       let valueDatas = [];
-      console.log(this.sampleDatas);
       this.sampleDatas.forEach((item) => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {
@@ -1664,6 +1662,13 @@ export default {
           }
         });
       }
+      let storeageId = window.uuid();
+      valueDatas.forEach((item) => {
+        item.storeageId = storeageId;
+        item.point.forEach((a) => {
+          a.storeageId = storeageId;
+        });
+      });
       toTemporaryStorageSampleData(JSON.stringify(valueDatas))
         .then((res) => {
           if (res.success) {
