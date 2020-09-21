@@ -721,6 +721,7 @@ export default {
             "leftBtn",
             "emptyBtn",
             "el-icon-arrow-down",
+            'emptyBtn'
           ];
           displayNoneArr.forEach((item) => {
             dispalyNone(item);

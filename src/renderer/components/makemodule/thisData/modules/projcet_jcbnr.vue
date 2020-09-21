@@ -107,7 +107,6 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[0]">
             <divModel
-              :isNumBox="true"
               v-if="item.rows[3] !== '/'"
               v-model="item.rows[3]"
               style="text-align: center;"
@@ -116,7 +115,6 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[1]">
             <divModel
-              :isNumBox="true"
               v-model="item.rows[4]"
               v-if="item.rows[4] !== '/'"
               style="text-align: center;"
@@ -125,7 +123,6 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[2]">
             <divModel
-              :isNumBox="true"
               v-model="item.rows[5]"
               v-if="item.rows[5] !== '/'"
               style="text-align: center;"

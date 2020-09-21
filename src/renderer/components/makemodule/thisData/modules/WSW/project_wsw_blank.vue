@@ -91,6 +91,8 @@ export default {
     returnVal(a, b) {
       if (a == "自定义") {
         this.data.valueData.testResults[b].showInput = false;
+      } else {
+        this.data.valueData.testResults[b].testResult = a;
       }
     },
     returnVal2(a, b) {

@@ -48,7 +48,7 @@
               type="danger"
               @click="wtReturnSample(item)"
               size="mini"
-              v-if="item.projectName == '委托送样'"
+              v-if="item.projectName == '委托送样'&&$route.path == '/laboratory/pickUp'"
               >退样</el-button
             >
             <span style="color: red" v-if="showTitle(item.value)">被退回</span>

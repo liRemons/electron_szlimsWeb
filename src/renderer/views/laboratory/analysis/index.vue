@@ -4,7 +4,7 @@
       <el-radio-group
         v-model="nowPage"
         @change="getNewData"
-        style="width: 400px; text-align: left;"
+        style="width: 400px; text-align: left"
       >
         <el-radio-button label="待分析"></el-radio-button>
         <el-radio-button label="正在分析"></el-radio-button>
@@ -20,29 +20,29 @@
         :initial-index="analysisInitial_index"
       >
         <el-carousel-item :key="1" label="理化">
-          <div style="margin-bottom: 10px; height: 100%; overflow-y: auto;">
+          <div style="margin-bottom: 10px; height: 100%; overflow-y: auto">
             <my-table
               ref="myt"
-              style="min-height: 66vh;"
+              style="min-height: 66vh"
               :data="dataLihua"
               :title="'理化'"
             ></my-table>
           </div>
         </el-carousel-item>
         <el-carousel-item :key="2" label="放射">
-          <div style="margin-bottom: 20px; height: 100%; overflow-y: auto;">
+          <div style="margin-bottom: 20px; height: 100%; overflow-y: auto">
             <my-table
               :data="dataFangshe"
-              style="min-height: 65vh;"
+              style="min-height: 65vh"
               :title="'放射'"
             ></my-table>
           </div>
         </el-carousel-item>
         <el-carousel-item :key="3" label="微生物">
-          <div style="margin-bottom: 20px; height: 100%; overflow-y: auto;">
+          <div style="margin-bottom: 20px; height: 100%; overflow-y: auto">
             <my-table
               :data="dataWeishenghu"
-              style="min-height: 65vh;"
+              style="min-height: 65vh"
               :title="'微生物'"
             ></my-table>
           </div>
@@ -50,7 +50,7 @@
       </el-carousel>
     </div>
 
-    <div style="position: fixed; right: 5vw; top: 90vh; z-index: 2001;">
+    <div style="position: fixed; right: 5vw; top: 90vh; z-index: 2001">
       <el-button @click="clearSelected">取消选择</el-button>
       <el-button
         v-show="nowPage === '正在分析'"
@@ -71,10 +71,10 @@
 
     <el-dialog :title="'样品操作'" :visible.sync="selectParallelSample" center>
       <div>
-        <el-radio v-model="radio" label="1" border style="width: 150px;"
+        <el-radio v-model="radio" label="1" border style="width: 150px"
           >新样品</el-radio
         >
-        <el-radio v-model="radio" label="2" border style="width: 150px;"
+        <el-radio v-model="radio" label="2" border style="width: 150px"
           >上次样品</el-radio
         >
       </div>
@@ -88,7 +88,11 @@
           <el-row v-for="item in samplesArr" :key="item.id">
             <el-col :span="12">
               <div>
-                <el-checkbox-group v-model="checkedParallelSample" disabled size="mini">
+                <el-checkbox-group
+                  v-model="checkedParallelSample"
+                  disabled
+                  size="mini"
+                >
                   <el-checkbox
                     @change="changeCheckBox"
                     :label="item.id"
@@ -183,7 +187,7 @@
         <el-col :span="2" :offset="11">
           <el-button @click="toImportFile = false">取 消</el-button>
         </el-col>
-        <el-col :span="1" style="margin-left: 10px;">
+        <el-col :span="1" style="margin-left: 10px">
           <el-button type="primary" @click="toImportFile = false"
             >确 定</el-button
           >
@@ -326,7 +330,7 @@ export default {
           ...this.dataLihua2,
         ])
       );
-    
+
       if (this.template <= 0) {
         this.$notify({
           type: "warning",
@@ -334,6 +338,7 @@ export default {
         });
         return;
       }
+      console.log(this.template);
       this.sampleNumId = [];
       this.template.forEach((item) => {
         item.value.forEach((a) => {
@@ -354,6 +359,20 @@ export default {
           });
           return;
         }
+      }
+      let flag = true;
+      let taskDataStateIdArr = this.template.map(
+        (item) => item.taskDataStateId
+      );
+      let taskDataStateId = taskDataStateIdArr.length
+        ? taskDataStateIdArr[0]
+        : "";
+      taskDataStateIdArr.forEach((item) => {
+        item !== taskDataStateId && item && (flag = false);
+      });
+      if (!flag && taskDataStateIdArr.length >= 1) {
+        this.$message.warning("请选择上次一起分析的项目");
+        return;
       }
       // sessionStorage.setItem("inspectionTime", this.template[0].inspectionTime);
       this.testProjectName = this.template[0].modelName;
@@ -514,22 +533,30 @@ export default {
             this.$message.error("暂无样品");
             return;
           }
+          let testDeviceCheckBox = res.data[0].testDeviceCheckBox;
+          let curveArr = res.data[0].curveArr;
           res.data.forEach((item) => {
             item.labSampleNum ? (item.sampleNum = item.labSampleNum) : "";
+            item.testResults= JSON.parse(this.template[0].value[0].sysBlankReportArr)
             try {
               item.myBlankSample = JSON.parse(item.blankSampleArr);
             } catch (e) {
               item.myBlankSample = [];
             }
           });
+          this.template[0].value.forEach((item) => {
+            item.curveArr = curveArr;
+            item.testDeviceCheckBox = testDeviceCheckBox;
+          });
           if (this.testProjectName == "project_systvoc") {
             let result = true;
             this.template[0].value.forEach((item) => {
-              if (item.isParallel) {
-                if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
-                  result = false;
-                }
-              }
+              item.parallelWindArea = item.sysSampleTotalArea;
+              // if (item.isParallel) {
+              //   if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
+              //     result = false;
+              //   }
+              // }
               if (!item.isParallel) {
                 if (!item.parallelWindArea) {
                   result = false;
@@ -541,6 +568,7 @@ export default {
             store.dispatch("ChangeSaveAnalysisData", res.data);
             this.$router.push(`/laboratory/doc-entering/1`);
           } else {
+           
             store.dispatch("TemplateAction", "update");
             store.dispatch("UpdateLabTemplate", this.template);
             store.dispatch("ChangeSaveAnalysisData", res.data);
@@ -552,6 +580,8 @@ export default {
         if (this.testProjectName == "project_systvoc") {
           let result = true;
           this.template[0].value.forEach((item) => {
+            item.sysBlankTotalArea = "";
+            item.sysBlankTargetTotalArea = "";
             if (item.isParallel) {
               if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
                 result = false;

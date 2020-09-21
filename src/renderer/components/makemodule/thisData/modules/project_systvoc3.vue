@@ -179,12 +179,19 @@ export default {
       let nameArr = name.split("-");
       return nameArr[0] + this.data.valueData.point[0].sampleNumIndex;
     },
+    watchCalculate() {
+      const {
+        allFeng,
+        allFengGoal,
+        regressionEquationValue1,
+        regressionEquationValue2,
+        regressionEquationValue3,
+      } = this;
+      return `${allFeng}${allFengGoal}${regressionEquationValue1}${regressionEquationValue2}${regressionEquationValue3}`;
+    },
   },
   watch: {
-    allFeng() {
-      this.concentration();
-    },
-    allFengGoal() {
+    watchCalculate() {
       this.concentration();
     },
   },
@@ -299,7 +306,7 @@ export default {
         this.regressionEquationValue1,
         this.regressionEquationValue2,
         this.regressionEquationValue3,
-        this.allFengGoal - this.allFeng,
+        this.allFeng - this.allFengGoal,
       ];
     },
     showBaoGao(item) {
@@ -334,19 +341,23 @@ export default {
           ).toFixed46(5);
         }
       });
-      let sysConcentration = this.data.valueData.point
-        .map((item) => {
-          if (this.showXieGan3(item) && item) {
-            return Number(item.sysConcentration).toFixed46(5);
-          } else {
-            return 0;
+      this.$nextTick(() => {
+        let sysConcentration = this.data.valueData.point
+          .map((item) => {
+            if (this.showXieGan3(item) && item) {
+              return Number(item.sysConcentration).toFixed46(5);
+            } else {
+              return 0;
+            }
+          })
+          .filter((item) => item > 0);
+        this.data.valueData.point.forEach((item) => {
+          if (!this.showXieGan3(item)) {
+            item.sysConcentration = this.$utils
+              .arrSUM(sysConcentration)
+              .toFixed46(5);
           }
-        })
-        .filter((item) => item > 0);
-      this.data.valueData.point.forEach((item) => {
-        if (!this.showXieGan3(item)) {
-          item.sysConcentration = this.$utils.arrSUM(sysConcentration);
-        }
+        });
       });
     },
   },
@@ -362,7 +373,9 @@ export default {
       );
       this.data.valueData.allPoint[rowIndex] = item;
     });
-    this.concentration();
+    this.$nextTick(()=>{
+      this.concentration();
+    })
   },
 };
 </script>

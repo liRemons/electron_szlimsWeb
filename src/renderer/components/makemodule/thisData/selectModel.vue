@@ -45,7 +45,7 @@
           style="padding: 9px 10px 9px 10px"
           :class="{
             selected: showSelected(item),
-            selected2: checkSelect(item),
+            selected2: checkSelect(item,index),
           }"
           v-for="(item, index) in list"
           @click.stop="statr(index)"
@@ -185,7 +185,15 @@ export default {
         return false;
       }
     },
-    checkSelect(item) {
+    checkSelect(item,index) {
+      if (this.Obj && this.transmitText) {
+        let arr = this.transmitText.split(",");
+        if (arr.length && arr.includes(item[this.Obj])) {
+          this.statr(index)
+          this.show=true
+          return true;
+        }
+      }
       if (this.Obj) {
         if (item[this.Obj] === this.transmitText) {
           return true;

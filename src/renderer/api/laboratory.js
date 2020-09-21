@@ -329,12 +329,20 @@ export function querySysSampleData(sampleIds) {
 }
 
 //分析暂存
-export function toTemporaryStorageSampleData(samples) {
+export function toTemporaryStorageSampleData(
+  samples,
+  taskDataStateId,
+  curveId,
+  curveArr
+) {
   return service({
     url: "/temporaryStorageSampleData",
     method: "post",
     data: {
       samples,
+      taskDataStateId,
+      curveId,
+      curveArr,
     },
   });
 }

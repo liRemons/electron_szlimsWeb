@@ -315,7 +315,6 @@
 import Methods from "../methods.js"; //  尼玛 babel版本太低, 无法解析 import {Adaptive, dataRefresh} from './methods.js'
 import newPoint from "@/utils/newPoint.js";
 import bus from "@/utils/bus.js";
-
 let { newtvoc } = newPoint;
 
 let { Adaptive } = Methods;
@@ -384,6 +383,7 @@ export default {
       nowCur7: "",
       projectName: "",
       projectObj: "",
+      testDeviceCheckBox: [],
     };
   },
   props: {
@@ -435,8 +435,9 @@ export default {
   methods: {
     // 显示这个示例
     showExample() {
-      this.projectName = this.labtemplate[0].name;
-      this.projectObj = this.labtemplate[0].projectName;
+      this.projectName = this.testProject.name;
+      this.projectObj = this.testProject.projectName;
+
       this.$store.dispatch(
         "ChangeInspectionTime",
         this.testProject.inspectionTime
@@ -462,6 +463,7 @@ export default {
       }
       // 获取到模块名
       let content = [{ name: _that.testProject.modelName }];
+
       // 只判断了tvoc
       if (content[0].name == "project_systvoc" && this.target != "4") {
         content = [{ name: "project_systvoc1" }];
@@ -640,16 +642,14 @@ export default {
               newObj.testProject = "TVOC总计";
               oneSampleData.push(newObj);
             }
-
             this.SampleDataArr.push(oneSampleData);
-            console.log(this.SampleDataArr);
           });
           this.getModelObj(content);
         });
       } else if (
         content[1] &&
         content[1].name == "project_systvoc" &&
-        this.target == "4"
+        this.target == 4
       ) {
         content[1] = { name: "project_systvoc4" };
         content.push({ name: "project_systvoc4" });
@@ -1032,6 +1032,23 @@ export default {
             }
           });
         }
+      } else {
+        if (data.value.length && data.value[0].testDeviceCheckBox) {
+          valData.valueData.sysDilutionDegree = data.value[0].sysDilutionDegree;
+          valData.valueData.sysDilutionHour = data.value[0].sysDilutionHour;
+          data.value[0].testDeviceCheckBox.length &&
+            (valData.valueData.testDeviceCheckBox =
+              data.value[0].testDeviceCheckBox);
+          valData.valueData.sysTestingTime = data.value[0].sysTestingTime;
+          valData.valueData.sysTestingEndTime = data.value[0].sysTestingEndTime;
+          valData.valueData.sysTemperature = data.value[0].sysTemperature;
+          valData.valueData.sysHumidity = data.value[0].sysHumidity;
+          valData.valueData.sysSampleState = data.value[0].sysSampleState;
+          valData.valueData.sysSolventDesorption =
+            data.value[0].sysSolventDesorption;
+          valData.valueData.sysSampleStateDetail =
+            data.value[0].sysSampleStateDetail;
+        }
       }
 
       let allowArr = ["project_systvoc"];
@@ -1100,9 +1117,12 @@ export default {
           arr.map((item) => {
             if (item.materialCurveName == this.testProjectTitle) {
               this.curveOptions = item.curves;
-              // this.curveName=item.materialName
             }
           });
+          // 如果暂存的数据曲线不为空
+          this.labtemplate[0] &&
+            this.labtemplate[0].value[0].curveArr &&
+            this.storeAgeCurve(res.datas);
         } else {
           this.$notify({
             type: "warning",
@@ -1111,15 +1131,65 @@ export default {
         }
       });
     },
+    // 暂存的数据------曲线
+    storeAgeCurve(data) {
+      // 甲苯的曲线
+      let curve, otherCurve;
+      if (!this.testProject.modelName.includes("TVOC")) {
+        curve = this.labtemplate[0].value[0].curveArr;
+      } else {
+        curve = this.labtemplate[0].value[0].curveArr.filter(
+          (item) => !item.testProject || item.testProject == "undefined"
+        );
+        otherCurve = this.labtemplate[0].value[0].curveArr.filter(
+          (item) => item.testProject && item.testProject !== "undefined"
+        );
+        // 其他曲线赋值-------START
+        let other = [
+          { name: "乙苯" },
+          { name: "乙酸丁酯" },
+          { name: "对二甲苯+间二甲苯" },
+          { name: "正十一烷" },
+          { name: "苯" },
+          { name: "苯乙烯" },
+          { name: "邻二甲苯" },
+        ];
+        otherCurve.forEach((item) => {
+          arr.forEach((a) => {
+            if (a.id == item.curveId) {
+              other.forEach((b, index) => {
+                if (item.testProject == b.name) {
+                  this.changeMyCurve(a, b.name, index);
+                  this[`nowCur${index + 1}`] = a.curveNum;
+                }
+              });
+            }
+          });
+        });
+        // -----------------END
+      }
+
+      // console.log(this.labtemplate[0].value[0].curveArr,'curve')
+      // 其他曲线
+
+      //为甲苯曲线赋值 ----SATRT
+      let arr = data.map((item) => item.curves).flat();
+      curve && this.changeCurve(curve[0], "storeage");
+      let curveArr = arr.filter((item) => item.id == curve[0].curveId);
+      curveArr.length && (this.nowSel = curveArr[0].curveNum);
+      // ------------------END
+    },
 
     //曲线改变
-    changeCurve(curve) {
-      this.bs = 1 / curve.regressionEquationValue1;
+    changeCurve(curve, type) {
+      this.bs = curve && 1 / curve.regressionEquationValue1;
       this.xieLv = curve.regressionEquationValue1;
       this.regressionEquationValue1 = curve.regressionEquationValue1;
       this.regressionEquationValue2 = curve.regressionEquationValue2;
       this.regressionEquationValue3 = curve.regressionEquationValue3;
-      this.nowCurve = curve.id;
+      type == "storeage"
+        ? (this.nowCurve = curve.curveId)
+        : (this.nowCurve = curve.id);
       this.$emit("selectedCurve", this.nowCurve);
     },
     changeAllFeng(data) {
@@ -1293,13 +1363,19 @@ export default {
                 let arr = _that.$store.getters.analysisData.filter(
                   (item) => item.sampleNum.indexOf("KB") !== -1
                 );
+
                 arr.forEach((item) => {
-                  if (modelResult.valueData.testResults)
-                    modelResult.valueData.testResults.push({
-                      noEdit: true,
-                      sampleNum: item.sampleNum,
-                      testResult: item.testResult,
-                    });
+                  if (modelResult.valueData.testResults) {
+                    if (item.testResults) {
+                      modelResult.valueData.testResults = item.testResults;
+                    } else {
+                      modelResult.valueData.testResults.push({
+                        noEdit: true,
+                        sampleNum: item.sampleNum,
+                        testResult: item.testResult,
+                      });
+                    }
+                  }
                 });
               }
               this.dataFormat(item, modelResult, item.index, item, flag);
@@ -1446,15 +1522,15 @@ export default {
     },
   },
 
-  created() {
-    // console.log("组件传过来的数据sample", this.sample);
-    // console.log("组件传过来的数据sampleData", this.sampleData);
-    // console.log("组件传过来的数据testProject", this.testProject);
-    // console.log("组件传过来的数据android", this.android);
-    // console.log("组件传过来的数据target", this.target);
-  },
   mounted() {
     this.$nextTick(() => {
+      if (this.target == 1) {
+        this.allFeng = this.labtemplate[0].value[0].sysBlankTotalArea;
+        this.allFengGoal = this.labtemplate[0].value[0].sysBlankTargetTotalArea;
+        this.changeAllFeng(this.allFeng);
+        this.changeAllFengGoal(this.allFengGoal);
+      }
+
       this.target == 1 && this.testProjectTitle == "甲苯"
         ? (this.AllFengFlag.flag = true)
         : "";

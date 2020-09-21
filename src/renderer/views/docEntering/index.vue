@@ -114,6 +114,13 @@
         >上传
       </el-button>
       <el-button
+        @click="againCreateHtml"
+        size="mini"
+        type="primary"
+        v-else-if="target == 3 && nowTask.pass == 4"
+        >重新生成
+      </el-button>
+      <el-button
         @click="signatureTimeDialog = true"
         size="mini"
         type="primary"
@@ -524,6 +531,7 @@ export default {
       delRowReason: false,
       delRowReasonArr: [],
       AllFeng: "",
+      allFengGoal: "",
       AllFengFlag: {
         flag: false,
       },
@@ -913,21 +921,7 @@ export default {
               }
             }
           });
-
-          // taskArr.push(
-          //   updateTaskData(
-          //     this.taskDatas[i].id,
-          //     JSON.stringify(this.templateArr)
-          //   )
-          // );
         }
-        // let that = this;
-        // return;
-        // Promise.all(taskArr)
-        //   .then(resultsArr => {
-        //     console.log(resultsArr);
-        //   })
-        //   .catch(() => {});
       });
     },
 
@@ -1081,6 +1075,9 @@ export default {
       document.execCommand("Copy");
       this.$message.success("复制成功");
       this.copyDialog = false;
+    },
+    againCreateHtml() {
+      generateMeasure(this.ids[0], this.$refs.templateHTML[0].$el.innerHTML);
     },
     //上传
     toUpload(signature) {
@@ -1313,7 +1310,6 @@ export default {
             valueDatas[0].point.push(item);
             valueDatas = valueDatas.slice(0, 1);
           }
-
           if (item.hasAll) {
             if (item.allPoint.length > 10) {
               item.sysReport =
@@ -1613,6 +1609,11 @@ export default {
     //暂存数据
     TemporaryStorage(isbut = false, isReview) {
       let valueDatas = [];
+      let sysSampleTotalArea = "",
+        sysBlankTotalArea,
+        sysBlankTargetTotalArea;
+      sysBlankTotalArea = this.AllFeng;
+      sysBlankTargetTotalArea = this.allFengGoal;
       this.sampleDatas.forEach((item) => {
         let showing = item.showing;
         if (this.imgBase64 != "" && isReview == false) {
@@ -1661,24 +1662,34 @@ export default {
             item.sysDifference = "";
           }
         });
+        valueDatas[0].point[0] &&
+          (sysSampleTotalArea =
+            valueDatas[0].point[0].point[0].parallelWindArea);
       }
-      let storeageId = window.uuid();
+      console.log(valueDatas)
+      let taskDataStateId = window.uuid();
       valueDatas.forEach((item) => {
-        item.storeageId = storeageId;
+        item.sysSampleTotalArea = sysSampleTotalArea;
+        item.sysBlankTotalArea = sysBlankTotalArea;
+        item.sysBlankTargetTotalArea = sysBlankTargetTotalArea;
+        item.testDeviceCheckBox.length &&
+          Object.prototype.toString.call(item.testDeviceCheckBox[0]) ===
+            "[object Object]" &&
+          (item.testDeviceCheckBox = item.testDeviceCheckBox.map((a) => a.id));
+        item.taskDataStateId = taskDataStateId;
         item.point.forEach((a) => {
-          a.storeageId = storeageId;
+          a.taskDataStateId = taskDataStateId;
         });
       });
-      toTemporaryStorageSampleData(JSON.stringify(valueDatas))
+      toTemporaryStorageSampleData(
+        JSON.stringify(valueDatas),
+        taskDataStateId,
+        this.selectedCurve,
+        this.curveArr
+      )
         .then((res) => {
           if (res.success) {
-            if (isbut) {
-              this.$router.push("/laboratory/analysis");
-            }
-            this.$notify({
-              type: "success",
-              message: res.msg,
-            });
+            isbut && this.$router.push("/laboratory/analysis");
           } else {
             this.$notify({
               type: "warning",
@@ -1705,7 +1716,7 @@ export default {
       this.AllFengFlag.flag = boolean;
     },
     changeAllFengGoal(data, boolean) {
-      this.AllFeng = data;
+      this.allFengGoal = data;
       this.AllFengFlag.flag = boolean;
     },
     reviewBack() {
@@ -2022,9 +2033,11 @@ export default {
       ];
       let index = forbidArr.findIndex((item) => item === modelName);
       if (index === -1 && window.location.href.indexOf("localhost") === -1) {
-        this.timerId = setInterval(() => {
-          _this.TemporaryStorage();
-        }, 10000);
+        this.$isUpdate
+          ? (this.timerId = setInterval(() => {
+              _this.TemporaryStorage();
+            }, 10000))
+          : "";
       }
     }
 

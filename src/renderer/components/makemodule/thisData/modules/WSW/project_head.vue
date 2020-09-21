@@ -106,6 +106,7 @@
             :rows="false"
             :list="devices"
             :Obj="'showName'"
+            :transmitText="showDevice"
           ></selectModel>
           <div v-else>{{ showDevice }}</div>
         </td>
@@ -174,8 +175,7 @@ export default {
       try {
         return this.data.valueData.testDeviceCheckBox
           .map(
-            (item) =>
-              item.deviceName + " " + item.deviceModel + " " + item.deviceNum
+            (item) => `${item.deviceName} ${item.deviceModel} ${item.deviceNum}`
           )
           .toString();
       } catch (e) {
@@ -240,7 +240,7 @@ export default {
         this.data.valueData.sysTestingEndTime.replace(/-/g, "/")
       ).getTime();
       let result = (time2 - time1) / 3600 / 1000;
-      this.$store.commit('CHANGETIME',result)
+      this.$store.commit("CHANGETIME", result);
       this.showTime2 = false;
     },
     changeState(val) {

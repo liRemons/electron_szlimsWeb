@@ -144,7 +144,7 @@ Vue.prototype.computeObj = computes;
 Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
 Vue.prototype.$updateAxios = axios.updateAxios;
-Vue.prototype.$isUpdate = true;
+Vue.prototype.$isUpdate = false;
 Vue.prototype.version = "1.1";
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
@@ -300,7 +300,7 @@ Vue.prototype.IntegerAdd0 = function(val) {
 };
 // 两位小数，不足补0
 Vue.prototype.IntegerAdd2 = function(val) {
-  if (!isNaN(val)) {
+  if (!isNaN(val)&&(val + "").split(".").length) {
     if ((val + "").split(".")[1].length == 1) {
       val += "0";
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="___relative" style="padding-top: 20px;">
+  <div class="___relative" style="padding-top: 20px">
     <div :class="{ eventCover: target != 0 }"></div>
     <table border="1" class="myTableReset _normalHeight_">
       <tr>
@@ -11,15 +11,13 @@
         <th class="p20 tc" colspan="7">标准要求</th>
       </tr>
       <tr>
-        <td class="p20 tl" colspan="7">
-          验收&状态&稳定性：±10%内。
-        </td>
+        <td class="p20 tl" colspan="7">验收&状态&稳定性：±10%内。</td>
       </tr>
       <tr>
         <th class="p20 tc" colspan="7">检测及计算方法</th>
       </tr>
       <tr>
-        <td class="p20 tl" colspan="7" style="line-height: 16px;">
+        <td class="p20 tl" colspan="7" style="line-height: 16px">
           校准平均值等于3次管电压测量值求平均值后，平均值依有效的计量部门检定/校准证书的校准结果进行校准后的结果。公式如下：依校准证书可知电压档为A1（送计量院校准仪器的读数）时，相应的校准值为B1（计量部门标准器的读数）。电压档为A2（送计量院校准仪器的读数）时，相应的校准值为B2（计量部门标准器的读数），现在管电压3次测量的平均值An位于A1和A2之间，则管电压校准平均值Bn
           =（An- A1）*（B2 - B1 ）/（A2 - A1 ）+ B1。
           相对偏差=（校准平均值-管电压预设值）/管电压预设值×100%。
@@ -44,35 +42,35 @@
         <td colspan="2">
           <divModel
             v-model="item.rows[0]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[1]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[2]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td>
           <divModel
             v-model="item.rows[3]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
           ></divModel>
         </td>
         <td class="___relative">
           <divModel
             v-model="item.rows[4]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
             :edit="false"
             :is-computer="true"
@@ -92,7 +90,7 @@
         <td class="___relative">
           <divModel
             v-model="item.rows[5]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="moduleInput hide focusBg"
             :edit="false"
             :is-computer="true"
@@ -115,12 +113,12 @@
               index != data.valueData.point.length - 1 &&
               ipdTemplate == 'ipdTemplate'
             "
-            style="right: -70px; width: 20px; z-index: 100;"
+            style="right: -70px; width: 20px; z-index: 100"
           >
             <div
               class="__functionButton6"
               @dblclick="reduce(index)"
-              style="right: 0;"
+              style="right: 0"
             >
               <span>-</span>
             </div>
@@ -134,7 +132,7 @@
         <td colspan="7" class="p20">
           <divModel
             v-model="data.valueData.remarks"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             class="warp2 rowsInput2 hide focusBg"
           ></divModel>
         </td>
@@ -143,13 +141,13 @@
 
     <div
       class="__functionBox"
-      style="bottom: 69px;"
+      style="bottom: 69px"
       v-if="ipdTemplate == 'ipdTemplate' && target == 0"
     >
       <div
         class="__functionButton6"
         @dblclick="reduce(data.valueData.point.length - 1)"
-        style="right: 30px;"
+        style="right: 30px"
       >
         <span>-</span>
       </div>
@@ -220,27 +218,34 @@ export default {
           };
         });
       deviceFactor_gdy.sort((a, b) => a.value1 - b.value1);
-      let An = (Number(num1) + Number(num2) + Number(num3)) / 3;
-      let min = [...deviceFactor_gdy]
-        .reverse()
-        .find((item) => An > item.value2);
-      let max = deviceFactor_gdy.find((item) => An < item.value2);
-      if (!min || !max) {
-        return;
-      }
-      let A1 = +min.value2;
-      let B2 = +max.value1;
-      let B1 = +min.value1;
-      let A2 = +max.value2;
-      let Bn = ((An - A1) * (B2 - B1)) / (A2 - A1) + B1;
+      const fn = (data) => {
+        let An = Number(data);
+        let min = [...deviceFactor_gdy]
+          .reverse()
+          .find((item) => An > item.value2);
+        let max = deviceFactor_gdy.find((item) => An < item.value2);
+        if (!min || !max) {
+          return;
+        }
+        let A1 = +min.value2;
+        let B2 = +max.value1;
+        let B1 = +min.value1;
+        let A2 = +max.value2;
+        let Bn = ((An - A1) * (B2 - B1)) / (A2 - A1) + B1;
+        return Bn;
+      };
+      let a1 = fn(num1);
+      let a2 = fn(num2);
+      let a3 = fn(num3);
+      let average = (a1 + a2 + a3) / 3;
       this.data.valueData.point[index].rows[4] = this.IntegerAdd2(
-        Bn.toFixed46(2)
+        average.toFixed46(2)
       );
       this.data.valueData.point[index].rows[5] = this.IntegerAdd2(
         (
           ((this.data.valueData.point[index].rows[4] - num0) / num0) *
           100
-        ).toFixed46(1)
+        ).toFixed46(2)
       );
     },
     reduce(index) {

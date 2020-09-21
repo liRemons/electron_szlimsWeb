@@ -539,6 +539,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.data)
     queryByPurpose("实验室").then((res) => {
       if (res.success) {
         this.devices = res.data;
