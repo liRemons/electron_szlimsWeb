@@ -160,7 +160,7 @@
 					</td>
 					<td class="___relative tc">
 						<myInput style="text-align: center" v-model="item.temperature" @change.native></myInput>
-						<div class="___absolute toolBar" style="left: 417px;top:0; width: 62px;">
+						<div class="___absolute toolBar" v-if="false" style="left: 417px;top:0; width: 62px;">
 							<div title="往指定行后面增加一行" class="___absolute tc" @click="addRow(index,1)">+</div>
 							<div
 											title="删除当前行"

@@ -186,7 +186,7 @@ export default {
       }
     },
     checkSelect(item,index) {
-      if (this.Obj && this.transmitText) {
+      if (this.Obj=='showName' && this.transmitText) {
         let arr = this.transmitText.split(",");
         if (arr.length && arr.includes(item[this.Obj])) {
           this.statr(index)
@@ -194,6 +194,7 @@ export default {
           return true;
         }
       }
+
       if (this.Obj) {
         if (item[this.Obj] === this.transmitText) {
           return true;

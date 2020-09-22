@@ -14,7 +14,7 @@
         <td>
           <selectModel
             @returnVal="getTestProjectArr"
-            v-if="target === '0'"
+            v-if="target ==0"
             :single="false"
             :rows="false"
             :special="index"

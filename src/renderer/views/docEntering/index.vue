@@ -1327,7 +1327,12 @@ export default {
           }
         });
       }
-      // console.log("送审上传的模板数据", valueDatas);
+      valueDatas.forEach((item) => {
+        item.testDeviceCheckBox.length &&
+          Object.prototype.toString.call(item.testDeviceCheckBox[0]) ===
+            "[object Object]" &&
+          (item.testDeviceCheckBox = item.testDeviceCheckBox.map((a) => a.id));
+      });
       // console.log("序列化后", JSON.myParse(JSON.stringify(valueDatas)));
       updateSampleData(
         JSON.stringify(valueDatas),
@@ -1666,7 +1671,7 @@ export default {
           (sysSampleTotalArea =
             valueDatas[0].point[0].point[0].parallelWindArea);
       }
-      console.log(valueDatas)
+      console.log(valueDatas);
       let taskDataStateId = window.uuid();
       valueDatas.forEach((item) => {
         item.sysSampleTotalArea = sysSampleTotalArea;

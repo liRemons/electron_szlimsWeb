@@ -34,7 +34,7 @@
 					</div>
 					<span>℃培养</span>
 					<div style="width:60px;display: inline-block;vertical-align:middle;">
-						<div v-if="target == 1" style="line-height:32px;">
+						<!-- <div v-if="target == 1" style="line-height:32px;">
 							<selectModel @returnVal="returnVal"
 													 :Judge="true"
 													 :special="1"
@@ -49,8 +49,8 @@
 							</selectModel>
 							<myInput style="text-align: center" v-else v-model="data.valueData.sysDilutionHour"
 											 @change.native="(el) => {noShowInput(el,1)}"></myInput>
-						</div>
-						<div v-else>{{data.valueData.sysDilutionHour}}</div>
+						</div> -->
+						<div >{{data.valueData.sysDilutionHour}}</div>
 					</div>
 					h后各稀释度平皿计数（CFU）
 				</td>
@@ -101,7 +101,7 @@
 <script>
   import {queryByPurpose} from "@/api/laboratory";
   import projectHead from "./project_head";
-
+import { mapState } from "vuex";
   export default {
     name: "project_wsw_jl_sjxs50cm2",
     props: [
@@ -140,7 +140,22 @@
     components: {
       projectHead
     },
-    watch: {},
+    computed: {
+    ...mapState({
+      cultureTime: (state) => state.laboratory.cultureTime,
+    }),
+  },
+  watch: {
+    cultureTime() {
+      this.showInput2 = true;
+      if (this.cultureTime <= 45) {
+        this.data.valueData.sysDilutionHour = Math.ceil(this.cultureTime) + "h";
+      } else {
+        this.data.valueData.sysDilutionHour =
+          Math.ceil(this.cultureTime / 24) + "d";
+      }
+    },
+  },
     methods: {
       headShow() {
         if (this.pageNumber > 0) {

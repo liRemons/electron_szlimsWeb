@@ -735,8 +735,9 @@ export default {
 
     querySearchAsync(queryString, cb, title) {
       let arr = [];
+      
       this.curveArr.map((item) => {
-        if (item.materialCurveName.includes(title)) {
+        if (item.materialCurveName&&item.materialCurveName.includes(title)) {
           arr = item.curves;
           // this.curveName=item.materialName
         }
@@ -1120,8 +1121,7 @@ export default {
             }
           });
           // 如果暂存的数据曲线不为空
-          this.labtemplate[0] &&
-            this.labtemplate[0].value[0].curveArr &&
+          this.labtemplate[0].value[0].curveArr &&
             this.storeAgeCurve(res.datas);
         } else {
           this.$notify({
@@ -1135,7 +1135,8 @@ export default {
     storeAgeCurve(data) {
       // 甲苯的曲线
       let curve, otherCurve;
-      if (!this.testProject.modelName.includes("TVOC")) {
+      let arr = data.map((item) => item.curves).flat();
+      if (!this.testProject.modelName.includes("tvoc")) {
         curve = this.labtemplate[0].value[0].curveArr;
       } else {
         curve = this.labtemplate[0].value[0].curveArr.filter(
@@ -1173,7 +1174,7 @@ export default {
       // 其他曲线
 
       //为甲苯曲线赋值 ----SATRT
-      let arr = data.map((item) => item.curves).flat();
+
       curve && this.changeCurve(curve[0], "storeage");
       let curveArr = arr.filter((item) => item.id == curve[0].curveId);
       curveArr.length && (this.nowSel = curveArr[0].curveNum);
@@ -1361,9 +1362,10 @@ export default {
                 item.item && item.item.sysSampleId;
               if (_that.$store.getters.analysisData) {
                 let arr = _that.$store.getters.analysisData.filter(
-                  (item) => item.sampleNum.indexOf("KB") !== -1
+                  // (item) => item.sampleNum.indexOf("KB") !== -1
+                  (item) => item.sampleNum
                 );
-
+                console.log(arr,'arr')
                 arr.forEach((item) => {
                   if (modelResult.valueData.testResults) {
                     if (item.testResults) {
@@ -1527,10 +1529,9 @@ export default {
       if (this.target == 1) {
         this.allFeng = this.labtemplate[0].value[0].sysBlankTotalArea;
         this.allFengGoal = this.labtemplate[0].value[0].sysBlankTargetTotalArea;
-        this.changeAllFeng(this.allFeng);
-        this.changeAllFengGoal(this.allFengGoal);
+        this.allFeng && this.changeAllFeng(this.allFeng);
+        this.allFengGoal && this.changeAllFengGoal(this.allFengGoal);
       }
-
       this.target == 1 && this.testProjectTitle == "甲苯"
         ? (this.AllFengFlag.flag = true)
         : "";

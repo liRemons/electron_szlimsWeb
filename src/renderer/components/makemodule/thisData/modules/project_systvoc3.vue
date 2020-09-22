@@ -192,7 +192,9 @@ export default {
   },
   watch: {
     watchCalculate() {
-      this.concentration();
+      this.$nextTick(() => {
+        this.concentration();
+      });
     },
   },
   props: [
@@ -325,6 +327,7 @@ export default {
         return item.sysReport;
       }
     },
+    // 计算
     concentration() {
       this.data.valueData.point.forEach((item) => {
         // 标准体积
@@ -341,23 +344,21 @@ export default {
           ).toFixed46(5);
         }
       });
-      this.$nextTick(() => {
-        let sysConcentration = this.data.valueData.point
-          .map((item) => {
-            if (this.showXieGan3(item) && item) {
-              return Number(item.sysConcentration).toFixed46(5);
-            } else {
-              return 0;
-            }
-          })
-          .filter((item) => item > 0);
-        this.data.valueData.point.forEach((item) => {
-          if (!this.showXieGan3(item)) {
-            item.sysConcentration = this.$utils
-              .arrSUM(sysConcentration)
-              .toFixed46(5);
+      let sysConcentration = this.data.valueData.point
+        .map((item) => {
+          if (this.showXieGan3(item) && item) {
+            return Number(item.sysConcentration).toFixed46(5);
+          } else {
+            return 0;
           }
-        });
+        })
+        .filter((item) => item > 0);
+      this.data.valueData.point.forEach((item) => {
+        if (!this.showXieGan3(item)) {
+          item.sysConcentration = this.$utils
+            .arrSUM(sysConcentration)
+            .toFixed46(5);
+        }
       });
     },
   },
@@ -373,9 +374,9 @@ export default {
       );
       this.data.valueData.allPoint[rowIndex] = item;
     });
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.concentration();
-    })
+    });
   },
 };
 </script>

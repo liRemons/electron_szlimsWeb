@@ -87,7 +87,6 @@
                   <div class="inputBlock ___absolute Full" style="width: 80px;">
                     <divModel
                       v-model="data.valueData.exposureParameterkV1"
-											:computers="isInteger(data.valueData.exposureParameterkV1,'exposureParameterkV1')"
                       style="width:50px;text-align: center; border-bottom: 1px solid black; height: 30px;"
                       class="Full warp2 rowsInput2 hide focusBg"
                     ></divModel>
@@ -97,7 +96,6 @@
                   <div class="___absolute Full" style="width: 100px;left:80px;">
                     <divModel
                       v-model="data.valueData.exposureParametermA"
-                      :computers="isInteger(data.valueData.exposureParametermA,'exposureParametermA')"
                       style="width:60px;text-align: center; border-bottom: 1px solid black; height: 30px;"
                       class="Full warp2 rowsInput2 hide focusBg"
                     ></divModel>
@@ -123,7 +121,6 @@
                       style="width: 50px; border-bottom: 1px solid black; height: 30px;"
                       class="___absolute"
                       v-model="data.valueData.exposureParameterms"
-											:computers="isInteger(data.valueData.exposureParameterms,'exposureParameterms')"
                       v-if="data.valueData.unit2 != '/'"
                     ></myInput>
                     <div

@@ -119,7 +119,7 @@
             ></myInput>
             <div
               class="___absolute toolBar"
-              v-if="target === '0'"
+              v-if="false"
               style="left: 630px; top: 0; width: 62px;"
             >
               <div
@@ -208,7 +208,7 @@
             <div
             v-if="target ==0"
               class="___absolute toolBar"
-              style="left: 240px; top: 0; width: 180px;"
+              style="left: 200px; top: 0; width: 180px;"
             >
               <div
                 title="往指定行后面增加一行"

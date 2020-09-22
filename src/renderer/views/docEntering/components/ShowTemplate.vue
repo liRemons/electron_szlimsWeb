@@ -723,9 +723,11 @@ export default {
             "el-icon-arrow-down",
             'emptyBtn'
           ];
-          displayNoneArr.forEach((item) => {
+        setTimeout(() => {
+            displayNoneArr.forEach((item) => {
             dispalyNone(item);
           });
+        }, 500);
 
           this.readFile(JSON.parse(getToken()), "noPass");
           this.readFileEvent().then((reson) => {
@@ -1866,7 +1868,6 @@ export default {
           let arr = this.deepCopy(this.importData);
           arr.taskId = this.task.id;
           arr.tasks.tasks[0].data = this.saveData;
-
           this.whrite(arr, JSON.parse(getToken()));
           this.writeFileEvent().then((res) => {
             bus.$emit("showSave", true);

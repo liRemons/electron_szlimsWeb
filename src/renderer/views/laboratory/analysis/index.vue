@@ -338,7 +338,6 @@ export default {
         });
         return;
       }
-      console.log(this.template);
       this.sampleNumId = [];
       this.template.forEach((item) => {
         item.value.forEach((a) => {
@@ -361,6 +360,7 @@ export default {
         }
       }
       let flag = true;
+
       let taskDataStateIdArr = this.template.map(
         (item) => item.taskDataStateId
       );
@@ -368,8 +368,12 @@ export default {
         ? taskDataStateIdArr[0]
         : "";
       taskDataStateIdArr.forEach((item) => {
-        item !== taskDataStateId && item && (flag = false);
+        item !== taskDataStateId && (flag = false);
       });
+      if (taskDataStateIdArr.length > 1) {
+        taskDataStateIdArr.filter((item) => item).length == 0 && (flag = true);
+      }
+
       if (!flag && taskDataStateIdArr.length >= 1) {
         this.$message.warning("请选择上次一起分析的项目");
         return;
@@ -537,7 +541,9 @@ export default {
           let curveArr = res.data[0].curveArr;
           res.data.forEach((item) => {
             item.labSampleNum ? (item.sampleNum = item.labSampleNum) : "";
-            item.testResults= JSON.parse(this.template[0].value[0].sysBlankReportArr)
+            item.testResults = JSON.parse(
+              this.template[0].value[0].sysBlankReportArr
+            );
             try {
               item.myBlankSample = JSON.parse(item.blankSampleArr);
             } catch (e) {
@@ -568,7 +574,6 @@ export default {
             store.dispatch("ChangeSaveAnalysisData", res.data);
             this.$router.push(`/laboratory/doc-entering/1`);
           } else {
-           
             store.dispatch("TemplateAction", "update");
             store.dispatch("UpdateLabTemplate", this.template);
             store.dispatch("ChangeSaveAnalysisData", res.data);
