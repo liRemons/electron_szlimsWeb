@@ -585,8 +585,7 @@ export default {
         if (this.testProjectName == "project_systvoc") {
           let result = true;
           this.template[0].value.forEach((item) => {
-            item.sysBlankTotalArea = "";
-            item.sysBlankTargetTotalArea = "";
+            
             if (item.isParallel) {
               if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
                 result = false;
@@ -598,6 +597,16 @@ export default {
               }
             }
           });
+          this.template[0].value.forEach(item=>{
+            item.sysBlankTotalArea = "";
+            item.sysTestingTime=''
+            item.sysTestingEndTime=''
+            item.sysTemperature = "";
+            item.sysHumidity = "";
+            item.sysSampleState = "";
+            item.sysSampleStateDetail = "";
+            item.sysBlankTargetTotalArea = "";
+          })
           if (result) {
             store.dispatch("TemplateAction", "update");
             store.dispatch("UpdateLabTemplate", this.template);

@@ -54,7 +54,7 @@
             v-model="item.volume"
             :edit="false"
           ></divModel>
-          <span v-else></span>
+          <span v-else>{{item.volume}}</span>
         </td>
 
         <td>
@@ -64,7 +64,7 @@
             v-model="item.temperature"
             :edit="false"
           ></divModel>
-          <span v-else></span>
+          <span v-else>{{item.temperature}}</span>
         </td>
 
         <td>
@@ -74,7 +74,7 @@
             v-model="item.atmosphericPressure"
             :edit="false"
           ></divModel>
-          <span v-else></span>
+          <span v-else>{{item.atmosphericPressure}}</span>
         </td>
         <td>
           <!--标准体积-->
@@ -83,7 +83,7 @@
             v-model="item.standardVo"
             :edit="false"
           ></divModel>
-          <span v-else></span>
+          <span v-else>{{item.standardVo}}</span>
         </td>
 
         <td v-if="showXieGan(item) == 0">
@@ -101,7 +101,7 @@
           <divModel v-model="item.peakArea" :edit="false"></divModel>
         </td>
         <td v-else>
-          <div></div>
+          <div>/</div>
         </td>
 
         <td v-if="showXieGan(item) == 0">
@@ -119,7 +119,7 @@
           <divModel v-model="item.suckConcentration" :edit="false"></divModel>
         </td>
         <td v-else>
-          <div></div>
+          <div>/</div>
         </td>
 
         <td v-if="showXieGan(item) == 0">
@@ -137,7 +137,7 @@
           <divModel v-model="item.blankConcentration" :edit="false"></divModel>
         </td>
         <td v-else>
-          <div></div>
+          <div>/</div>
         </td>
 
         <td>

@@ -45,7 +45,6 @@ export default {
   top: 150px;
   z-index: 100;
   margin-left: -200px;
-
   border-radius: 5px;
   .close {
     position: absolute;

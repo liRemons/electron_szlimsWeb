@@ -52,7 +52,7 @@
 						</div> -->
 						<div >{{data.valueData.sysDilutionHour}}</div>
 					</div>
-					h后各稀释度平皿计数（CFU）
+					后各稀释度平皿计数（CFU）
 				</td>
 				<td rowspan="2">
 					报告值

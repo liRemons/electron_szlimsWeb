@@ -735,10 +735,10 @@ export default {
 
     querySearchAsync(queryString, cb, title) {
       let arr = [];
-      
-      this.curveArr.map((item) => {
-        if (item.materialCurveName&&item.materialCurveName.includes(title)) {
-          arr = item.curves;
+      this.curveArr.forEach((item) => {
+        
+        if (item.materialCurveName&&title.includes(item.materialCurveName)) {
+          arr.push(...item.curves);
           // this.curveName=item.materialName
         }
       });
@@ -751,7 +751,6 @@ export default {
 
     createStateFilter(queryString) {
       return (state) => {
-        console.log(state, "state");
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
         );
