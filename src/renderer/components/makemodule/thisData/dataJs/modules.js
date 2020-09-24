@@ -1642,6 +1642,7 @@ export default [
     height: {
       //模块高度
       _normal: {
+        confirm:true,
         carried: true,
         fixed: 64,
         value: function(obj) {
@@ -1673,6 +1674,7 @@ export default [
       //模块高度
       _normal: {
         carried: true,
+        confirm:true,
         fixed: 64, //固定
         value: function(obj) {
           return 64 + 32 * obj.point.length;

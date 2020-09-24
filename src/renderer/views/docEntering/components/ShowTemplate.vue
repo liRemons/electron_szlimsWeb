@@ -182,7 +182,7 @@
           </div>
 
           <!-- 受检单位签名图片容器 -->
-          <div class="pageFoot_4">{{ todayDate }}</div>
+          <div class="pageFoot_4">{{ time }}</div>
         </div>
 
         <div class="filler _noprint"></div>
@@ -233,6 +233,7 @@ import { currentTime } from "@/utils/dateTime.js";
 export default {
   data() {
     return {
+      time:"",
       heads,
       pageBox: false,
       staffId: "",
@@ -304,6 +305,7 @@ export default {
     target: String,
     importData: Object,
     unitUrl: Array,
+    unitTime:String
   },
   methods: {
     classification(data) {
@@ -1028,13 +1030,13 @@ export default {
         };
         this.jsonString.push(json);
       });
-
       if (!this.jsonString[0].data.valueData.hasOwnProperty("todayDate")) {
         this.jsonString[0].data.valueData.todayDate = _dateFormat(
           "now",
           "Y年M月D日  h时m分"
         );
       }
+      
       this.jsonString.forEach((item) => {
         if (
           !item.data.valueData.title &&
@@ -1377,7 +1379,7 @@ export default {
               template.valueData[localArr[index]] = task[item];
             }
           });
-          template.valueData.detectionTime = _dateFormat("now", "Y-M-D  h:m:s");
+          template.valueData.detectionTime =this.taskData.startTime;
           try {
             template.valueData.assessArr = JSON.myParse(task["assessArr"])
               .map((item) => item.evaluateName)
@@ -1728,6 +1730,11 @@ export default {
     },
   },
   mounted() {
+    if(this.unitTime){
+       this.time=this.$utils.dateFormat(new Date(this.unitTime).getTime(),'yyyy年MM月dd日 HH时mm分ss秒')
+     this.time = this.time.substring(0, this.time.length - 3);
+    }
+   
     if (this.$route.params.target == 3) {
       this.btnFlag = false;
     } else {

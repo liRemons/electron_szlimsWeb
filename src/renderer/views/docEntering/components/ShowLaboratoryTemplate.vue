@@ -1364,7 +1364,6 @@ export default {
                   // (item) => item.sampleNum.indexOf("KB") !== -1
                   (item) => item.sampleNum
                 );
-                console.log(arr,'arr')
                 arr.forEach((item) => {
                   if (modelResult.valueData.testResults) {
                     if (item.testResults) {

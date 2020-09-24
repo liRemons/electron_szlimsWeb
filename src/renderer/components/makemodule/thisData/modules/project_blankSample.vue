@@ -48,7 +48,7 @@
           <div v-else>
             <querySelect
               v-model="item.sampleNum"
-              v-if="target === '0'"
+              v-if="target ==0"
               :num="index"
               :list="beUseBlank"
               :defaultValue="item.sampleNum"

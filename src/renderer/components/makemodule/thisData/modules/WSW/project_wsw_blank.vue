@@ -4,14 +4,13 @@
       <td v-if="item.noEdit">
         <div v-if="item.noEdit">
           <selectModel
-            v-if="index == 0"
             style="line-height: 32px"
             @returnVal="(a) => returnVal2(a, index)"
             :Judge="true"
             :special="1"
             :transmitText="item.sampleNum"
             :multi-select="false"
-            :receive="'id'"
+            :receive="'sampleNum'"
             :single="true"
             :rows="false"
             :list="['实验室空白对照', '阳性对照', '阴性对照']"
@@ -20,7 +19,7 @@
           </selectModel>
         </div>
 
-        <myInput v-else v-model="item.sampleNum"></myInput>
+        <!-- <myInput v-else v-model="item.sampleNum"></myInput> -->
       </td>
       <td class="___relative" style="line-height: 32px" v-if="item.noEdit">
         <selectModel
@@ -98,6 +97,8 @@ export default {
     returnVal2(a, b) {
       if (a == "自定义") {
         this.data.valueData.testResults[b].showInput2 = false;
+      } else {
+        this.data.valueData.testResults[b].sampleNum = a;
       }
     },
   },
@@ -131,6 +132,7 @@ export default {
     } catch (e) {
       blanks = [];
     }
+    console.log(this.data.valueData.testResults, "d");
     this.data.valueData.testResults.forEach((item) => {
       if (item.showInput == undefined) {
         item.showInput = true;

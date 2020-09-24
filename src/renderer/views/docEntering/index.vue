@@ -272,6 +272,7 @@
             :taskData="taskDatas[key]"
             android="false"
             :unitUrl="unitUrl"
+            :unitTime="unitTime"
           />
         </div>
       </div>
@@ -542,6 +543,7 @@ export default {
       deleteDialog: false,
       staffName: "",
       unitInvalidDuration: 0.5,
+      unitTime:""
     };
   },
 
@@ -715,6 +717,7 @@ export default {
             id: resItem.tasks[0].id,
             unitUrl: resItem.tasks[0].unitUrl,
           });
+         this.unitTime= resItem.tasks[0].unitTime
           this.tasks.push(resItem.tasks[0]);
           this.taskDatas.push({
             id: "",

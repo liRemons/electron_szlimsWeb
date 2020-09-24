@@ -54,7 +54,7 @@
             v-model="item.volume"
             :edit="false"
           ></divModel>
-          <span v-else>{{item.volume}}</span>
+          <span v-else>{{ item.volume }}</span>
         </td>
 
         <td>
@@ -64,7 +64,7 @@
             v-model="item.temperature"
             :edit="false"
           ></divModel>
-          <span v-else>{{item.temperature}}</span>
+          <span v-else>{{ item.temperature }}</span>
         </td>
 
         <td>
@@ -74,7 +74,7 @@
             v-model="item.atmosphericPressure"
             :edit="false"
           ></divModel>
-          <span v-else>{{item.atmosphericPressure}}</span>
+          <span v-else>{{ item.atmosphericPressure }}</span>
         </td>
         <td>
           <!--标准体积-->
@@ -83,7 +83,7 @@
             v-model="item.standardVo"
             :edit="false"
           ></divModel>
-          <span v-else>{{item.standardVo}}</span>
+          <span v-else>{{ item.standardVo }}</span>
         </td>
 
         <td v-if="showXieGan(item) == 0">
@@ -196,6 +196,11 @@ export default {
         this.concentration();
       });
     },
+    'data.valueData.point':function(){
+       this.$nextTick(() => {
+        this.concentration();
+      });
+    }
   },
   props: [
     "ipdTemplate",
@@ -342,6 +347,7 @@ export default {
             (item.suckConcentration - item.blankConcentration) /
             item.standardVo
           ).toFixed46(5);
+          Number(item.sysConcentration) < 0 && (item.sysConcentration = 0);
         }
       });
       let sysConcentration = this.data.valueData.point
@@ -364,6 +370,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.data, "data");
     this.data.valueData.sampleNum = this.mySample;
     this.data.valueData.pageNumber = this.pageNumber;
     this.data.valueData.sysSampleId = this.data.valueData.allPoint[0].sysSampleId;

@@ -374,10 +374,10 @@ export default {
         taskDataStateIdArr.filter((item) => item).length == 0 && (flag = true);
       }
 
-      if (!flag && taskDataStateIdArr.length >= 1) {
-        this.$message.warning("请选择上次一起分析的项目");
-        return;
-      }
+      // if (!flag && taskDataStateIdArr.length >= 1) {
+      //   this.$message.warning("请选择上次一起分析的项目");
+      //   return;
+      // }
       // sessionStorage.setItem("inspectionTime", this.template[0].inspectionTime);
       this.testProjectName = this.template[0].modelName;
       this.testProjectChieseName = this.template[0].name;

@@ -13,7 +13,8 @@
         <td>样品编号</td>
         <td :colspan="projectName == '委托送样' && 2">样品名称</td>
         <td :colspan="projectName == '委托送样' && 2">分析项</td>
-        <td>分析结果</td>
+        <td>观察结果</td>
+        <td>{{ projectName == "委托送样" ? "报告结果" : "分析结果" }}</td>
         <td colspan="2" v-if="projectName !== '委托送样'">报告结果</td>
         <td>单位</td>
       </tr>
@@ -30,6 +31,12 @@
         </td>
         <td :colspan="projectName == '委托送样' && 2">
           {{ item.sysAnalysisItem }}
+        </td>
+        <td>
+          <myInput
+            style="text-align: center"
+            v-model="item.sysObservationResult"
+          ></myInput>
         </td>
         <td style="line-height: 32px">
           <selectModel
@@ -103,7 +110,7 @@
           {{ item.detectionLimitPieces }}
         </td>
       </tr>
-      <td colspan="7" style="line-height: 32px">
+      <td colspan="8" style="line-height: 32px">
         <div class="___relative">
           <div class="___absolute" style="width: 50px">备注：</div>
           <myInput
