@@ -63,9 +63,7 @@
       "icon": "build/icons"
     }
   },
-  "config": {
-    "arch": "ia32"
-  },
+  "config": {},
   "dependencies": {
     "axios": "0.19.2",
     "compressing": "^1.5.1",
