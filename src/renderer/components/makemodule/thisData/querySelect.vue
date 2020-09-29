@@ -2,7 +2,7 @@
   <div style="width:100%">
     <input
       class="box"
-      style="width:100%;height:100%"
+      style="width:100%;height:32px;line-height:32px"
       ref="mySearchBox"
       :defaultVal="defaultValue"
       @input="toInput"

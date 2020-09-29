@@ -3,7 +3,7 @@
   <div>
     <div :class="{ _normalHeight_: true }" class="___relative">
       <div :class="{ eventCover: !ableInput }"></div>
-      <table class="myTable" style="margin-bottom: 10px;">
+      <table class="myTable" style="margin-bottom: 10px">
         <tr class="tl">
           <td colspan="13">
             <span class="ml10">{{
@@ -17,7 +17,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="13" style="text-align: left; padding-left: 10px;">
+          <td colspan="13" style="text-align: left; padding-left: 10px">
             <span>
               验收：±1mm内@s＞2mm、±50%内@2mm≥s≥1mm、±0.5mm内@s＜1mm；
               <br />状态：±1mm内@s＞2mm；
@@ -33,14 +33,14 @@
         <tr class="tl">
           <td
             colspan="13"
-            style="padding-left: 10px; line-height: 20px; text-indent: 2em;"
+            style="padding-left: 10px; line-height: 20px; text-indent: 2em"
           >
-            <span style="white-space: normal;"
+            <span style="white-space: normal"
               >分别选择s＞2mm、2mm≥s≥1mm、和s＜1mm三种层厚，并选择合适的扫描条件扫描Catphan500体模的层厚模块中心，读取图像，调节至最小窗宽，测量最高窗位及背景CT值，调节窗位至半高宽（最高窗位与背景CT值的平均值），分别测量上、下、左、右四条标记物的影像长度，测量层厚=标记物影像长度平均值×0.42，偏差=（测量层厚-标称层厚）/标称层厚×100%。</span
             >
           </td>
         </tr>
-        <tr style="white-space: normal;">
+        <tr style="white-space: normal">
           <td rowspan="2" colspan="2">层厚范围</td>
           <td rowspan="2">标称层厚/mm</td>
           <td rowspan="2">最小窗宽</td>
@@ -58,7 +58,7 @@
           <td>右</td>
         </tr>
         <tr
-          style="white-space: normal;"
+          style="white-space: normal"
           v-for="(item, index) in data.valueData.point"
           :key="index"
         >
@@ -93,7 +93,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               :style="{ color: Number(item.B) > 1 ? 'red' : '#000' }"
               @change.native="changeNum(item, index, 'B')"
               v-model="item.B"
@@ -102,7 +102,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(item, index, 'E')"
               v-model="item.C"
               :defaultValue="item.C"
@@ -114,7 +114,7 @@
                 color: Number(item.D) <= Number(item.C) ? 'red' : '#000',
                 textAlign: 'center',
               }"
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(item, index, 'E')"
               v-model="item.D"
               :defaultValue="item.D"
@@ -123,7 +123,7 @@
           <td>{{ item.E }}</td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(item, index, 'J')"
               v-model="item.F"
               :defaultValue="item.F"
@@ -131,7 +131,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(item, index, 'J')"
               v-model="item.G"
               :defaultValue="item.G"
@@ -139,7 +139,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(item, index, 'J')"
               v-model="item.H"
               :defaultValue="item.H"
@@ -147,14 +147,33 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(item, index, 'J')"
               v-model="item.I"
               :defaultValue="item.I"
             ></myInput>
           </td>
           <td>{{ item.J }}</td>
-          <td>{{ item.K }}</td>
+          <td class="___relative">
+            {{ item.K }}
+<!-- 
+            <div class="___absolute leftBtn" style="top: 0; right: -100px">
+              <div
+                class="rowOption"
+                style="display: inline-block"
+                @click="addRow(index)"
+              >
+                +
+              </div>
+              <div
+                class="rowOption"
+                style="display: inline-block"
+                @dblclick="delRow(index)"
+              >
+                -
+              </div>
+            </div> -->
+          </td>
         </tr>
         <tr>
           <td colspan="13">
@@ -164,7 +183,7 @@
         <tr class="tl">
           <td colspan="13">
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="data.valueData.remark"
               :defaultValue="data.valueData.remark"
             ></myInput>
@@ -180,8 +199,8 @@ export default {
   data() {
     return {
       showInput: false,
-      list: ["s<1", "2mm≥s≥1m", "s＞2mm", "/"],
-      copyList: ["s<1", "2mm≥s≥1m", "s＞2mm", "/"],
+      list: ["s<1mm", "2mm≥s≥1mm", "s＞2mm", "/"],
+      copyList: ["s<1mm", "2mm≥s≥1mm", "s＞2mm", "/"],
     };
   },
   watch: {},
@@ -202,6 +221,48 @@ export default {
   ],
   filters: {},
   methods: {
+    addRow(index) {
+      if (this.data.valueData.point.length >= 3) {
+        this.$message.warning("不能再添加了");
+        return;
+      }
+      let scopeArr = this.data.valueData.point.map((item) => item.scope);
+      this.$nextTick(() => {
+        // let scope = "";
+        // if (!scopeArr.includes("s<1mm")) {
+        //   scope = "s<1mm";
+        // }
+        // if (!scopeArr.includes("2mm≥s≥1mm")) {
+        //   scope = "2mm≥s≥1mm";
+        // }
+        // if (!scopeArr.includes("s＞2mm")) {
+        //   scope = "s＞2mm";
+        // }
+        let obj = {
+          scope: '/',
+          A: "",
+          AColor: false,
+          B: "",
+          C: "",
+          D: "",
+          E: "",
+          F: "",
+          G: "",
+          H: "",
+          I: "",
+          J: "",
+          K: "",
+        };
+        this.data.valueData.point.splice(index + 1, 0, obj);
+      });
+    },
+    delRow(index) {
+      if (this.data.valueData.point.length > 1) {
+        this.data.valueData.point.splice(index, 1);
+      } else {
+        this.$message.warning("不能再删除了");
+      }
+    },
     returnVal(val, name, modelIndex, index) {
       setTimeout(() => {
         this.initModel();
@@ -299,24 +360,29 @@ export default {
               4) *
             0.42;
           item.J = item.J.toFixed46(2);
-          switch (index) {
-            case 0:
-              item.K = (Number(item.J) - Number(item.A)).toFixed46(2);
-              break;
-            case 1:
-              item.K =
-                (
-                  ((Number(item.J) - Number(item.A)) / Number(item.A)) *
-                  100
-                ).toFixed46(1) + "%";
-              break;
-            case 2:
-              item.K = (Number(item.J) - Number(item.A)).toFixed46(1);
-              break;
+          item.K =
+            (
+              ((Number(item.J) - Number(item.A)) / Number(item.A)) *
+              100
+            ).toFixed46(2) + "%";
+          // switch (index) {
+          //   case 0:
+          //     item.K = (Number(item.J) - Number(item.A)).toFixed46(2);
+          //     break;
+          //   case 1:
+          //     item.K =
+          //       (
+          //         ((Number(item.J) - Number(item.A)) / Number(item.A)) *
+          //         100
+          //       ).toFixed46(1) + "%";
+          //     break;
+          //   case 2:
+          //     item.K = (Number(item.J) - Number(item.A)).toFixed46(1);
+          //     break;
 
-            default:
-              break;
-          }
+          //   default:
+          //     break;
+          // }
           break;
 
         case "K":

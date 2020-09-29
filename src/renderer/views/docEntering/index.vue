@@ -132,6 +132,7 @@
         @click="entryYuanShi"
         size="mini"
         type="primary"
+        :disabled="$route.query.solutionPass !== 0"
         v-else-if="target == 5 && showSave"
         >保存</el-button
       >
@@ -1172,11 +1173,11 @@ export default {
             a.data.valueData.remark = "";
             let remark = [];
             let point = a.data.valueData.point;
-            let s1 = point.filter((b) => b.scope == "s<1").length;
-            let s2 = point.filter((b) => b.scope == "2mm≥s≥1m").length;
+            let s1 = point.filter((b) => b.scope == "s<1mm").length;
+            let s2 = point.filter((b) => b.scope == "2mm≥s≥1mm").length;
             let s3 = point.filter((b) => b.scope == "s＞2mm").length;
-            s1 == 0 && remark.push(" 无 s<1 的层厚范围 ");
-            s2 == 0 && remark.push(" 无 2mm≥s≥1m 的层厚范围 ");
+            s1 == 0 && remark.push(" 无 s<1mm 的层厚范围 ");
+            s2 == 0 && remark.push(" 无 2mm≥s≥1mm 的层厚范围 ");
             s3 == 0 && remark.push(" 无 s＞2mm 的层厚范围 ");
             a.data.valueData.remark = remark.join(",");
           }
@@ -1674,7 +1675,6 @@ export default {
           (sysSampleTotalArea =
             valueDatas[0].point[0].point[0].parallelWindArea);
       }
-      console.log(valueDatas);
       let taskDataStateId = window.uuid();
       valueDatas.forEach((item) => {
         item.sysSampleTotalArea = sysSampleTotalArea;

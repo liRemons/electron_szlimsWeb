@@ -218,14 +218,22 @@ export default {
           };
         });
       deviceFactor_gdy.sort((a, b) => a.value1 - b.value1);
+      let min, max;
       const fn = (data) => {
         let An = Number(data);
-        let min = [...deviceFactor_gdy]
-          .reverse()
-          .find((item) => An > item.value2);
-        let max = deviceFactor_gdy.find((item) => An < item.value2);
-        if (!min || !max) {
-          return;
+        min = [...deviceFactor_gdy].reverse().find((item) => An > item.value2);
+
+        max = deviceFactor_gdy.find((item) => An < item.value2);
+        if (!min) {
+          // 如果输入的值比最小值还小
+          let mini = deviceFactor_gdy[0];
+          return (+mini.value1 / +mini.value2) * +data;
+        }
+
+        if (!max) {
+          // 如果输入的值比最大值还大
+          let big = deviceFactor_gdy[deviceFactor_gdy.length - 1];
+          return (+big.value1 / +big.value2) * +data;
         }
         let A1 = +min.value2;
         let B2 = +max.value1;
@@ -238,6 +246,9 @@ export default {
       let a2 = fn(num2);
       let a3 = fn(num3);
       let average = (a1 + a2 + a3) / 3;
+      // if (!min || !max) {
+      //   average = (Number(num1) + Number(num2) + Number(num3)) / 3;
+      // }
       this.data.valueData.point[index].rows[4] = this.IntegerAdd2(
         average.toFixed46(2)
       );

@@ -1773,8 +1773,9 @@ body::-webkit-scrollbar-track {
   text-align: center !important;
 }
 
-.tl {
+.tl05 {
   text-align: left;
+  text-indent: .5rem;
 }
 
 .pl5 {

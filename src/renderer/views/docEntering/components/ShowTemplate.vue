@@ -723,7 +723,6 @@ export default {
             "leftBtn",
             "emptyBtn",
             "el-icon-arrow-down",
-            'emptyBtn'
           ];
         setTimeout(() => {
             displayNoneArr.forEach((item) => {
@@ -1067,7 +1066,11 @@ export default {
           item.data.valueData.isSampleName = true;
         }
       });
-      console.log(this.jsonString);
+      this.jsonString.forEach((item,index)=>{
+        if(item.to=="projcet_jcbt"&&item.data.valueData.exposureMode=='头颅摄影'){
+          this.jsonString.splice()
+        }
+      })
 
       // ————————————————————————————————————
       // this.Reset();

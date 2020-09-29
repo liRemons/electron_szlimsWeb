@@ -1,7 +1,13 @@
 <template>
   <input
     class="box"
-    style="border: none; width: 95%"
+    style="
+      border: none;
+      width: 95%;
+      height: 29px;
+      border: none;
+      text-align: center;
+    "
     ref="myBox"
     :placeholder="placeholder"
     @change="toInput"
@@ -56,10 +62,6 @@ export default {
 
 <style scoped>
 .box {
-  height: 29px;
-  width: 100%;
-  border: none;
-  text-align: center;
 }
 
 .box::-ms-clear {

@@ -1523,6 +1523,7 @@ export default {
   },
 
   mounted() {
+    console.log(111)
     this.$nextTick(() => {
       if (this.target == 1) {
         this.allFeng = this.labtemplate[0].value[0].sysBlankTotalArea;

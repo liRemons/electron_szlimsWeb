@@ -20,15 +20,15 @@
 			<td>
 				检测依据
 			</td>
-			<td>
+			<td style="height:64px !important;white-space: normal">
 				{{data.valueData.standardName}}
 			</td>
 		</tr>
 		<tr>
 			<td>
-				样品处理
+				实验过程
 			</td>
-			<td>
+			<td style="height:64px !important;white-space: normal">
 				{{data.valueData.sampleHandle}}
 			</td>
 		</tr>
@@ -37,7 +37,7 @@
 				计算公式
 			</td>
 			<td>
-				<img :src="data.valueData.formulas" alt="">
+				<img style="max-height:64px" :src="data.valueData.formulas" alt="">
 			</td>
 		</tr>
 	</table>

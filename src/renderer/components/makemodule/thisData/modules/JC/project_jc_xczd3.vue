@@ -20,40 +20,40 @@
       </div>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 100px;">
+          <td class="___relative tc" style="width: 100px">
             <span>样品编号</span>
           </td>
-          <td class="___relative tc" style="width: 210px;">
+          <td class="___relative tc" style="width: 210px">
             <span>检测地点</span>
           </td>
-          <td class="___relative tc" style="width: 60px;">
+          <td class="___relative tc" style="width: 60px">
             <span>检测点位</span>
           </td>
-          <td class="___relative tc" style="width: 70px;">
+          <td class="___relative tc" style="width: 70px">
             <span>读数1</span>
           </td>
-          <td class="___relative tc" style="width: 70px;">
+          <td class="___relative tc" style="width: 70px">
             <span>读数2</span>
           </td>
-          <td class="___relative tc" style="width: 70px;">
+          <td class="___relative tc" style="width: 70px">
             <span>读数3</span>
           </td>
-          <td class="___relative tc" style="width: 70px;">
+          <td class="___relative tc" style="width: 70px">
             <span>修正信息</span>
           </td>
-          <td class="___relative tc" style="width: 80px;">
+          <td class="___relative tc" style="width: 80px">
             <span>检测结果</span>
           </td>
-          <td class="___relative tc" style="width: 70px; line-height: 16px;">
+          <td class="___relative tc" style="width: 70px; line-height: 16px">
             <span>检测结果<br />平均值</span>
           </td>
-          <td class="___relative tc" style="width: 80px;">
+          <td class="___relative tc" style="width: 80px">
             <span>检测时间</span>
           </td>
-          <td class="___relative tc" style="width: 80px;">
+          <td class="___relative tc" style="width: 80px">
             <span>仪器编号</span>
           </td>
-          <td class="___relative tc" style="width: 120px;">
+          <td class="___relative tc" style="width: 120px">
             <span>备注</span>
           </td>
         </tr>
@@ -89,14 +89,14 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.point"
               :defaultValue="item.point"
             ></myInput>
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.reading[0]"
               :defaultValue="item.reading[0]"
               @change.native="changeNum(index)"
@@ -104,7 +104,7 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.reading[1]"
               :defaultValue="item.reading[1]"
               @change.native="changeNum(index)"
@@ -112,7 +112,7 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.reading[2]"
               :defaultValue="item.reading[2]"
               @change.native="changeNum(index)"
@@ -120,7 +120,7 @@
             <div
               class="___absolute toolBar"
               v-if="false"
-              style="left: 630px; top: 0; width: 62px;"
+              style="left: 630px; top: 0; width: 62px"
             >
               <div
                 title="往指定行后面增加一行"
@@ -132,7 +132,7 @@
               <div
                 title="删除当前行"
                 class="___absolute tc"
-                style="left: 30px;"
+                style="left: 30px"
                 @click="deleteRow(index)"
               >
                 -
@@ -174,8 +174,8 @@
           >
             <querySelect
               v-model="item.deviceNum"
-              style="width: 78px;"
-              v-if="target === '0'"
+              style="width: 78px"
+              v-if="target == 0"
               ref="querySelect"
               :num="index"
               :list="deviceData"
@@ -195,7 +195,7 @@
             :rowspan="item.heBingLength"
           >
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.remarks"
               :defaultValue="item.remarks"
               @change.native="
@@ -206,9 +206,9 @@
               "
             ></myInput>
             <div
-            v-if="target ==0"
+              v-if="target == 0"
               class="___absolute toolBar"
-              style="left: 200px; top: 0; width: 180px;"
+              style="left: 200px; top: 0; width: 180px"
             >
               <div
                 title="往指定行后面增加一行"
@@ -220,7 +220,7 @@
               <div
                 title="删除当前行"
                 class="___absolute tc"
-                style="left: 30px;"
+                style="left: 30px"
                 @click="deleteRow(index, item)"
               >
                 -
@@ -228,7 +228,7 @@
               <div
                 title="复制部分数据"
                 class="___absolute tc"
-                style="left: 60px;"
+                style="left: 60px"
                 @click="copyRow(index, 'copy')"
               >
                 c
@@ -236,7 +236,7 @@
               <div
                 title="复制全部数据"
                 class="___absolute tc"
-                style="left: 90px;"
+                style="left: 90px"
                 @click="copyRow(index, 'copyAll')"
               >
                 C
@@ -244,7 +244,7 @@
               <div
                 title="粘贴数据"
                 class="___absolute tc"
-                style="left: 120px;"
+                style="left: 120px"
                 @click="pasteRow(index)"
               >
                 p
@@ -252,7 +252,7 @@
               <div
                 title="生成重复样"
                 class="___absolute tc"
-                style="left: 150px;"
+                style="left: 150px"
                 @click="addSample(index)"
               >
                 r
@@ -300,9 +300,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <div style="text-align: right; margin-right: 50px;">
+      <div style="text-align: right; margin-right: 50px">
         <el-button
-          style="margin-top: 15px; margin-left: 470px;"
+          style="margin-top: 15px; margin-left: 470px"
           type="primary"
           @click="sureSampleNum"
           >确定</el-button

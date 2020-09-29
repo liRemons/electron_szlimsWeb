@@ -2,12 +2,14 @@
 
 <template>
   <div>
-    <div :class="{_normalHeight_:true}" class="___relative">
-      <div :class="{eventCover:!ableInput}"></div>
-      <table class="myTable" style="margin-bottom: 10px;">
+    <div :class="{ _normalHeight_: true }" class="___relative">
+      <div :class="{ eventCover: !ableInput }"></div>
+      <table class="myTable" style="margin-bottom: 10px">
         <tr class="tl">
           <td colspan="9">
-            <span class="ml10">{{data.valueData.testProjectChineseName}}</span>
+            <span class="ml10">{{
+              data.valueData.testProjectChineseName
+            }}</span>
           </td>
         </tr>
         <tr>
@@ -16,8 +18,10 @@
           </td>
         </tr>
         <tr>
-          <td colspan="9" style="text-align: left;padding-left: 10px;">
-            <span>验收：±5HU内；状态：±6HU内；稳定性：与基线值相差±2HU内。</span>
+          <td colspan="9" style="text-align: left; padding-left: 10px">
+            <span
+              >验收：±5HU内；状态：±6HU内；稳定性：与基线值相差±2HU内。</span
+            >
           </td>
         </tr>
         <tr>
@@ -26,10 +30,13 @@
           </td>
         </tr>
         <tr class="tl">
-          <td colspan="9" style="padding-left:10px;line-height: 20px;text-indent: 2em;">
-            <span
-              style="white-space: normal;"
-            >将模体置于扫描野中心，并使圆柱轴垂直于扫描层面，设置扫描条件CTDIw≤50mGy，设置薄层层厚，分别使用常规算法和高分辨力算法扫描Catphan500体模的层厚模块中心，其中高分辨力算法的FOV取尽量小（130mm左右），分别读取图像，在最小窗宽条件下调节窗位至观察者认为的细节最清晰状态，但窗位不得大于细节CT值和背景CT值之差。</span>
+          <td
+            colspan="9"
+            style="padding-left: 10px; line-height: 20px; text-indent: 2em"
+          >
+            <span style="white-space: normal"
+              >将模体置于扫描野中心，并使圆柱轴垂直于扫描层面，设置扫描条件CTDIw≤50mGy，设置薄层层厚，分别使用常规算法和高分辨力算法扫描Catphan500体模的层厚模块中心，其中高分辨力算法的FOV取尽量小（130mm左右），分别读取图像，在最小窗宽条件下调节窗位至观察者认为的细节最清晰状态，但窗位不得大于细节CT值和背景CT值之差。</span
+            >
           </td>
         </tr>
         <tr>
@@ -42,20 +49,21 @@
           <td>管电压</td>
           <td>
             <myInput
-              style="text-align: center;width: 70%"
+              style="text-align: center; width: 70%"
               v-model="data.valueData.a"
               :defaultValue="data.valueData.a"
-            ></myInput>kV
+            ></myInput
+            >kV
           </td>
           <td>管电流</td>
           <td>
             <myInput
-              style="text-align: center;width: 50%;"
+              style="text-align: center; width: 50%"
               v-model="data.valueData.b"
               :defaultValue="data.valueData.b"
             ></myInput>
             <selectModel
-              style="width: 50%;float: right;"
+              style="width: 50%; float: right"
               @returnVal="returnVal"
               :Judge="true"
               v-if="!showInput"
@@ -72,20 +80,22 @@
           <td>曝光时间</td>
           <td>
             <myInput
-              style="text-align: center;width: 70%"
+              style="text-align: center; width: 70%"
               v-model="data.valueData.c"
               :defaultValue="data.valueData.c"
-            ></myInput>s
+            ></myInput
+            >s
           </td>
           <td>CTDI 显示值</td>
           <td>
             <myInput
-              style="text-align: center;width: 60%"
-              :style="{ color: (data.valueData.d>50?'red':'#000')}"
+              style="text-align: center; width: 60%"
+              :style="{ color: data.valueData.d > 50 ? 'red' : '#000' }"
               v-model="data.valueData.d"
               :defaultValue="data.valueData.d"
-              @change.native="changeNum(data.valueData,'d')"
-            ></myInput>mGy
+              @change.native="changeNum(data.valueData, 'd')"
+            ></myInput
+            >mGy
           </td>
         </tr>
         <tr>
@@ -93,58 +103,69 @@
           <td colspan="2">算法</td>
           <td>层厚</td>
           <td>SFOV</td>
-          <td style="white-space: normal;">细节CT值（HU）</td>
-          <td style="white-space: normal;">背景CT值（HU）</td>
+          <td style="white-space: normal">细节CT值（HU）</td>
+          <td style="white-space: normal">背景CT值（HU）</td>
           <td>窗位</td>
-          <td style="white-space: normal;">检测结果（lp/mm）</td>
+          <td style="white-space: normal">检测结果（lp/mm）</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point" :key="index">
           <td colspan="2">
-            <span>{{item.arithmetic}}</span>
-            <myInput style="text-align: center;width: 60%" v-model="item.A" :defaultValue="item.A"></myInput>
+            <el-checkbox v-model="item.checked"></el-checkbox>
+            <span>{{ item.arithmetic }}</span>
+            <myInput
+              v-if="item.checked"
+              style="text-align: center; width: 50%"
+              v-model="item.A"
+              :defaultValue="item.A"
+            ></myInput>
           </td>
           <td>
             <myInput
+              v-if="item.checked"
               style="text-align: center"
-              :style="{ color: (item.B>8?'red':'#000')}"
+              :style="{ color: item.B > 8 ? 'red' : '#000' }"
               v-model="item.B"
               :defaultValue="item.B"
-              @change.native="changeNum(item,'B')"
+              @change.native="changeNum(item, 'B')"
             ></myInput>
           </td>
           <td>
             <myInput
+              v-if="item.checked"
               style="text-align: center"
-              :style="{ color: (item.C>140?'red':'#000')}"
+              :style="{ color: item.C > 140 ? 'red' : '#000' }"
               v-model="item.C"
               :defaultValue="item.C"
-              @change.native="changeNum(item,'C')"
+              @change.native="changeNum(item, 'C')"
             ></myInput>
           </td>
           <td>
             <myInput
+              v-if="item.checked"
               style="text-align: center"
               v-model="item.D"
               :defaultValue="item.D"
-              @change.native="changeNum(item,'F')"
+              @change.native="changeNum(item, 'F')"
             ></myInput>
           </td>
           <td>
             <myInput
+              v-if="item.checked"
               style="text-align: center"
               v-model="item.E"
               :defaultValue="item.E"
-              @change.native="changeNum(item,'F')"
+              @change.native="changeNum(item, 'F')"
             ></myInput>
           </td>
-          <td>{{item.F}}</td>
+          <td>{{ item.F }}</td>
           <td>
             <myInput
+              v-if="item.checked"
               style="text-align: center"
-              :style="{ color: (item.G>21?'red':'#000')}"
+              :style="{ color: item.G > 21 ? 'red' : '#000' }"
               v-model="item.G"
               :defaultValue="item.G"
-              @change.native="changeNum(item,'G')"
+              @change.native="changeNum(item, 'G')"
             ></myInput>
           </td>
         </tr>
@@ -157,7 +178,7 @@
 export default {
   data() {
     return {
-      showInput: false
+      showInput: false,
     };
   },
   computed: {},
@@ -173,7 +194,7 @@ export default {
     "ableInput",
     "task",
     "target",
-    "deviceData"
+    "deviceData",
   ],
   filters: {},
   methods: {
@@ -192,7 +213,7 @@ export default {
     err(msg) {
       this.$notify({
         type: "error",
-        message: msg
+        message: msg,
       });
     },
     changeNum(item, num) {
@@ -219,9 +240,9 @@ export default {
         default:
           break;
       }
-    }
+    },
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

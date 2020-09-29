@@ -1,23 +1,27 @@
 <template>
   <div class="___relative">
     <div id="Layer1" class="eventCover" v-if="isCopy"></div>
-    <table class="tb" style="width: 1192px" border="1">
-      <tr style="line-height: 30px;">
-        <td>标准物质</td>
+    <table
+      class="curveTable"
+      style="width: 1140px; line-height: 30px"
+      border="1"
+    >
+      <tr>
+        <td colspan="2">标准物质</td>
         <td>标准值</td>
-        <td>国标号(或批号)</td>
-        <td>实验室编号</td>
+        <td colspan="2">国标号(或批号)</td>
+        <td colspan="2">实验室编号</td>
         <td>生产日期</td>
         <td>失效效期</td>
-        <td style="width: 104px;">基体</td>
-        <td class="hiddenBorder" style="width: 50px;"></td>
+        <td>基体</td>
+        <!-- <td class="hiddenBorder" style="width: 50px"></td> -->
       </tr>
       <tr
         v-for="(item, index) in data.valueData.point"
-        :key="Math.random()"
-        style="height: 32px;"
+        :key="index + 'point'"
+        style="height: 32px"
       >
-        <td width="110">
+        <td colspan="2">
           <querySelect
             v-model="item.materialName"
             :num="index"
@@ -29,31 +33,27 @@
           >
           </querySelect>
         </td>
-        <td width="110">
-          <div>{{ item.standardValue }}</div>
-        </td>
-        <td width="110">
-          <div>{{ item.batchNum }}</div>
-        </td>
-        <td width="110">
-          <div>{{ item.laboratoryNum }}</div>
-        </td>
-        <td width="210">
-          <div>{{ item.productionTime | getTime }}</div>
-        </td>
-        <td width="210">
-          <div>{{ item.invalidTime | getTime }}</div>
-        </td>
-        <td width="210">
-          <div>{{ item.matrix }}</div>
-        </td>
-        <td class="hiddenBorder" v-if="!isCopy">
-          <div class="___relative" style="width: 100px; height: 30px;">
-            <div class="___absolute">
-              <div class="rowOption" @click="addRow(index)">+</div>
+        <td>{{ item.standardValue }}</td>
+        <td colspan="2">{{ item.batchNum }}</td>
+        <td colspan="2">{{ item.laboratoryNum }}</td>
+        <td>{{ item.productionTime | getTime }}</td>
+        <td>{{ item.invalidTime | getTime }}</td>
+        <td class="___relative">
+          {{ item.matrix }}
+          <div class="___absolute" style="top: 0; right: -46px" v-if="!onlyRead">
+            <div
+              class="rowOption"
+              style="display: inline-block"
+              @click="addRow(index)"
+            >
+              +
             </div>
-            <div class="___absolute" style="left: 23px;top: 0px;">
-              <div class="rowOption" @click="delRow(index)">-</div>
+            <div
+              class="rowOption"
+              style="display: inline-block"
+              @click="delRow(index)"
+            >
+              -
             </div>
           </div>
         </td>
@@ -68,11 +68,11 @@ import { queryAllMaterial } from "@/api/laboratory";
 
 export default {
   name: "curveHead",
-  props: ["data", "target", "jsonString"],
+  props: ["data", "target", "jsonString",'onlyRead'],
   data() {
     return {
       materialList: [],
-      canEdit: false
+      canEdit: false,
     };
   },
   filters: {
@@ -80,7 +80,7 @@ export default {
       if (!val) return;
       let timeArr = val.split(" ");
       return timeArr[0];
-    }
+    },
   },
   computed: {
     isCopy() {
@@ -89,7 +89,7 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   methods: {
     addRow(index) {
@@ -111,20 +111,22 @@ export default {
         } else if (item.to === "curve_foot") {
           foot.push(...item.data.valueData.point);
           item.data.valueData.point = [];
+        } else if (item.to === "curve_cbynd") {
+          item.data.valueData.point = [];
         }
       });
-      // console.log(head,'head')
       let data = head.map((item, index) => {
         return {
           id: item.id,
           materialName: item.materialName,
-          Dosage: foot[index].Dosage,
-          constantVolume: foot[index].constantVolume,
-          concentration: foot[index].concentration,
-          count: foot[index].count,
-          numbering: foot[index].numbering,
-          validityPeriod: foot[index].validityPeriod,
-          noUse: true
+          Dosage: foot[index] && foot[index].Dosage,
+          standardValue: item.standardValue,
+          constantVolume: foot[index] && foot[index].constantVolume,
+          concentration: foot[index] && foot[index].concentration,
+          count: foot[index] && foot[index].count,
+          numbering: foot[index] && foot[index].numbering,
+          validityPeriod: foot[index] && foot[index].validityPeriod,
+          noUse: true,
         };
       });
       data.forEach((item, index) => {
@@ -137,30 +139,46 @@ export default {
       this.jsonString.find(
         (item, index) => item.to === "curve_foot"
       ).data.valueData.point = [...data, ...footFilter];
+      this.jsonString.find(
+        (item, index) => item.to === "curve_cbynd"
+      ).data.valueData.point = [...data, ...footFilter];
       bus.$emit("reset");
     },
     getMaterialSel() {
-      queryAllMaterial().then(res => {
+      queryAllMaterial().then((res) => {
         if (res.success) {
           this.materialList = res.datas;
         } else {
           this.$notify({
             type: "warning",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
     },
     returnVal(index, item) {
+      let data = this.jsonString
+        .filter((item) => item.to == "curve_head")
+        .map((item) => item.data.valueData.point)
+        .flat()
+        .map((item) => item.id);
+      if (data.includes(item.id)) {
+        this.$message.warning("不可重复勾选");
+        let point = JSON.parse(JSON.stringify(this.data.valueData.point));
+        this.data.valueData.point = this.$utils.removeArrRepeat(point, "id");
+        this.$forceUpdate();
+        return;
+      }
+
       this.data.valueData.point[index] = JSON.myParse(JSON.stringify(item));
       this.addDownTable();
       this.$forceUpdate();
-    }
+    },
   },
   created() {
     this.getMaterialSel();
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

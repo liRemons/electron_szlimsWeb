@@ -133,7 +133,7 @@
           <td colspan="2">CT 值（水）</td>
           <td colspan="4">
             <myInput
-              style="text-align: center;width:50px;"
+              style="text-align: center;width:50px;border-bottom:1px solid #000"
               v-model="data.valueData.result"
               :defaultValue="data.valueData.result"
               @change.native="changeNum(data.valueData, 'result')"

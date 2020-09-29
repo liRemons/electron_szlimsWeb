@@ -103,6 +103,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.data)
     let blanks = [];
     // return
     try {
@@ -132,7 +133,6 @@ export default {
     } catch (e) {
       blanks = [];
     }
-    console.log(this.data.valueData.testResults, "d");
     this.data.valueData.testResults.forEach((item) => {
       if (item.showInput == undefined) {
         item.showInput = true;

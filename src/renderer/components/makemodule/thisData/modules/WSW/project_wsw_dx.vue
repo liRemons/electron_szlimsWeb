@@ -115,7 +115,6 @@
           <div class="___absolute" style="width: 50px">备注：</div>
           <myInput
             v-model="data.valueData.remarks"
-            class="___absolute"
             style="left: 50px; width: 1047px"
           ></myInput>
         </div>

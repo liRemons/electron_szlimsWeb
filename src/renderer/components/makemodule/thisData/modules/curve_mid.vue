@@ -1,80 +1,65 @@
 <template>
   <div class="___relative">
     <div id="Layer1" class="eventCover" v-if="false"></div>
-    <table class="tb" border="1">
-      <tr class="temperature delLine">
-        <td width="80">
-          <div class="temperatureName">温度:</div>
+    <table style="width: 1140px" border="1" class="curveTable">
+      <tr>
+        <td colspan="3">
+          温度:
+          <divModel
+            style="width: 60%"
+            class="block"
+            :edit="!isCopy"
+            v-model="data.valueData.temperature"
+          ></divModel
+          >℃
         </td>
-        <td width="65">
-          <div class="temperatureValue">
-            <divModel
-              :edit="!isCopy"
-              v-model="data.valueData.temperature"
-            ></divModel>
-          </div>
+        <td colspan="3">
+          湿度:
+          <divModel
+            style="width: 60%"
+            class="block"
+            :edit="!isCopy"
+            v-model="data.valueData.humidity"
+          ></divModel
+          >%RH
         </td>
-        <td align="left" width="148">
-          <div class="temperatureDan">℃</div>
-        </td>
-        <td width="80">
-          <div class="temperatureName">湿度:</div>
-        </td>
-        <td width="80">
-          <div class="temperatureValue">
-            <divModel
-              :edit="!isCopy"
-              v-model="data.valueData.humidity"
-            ></divModel>
-          </div>
-        </td>
-        <td align="left" width="160">
-          <div class="temperatureDan">%RH</div>
-        </td>
-        <td width="80">
-          <div class="temperatureName">溶液温度：</div>
-        </td>
-        <td width="86">
-          <div class="temperatureValue">
-            <divModel
-              :edit="!isCopy"
-              v-model="data.valueData.solutionTemperature"
-            ></divModel>
-          </div>
-        </td>
-        <td align="left" width="330">
-          <div class="temperatureDan">℃</div>
+        <td colspan="4">
+          溶液温度：
+          <divModel
+            style="width: 60%"
+            class="block"
+            :edit="!isCopy"
+            v-model="data.valueData.solutionTemperature"
+          ></divModel
+          >℃
         </td>
       </tr>
     </table>
-
-    <div
-      style="height: 33px; border-left: 1px solid black; border-right: 1px solid black;width: 1128px; line-height: 33px; text-align: left; padding-left: 10px;"
-    >
-      计量器具：
-    </div>
     <table
-      class="checkTable"
+      class="curveTable"
       border="1"
-      style="width: 1140px;line-height: 30px;"
+      style="width: 1140px; line-height: 30px"
     >
       <tr>
-        <td style="width: 100px;">
+        <td colspan="10" class="tl">计量器具：</td>
+      </tr>
+      <tr>
+        <td colspan="3" class="tl05"> 
           <el-checkbox
             :disabled="isCopy"
-            @change="data => change(data, 1)"
+            @change="(data) => change(data, 1)"
             v-model="data.valueData.checked[0]"
           ></el-checkbox>
-          <span>电子天平：</span>
+          电子天平：
         </td>
-        <td style="width: 450px;">
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[0]"
           ></divModel>
         </td>
-        <td style="width: 50px;">编号:</td>
-        <td style="width: 400px;">
+        <td>编号:</td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[0]"
@@ -82,22 +67,22 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3" class="tl05">
           <el-checkbox
             :disabled="isCopy"
             v-model="data.valueData.checked[1]"
-            @change="data => change(data, 2)"
+            @change="(data) => change(data, 2)"
           ></el-checkbox>
-          <span>容量瓶：</span>
+          容量瓶：
         </td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[1]"
           ></divModel>
         </td>
         <td>编号:</td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[1]"
@@ -105,22 +90,22 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3" class="tl05">
           <el-checkbox
             :disabled="isCopy"
             v-model="data.valueData.checked[2]"
-            @change="data => change(data, 3)"
+            @change="(data) => change(data, 3)"
           ></el-checkbox>
-          <span>单标吸管：</span>
+          单标吸管：
         </td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[2]"
           ></divModel>
         </td>
         <td>编号:</td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[2]"
@@ -128,22 +113,22 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3" class="tl05">
           <el-checkbox
             :disabled="isCopy"
             v-model="data.valueData.checked[3]"
-            @change="data => change(data, 4)"
+            @change="(data) => change(data, 4)"
           ></el-checkbox>
-          <span>移液管：</span>
+          移液管：
         </td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[3]"
           ></divModel>
         </td>
         <td>编号:</td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[3]"
@@ -151,22 +136,22 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3" class="tl05">
           <el-checkbox
             :disabled="isCopy"
             v-model="data.valueData.checked[4]"
-            @change="data => change(data, 5)"
+            @change="(data) => change(data, 5)"
           ></el-checkbox>
-          <span>移液枪：</span>
+          移液枪：
         </td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[4]"
           ></divModel>
         </td>
         <td>编号:</td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[4]"
@@ -174,22 +159,22 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3" class="tl05">
           <el-checkbox
             :disabled="isCopy"
             v-model="data.valueData.checked[5]"
-            @change="data => change(data, 6)"
+            @change="(data) => change(data, 6)"
           ></el-checkbox>
-          <span>微量进样器：</span>
+          微量进样器：
         </td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[5]"
           ></divModel>
         </td>
         <td>编号:</td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[5]"
@@ -197,34 +182,31 @@
         </td>
       </tr>
       <tr>
-        <td>
+        <td colspan="3" class="tl05">
           <el-checkbox
             :disabled="isCopy"
             v-model="data.valueData.checked[6]"
-            @change="data => change(data, 7)"
+            @change="(data) => change(data, 7)"
           ></el-checkbox>
-          <span>注射器：</span>
+          注射器：
         </td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.guiGeArr[6]"
           ></divModel>
         </td>
         <td>编号:</td>
-        <td>
+        <td colspan="3">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.biaoHaoArr[6]"
           ></divModel>
         </td>
       </tr>
-    </table>
-
-    <table class="checkTable" style="width: 1140px;" border="1">
       <tr>
-        <td style="width: 100px;">依据标准：</td>
-        <td @click="selectMethods">
+        <td colspan="3" class="tl05">依据标准：</td>
+        <td colspan="7" @click="selectMethods">
           <divModel
             :edit="!isCopy"
             v-model="data.valueData.standard"
@@ -291,11 +273,11 @@
 <script>
 import {
   queryBySysDeviceType,
-  queryStandardByMaterialId
+  queryStandardByMaterialId,
 } from "@/api/laboratory";
 export default {
   name: "curve_mid",
-  props: ["data", "target", "jsonString"],
+  props: ["data", "target", "jsonString",'onlyRead'],
   data() {
     return {
       dialogVisible: false,
@@ -304,7 +286,7 @@ export default {
       type: null,
       selectData: null,
       standardSelectData: null,
-      standardTableData: []
+      standardTableData: [],
     };
   },
   filters: {
@@ -328,7 +310,7 @@ export default {
         ? (type = "注射器")
         : "";
       return type;
-    }
+    },
   },
   computed: {
     isCopy() {
@@ -337,13 +319,13 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
   methods: {
     selectMethods() {
-      let arr = this.jsonString.filter(item => item.to == "curve_head");
-      let data = arr[0].data.valueData.point.map(item => item.id);
-      queryStandardByMaterialId(data).then(res => {
+      let arr = this.jsonString.filter((item) => item.to == "curve_head");
+      let data = arr[0].data.valueData.point.map((item) => item.id);
+      queryStandardByMaterialId(data).then((res) => {
         this.standardTableData = res.datas;
         if (res.datas.length) {
           this.standardDialog = true;
@@ -354,7 +336,7 @@ export default {
       this.type = type;
       this.selectData = null;
       if (data) {
-        queryBySysDeviceType(type).then(res => {
+        queryBySysDeviceType(type).then((res) => {
           if (res.data.length) {
             this.dialogVisible = true;
             this.tableData = res.data;
@@ -376,7 +358,7 @@ export default {
     standardConfirm() {
       if (this.standardSelectData) {
         this.standardDialog = false;
-        this.data.valueData.standard = `${this.standardSelectData.standardNum}(${this.standardSelectData.standardName})`;
+        this.data.valueData.standard = `${this.standardSelectData.standardNum}${this.standardSelectData.standardName}`;
       } else {
         this.$message.warning("您未选择");
       }
@@ -393,8 +375,8 @@ export default {
       } else {
         this.$message.warning("您未选择");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

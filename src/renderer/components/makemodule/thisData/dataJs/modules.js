@@ -1259,9 +1259,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 32,
+        fixed: 64,
         value: function(obj) {
-          return 32 + 32 * obj.point.length;
+          return 64 + 32 * obj.point.length;
         },
       },
       _short: {
@@ -1288,9 +1288,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 128,
+        fixed: 96,
         value: function(obj) {
-          return 32 * obj.point.length + 160;
+          // return 32 * obj.point.length + 96;
+          return 32 * obj.biaoHaoArr.length + 96;
         },
       },
       _short: {
@@ -1314,20 +1315,59 @@ export default [
           Dosage: "",
           constantVolume: "",
           concentration: "",
+          standardValue:"",
           numbering: "",
           validityPeriod: "",
           count: 1,
           noUse: true,
         },
+        // {
+        //   id: "",
+        //   materialName: "",
+        //   Dosage: "",
+        //   constantVolume: "",
+        //   concentration: "",
+        //   numbering: "",
+        //   validityPeriod: "",
+        //   noUse: false,
+        // },
+      ],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 64,
+        value: function(obj) {
+          return 64 + 32 * obj.point.length;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "curve_cby",
+    projectName: "曲线尾",
+    switch: false,
+    valueData: {
+      testProject: "curve_cby",
+      point: [
         {
           id: "",
+          materialNum:"",
           materialName: "",
           Dosage: "",
           constantVolume: "",
           concentration: "",
           numbering: "",
-          validityPeriod: "",
-          noUse: false,
+          validityPeriod: "临用现配",
+          count: 1,
+          noUse: true,
         },
       ],
     },
@@ -1335,9 +1375,41 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 32,
+        fixed: 64,
         value: function(obj) {
-          return 32 + 32 * obj.point.length;
+          return 64 + 32 * obj.point.length;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "curve_cbynd",
+    projectName: "储备液浓度",
+    switch: false,
+    valueData: {
+      testProject: "curve_cbynd",
+      point: [
+        {
+          id: "",
+          materialName: "",
+          constantVolume: "",
+          num:[]
+        },
+      ],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 64,
+        value: function(obj) {
+          return 64 + 32 * obj.point.length;
         },
       },
       _short: {
@@ -1642,7 +1714,7 @@ export default [
     height: {
       //模块高度
       _normal: {
-        confirm:true,
+        confirm: true,
         carried: true,
         fixed: 64,
         value: function(obj) {
@@ -1674,7 +1746,7 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        confirm:true,
+        confirm: true,
         fixed: 64, //固定
         value: function(obj) {
           return 64 + 32 * obj.point.length;
@@ -1733,7 +1805,7 @@ export default [
     switch: true,
     isHead: true,
     valueData: {
-      endTime:"",
+      endTime: "",
       testProject: "project_jbxx",
       multipleId: 0,
       entrustedUnitName: "",
@@ -1856,7 +1928,7 @@ export default [
         {
           exposureMode: "",
           harnessDirection: "",
-          checked:true
+          checked: true,
         },
       ],
       deviceStatus: "",
@@ -1864,7 +1936,6 @@ export default [
       sonOperation: "",
       surgeonNum: "",
       siteEnvironment: "",
-      
     },
     height: {
       //模块高度
@@ -2427,9 +2498,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 384,
+        fixed: 400,
         value: function(obj) {
-          return 384 + 32 * obj.point.length;
+          return 400 + 32 * obj.point.length;
         },
       },
       _short: {
@@ -4545,7 +4616,7 @@ export default [
         fixed: 485,
         confirm: true,
         value: function(obj) {
-          return 485
+          return 485;
         },
       },
       _short: {
@@ -4976,7 +5047,7 @@ export default [
           v3: "",
           v4: "",
           // v5: [false, false, false, false, false, false, false],
-          v5:"",
+          v5: "",
           jiXianVal: "",
         },
         {
@@ -4985,7 +5056,7 @@ export default [
           v3: "",
           v4: "",
           // v5: [false, false, false, false, false, false, false],
-          v5:'',
+          v5: "",
           jiXianVal: "",
         },
       ],
@@ -5323,6 +5394,98 @@ export default [
           Remarks: "",
           /*备注*/
 
+          sampleNumIndex: "",
+          isPrototype: true,
+          sampleQuantity: "",
+          /*样品数量*/
+          SamplePoint: "",
+          /*采样布点*/
+          blankSample: 0,
+        },
+      ],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 80,
+        value: function(obj) {
+          return 80 + 32 * obj.point.length;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "project_cy_kqzdnd",
+    projectName: "空气中氡浓度",
+    switch: false,
+    type: null,
+    publicData: [], //本模块的公共数据
+    noCopyArr: ["pointId", "sampleNum"],
+    //添加行使用的模板数据
+    modelRow: {
+      pointId: window.uuid(),
+      foreverId: window.uuid(), //永久的id 用于重复样
+
+      sampleNum: "",
+      deviceNum: "", //仪器编号
+      /*采样编号*/
+      SampleAddress: "",
+      /*采样地点*/
+      sampleName: "", //样品名称
+      point: "", //
+      period1: "", //第一周期
+      period2: "",
+      result: "",
+      pumpingTime: "", //抽气时长
+      resultAverage: "", //检测结果平均值，
+      measureTime: "", //测量时长
+      exportTime: "", //排气时长
+      Remarks: "",
+      /*备注*/
+      time: "",
+      SamplingTime: "",
+      sampleNumIndex: "",
+      isPrototype: true,
+      sampleQuantity: "",
+      /*样品数量*/
+      SamplePoint: "",
+      /*采样布点*/
+      blankSample: 0,
+    },
+    valueData: {
+      //模块内容键值对
+      testProject: "project_cy_kqzdnd",
+      testProjectChineseName: "空气中氡浓度",
+      point: [
+        {
+          pointId: window.uuid(),
+          foreverId: window.uuid(), //永久的id 用于重复样
+
+          sampleNum: "",
+          deviceNum: "", //仪器编号
+          /*采样编号*/
+          SampleAddress: "",
+          /*采样地点*/
+          sampleName: "", //样品名称
+          point: "", //
+          period1: "", //第一周期
+          period2: "",
+          result: "",
+          pumpingTime: "", //抽气时长
+          resultAverage: "", //检测结果平均值，
+          measureTime: "", //测量时长
+          exportTime: "", //排气时长
+          Remarks: "",
+          /*备注*/
+          time: "",
+          SamplingTime: "",
           sampleNumIndex: "",
           isPrototype: true,
           sampleQuantity: "",

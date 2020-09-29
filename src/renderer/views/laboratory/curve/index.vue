@@ -1,12 +1,12 @@
 <template>
   <div class="box">
-    <div class="add" style="text-align: left;">
+    <div class="add" style="text-align: left">
       <el-button icon="plus" type="primary" @click="add" size="small"
         >新增配制记录</el-button
       >
     </div>
     <el-card>
-      <div style="min-height: 71vh;">
+      <div style="min-height: 71vh">
         <el-table
           ref="multipleTable"
           :data="curveList"
@@ -23,7 +23,7 @@
               <el-table
                 tooltip-effect="dark"
                 :data="props.row.curves"
-                style="width: 100%; margin-left: 50px;"
+                style="width: 100%; margin-left: 50px"
                 @row-dblclick="editCurve"
               >
                 <el-table-column type="index" width="50px;"></el-table-column>
@@ -109,7 +109,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div style="margin-top: 10px;">
+      <div style="margin-top: 10px">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -196,15 +196,15 @@
             ></el-input>
           </el-col>
         </el-row>
-        <el-button type="primary" style="margin:20px 0" @click="generate"
+        <el-button type="primary" style="margin: 20px 0" @click="generate"
           >生成</el-button
         >
         <el-row>
-          <el-col :pull="3" style="margin-left: 22px;">
+          <el-col :pull="3" style="margin-left: 22px">
             <el-form-item label="回归方程:" prop="regressionEquationValue1">
               Y=(
               <el-input
-                style="width:240px"
+                style="width: 240px"
                 @input="
                   addCurve.regressionEquationValue1 = addCurve.regressionEquationValue1.replace(
                     /[^\d.]/g,
@@ -219,7 +219,7 @@
             <el-form-item prop="regressionEquationValue2">
               <el-select
                 v-model="addCurve.regressionEquationValue2"
-                style="width:100px"
+                style="width: 100px"
               >
                 <el-option
                   v-for="(item, index) in operation"
@@ -231,7 +231,7 @@
             </el-form-item>
             <el-form-item prop="regressionEquationValue3">
               <el-input
-                style="width:240px"
+                style="width: 240px"
                 @input="
                   addCurve.regressionEquationValue3 = addCurve.regressionEquationValue3.replace(
                     /[^\d.]/g,
@@ -277,7 +277,7 @@ import { addForCurve } from "@/api/laboratory";
 import {
   queryAllMaterial,
   deleteSolution,
-  deleteCurve
+  deleteCurve,
 } from "@/api/laboratory";
 import { updateCurve } from "@/api/laboratory";
 import { getToken } from "@/utils/auth";
@@ -307,41 +307,41 @@ export default {
         series: [
           {
             testProject: "",
-            response: "响应值"
+            response: "响应值",
           },
           {
             testProject: "",
-            response: ""
-          }
-        ]
+            response: "",
+          },
+        ],
       },
       rules: {
         curveNum: [
-          { required: true, message: "请输入曲线记录编号", trigger: "blur" }
+          { required: true, message: "请输入曲线记录编号", trigger: "blur" },
         ],
         materialId: [
-          { required: true, message: "请输入标准物质", trigger: "change" }
+          { required: true, message: "请输入标准物质", trigger: "change" },
         ],
         regressionEquationValue1: [
-          { required: true, message: "请输入回归方程", trigger: "blur" }
+          { required: true, message: "请输入回归方程", trigger: "blur" },
         ],
         regressionEquationValue2: [
-          { required: true, message: "请选择运算符", trigger: "change" }
+          { required: true, message: "请选择运算符", trigger: "change" },
         ],
         regressionEquationValue3: [
-          { required: true, message: "请输入回归方程", trigger: "blur" }
+          { required: true, message: "请输入回归方程", trigger: "blur" },
         ],
         coefficient: [
-          { required: true, message: "请输入计算公式", trigger: "blur" }
-        ]
-      }
+          { required: true, message: "请输入计算公式", trigger: "blur" },
+        ],
+      },
     };
   },
   filters: {
     filterState(index) {
       let arr = ["未审核", "已审核"];
       return arr[index];
-    }
+    },
   },
   computed: {
     getTitle() {
@@ -350,7 +350,7 @@ export default {
       } else {
         return "修改曲线";
       }
-    }
+    },
   },
   methods: {
     getRowKeys(row) {
@@ -358,14 +358,15 @@ export default {
     },
     expandchange(row, expandedRows) {
       let arr = [];
-      expandedRows.map(item => {
+      expandedRows.map((item) => {
         arr.push(item.id);
       });
       this.expands = arr;
     },
     //曲线列表
     add() {
-      let content = ["curve_head", "curve_mid", "curve_foot"];
+      let content = ["curve_head", "curve_mid", "curve_foot", "curve_cby","curve_cbynd"];
+      // let content = ["curve_head", "curve_mid", "curve_foot"];
       this.$router.push(`/laboratory/doc-entering/5`);
       sessionStorage.setItem("templateContent", JSON.stringify(content));
     },
@@ -406,20 +407,20 @@ export default {
       this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          deleteCurve(row.id).then(res => {
+          deleteCurve(row.id).then((res) => {
             if (res.success) {
               this.$notify({
                 type: "success",
-                message: res.msg
+                message: res.msg,
               });
               this.getList();
             } else {
               this.$notify({
                 type: "error",
-                message: res.msg
+                message: res.msg,
               });
             }
           });
@@ -430,18 +431,18 @@ export default {
     getList() {
       let that = this;
       getCurveList(this.pageIndex, this.pageSize)
-        .then(res => {
+        .then((res) => {
           if (res.success) {
             that.curveList = res.datas;
             that.count = res.total;
           } else {
             that.$notify({
               type: "error",
-              message: res.msg
+              message: res.msg,
             });
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -450,8 +451,8 @@ export default {
       this.rowData = row;
       let materialArr = JSON.myParse(row.materialArr);
       let curves = row.curves;
-      this.materialList = materialArr.filter(item => {
-        let index = curves.findIndex(item2 => {
+      this.materialList = materialArr.filter((item) => {
+        let index = curves.findIndex((item2) => {
           return item2.materialId === item.id;
         });
         if (index === -1) {
@@ -470,13 +471,13 @@ export default {
         series: [
           {
             testProject: "",
-            response: "响应值"
+            response: "响应值",
           },
           {
             testProject: "",
-            response: ""
-          }
-        ]
+            response: "",
+          },
+        ],
       };
       this.isAdd = true;
       this.showAddCurve = true;
@@ -486,20 +487,20 @@ export default {
       this.$confirm("此操作将永久删除该记录, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
-          deleteSolution(row.id).then(res => {
+          deleteSolution(row.id).then((res) => {
             if (res.success) {
               this.$notify({
                 type: "success",
-                message: res.msg
+                message: res.msg,
               });
               this.getList();
             } else {
               this.$notify({
                 type: "error",
-                message: res.msg
+                message: res.msg,
               });
             }
           });
@@ -522,7 +523,7 @@ export default {
       let series = this.addCurve.series;
       series.push({
         testProject: "",
-        response: ""
+        response: "",
       });
     },
 
@@ -531,7 +532,7 @@ export default {
     },
     toAddCurve() {
       let addCurve = this.addCurve;
-      this.$refs["materialTable"].validate(valid => {
+      this.$refs["materialTable"].validate((valid) => {
         if (valid) {
           addForCurve(
             addCurve.curveNum,
@@ -543,25 +544,25 @@ export default {
             addCurve.regressionEquationValue2,
             addCurve.regressionEquationValue3,
             this.rowData.id
-          ).then(res => {
+          ).then((res) => {
             if (res.success) {
               this.$notify({
                 type: "success",
-                message: res.msg
+                message: res.msg,
               });
               this.showAddCurve = false;
               this.getList();
             } else {
               this.$notify({
                 type: "error",
-                message: res.msg
+                message: res.msg,
               });
             }
           });
         } else {
           this.$notify({
             type: "warning",
-            message: "有必填项未填"
+            message: "有必填项未填",
           });
           return false;
         }
@@ -572,13 +573,13 @@ export default {
         data = this.curveList[data];
       }
       let selectConfig = this.curveList.find(
-        item => item.id === data.solutionId
+        (item) => item.id === data.solutionId
       );
 
       let materialArr = JSON.myParse(selectConfig.materialArr);
       let curves = selectConfig.curves;
-      this.materialList = materialArr.filter(item => {
-        let index = curves.findIndex(item2 => {
+      this.materialList = materialArr.filter((item) => {
+        let index = curves.findIndex((item2) => {
           return item2.materialId === item.id;
         });
         if (index === -1) {
@@ -587,7 +588,7 @@ export default {
           return false;
         }
       });
-      let obj = materialArr.find(item => item.id === data.materialId);
+      let obj = materialArr.find((item) => item.id === data.materialId);
       this.materialList.push(obj);
 
       this.isAdd = false;
@@ -598,7 +599,7 @@ export default {
     },
     toEditCurve() {
       let addCurve = this.addCurve;
-      this.$refs["materialTable"].validate(valid => {
+      this.$refs["materialTable"].validate((valid) => {
         if (valid) {
           updateCurve(
             addCurve.id,
@@ -610,25 +611,25 @@ export default {
             addCurve.regressionEquationValue1,
             addCurve.regressionEquationValue2,
             addCurve.regressionEquationValue3
-          ).then(res => {
+          ).then((res) => {
             if (res.success) {
               this.$notify({
                 type: "success",
-                message: res.msg
+                message: res.msg,
               });
               this.showAddCurve = false;
               this.getList();
             } else {
               this.$notify({
                 type: "error",
-                message: res.msg
+                message: res.msg,
               });
             }
           });
         } else {
           this.$notify({
             type: "warning",
-            message: "有必填项未填"
+            message: "有必填项未填",
           });
         }
       });
@@ -660,12 +661,12 @@ export default {
               constantVolume: "",
               concentration: "",
               numbering: "",
-              validityPeriod: ""
-            }
+              validityPeriod: "",
+            },
           ],
           biaoHaoArr: ["", "", "", "", "", "", ""],
           guiGeArr: ["", "", "", "", "", "", ""],
-          checkBoxArr: [false, false, false, false, false, false, false]
+          checkBoxArr: [false, false, false, false, false, false, false],
         };
 
         sessionStorage.setItem(
@@ -676,7 +677,7 @@ export default {
           "addYuanShiObj",
           JSON.stringify({
             curveId: nowCurve.id,
-            preparationStaffId: JSON.myParse(token).id
+            preparationStaffId: JSON.myParse(token).id,
           })
         );
       } else {
@@ -690,7 +691,7 @@ export default {
           "addYuanShiObj",
           JSON.stringify({
             curveId: nowCurve.id,
-            preparationStaffId: JSON.myParse(token).id
+            preparationStaffId: JSON.myParse(token).id,
           })
         );
       }
@@ -797,7 +798,7 @@ export default {
         this.isNumber(R2.toFixed46(4)) ? R2.toFixed46(4) : 0,
         A + fb + "*lnX",
         A,
-        fb
+        fb,
       ];
     },
     //线性公式y=ax+b
@@ -977,8 +978,8 @@ export default {
           arr.splice(index, 1);
         }
       });
-      let KcontentArr = arr.map(item => Number(item.testProject));
-      let absorbanceNewArr = arr.map(item => Number(item.response));
+      let KcontentArr = arr.map((item) => Number(item.testProject));
+      let absorbanceNewArr = arr.map((item) => Number(item.response));
 
       let Kcontent = this.JudgeNum(KcontentArr);
       let absorbanceArr = this.JudgeNum(absorbanceNewArr);
@@ -987,7 +988,7 @@ export default {
       let expFitting = this.expFitting(Kcontent, absorbanceArr);
       let finttIngArr = [logFitting, lineFitting, expFitting];
       let index = "";
-      let a = Math.max(...finttIngArr.map(item => item[0]));
+      let a = Math.max(...finttIngArr.map((item) => item[0]));
       index = finttIngArr.findIndex((item, index) => item[0] === a);
       let b = finttIngArr[index][1];
       this.addCurve.coefficient = Math.sqrt(finttIngArr[index][0]).toFixed46(4);
@@ -995,16 +996,16 @@ export default {
       this.addCurve.regressionEquationValue2 = finttIngArr[index][3].split(
         `${this.addCurve.regressionEquationValue2}`
       )[0];
-    }
+    },
     // 公式结束——————————————————————————————
   },
   mounted() {
     this.getList();
     this.toStringify2([
       { name: 1, age: 2 },
-      { name: 3, age: 4 }
+      { name: 3, age: 4 },
     ]);
-  }
+  },
 };
 </script>
 

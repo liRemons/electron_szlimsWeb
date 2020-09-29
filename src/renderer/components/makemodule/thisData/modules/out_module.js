@@ -96,6 +96,8 @@ import project_sysben_two from './project_sysben_two.vue';
 import curve_head from './curveHead.vue';
 import curve_mid from './curve_mid.vue';
 import curve_foot from './curve_foot.vue';
+import curve_cby from './curve_cby.vue';
+import curve_cbynd from './curve_cbynd.vue';
 
 import querySelect from '../querySelect.vue';
 import myInput from '../myInput.vue';
@@ -129,6 +131,7 @@ import project_cy_ljskcyq from './CY/project_cy_ljskcyq.vue';
 import project_cy_kqwswcy from './CY/project_cy_kqwswcy.vue';
 import project_cy_ypcymj from './CY/project_cy_ypcymj.vue';
 import project_cy_ypcycy from './CY/project_cy_ypcycy.vue';
+import project_cy_kqzdnd from './CY/project_cy_kqzdnd.vue';
 /*import project_cy_ypcytjl from './CY/project_cy_ypcytjl.vue';
 import project_cy_ypcytjml from './CY/project_cy_ypcytjml.vue';*/
 
@@ -333,6 +336,8 @@ export default {
     Vue.component('curve_head', curve_head);
     Vue.component('curve_mid', curve_mid);
     Vue.component('curve_foot', curve_foot);
+    Vue.component('curve_cby', curve_cby);
+    Vue.component('curve_cbynd', curve_cbynd);
     Vue.component('querySelect', querySelect);
     Vue.component('myInput', myInput);
     Vue.component('project_blankSample', project_blankSample);
@@ -364,6 +369,7 @@ export default {
     Vue.component('project_cy_kqwswcy', project_cy_kqwswcy);
     Vue.component('project_cy_ypcymj', project_cy_ypcymj);
     Vue.component('project_cy_ypcycy', project_cy_ypcycy);
+    Vue.component('project_cy_kqzdnd', project_cy_kqzdnd);
     /*Vue.component('project_cy_ypcytjl', project_cy_ypcytjl);
     Vue.component('project_cy_ypcytjml', project_cy_ypcytjml);*/
 

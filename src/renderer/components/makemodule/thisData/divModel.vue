@@ -1,5 +1,8 @@
 <template>
-  <div class="box historyValue">
+  <div
+    class="box historyValue"
+    style="background: #fff; max-width: 99%"
+  >
     <!--数字框-->
     <section
       :class="{ redBox: showRedBox }"
@@ -76,11 +79,11 @@ export default {
       checkResult: false,
       nowClass: "checkB",
       obj: {
-        name: 1
+        name: 1,
       },
       showRedBox: false,
       timerId2: "",
-      detectionLimitObj: ""
+      detectionLimitObj: "",
     };
   },
   watch: {
@@ -90,14 +93,14 @@ export default {
     computers: {
       deep: true,
       immediate: true,
-      handler: function() {
+      handler: function () {
         this.getComputerValue();
-      }
-    }
+      },
+    },
   },
   model: {
     prop: "value",
-    event: "change"
+    event: "change",
   },
   props: {
     value: [String, Date, Number, Array],
@@ -105,60 +108,60 @@ export default {
     isNumBox: {
       //如果为true 只能输入数值
       type: Boolean,
-      default: false
+      default: false,
     },
     isTimeBox: {
       //如果为true 时间框
       type: Boolean,
-      default: false
+      default: false,
     },
     mustWrite: {
       type: Boolean,
-      default: false
+      default: false,
     },
     pulldown: {
       type: Array,
-      default: null
+      default: null,
     },
 
     pulldownTwo: {
       type: Array,
       default() {
         return null;
-      }
+      },
     },
 
     ind: {
-      type: String
+      type: String,
     },
     edit: {
       type: Boolean,
-      default: true
+      default: true,
     },
     checkBoxObj: {
       type: Object,
       default() {
         return null;
-      }
+      },
     },
     isComputer: {
       type: Boolean,
       default() {
         return false;
-      }
+      },
     },
     computers: {
       type: Array,
       default() {
         return [];
-      }
+      },
     },
     computerFormula: {
       type: String,
       default() {
         return null;
-      }
-    }
+      },
+    },
   },
   computed: {},
   methods: {
@@ -171,12 +174,12 @@ export default {
     },
     checkEmpty() {
       // let content = this.$refs.box.textContent;
-      
+
       let value = this.$refs.box.textContent;
       // if (this.isNumBox) {
       //   this.$refs.box.textContent = Number(value.replace(/[^\d.]/g, ""));
       // }
-      this.$emit('change',  this.$refs.box.textContent);
+      this.$emit("change", this.$refs.box.textContent);
     },
     changeNum(e) {
       // let keycode = [37, 38, 39, 40, 9];  //按了数组中的键, 不执行后面的代码
@@ -409,18 +412,17 @@ export default {
             break;
         }
       }
-    }
+    },
   },
   mounted() {
     if (this.pulldown) {
       this.$refs.sel.value = this.value;
     }
-    if(sessionStorage.getItem('detectionLimitObj')){
+    if (sessionStorage.getItem("detectionLimitObj")) {
       this.detectionLimitObj = JSON.myParse(
-      sessionStorage.getItem("detectionLimitObj")
-    );
+        sessionStorage.getItem("detectionLimitObj")
+      );
     }
-    
   },
   destroyed() {
     let that = this;
@@ -430,7 +432,7 @@ export default {
     if (that.timerId2) {
       clearInterval(that.timerId2);
     }
-  }
+  },
 };
 </script>
 <style lang="less" scoped>

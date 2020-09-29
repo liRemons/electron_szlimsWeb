@@ -1,119 +1,137 @@
-.columnName{
-    width: 1020px;
-    word-break:break-all;
+.columnName {
+  width: 1020px;
+  word-break: break-all;
 }
 
 .columnName td {
-    height:35px;
-    line-height: 35px;
+  height: 35px;
+  line-height: 35px;
 }
 
-.tb{
-    table-layout:fixed;
-    text-align: center;
-    width: 1140px;
+.tb {
+  table-layout: fixed;
+  text-align: center;
+  width: 1140px;
 }
-.tb td{
-    word-break:keep-all;
-    white-space:nowrap;
-    text-overflow:ellipsis;
+.tb td {
+  word-break: keep-all;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.temperature .temperatureName{
-    width:88px;
-    height: 35px;
+.temperature .temperatureName {
+  width: 88px;
+  height: 35px;
 }
 
 .temperature {
-    line-height: 35px;
-    border: 1px solid gray;
-    border-top: 0px;
-    word-break:break-all;
+  line-height: 35px;
+  border: 1px solid gray;
+  border-top: 0px;
+  word-break: break-all;
 }
 
-.temperature .temperatureValue{
-    height: 35px;
+.temperature .temperatureValue {
+  height: 35px;
 }
-
 
 .border {
-    border: 1px solid gray;
+  border: 1px solid gray;
 }
 
-.checkTable{
-    word-break: break-all;
-    table-layout:fixed;
+.checkTable {
+  word-break: break-all;
+  table-layout: fixed;
 }
 
-.checkTable tr{
-    height: 35px;
+.checkTable tr {
+  height: 35px;
 }
 
-.checkTable td{
-    padding-left: 10px;
-    text-align: left;
-    word-break:keep-all;/* 不换行 */
-    white-space:nowrap;/* 不换行 */
-    overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
-    text-overflow:ellipsis;
+.checkTable td {
+  padding-left: 10px;
+  text-align: left;
+  word-break: keep-all; /* 不换行 */
+  white-space: nowrap; /* 不换行 */
+  overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
+  text-overflow: ellipsis;
 }
 
-.yiJuTable{
-    width: 1000px;
-    table-layout:fixed;
-    word-break:break-all;
+.yiJuTable {
+  width: 1000px;
+  table-layout: fixed;
+  word-break: break-all;
 }
 
-.yiJuTable tr{
-    border: 1px solid gray;
-    border-left: 0px;
-    border-right: 0px;
+.yiJuTable tr {
+  border: 1px solid gray;
+  border-left: 0px;
+  border-right: 0px;
 }
 
-.biaoZhunTable{
-    word-break:break-all;
-    table-layout:fixed;
+.m0{
+  margin: 0 !important;
 }
 
-.biaoZhunTable td{
-    height: 30px;
-    word-break:keep-all;/* 不换行 */
-    white-space:nowrap;/* 不换行 */
-    overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
-    text-overflow:ellipsis;
+.biaoZhunTable {
+  word-break: break-all;
+  table-layout: fixed;
 }
 
-.checkTab{
-    table-layout:fixed;
-    word-break:break-all;
+.biaoZhunTable td {
+  height: 30px;
+  word-break: keep-all; /* 不换行 */
+  white-space: nowrap; /* 不换行 */
+  /* overflow: hidden; 内容超出宽度时隐藏超出部分的内容 */
+  text-overflow: ellipsis;
+}
+.curveTable tr,
+.biaoZhunTable tr {
+  height: 30px;
+  line-height: 30px;
+}
+.curveTable {
+  table-layout: fixed;
+}
+.curveTable td {
+  border: 1px solid gray;
 }
 
-.rowOption{
-    font-size: 20px;
-    background: gray;
-    width: 20px;
-    cursor: pointer;
+.checkTab {
+  table-layout: fixed;
+  word-break: break-all;
 }
 
-.addRow{
-    position: absolute;
-    top: 40px;
-    left: 860px;
+.rowOption {
+  font-size: 20px;
+  background: gray;
+  width: 20px;
+  cursor: pointer;
 }
 
-.delRow{
-    position: absolute;
-    top: 40px;
-    left: 890px;
+.addRow {
+  position: absolute;
+  top: 40px;
+  left: 860px;
 }
 
-.addRowDown{
-    position: absolute;
-    top: 400px;
-    left: 860px;
+.delRow {
+  position: absolute;
+  top: 40px;
+  left: 890px;
 }
 
-.delRowDown{
-    position: absolute;
-    top: 400px;
-    left: 890px;
+.addRowDown {
+  position: absolute;
+  top: 400px;
+  left: 860px;
+}
+
+.delRowDown {
+  position: absolute;
+  top: 400px;
+  left: 890px;
+}
+
+.curve_cby .el-textarea .el-textarea__inner{
+  resize: none !important;
 }

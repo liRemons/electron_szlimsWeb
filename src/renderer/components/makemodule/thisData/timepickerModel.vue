@@ -1,6 +1,6 @@
 <template>
   <div class="timepickerModel tc">
-    <div class="heightCenter3" style="height: 32px; width: 100%;">
+    <div class="heightCenter3" style="height: 32px; width: 100%;line-height:32px">
       <span>{{ time }}</span
       >&nbsp;
       <el-time-picker
