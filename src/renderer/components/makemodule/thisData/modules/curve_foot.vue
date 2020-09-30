@@ -15,8 +15,8 @@
       </tr>
       <tr v-for="(item, index) in data.valueData.point" :key="index + 'point'">
         <td colspan="3">
-          <span v-if="item.noUse">{{ item.materialName }}</span>
-          <divModel v-else v-model="item.materialName"></divModel>
+          <!-- <span v-if="item.noUse">{{ item.materialName }}</span> -->
+          <divModel v-model="item.materialName"></divModel>
         </td>
         <td>
           <divModel v-model="item.Dosage"></divModel>
@@ -28,8 +28,7 @@
           <divModel :isNumBox="true" v-model="item.count"></divModel>
         </td>
         <td @click="calculate(item, index)">
-          <span v-if="item.id">{{ item.concentration }}</span>
-          <divModel v-else v-model="item.concentration"></divModel>
+          {{ item.concentration }}
         </td>
         <td
           colspan="2"
@@ -105,8 +104,8 @@ export default {
         let foot = this.jsonString.filter((item) => item.to == "curve_foot");
 
         if (foot.length) {
-          num = foot[0].data.valueData.point[0].numbering;
-          validityPeriod = foot[0].data.valueData.point[0].validityPeriod;
+          num = this.data.valueData.point[0].numbering;
+          validityPeriod = this.data.valueData.point[0].validityPeriod;
         }
         this.jsonString.forEach((item) => {
           if (item.to == "curve_cby") {
@@ -114,13 +113,15 @@ export default {
               a.materialNum = num;
             });
           }
-        });
-        this.data.valueData.point.forEach((item) => {
-          item.numbering = num;
-          item.validityPeriod = validityPeriod;
+          if (item.to == "curve_foot") {
+            item.data.valueData.point.forEach((a) => {
+              a.validityPeriod = validityPeriod;
+              a.numbering = num;
+            });
+          }
         });
         bus.$emit("reset");
-        // this.$forceUpdate();
+        this.$forceUpdate();
       });
     },
     changeNum(e) {
@@ -139,9 +140,8 @@ export default {
       this.updateUI();
     },
     calculate(data, index) {
-      console.log(data);
       // 标液
-      if (data.id == "") {
+      if (!data.id) {
         return;
       }
 
@@ -165,7 +165,7 @@ export default {
         constantVolume,
         count
       );
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     calculateNum(Dosage, standardValue, constantVolume, count) {
       this.count++;
@@ -209,7 +209,9 @@ export default {
       // bus.$emit("reset");
     },
   },
-  mounted() {},
+  mounted() {
+    this.isUpdate = true;
+  },
 };
 </script>
 

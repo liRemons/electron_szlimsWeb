@@ -38,7 +38,11 @@
         </td>
         <td colspan="2" class="___relative">
           <divModel v-model="item.numbering"></divModel>
-          <div class="___absolute" style="top: 0; right: -160px" v-if="!onlyRead">
+          <div
+            class="___absolute"
+            style="top: 0; right: -160px"
+            v-if="!onlyRead"
+          >
             <div
               class="rowOption"
               style="display: inline-block"
@@ -62,10 +66,10 @@
         >
           <divModel v-model="item.validityPeriod"></divModel>
           <el-button
-          v-if="!onlyRead"
+            v-if="!onlyRead"
             @click="create"
             class="___absolute"
-            style="top: 0; right: -80px"
+            style="top: 0; right: -100px"
             size="mini"
             icon="el-icon-search"
             circle
@@ -78,7 +82,7 @@
 <script>
 import bus from "@/utils/bus.js";
 export default {
-  props: ["data", "jsonString",'onlyRead'],
+  props: ["data", "jsonString", "onlyRead"],
   data() {
     return {};
   },
@@ -129,6 +133,9 @@ export default {
         let constantVolume = point
           .map((item) => item.constantVolume)
           .filter((item) => item);
+        if (point.length == 1 && point[0].numbering == "") {
+          return;
+        }
         if (num.length !== point.length) {
           this.$message.warning("您有编号未填写");
           return;
@@ -149,6 +156,14 @@ export default {
       let foot = this.jsonString.filter((item) => item.to == "curve_foot");
       let point = json.map((item) => item.data.valueData.point).flat();
       let footPoint = foot.map((item) => item.data.valueData.point).flat();
+      let standardValueArr = footPoint
+        .map((item) => item.standardValue)
+        .filter((item) => item);
+
+      if (standardValueArr.length !== footPoint.length) {
+        this.$message.warning("您有浓度尚未计算");
+        return;
+      }
       this.jsonString.forEach((item) => {
         if (item.to == "curve_cbynd") {
           item.data.valueData.point.forEach((a) => {

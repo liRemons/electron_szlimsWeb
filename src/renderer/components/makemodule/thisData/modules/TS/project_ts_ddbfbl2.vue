@@ -62,12 +62,14 @@
           </td>
           <td class="___relative">
             <div class="___relative">
-              <div class="___absolute t0" style="width: 40px;">
-                {{ item.result1 }}
+              <div class="block" style="vertical-align: top;height:32px">
+                {{ item.result1 }}%
               </div>
-              <span style="margin-left: 40px;">%</span>
-              <div class="___absolute t0" style="width: 40px; left: 60px;">
+              <div class="block" style="vertical-align: top;height:32px;font-size:12px"
+              :style="{width:item.result2!=='无法分辨最小孔径'?'40px':'100px'}"
+              >
                 <selectModel
+                class="block"
                   @returnVal="returnVal3"
                   :Judge="true"
                   :special="index"
@@ -75,12 +77,13 @@
                   :single="true"
                   :rows="false"
                   :transmitText="item.result2"
-                  :list="[1.5, 3, 5, 7]"
+                  :list="[1.5, 3, 5, 7,'无法分辨最小孔径']"
                   :Obj="''"
                 >
                 </selectModel>
+                <span v-if="item.result2!=='无法分辨最小孔径'" style="vertical-align: top;">mm</span>
               </div>
-              <span style="margin-left: 50px;">mm</span>
+              
             </div>
             <utilBar
               v-if="btnFlag && target == 0"

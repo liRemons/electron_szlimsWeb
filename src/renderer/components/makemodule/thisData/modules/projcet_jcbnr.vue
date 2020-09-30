@@ -5,13 +5,13 @@
       <el-button
         class="emptyBtn"
         size="mini"
-        style="position: absolute; top: 0; right: -100px;"
+        style="position: absolute; top: 0; right: -100px"
         @click="empty"
         v-if="target == 0"
       >
         清空
       </el-button>
-      <table class="myTable" style="width: 710px;">
+      <table class="myTable" style="width: 710px">
         <tr>
           <td width="202">重复测量次数</td>
           <td>
@@ -19,7 +19,7 @@
               @returnVal="changeTestNum"
               :Judge="true"
               class="___absolute"
-              style="top: 0px;"
+              style="top: 0px"
               :special="1"
               :receive="''"
               :single="true"
@@ -34,7 +34,7 @@
         </tr>
       </table>
 
-      <table class="myTable" style="table-layout: auto !important;">
+      <table class="myTable" style="table-layout: auto !important">
         <tr class="delLine">
           <td rowspan="2" width="50">序号</td>
           <td rowspan="2" colspan="2" width="80">检测点位置</td>
@@ -45,7 +45,7 @@
             width="150"
           >
             <div class="___relative">
-              <div style="display: inline-block; margin-right: 20px;">
+              <div style="display: inline-block; margin-right: 20px">
                 测量值(单位:
               </div>
               <selectModel
@@ -68,13 +68,13 @@
               >
               </selectModel>
 
-              <span class="___absolute" style="right: 0;">)</span>
+              <span class="___absolute" style="right: 0">)</span>
             </div>
           </td>
-          <td rowspan="2" style="font-size: 12px;">
+          <td rowspan="2" style="font-size: 12px">
             *报告值(单<br />位：{{ data.valueData.company }})
           </td>
-          <td rowspan="2" style="font-size: 12px;" v-if="JudgePhotography">
+          <td rowspan="2" style="font-size: 12px" v-if="JudgePhotography">
             *年剂量(单<br />位：{{ data.valueData.company }})
           </td>
           <td rowspan="2" :colspan="!JudgePhotography ? 2 : 1" width="60">
@@ -107,32 +107,35 @@
           </td>
           <td v-if="data.valueData.testPoinrNum[0]">
             <divModel
+              isNumBox
               v-if="item.rows[3] !== '/'"
               v-model="item.rows[3]"
-              style="text-align: center;"
+              style="text-align: center"
             ></divModel>
             <span v-else>/</span>
           </td>
           <td v-if="data.valueData.testPoinrNum[1]">
             <divModel
+            isNumBox
               v-model="item.rows[4]"
               v-if="item.rows[4] !== '/'"
-              style="text-align: center;"
+              style="text-align: center"
             ></divModel>
             <span v-else>/</span>
           </td>
           <td v-if="data.valueData.testPoinrNum[2]">
             <divModel
+            isNumBox
               v-model="item.rows[5]"
               v-if="item.rows[5] !== '/'"
-              style="text-align: center;"
+              style="text-align: center"
             ></divModel>
             <span v-else>/</span>
           </td>
           <td>
             <divModel
               v-model="item.rows[6]"
-              style="text-align: center;"
+              style="text-align: center"
               :edit="false"
               :is-computer="true"
               :computers="
@@ -151,7 +154,7 @@
               @returnVal="changeRemark($event, index)"
               :Judge="true"
               class="___absolute"
-              style="top: 0px;"
+              style="top: 0px"
               :special="1"
               :receive="''"
               :single="true"

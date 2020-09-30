@@ -37,17 +37,19 @@ export default {
     },
     limit(e) {
       // 改来改去，md自己随便输吧，不限制了
-      // if (this.reg) {
-      //   this.reg == "[^0-9./]"
-      //     ? (this.$refs.myBox.value = Number(
-      //         e.target.value.replace(/[^(\-?)\d+(\.\d+)]/g, "")
-      //       ))
-      //     : "";
-      //   this.$emit("input", this.$refs.myBox.value);
-      //   // let value = e.target.value;
-      //   // let val = new RegExp(this.reg, 'g');
-      //   // e.target.value = value.replace(val, '');
-      // }
+      if (this.reg) {
+        this.reg == "[^0-9./]" && isNaN(e.target.value)
+          ? this.$message.warning("请输入正确的值")
+          : "";
+        // ? (this.$refs.myBox.value = Number(
+        //     e.target.value.replace(/[^(\-?)\d+(\.\d+)]/g, "")
+        //   ))
+        // : "";
+        this.$emit("input", this.$refs.myBox.value);
+        // let value = e.target.value;
+        // let val = new RegExp(this.reg, 'g');
+        // e.target.value = value.replace(val, '');
+      }
     },
   },
   mounted() {

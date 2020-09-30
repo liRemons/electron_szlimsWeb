@@ -6,85 +6,85 @@
   >
     <div :class="{ eventCover: !headInput }"></div>
     <div class="modules_1_tableBox ___relative mt10">
-      <p style="line-height: 16px;" class="editHistoryProject">
+      <p style="line-height: 16px" class="editHistoryProject">
         二、检测现场信息
       </p>
       <div
         class="___relative ___module_frame_Box"
-        style="border-top: solid 1px black;"
+        style="border-top: solid 1px black"
       >
         <div class="___relative borderBottom">
-          <div style="width: 140px;" class="borderRight">
-            <div style="height: 32px;">
+          <div style="width: 140px" class="borderRight">
+            <div style="height: 32px">
               <div class="tc editHistoryTitle">设备名称</div>
             </div>
           </div>
           <div
-            style="width: 190px; left: 141px;"
+            style="width: 190px; left: 141px"
             class="___absolute t0 Full borderRight"
           >
             <divModel
               v-model="data.valueData.deviceName"
               ref="deviceName"
-              style="width: 100%; text-align: center; font-size: 12px;"
+              style="width: 100%; text-align: center; font-size: 12px"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
           <div
-            style="width: 140px; left: 331px;"
+            style="width: 140px; left: 331px"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc editHistoryTitle">设备型号</div>
           </div>
-          <div style="width: 238px; right: 0;" class="___absolute t0 Full">
+          <div style="width: 238px; right: 0" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.deviceModel"
-              style="width: 100%; text-align: center;"
+              style="width: 100%; text-align: center"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
-          <div style="width: 140px;" class="borderRight">
-            <div style="height: 32px;">
+          <div style="width: 140px" class="borderRight">
+            <div style="height: 32px">
               <div class="tc editHistoryTitle">设备编号</div>
             </div>
           </div>
           <div
-            style="width: 190px; left: 141px;"
+            style="width: 190px; left: 141px"
             class="___absolute t0 Full borderRight"
           >
             <divModel
               v-model="data.valueData.deviceNum"
-              style="width: 100%; text-align: center;"
+              style="width: 100%; text-align: center"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
           <div
-            style="width: 140px; left: 331px;"
+            style="width: 140px; left: 331px"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc editHistoryTitle">生产厂家</div>
           </div>
-          <div style="width: 238px; right: 0;" class="___absolute t0 Full">
+          <div style="width: 238px; right: 0" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.manufacturer"
-              style="width: 100%; text-align: center;"
+              style="width: 100%; text-align: center"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
-          <div style="width: 140px;" class="borderRight">
-            <div style="height: 35px;">
+          <div style="width: 140px" class="borderRight">
+            <div style="height: 35px">
               <div class="tc editHistoryTitle">主要参数</div>
             </div>
           </div>
           <div
-            style="width: 190px; left: 141px;"
+            style="width: 190px; left: 141px"
             class="___absolute t0 Full borderRight editHistoryValue"
           >
-            <div class="___absolute Full" style="width: 50%;">
+            <div class="___absolute Full" style="width: 50%">
               <divModel
                 v-model="data.valueData.mainParameterkV"
                 :computers="
@@ -98,9 +98,9 @@
                 "
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <span style="margin-left: 70%;">kV</span>
+              <span style="margin-left: 70%">kV</span>
             </div>
-            <div class="___absolute Full" style="width: 50%; left: 50%;">
+            <div class="___absolute Full" style="width: 50%; left: 50%">
               <divModel
                 :computers="
                   isInteger(data.valueData.mainParametermA, 'mainParametermA')
@@ -114,7 +114,7 @@
                 "
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <div style="margin-left: 50%;">
+              <div style="margin-left: 50%">
                 <!-- 为了取到innerText值，留修改记录 -->
                 <span v-show="false">{{
                   data.valueData.mainParametermAutil
@@ -134,49 +134,49 @@
             </div>
           </div>
           <div
-            style="width: 140px; left: 331px;"
+            style="width: 140px; left: 331px"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc editHistoryTitle">所在场所</div>
           </div>
-          <div style="width: 238px; right: 0;" class="___absolute t0 Full">
+          <div style="width: 238px; right: 0" class="___absolute t0 Full">
             <divModel
               v-model="data.valueData.location"
-              style="width: 100%; text-align: center;"
+              style="width: 100%; text-align: center"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
         </div>
         <div class="___relative borderBottom">
-          <div style="width: 140px;" class="___absolute t0 Full borderRight">
-            <div style="height: 32px;">
+          <div style="width: 140px" class="___absolute t0 Full borderRight">
+            <div style="height: 32px">
               <div class="tc heightCenter3">球管编号</div>
             </div>
           </div>
           <div
-            style="width: 190px; left: 141px;"
+            style="width: 190px; left: 141px"
             class="___absolute t0 Full borderRight"
           >
             <div class="heightCenter3">
               <divModel
                 v-if="ableInput"
                 v-model="data.valueData.ballNum"
-                style="width: 100%; text-align: center; height: 32px;"
+                style="width: 100%; text-align: center; height: 32px"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
-              <div style="width: 100%; text-align: center;" v-else>
+              <div style="width: 100%; text-align: center" v-else>
                 {{ data.valueData.ballNum }}
               </div>
             </div>
           </div>
           <div
-            style="width: 140px; left: 331px;"
+            style="width: 140px; left: 331px"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc heightCenter3">设备类型</div>
           </div>
           <div
-            style="width: 238px; left: 471px; min-height: 32px;"
+            style="width: 238px; left: 471px; min-height: 32px"
             class="___relative"
           >
             <div v-for="(item, index) in deviceType" class="___relative ml5">
@@ -192,13 +192,13 @@
         <div v-for="(item, index) in data.valueData.point">
           <div class="___relative borderBottom">
             <div :class="{ eventCover: !ableInput }"></div>
-            <div style="width: 140px;" class="borderRight">
-              <div style="height: 32px;">
+            <div style="width: 140px" class="borderRight">
+              <div style="height: 32px">
                 <div class="tc">曝光模式</div>
               </div>
             </div>
             <div
-              style="width: 190px; left: 141px;"
+              style="width: 190px; left: 141px"
               class="___absolute t0 Full borderRight"
             >
               <selectModel
@@ -214,15 +214,15 @@
               ></selectModel>
             </div>
             <div
-              style="width: 140px; left: 331px;"
+              style="width: 140px; left: 331px"
               class="___absolute t0 Full borderRight"
             >
               <div class="tc">有用线束方向</div>
             </div>
-            <div style="width: 238px; right: 0;" class="___absolute t0 Full">
+            <div style="width: 238px; right: 0" class="___absolute t0 Full">
               <divModel
                 v-model="item.harnessDirection"
-                style="width: 100%; text-align: center;"
+                style="width: 100%; text-align: center"
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
             </div>
@@ -234,16 +234,16 @@
                 ipdTemplate == 'ipdTemplate' &&
                 target == 0
               "
-              style="top: 0px; right: -70px; width: 20px; z-index: 100;"
+              style="top: 0px; right: -70px; width: 20px; z-index: 100"
             >
               <div
                 class="__functionButton6"
                 @dblclick.stop="reduce(index)"
-                style="right: 0;"
+                style="right: 0"
               >
                 <span>-</span>
               </div>
-              <div class="___absolute" style="right: -200px;">
+              <div class="___absolute" style="right: -200px">
                 <el-checkbox v-model="data.valueData.point[index].checked"
                   >机房屏蔽体现场调查</el-checkbox
                 >
@@ -253,11 +253,11 @@
         </div>
         <div class="___relative borderBottom">
           <div :class="{ eventCover: !ableInput }"></div>
-          <div style="width: 140px;" class="___absolute t0 Full borderRight">
+          <div style="width: 140px" class="___absolute t0 Full borderRight">
             <div class="tc heightCenter3">设备状态</div>
           </div>
           <div
-            style="width: 190px; left: 141px;"
+            style="width: 190px; left: 141px"
             class="___absolute t0 Full borderRight"
           >
             <div
@@ -268,13 +268,13 @@
             </div>
           </div>
           <div
-            style="width: 140px; left: 331px;"
+            style="width: 140px; left: 331px"
             class="___absolute t0 Full borderRight"
           >
             <div class="tc heightCenter3">设备操作方式</div>
           </div>
-          <div style="width: 238px; left: 472px;" class="___relative">
-            <div style="height: 170px; margin-left: 10px;">
+          <div style="width: 238px; left: 472px" class="___relative">
+            <div style="height: 170px; margin-left: 10px">
               <div>
                 <el-checkbox
                   label="隔室操作"
@@ -290,7 +290,7 @@
                   v-model="data.valueData.operationMode[1]"
                 ></el-checkbox>
               </div>
-              <div style="margin-left: 10px;">
+              <div style="margin-left: 10px">
                 <div class="___relative">
                   <el-radio
                     :disabled="!data.valueData.operationMode[1]"
@@ -319,7 +319,7 @@
                       "
                       class="warp2 rowsInput2 hide focusBg ___absolute t0"
                     ></divModel>
-                    <span class="___relative" style="left: 30px;">)</span>
+                    <span class="___relative" style="left: 30px">)</span>
                   </div>
                 </div>
                 <div class="___relative">
@@ -350,7 +350,7 @@
                       "
                       class="warp2 rowsInput2 hide focusBg ___absolute t0"
                     ></divModel>
-                    <span class="___relative" style="left: 30px;">)</span>
+                    <span class="___relative" style="left: 30px">)</span>
                   </div>
                 </div>
                 <div>
@@ -365,12 +365,12 @@
           </div>
         </div>
         <div class="___relative">
-          <div style="width: 140px;" class="borderRight">
-            <div style="height: 32px;">
+          <div style="width: 140px" class="borderRight">
+            <div style="height: 32px">
               <div class="tc">现场环境</div>
             </div>
           </div>
-          <div style="width: 100px; left: 141px;" class="___absolute t0 Full">
+          <div style="width: 100px; left: 141px" class="___absolute t0 Full">
             <divModel
               :computers="
                 Fixed1(data.valueData.siteEnvironment, 'siteEnvironment')
@@ -386,11 +386,11 @@
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
-          <div style="width: 50px; left: 241px;" class="___absolute t0 Full">
+          <div style="width: 50px; left: 241px" class="___absolute t0 Full">
             °C
           </div>
 
-          <div style="width: 100px; left: 291px;" class="___absolute t0 Full">
+          <div style="width: 100px; left: 291px" class="___absolute t0 Full">
             <divModel
               :computers="
                 Fixed1(data.valueData.siteEnvironment2, 'siteEnvironment2')
@@ -406,11 +406,11 @@
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
-          <div style="width: 50px; left: 391px;" class="___absolute t0 Full">
+          <div style="width: 50px; left: 391px" class="___absolute t0 Full">
             ％Rh
           </div>
 
-          <div style="width: 100px; left: 441px;" class="___absolute t0 Full">
+          <div style="width: 100px; left: 441px" class="___absolute t0 Full">
             <divModel
               :computers="
                 Fixed1(data.valueData.siteEnvironment3, 'siteEnvironment3')
@@ -426,7 +426,7 @@
               class="Full warp2 rowsInput2 hide focusBg"
             ></divModel>
           </div>
-          <div style="width: 50px; left: 551px;" class="___absolute t0 Full">
+          <div style="width: 50px; left: 551px" class="___absolute t0 Full">
             kPa
           </div>
         </div>
@@ -445,7 +445,7 @@
         <div
           class="__functionButton6"
           @dblclick="reduce(data.valueData.point.length - 1)"
-          style="right: 30px;"
+          style="right: 30px"
         >
           <span>-</span>
         </div>
@@ -453,7 +453,7 @@
         <div class="__functionButton6" @click="increase">
           <span>+</span>
         </div>
-        <div class="___absolute" style="right: -177px;">
+        <div class="___absolute" style="right: -177px">
           <el-checkbox
             v-model="
               data.valueData.point[data.valueData.point.length - 1].checked
@@ -464,13 +464,13 @@
       </div>
       <div
         class="__functionBox tc"
-        style="right: -75px; width: 30px;"
+        style="right: -75px; width: 30px"
         v-if="ipdTemplate == 'ipdTemplate' && target == 0"
       >
         <div
           class="__functionButton6"
           @click="sure(true)"
-          style="right: 5px; font-size: 14px;"
+          style="right: 5px; font-size: 14px"
         >
           <span class="el-icon-search"></span>
         </div>
@@ -1025,15 +1025,12 @@ export default {
         usedData.splice(insertIndex + 1, 0, ...newData);
       }
       this.$emit("changeJson", [...usedData]);
-
-      // this.$store.dispatch("actionsClear", completeArr);
+      if (completeArr.length) {
+        this.$store.dispatch("actionsSurgeonArr", completeArr);
+      }
       this.$store.dispatch("actionsSetTestprojectId", true);
 
       this.$store.dispatch("actionsSurgeon");
-
-      if (completeArr.length > 0) {
-        this.$store.dispatch("actionsSurgeonArr", completeArr);
-      }
 
       if (flag !== 1) {
         this.importData.isCreate = true;

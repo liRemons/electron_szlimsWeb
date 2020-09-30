@@ -7,24 +7,22 @@
     <el-button
       class="emptyBtn"
       size="mini"
-      style="position: absolute; top: 0; right: -100px;"
+      style="position: absolute; top: 0; right: -100px"
       @click="empty"
       v-if="target == 0"
     >
       清空
     </el-button>
     <div :class="{ eventCover: !ableInput }"></div>
-    <table class="myTable" style="width: 712px;">
+    <table class="myTable" style="width: 712px">
       <tr>
-        <td width="182">
-          重复测量次数
-        </td>
+        <td width="182">重复测量次数</td>
         <td>
           <selectModel
             @returnVal="changeTestNum"
             :Judge="true"
             class="___absolute"
-            style="top: 0px; left: 20px;"
+            style="top: 0px; left: 20px"
             :special="1"
             :receive="''"
             :single="true"
@@ -39,7 +37,7 @@
       </tr>
     </table>
 
-    <table class="myTable" style="width: 712px; table-layout: auto !important;">
+    <table class="myTable" style="width: 712px; table-layout: auto !important">
       <tr class="delLine">
         <td rowspan="2" width="50">序号</td>
         <td rowspan="2" colspan="2" width="100">检测点位置</td>
@@ -54,14 +52,14 @@
           "
         >
           <div class="___relative">
-            <div class="___absolute" style="top: 0px; left: 20px;">
+            <div class="___absolute" style="top: 0px; left: 20px">
               测量值(单位:
             </div>
             <selectModel
               @returnVal="changeCompany"
               :Judge="true"
               class="___absolute"
-              style="width: 100px; top: 0px; left: 80px;"
+              style="width: 100px; top: 0px; left: 80px"
               :special="1"
               :receive="''"
               :single="true"
@@ -71,25 +69,25 @@
               :Obj="''"
             >
             </selectModel>
-            <div class="___absolute" style="top: 0px; left: 150px;">)</div>
+            <div class="___absolute" style="top: 0px; left: 150px">)</div>
           </div>
         </td>
-        <td rowspan="2" style="width: 80px;">
+        <td rowspan="2" style="width: 80px">
           最小值(单位:
           <br />
           {{ data.valueData.company }})
         </td>
-        <td rowspan="2" style="width: 80px;">
+        <td rowspan="2" style="width: 80px">
           最大值(单位:
           <br />
           {{ data.valueData.company }})
         </td>
-        <td rowspan="2" style="width: 80px;">
+        <td rowspan="2" style="width: 80px">
           平均值(单位:
           <br />
           {{ data.valueData.company }})
         </td>
-        <td rowspan="2" style="width: 80px;">
+        <td rowspan="2" style="width: 80px">
           <!-- 标准差(单位:
           <br />
           {{ data.valueData.company }}) -->
@@ -119,32 +117,35 @@
         </td>
         <td v-if="data.valueData.testPoinrNum[0]">
           <divModel
+            isNumBox
             v-if="item.rows[1] !== '/'"
             v-model="item.rows[1]"
-            style="text-align: center;"
+            style="text-align: center"
           ></divModel>
           <span v-else>/</span>
         </td>
         <td v-if="data.valueData.testPoinrNum[1]">
           <divModel
+          isNumBox
             v-if="item.rows[2] !== '/'"
             v-model="item.rows[2]"
-            style="text-align: center;"
+            style="text-align: center"
           ></divModel>
           <span v-else>/</span>
         </td>
         <td v-if="data.valueData.testPoinrNum[2]">
           <divModel
+          isNumBox
             v-if="item.rows[3] !== '/'"
             v-model="item.rows[3]"
-            style="text-align: center;"
+            style="text-align: center"
           ></divModel>
           <span v-else>/</span>
         </td>
         <td>
           <divModel
             v-model="item.rows[4]"
-            style="width: 100%; text-align: center;"
+            style="width: 100%; text-align: center"
             :edit="false"
             :is-computer="true"
             :computers="
@@ -155,19 +156,19 @@
           </divModel>
         </td>
         <td>
-          <div style="text-align: center;">{{ item.rows[5] }}</div>
+          <div style="text-align: center">{{ item.rows[5] }}</div>
         </td>
         <td>
-          <div style="text-align: center;">{{ item.rows[6] }}</div>
+          <div style="text-align: center">{{ item.rows[6] }}</div>
         </td>
         <td>
-          <div style="width: 100%; text-align: center;">
+          <div style="width: 100%; text-align: center">
             <selectModel
               v-if="flag"
               @returnVal="changeRemark($event, index)"
               :Judge="true"
               class="___absolute"
-              style="top: 0px;"
+              style="top: 0px"
               :special="1"
               :receive="''"
               :single="true"

@@ -4,12 +4,12 @@
       <div :class="{ eventCover: !ableInput }"></div>
       <table class="myTable">
         <tr>
-          <td rowspan="2" style="width:80px;">视野(mm)</td>
-          <td rowspan="2" style="width: 80px;">管电压(kV)</td>
-          <td rowspan="2" style="width: 80px;">管电流(mA)</td>
-          <td colspan="3" class="___relative" style="width: 230px;">
-            <span style="margin-right:55px;">测量值k(</span>
-            <div class="___absolute t0" style="width:50px;left:115px;">
+          <td rowspan="2" style="width: 80px">视野(mm)</td>
+          <td rowspan="2" style="width: 80px">管电压(kV)</td>
+          <td rowspan="2" style="width: 80px">管电流(mA)</td>
+          <td colspan="3" class="___relative" style="width: 230px">
+            <span style="margin-right: 55px">测量值k(</span>
+            <div class="___absolute t0" style="width: 50px; left: 115px">
               <selectModel
                 @returnVal="returnVal2"
                 :Judge="true"
@@ -18,14 +18,14 @@
                 :single="true"
                 :rows="false"
                 :transmitText="data.valueData.company"
-                :list="['μGy/s', 'nGy/s']"
+                :list="['μGy/s', 'nGy/s','mGy/s']"
                 :Obj="''"
               >
               </selectModel>
             </div>
             <span>)</span>
           </td>
-          <td rowspan="2" style="width:80px;">校准因子f</td>
+          <td rowspan="2" style="width: 80px">校准因子f</td>
           <td rowspan="2">检测结果(mGy/min)</td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
                 'view',
                 data.valueData.testProject,
                 data.valueData.multipleId,
-                jsonString
+                jsonString,
               ]"
               :transmitText="item.view"
               :list="data.valueData.sizeList.split(',')"
@@ -57,6 +57,7 @@
           </td>
           <td>
             <myInput
+              reg="[^0-9./]"
               style="text-align: center"
               @change.native="changeNum(index)"
               v-model="item.voltage"
@@ -65,6 +66,7 @@
           </td>
           <td>
             <myInput
+              reg="[^0-9./]"
               style="text-align: center"
               v-model="item.electricCurrent"
               :defaultValue="item.electricCurrent"
@@ -72,6 +74,7 @@
           </td>
           <td>
             <myInput
+              reg="[^0-9./]"
               style="text-align: center"
               @change.native="changeNum(index)"
               v-model="item.val1"
@@ -80,6 +83,7 @@
           </td>
           <td>
             <myInput
+              reg="[^0-9./]"
               style="text-align: center"
               @change.native="changeNum(index)"
               v-model="item.val2"
@@ -88,6 +92,7 @@
           </td>
           <td>
             <myInput
+              reg="[^0-9./]"
               style="text-align: center"
               @change.native="changeNum(index)"
               v-model="item.val3"
@@ -100,7 +105,7 @@
           <td class="___relative">
             <span>{{ item.result }}</span>
             <utilBar
-              v-if="btnFlag&&target==0"
+              v-if="btnFlag && target == 0"
               :data="data"
               :index="index"
               :barNum="[
@@ -108,7 +113,7 @@
                 item.isPrototype ? 1 : '',
                 3,
                 4,
-                item.isPrototype ? 5 : ''
+                item.isPrototype ? 5 : '',
               ]"
               :jsonString="jsonString"
               :whiteList="[
@@ -118,10 +123,10 @@
                 'volume',
                 'samplingDianWei',
                 'dishSize',
-                'Remarks'
+                'Remarks',
               ]"
               class="___absolute leftBtn"
-              style="left: 210px;top: 5px;"
+              style="left: 210px; top: 5px"
             ></utilBar>
           </td>
         </tr>
@@ -136,7 +141,7 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      showInput: false
+      showInput: false,
     };
   },
   props: [
@@ -152,7 +157,7 @@ export default {
     "task",
     "target",
     "deviceData",
-    "btnFlag"
+    "btnFlag",
   ],
   filters: {},
   methods: {
@@ -175,7 +180,6 @@ export default {
     },
     changeNum(index) {
       let voltage = this.data.valueData.point[index].voltage;
-      console.log(this.data.valueData.factorArr);
       if (
         this.isNumber(voltage) &&
         this.data.valueData.factorArr instanceof Array &&
@@ -184,7 +188,7 @@ export default {
         this.data.valueData.point[index].factor = this.getFactor(
           voltage,
           this.data.valueData.factorArr
-        );
+        ).toFixed46(3);
       } else {
         // this.data.valueData.point[index].factor = "";
       }
@@ -226,22 +230,22 @@ export default {
     returnVal2(val, name, index) {
       this.data.valueData.company = val;
       this.reset();
-    }
+    },
   },
   computed: {
     ...mapState({
-      deviceFactor: state => state.StomatologyLinkage.deviceFactor,
-      sizeList: state => state.StomatologyLinkage.sizeList
-    })
+      deviceFactor: (state) => state.StomatologyLinkage.deviceFactor,
+      sizeList: (state) => state.StomatologyLinkage.sizeList,
+    }),
   },
   watch: {
     deviceFactor(val) {
       if (val instanceof Array && val.length > 0) {
         this.$set(this.data.valueData, "factorArr", val);
-        this.showing.forEach(item => {
-          item.forEach(a => {
-            if(a.to=="project_ts_tssjzrstbkqbsdnldxz1")
-            a.data.valueData.factorArr = val;
+        this.showing.forEach((item) => {
+          item.forEach((a) => {
+            if (a.to == "project_ts_tssjzrstbkqbsdnldxz1")
+              a.data.valueData.factorArr = val;
           });
         });
         this.reset();
@@ -254,9 +258,9 @@ export default {
         this.data.valueData.point[0].view = Math.max(...val.split(","));
       }
       this.reset();
-    }
+    },
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

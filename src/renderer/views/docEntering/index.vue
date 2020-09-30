@@ -132,7 +132,7 @@
         @click="entryYuanShi"
         size="mini"
         type="primary"
-        :disabled="$route.query.solutionPass !== 0"
+        :disabled="$route.query.isEdit=='true'"
         v-else-if="target == 5 && showSave"
         >保存</el-button
       >
@@ -141,7 +141,7 @@
         @click="reviewBack"
         size="mini"
         type="danger"
-        v-if="target == 4 && isSelect === '0'"
+        v-if="target == 4 && isSelect == 0"
         >不通过</el-button
       >
       <el-button
@@ -544,7 +544,7 @@ export default {
       deleteDialog: false,
       staffName: "",
       unitInvalidDuration: 0.5,
-      unitTime:""
+      unitTime: "",
     };
   },
 
@@ -718,7 +718,7 @@ export default {
             id: resItem.tasks[0].id,
             unitUrl: resItem.tasks[0].unitUrl,
           });
-         this.unitTime= resItem.tasks[0].unitTime
+          this.unitTime = resItem.tasks[0].unitTime;
           this.tasks.push(resItem.tasks[0]);
           this.taskDatas.push({
             id: "",

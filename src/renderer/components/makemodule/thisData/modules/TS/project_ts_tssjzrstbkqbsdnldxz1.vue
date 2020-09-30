@@ -154,6 +154,7 @@ export default {
       this.data.valueData.size.split(",").forEach((item, index) => {
         arr.push(...item.split("，"));
       });
+      console.log(arr)
       this.data.valueData.sizeJudge = arr.length;
       this.$store.dispatch("actionsSizeList", arr.toString());
     },

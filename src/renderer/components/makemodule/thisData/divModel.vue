@@ -1,7 +1,7 @@
 <template>
   <div
     class="box historyValue"
-    style="background: #fff; max-width: 99%"
+    style="background: #fff; max-width: 99%; margin: 0 2px"
   >
     <!--数字框-->
     <section
@@ -176,9 +176,12 @@ export default {
       // let content = this.$refs.box.textContent;
 
       let value = this.$refs.box.textContent;
-      // if (this.isNumBox) {
-      //   this.$refs.box.textContent = Number(value.replace(/[^\d.]/g, ""));
-      // }
+
+      if (this.isNumBox && isNaN(value)) {
+        this.$message.warning("请输入正确的值");
+        this.$refs.box.textContent = "";
+        // this.$refs.box.textContent = Number(value.replace(/[^\d.]/g, ""));
+      }
       this.$emit("change", this.$refs.box.textContent);
     },
     changeNum(e) {

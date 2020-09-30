@@ -1,12 +1,24 @@
 <template>
   <div>
+    <div
+      class="tl05"
+      style="
+        border: 1px solid gray;
+        line-height: 32px;
+        width: 1138px;
+        border-bottom: none;
+      "
+    >
+      标准储备液浓度
+    </div>
     <table style="width: 1140px" border="1" class="curveTable">
       <tr>
-        <td class="tl05" :colspan="2+ num.length">标准储备液浓度</td>
-      </tr>
-      <tr>
         <td colspan="2">标准储备液各组分浓度</td>
-        <td v-for="item in num" :colspan="(10 - 2) / num.length">
+        <td
+          v-for="(item, index) in num"
+          :colspan="(10 - 2) / num.length"
+          :key="index + 'index'"
+        >
           {{ item.numbering }}
         </td>
       </tr>
@@ -26,7 +38,7 @@
 
 <script>
 export default {
-  props: ["data", "jsonString",'onlyRead'],
+  props: ["data", "jsonString", "onlyRead"],
   data() {
     return {
       num: [],
@@ -35,6 +47,9 @@ export default {
   watch: {
     "data.valueData.point": function () {
       this.num = this.data.valueData.point[0].num;
+      if (!this.num) {
+        return;
+      }
       this.data.valueData.point.forEach((item, index) => {
         item.rows = [];
         item.num.forEach((a, b) => {
