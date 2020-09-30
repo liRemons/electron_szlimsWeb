@@ -28,7 +28,7 @@
         <tr class="tl">
           <td
             colspan="5"
-            style="padding-left:10px;line-height: 24px;text-indent:25px;"
+            style="padding-left: 10px; line-height: 24px; text-indent: 25px"
           >
             <span
               >将尺寸为30cm×30cm×20cm的水模放置在探测器与影像接收器之间，调节至影像接收器最大照射野尺寸下<br />进行检测，检测条件见下表，计算公式：检测结果=(∑k)/3×f</span
@@ -91,6 +91,7 @@
           <td colspan="2">
             <div v-if="target == 0">
               <selectModel
+                v-if="data.valueData.isEdit"
                 @returnVal="returnVal"
                 :Judge="true"
                 :special="'0'"
@@ -104,11 +105,17 @@
                   'C形臂',
                   '影像增强器床下管',
                   '普通荧光屏透视',
-                  '自定义'
+                  '自定义',
                 ]"
                 :Obj="''"
               >
               </selectModel>
+              <myInput
+                style="text-align: center"
+                v-else
+                v-model="data.valueData.deviceType"
+                :defaultValue="data.valueData.deviceType"
+              ></myInput>
             </div>
             <div v-else>{{ data.valueData.deviceType }}</div>
           </td>
@@ -136,7 +143,7 @@ export default {
     "ableInput",
     "task",
     "target",
-    "deviceData"
+    "deviceData",
   ],
   filters: {},
   methods: {
@@ -145,7 +152,7 @@ export default {
         this.$notify({
           title: "错误",
           type: "error",
-          message: "尺寸已输入，如果修改可能会造成数据丢失，请谨慎操作！"
+          message: "尺寸已输入，如果修改可能会造成数据丢失，请谨慎操作！",
         });
       }
     },
@@ -154,7 +161,7 @@ export default {
       this.data.valueData.size.split(",").forEach((item, index) => {
         arr.push(...item.split("，"));
       });
-      console.log(arr)
+      console.log(arr);
       this.data.valueData.sizeJudge = arr.length;
       this.$store.dispatch("actionsSizeList", arr.toString());
     },
@@ -169,10 +176,19 @@ export default {
     },
     returnVal(val, name, index) {
       this.data.valueData.deviceType = val;
+      if (val == "自定义") {
+        this.data.valueData.deviceType = "";
+        this.data.valueData.isEdit = false;
+      }
+
       // this.assignment(this.data.valueData.deviceType)
+    },
+  },
+  mounted() {
+    if (this.data.valueData.isEdit == undefined) {
+      this.data.valueData.isEdit = true;
     }
   },
-  mounted() {}
 };
 </script>
 
