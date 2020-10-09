@@ -150,7 +150,11 @@
           </el-col>
           <el-col :span="14">
             <el-form-item label="标准物质:" prop="materialId">
-              <el-select v-model="addCurve.materialId" placeholder="请选择">
+              <el-select
+                v-model="addCurve.materialId"
+                @change="changeMaterial"
+                placeholder="请选择"
+              >
                 <el-option
                   v-for="(item, index) in materialList"
                   :label="item.materialName"
@@ -285,6 +289,7 @@ import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
+      curveCbyndPoint: "",
       expands: [],
       pageIndex: 1,
       pageSize: 10,
@@ -353,6 +358,20 @@ export default {
     },
   },
   methods: {
+    changeMaterial(val) {
+      let point = this.curveCbyndPoint.filter((item) => item.id === val);
+      if (point.length) {
+        let series0 = JSON.parse(JSON.stringify(this.addCurve.series[0]));
+        this.addCurve.series = [];
+        point[0].rows.forEach((item) => {
+          this.addCurve.series.push({
+            testProject: item,
+            response: "",
+          });
+        });
+        this.addCurve.series.unshift(series0);
+      }
+    },
     getRowKeys(row) {
       return row.id;
     },
@@ -365,7 +384,13 @@ export default {
     },
     //曲线列表
     add() {
-      let content = ["curve_head", "curve_mid", "curve_foot", "curve_cby","curve_cbynd"];
+      let content = [
+        "curve_head",
+        "curve_mid",
+        "curve_foot",
+        "curve_cby",
+        "curve_cbynd",
+      ];
       // let content = ["curve_head", "curve_mid", "curve_foot"];
       this.$router.push(`/laboratory/doc-entering/5`);
       sessionStorage.setItem("templateContent", JSON.stringify(content));
@@ -449,6 +474,11 @@ export default {
     //显示新增曲线
     toShowAddCurve(row) {
       this.rowData = row;
+      let solutionPreparationData = JSON.parse(row.solutionPreparationData);
+      this.curveCbyndPoint = solutionPreparationData
+        .filter((item) => item.testProject == "curve_cbynd")
+        .map((item) => item.point)
+        .flat();
       let materialArr = JSON.myParse(row.materialArr);
       let curves = row.curves;
       this.materialList = materialArr.filter((item) => {
@@ -634,69 +664,7 @@ export default {
         }
       });
     },
-    entryOriginal(index) {
-      let nowCurve = this.curveList[index];
-      let solutionPreparationData = nowCurve.solutionPreparationData;
-      let token = getToken();
-      let user = JSON.myParse(token).staffName;
-      if (solutionPreparationData == null) {
-        console.log("solutionPreparationData为null");
-        let peiZhiDate = _dateFormat("now", "Y 年 M 月 D 日");
-        let jiaoHeDate = _dateFormat("now", "Y 年 M 月 D 日");
 
-        solutionPreparationData = {
-          temperature: "温度", //温度
-          humidity: "湿度", //湿度
-          solutionTemperature: "溶液温度", //溶液温度
-          standard: "依据标准", //依据标准
-          user,
-          peiZhiDate, //配置者日期
-          jiaoHeDate,
-          biaoZhunArr: [{}],
-          materialList: this.materialList,
-          biaoZhunDownArr: [
-            {
-              materialName: "",
-              Dosage: "",
-              constantVolume: "",
-              concentration: "",
-              numbering: "",
-              validityPeriod: "",
-            },
-          ],
-          biaoHaoArr: ["", "", "", "", "", "", ""],
-          guiGeArr: ["", "", "", "", "", "", ""],
-          checkBoxArr: [false, false, false, false, false, false, false],
-        };
-
-        sessionStorage.setItem(
-          "solutionPreparationData",
-          JSON.stringify(solutionPreparationData)
-        );
-        sessionStorage.setItem(
-          "addYuanShiObj",
-          JSON.stringify({
-            curveId: nowCurve.id,
-            preparationStaffId: JSON.myParse(token).id,
-          })
-        );
-      } else {
-        console.log("solutionPreparationData不为null");
-
-        sessionStorage.setItem(
-          "solutionPreparationData",
-          solutionPreparationData
-        );
-        sessionStorage.setItem(
-          "addYuanShiObj",
-          JSON.stringify({
-            curveId: nowCurve.id,
-            preparationStaffId: JSON.myParse(token).id,
-          })
-        );
-      }
-      this.$router.push(`/laboratory/doc-entering/5`);
-    },
     toStringify2(arr) {
       let myArr = [];
       for (let j = 0; j < arr.length; j++) {
@@ -767,7 +735,6 @@ export default {
         (yem - ((x.length * y1 - yem * x1) / (x.length * x2 - x1 * x1)) * x1) /
         x.length
       ).toFixed(4);
-      console.log(x2, x1 * x1);
       let B = ((x.length * y1 - yem * x1) / (x.length * x2 - x1 * x1)).toFixed(
         4
       );
@@ -892,15 +859,11 @@ export default {
         ori += ((x[i] - xavg) / xrange) * ((y[i] - yavg) / yrange);
       }
       let R2 = Math.pow(ori / x.length, 2);
-      console.log("拟合优度R的平方为" + R2.toFixed(4));
-      // console.log("公式：" + "y=" + result[1].toFixed(4) + "* X" + s);
       R2 = this.isNumber(R2.toFixed46(4)) ? R2.toFixed46(4) : 0;
       let A = this.isNumber(result[1].toFixed46(4))
         ? result[1].toFixed46(4)
         : 0;
-      // this.addCurve.regressionEquationValue1=
       let B = this.isNumber(parseFloat(s)) ? s : 0;
-      console.log(B, "B");
       return [R2, A + "* X" + (B !== 0 ? B : ""), A, B];
     },
     // 计算指数
@@ -963,8 +926,6 @@ export default {
         ssreg += (oriY[i] - yavg) * (oriY[i] - yavg);
       }
       let R2 = 1 - sss / ssreg;
-      // console.log("拟合优度R的平方为===" + R2.toFixed(4));  //拟合优度
-      // console.log("Y=" + A + "*e^(" + B + "*X)");
       // R2 = this.isNumber(R2.toFixed46(4)) ? R2.toFixed46(4) : 0;
       R2 = this.isNumber(R2.toFixed(4)) ? R2.toFixed(4) : 0;
       let valA = this.isNumber(parseFloat(A)) ? A : 0;

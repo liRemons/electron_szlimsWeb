@@ -1,17 +1,19 @@
 <template>
   <div>
     <div :class="{ _normalHeight_: true }" class="___relative">
-      <div :class="{ eventCover: !ableInput }"></div>
+      <div
+        :class="{ eventCover: !ableInput || purposeDetection == '状态检测' }"
+      ></div>
       <table class="myTable">
         <tr>
-          <td rowspan="2" style="width: 100px; line-height: 16px;">
+          <td rowspan="2" style="width: 100px; line-height: 16px">
             影像增强输入<br />屏视野尺(mm)
           </td>
-          <td rowspan="2" style="width: 80px;">管电压(kV)</td>
-          <td rowspan="2" style="width: 80px;">管电流(mA)</td>
-          <td colspan="3" class="___relative" style="width: 230px;">
-            <span style="margin-right: 55px;">测量值k(</span>
-            <div class="___absolute t0" style="width: 50px; left: 115px;">
+          <td rowspan="2" style="width: 80px">管电压(kV)</td>
+          <td rowspan="2" style="width: 80px">管电流(mA)</td>
+          <td colspan="3" class="___relative" style="width: 230px">
+            <span style="margin-right: 55px">测量值k(</span>
+            <div class="___absolute t0" style="width: 50px; left: 115px">
               <selectModel
                 @returnVal="returnVal2"
                 :Judge="true"
@@ -27,11 +29,9 @@
             </div>
             <span>)</span>
           </td>
-          <td rowspan="2" style="width: 80px;">校准因子f</td>
-          <td rowspan="2" style="line-height: 16px;">影增前有<br />无滤线栅</td>
-          <td rowspan="2" style="line-height: 16px;">
-            检测结果<br />(μGy/min)
-          </td>
+          <td rowspan="2" style="width: 80px">校准因子f</td>
+          <td rowspan="2" style="line-height: 16px">影增前有<br />无滤线栅</td>
+          <td rowspan="2" style="line-height: 16px">检测结果<br />(μGy/min)</td>
         </tr>
         <tr>
           <td>1</td>
@@ -62,7 +62,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.voltage"
               @change.native="changeNum(index)"
               :defaultValue="item.voltage"
@@ -70,14 +70,14 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.electricCurrent"
               :defaultValue="item.electricCurrent"
             ></myInput>
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(index)"
               v-model="item.val1"
               :defaultValue="item.val1"
@@ -85,7 +85,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               @change.native="changeNum(index)"
               v-model="item.val2"
               :defaultValue="item.val2"
@@ -93,7 +93,7 @@
           </td>
           <td>
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.val3"
               @change.native="changeNum(index)"
               :defaultValue="item.val3"
@@ -116,7 +116,7 @@
             >
             </selectModel>
             <utilBar
-              v-if="btnFlag && target == 0"
+              v-if="btnFlag && target == 0 && purposeDetection !== '状态检测'"
               :data="data"
               :index="index"
               :barNum="[
@@ -137,7 +137,7 @@
                 'Remarks',
               ]"
               class="___absolute leftBtn"
-              style="left: 193px; top: 5px;"
+              style="left: 193px; top: 5px"
             ></utilBar>
           </td>
           <td class="hide">
@@ -163,6 +163,7 @@ export default {
     "btnFlag",
     "pageNumber",
     "data",
+    "purposeDetection",
     "thisPageIndex",
     "jsonString",
     "showing",

@@ -91,7 +91,7 @@
           <td colspan="2">
             <div v-if="target == 0">
               <selectModel
-                v-if="data.valueData.isEdit"
+                v-if="data.valueData.isEdit||data.valueData.deviceType==''"
                 @returnVal="returnVal"
                 :Judge="true"
                 :special="'0'"
@@ -177,7 +177,7 @@ export default {
     returnVal(val, name, index) {
       this.data.valueData.deviceType = val;
       if (val == "自定义") {
-        this.data.valueData.deviceType = "";
+        this.data.valueData.deviceType = " ";
         this.data.valueData.isEdit = false;
       }
 

@@ -46,7 +46,7 @@
           </td>
           <td>
             <myInput
-						v-if="!flag"
+              v-if="!flag && purposeDetection !== '状态检测'"
               style="text-align: center"
               v-model="data.valueData.distance"
               :defaultValue="data.valueData.distance"
@@ -62,11 +62,12 @@
 export default {
   data() {
     return {
-			flag:false
-		};
+      flag: false,
+    };
   },
   computed: {},
   props: [
+    "purposeDetection",
     "ipdTemplate",
     "pageNumber",
     "data",

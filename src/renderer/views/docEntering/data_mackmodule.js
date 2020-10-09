@@ -26,7 +26,7 @@ export default {
     categoryOptions: [],
 
     pass: "",
-    // url:'http://192.168.1.198:8002',
+    // url:'http://192.168.1.198:8003',
     imgUrl: "http://118.178.18.106:8080/roms/",
     winAppUrl: 'http://xtroms.com:2222',
     url: 'http://118.178.18.106:8002',

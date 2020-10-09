@@ -106,6 +106,7 @@
                   :headInput="headInput"
                   :key="moduleJson.id"
                   :ipdTemplate="ipdTemplate"
+                  :purposeDetection="purposeDetection"
                   @restart="Reset"
                   @deleteSample="deleteSample"
                   @redefinition="redefinition"
@@ -233,7 +234,8 @@ import { currentTime } from "@/utils/dateTime.js";
 export default {
   data() {
     return {
-      time:"",
+      purposeDetection: "",
+      time: "",
       heads,
       pageBox: false,
       staffId: "",
@@ -305,7 +307,7 @@ export default {
     target: String,
     importData: Object,
     unitUrl: Array,
-    unitTime:String
+    unitTime: String,
   },
   methods: {
     classification(data) {
@@ -595,6 +597,16 @@ export default {
       // this.jfpbtData(decompose); //修复重复数据屏蔽体现场调查   (失败)
 
       this.jsonString = decompose;
+      // 获取检测类型-------START
+      let project_jbxxData = this.jsonString.find(
+        (item) => item.to === "project_jbxx"
+      );
+      if (project_jbxxData) {
+        this.purposeDetection = this.detectionType(
+          project_jbxxData.data.valueData.purposeDetection
+        );
+      }
+      // ----------------END
       this.$forceUpdate();
       this.Reset();
 
@@ -724,11 +736,11 @@ export default {
             "emptyBtn",
             "el-icon-arrow-down",
           ];
-        setTimeout(() => {
+          setTimeout(() => {
             displayNoneArr.forEach((item) => {
-            dispalyNone(item);
-          });
-        }, 500);
+              dispalyNone(item);
+            });
+          }, 500);
 
           this.readFile(JSON.parse(getToken()), "noPass");
           this.readFileEvent().then((reson) => {
@@ -1035,7 +1047,7 @@ export default {
           "Y年M月D日  h时m分"
         );
       }
-      
+
       this.jsonString.forEach((item) => {
         if (
           !item.data.valueData.title &&
@@ -1066,11 +1078,14 @@ export default {
           item.data.valueData.isSampleName = true;
         }
       });
-      this.jsonString.forEach((item,index)=>{
-        if(item.to=="projcet_jcbt"&&item.data.valueData.exposureMode=='头颅摄影'){
-          this.jsonString.splice()
+      this.jsonString.forEach((item, index) => {
+        if (
+          item.to == "projcet_jcbt" &&
+          item.data.valueData.exposureMode == "头颅摄影"
+        ) {
+          this.jsonString.splice();
         }
-      })
+      });
 
       // ————————————————————————————————————
       // this.Reset();
@@ -1382,7 +1397,7 @@ export default {
               template.valueData[localArr[index]] = task[item];
             }
           });
-          template.valueData.detectionTime =this.taskData.startTime;
+          template.valueData.detectionTime = this.taskData.startTime;
           try {
             template.valueData.assessArr = JSON.myParse(task["assessArr"])
               .map((item) => item.evaluateName)
@@ -1733,11 +1748,14 @@ export default {
     },
   },
   mounted() {
-    if(this.unitTime){
-       this.time=this.$utils.dateFormat(new Date(this.unitTime).getTime(),'yyyy年MM月dd日 HH时mm分ss秒')
-     this.time = this.time.substring(0, this.time.length - 3);
+    if (this.unitTime) {
+      this.time = this.$utils.dateFormat(
+        new Date(this.unitTime).getTime(),
+        "yyyy年MM月dd日 HH时mm分ss秒"
+      );
+      this.time = this.time.substring(0, this.time.length - 3);
     }
-   
+
     if (this.$route.params.target == 3) {
       this.btnFlag = false;
     } else {

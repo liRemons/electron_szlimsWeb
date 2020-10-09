@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="{ _normalHeight_: true }" class="___relative mt20">
-      <div :class="{ eventCover: !ableInput }"></div>
+      <div :class="{ eventCover: !ableInput || purposeDetection == '状态检测' }"></div>
       <table class="myTable">
         <tr class="tl">
           <td colspan="5">
@@ -96,7 +96,8 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+    };
   },
   computed: {},
   props: [
@@ -110,6 +111,7 @@ export default {
     "isTemplate",
     "ableInput",
     "task",
+    "purposeDetection",
     "target",
     "deviceData",
   ],
@@ -150,6 +152,7 @@ export default {
     },
   },
   mounted() {
+
     if (this.data.valueData.isEdit == undefined) {
       this.data.valueData.isEdit = true;
     }
