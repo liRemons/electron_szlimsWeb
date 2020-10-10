@@ -329,8 +329,8 @@ export default [
       //模块内容键值对
       testProject: "project_dc_dchjxpcl",
       correct: "电磁环境测量",
-      pointId: window.uuid(),
-      foreverId: window.uuid(), //永久的id 用于重复样
+      pointId: "",
+      foreverId: "", //永久的id 用于重复样
       testNum: "",
       pointNum: "",
       pointName: "",
@@ -405,8 +405,8 @@ export default [
       //模块内容键值对
       testProject: "project_dc_dchjxpclbg",
       correct: "电磁环境选频测量表格",
-      pointId: window.uuid(),
-      foreverId: window.uuid(), //永久的id 用于重复样
+      pointId: "",
+      foreverId: "", //永久的id 用于重复样
       point: [
         {
           v1: 1,
@@ -451,8 +451,8 @@ export default [
       testProject: "project_dc_dctj",
       correct: "统计",
       Judge: true,
-      pointId: window.uuid(),
-      foreverId: window.uuid(), //永久的id 用于重复样
+      pointId: "",
+      foreverId: "", //永久的id 用于重复样
       Other: ["", ""],
       total: ["", ""],
       point: [],
@@ -484,8 +484,8 @@ export default [
     noCopyArr: [],
     //添加行使用的模板数据
     modelRow: {
-      pointId: window.uuid(),
-      foreverId: window.uuid(), //永久的id 用于重复样
+      pointId: "",
+      foreverId: "", //永久的id 用于重复样
       noShow: true,
       heBingId: "",
       heBingLength: "",

@@ -52,22 +52,7 @@
         v-if="target == 0 || target == 2 || target == 3"
         >索引
       </el-button>
-      <el-button
-        @click="dcUpload"
-        v-if="deviceMainId == 6"
-        style="position: fixed; left: 4.1vw; top: 18vh"
-        size="mini"
-        type="primary"
-        round
-        >上传文件
-      </el-button>
-      <input
-        type="file"
-        v-if="inputFile"
-        @change="fileImport"
-        id="file"
-        style="display: none"
-      />
+      
 
       <el-button
         @click="temporaryData"
@@ -430,7 +415,7 @@
 
 <script>
 import bus from "@/utils/bus.js";
-import XLSX from "xlsx";
+
 import store from "@/store";
 import ShowTemplate from "./components/ShowTemplate";
 import ShowLaboratoryTemplate from "./components/ShowLaboratoryTemplate.vue";
@@ -1950,50 +1935,7 @@ export default {
           console.log(error);
         });
     },
-    dcUpload() {
-      document.querySelector("#file").click();
-    },
-    fileImport() {
-      //获取读取我文件的File对象
-      var selectedFile = document.getElementById("file").files[0];
-      var reader = new FileReader(); //这是核心,读取操作就是由它完成.
-      reader.readAsBinaryString(selectedFile);
-      let this_ = this;
-      reader.onload = function (e) {
-        let persons = [];
-        var data = e.target.result;
-        var workbook = XLSX.read(data, { type: "binary" });
-        for (var sheet in workbook.Sheets) {
-          if (workbook.Sheets.hasOwnProperty(sheet)) {
-            let fromTo = workbook.Sheets[sheet]["!ref"];
-            persons = persons.concat(
-              XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
-            );
-            break; // 如果只取第一张表，就取消注释这行
-          }
-        }
-        // let arr = persons.filter((item) => !isNaN(item["索引"]));
-        // console.log(arr);
-        let newArr = persons.map((item) => {
-          return {
-            v1: item["索引"],
-            v2: item["服务"],
-            v3: item["频段"],
-            v4: item.E1.split(" ")[0],
-            v5: item.E2.split(" ")[0],
-            v6: item.E3.split(" ")[0],
-            v7: item.E4.split(" ")[0],
-            v8: item.E5.split(" ")[0],
-            v9: item.E1.split(" ")[1],
-          };
-        });
-        this_.$store.commit("CHANGE_DCHJXPCLBG", newArr);
-        this_.inputFile = false;
-        this_.$nextTick(() => {
-          this_.inputFile = true;
-        });
-      };
-    },
+    
   },
 
   created() {

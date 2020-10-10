@@ -220,6 +220,7 @@ import { queryListType } from "@/api/local";
 import { getToken } from "@/utils/auth";
 import heads from "@/components/makemodule/thisData/dataJs/heads.js";
 import modules from "@/components/makemodule/thisData/dataJs/modules.js";
+
 import bus from "@/utils/bus.js";
 import { getInstrumentList } from "@/api/entering";
 import { setTimeout } from "timers";
@@ -412,10 +413,9 @@ export default {
         );
       }
       // ---------------------------END----------------------------
-      // --------------------------START----------------
-      let dc = this.jsonString.filter((item) => item.to == "project_dc_jcxx")
-        .length;
-      // "project_dc_dchjcl"
+      // --------------------------电磁START----------------
+      // this.jsonString.filter((item) => item.to == "project_dc_jcxx").length &&
+      //   this.dcInit();
       // --------------------------END-----------------
       this.jsonString.forEach((item, index) => {
         let obj = {};
@@ -479,8 +479,8 @@ export default {
             for (let i = 0; i < this.syntheticData.length; i++) {
               let nowRows = this.syntheticData[i].rows;
               let myId = nowRows[nowRows.length - 1];
-              let index = arr.findIndex((item) => {
-                return item.rows[item.rows.length - 1] === myId;
+              let index = arr.findIndex((v) => {
+                return v.rows[v.rows.length - 1] === myId;
               });
               if (
                 index !== -1 &&
@@ -499,9 +499,9 @@ export default {
         } else {
           point = item.data.valueData.point;
         }
-        point.forEach((po, index) => {
+        point.forEach((po, i) => {
           if (po != "") {
-            po.index = index + 1;
+            po.index = i + 1;
           }
         });
         let lastProject = Adaptive(decompose, height);
@@ -544,7 +544,6 @@ export default {
           if (several > 2) {
             several -= 2;
           }
-
           if (point.length > several) {
             projcet.data.valueData.point = this.deepCopy(
               point.slice(0, several)
@@ -619,7 +618,7 @@ export default {
         this.generateTestprojectId();
         this.getContents();
       }, 100);
-
+      
       this.jsonString.forEach((item) => {
         if (this.target != 0 && item.data.toBeShow) {
           setTimeout(() => {
@@ -1332,33 +1331,7 @@ export default {
       }
     },
 
-    deepCopy(target) {
-      let copyed_objs = []; //此数组解决了循环引用和相同引用的问题，它存放已经递归到的目标对象
-      function _deepCopy(target) {
-        if (typeof target !== "object" || !target) {
-          return target;
-        }
-        for (let i = 0; i < copyed_objs.length; i++) {
-          if (copyed_objs[i].target === target) {
-            return copyed_objs[i].copyTarget;
-          }
-        }
-        let obj = {};
-        if (Array.isArray(target)) {
-          obj = []; //处理target是数组的情况
-        }
-        copyed_objs.push({ target: target, copyTarget: obj });
-        Object.keys(target).forEach((key) => {
-          if (obj[key]) {
-            return;
-          }
-          obj[key] = _deepCopy(target[key]);
-        });
-        return obj;
-      }
-
-      return _deepCopy(target);
-    },
+    
 
     dataFormat(template, content, task) {
       let name = template.name;

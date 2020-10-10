@@ -3,7 +3,7 @@
     <div class="login_box">
       <div class="img">
         <div class="title">深圳瑞达智能检测系统用户端</div>
-        <img  src="@/assets/icon/login_box.png" alt="" />
+        <img src="@/assets/icon/login_box.png" alt="" />
         <!-- @click="$router.replace('/camera')" -->
       </div>
       <div class="right">
@@ -18,7 +18,7 @@
             <el-input v-show="false"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="primary" style="width:100%" @click="winGetUserInfo"
+        <el-button type="primary" style="width: 100%" @click="winGetUserInfo"
           >登 录</el-button
         >
       </div>
@@ -29,7 +29,6 @@
 <script>
 import { winGetUserInfo } from "@/api/login";
 import { setToken, getToken } from "@/utils/auth";
-
 export default {
   name: "login",
   data() {
@@ -37,7 +36,7 @@ export default {
       phone: "",
       staffFingerprints: "", //数据库中的参考指纹
       staff: null,
-      fingerprint: {}
+      fingerprint: {},
     };
   },
   methods: {
@@ -49,22 +48,22 @@ export default {
       if (this.phone === "") {
         this.$notify({
           type: "warning",
-          message: "请填写手机号！"
+          message: "请填写手机号！",
         });
         return;
       }
-      winGetUserInfo(this.phone).then(res => {
+      winGetUserInfo(this.phone).then((res) => {
         let staffFingerprint = res.staff.staffFingerprint; //返回的是该人员的多个指纹 以逗号分隔
         this.staff = res.staff;
         if (staffFingerprint == "" || staffFingerprint == null) {
           this.$notify({
             message: "该人员没有录入指纹",
-            type: "error"
+            type: "error",
           });
         } else {
           this.$notify({
             message: "获取指纹信息成功, 请录入指纹.",
-            type: "success"
+            type: "success",
           });
           this.staffFingerprints = staffFingerprint.split(",");
           setToken(this.staff);
@@ -81,11 +80,11 @@ export default {
     //获取匹配指纹
     GetMatTemplate() {
       this.finger(this.staffFingerprints[0]);
-    }
+    },
   },
   mounted() {
     //回车登录
-    window.onkeydown = key => {
+    window.onkeydown = (key) => {
       if (key.keyCode == 13) {
         this.winGetUserInfo();
       }
@@ -116,13 +115,13 @@ export default {
         this.$message.error("匹配失败");
         this.finger(this.staffFingerprints[0]);
       }
-    }
+    },
   },
   computed: {
     getFingerprintCode() {
       this.fingerprint = this.$store.state.fingerprint;
       return this.fingerprint.fingerprintCode;
-    }
+    },
   },
   created() {
     // this.$ipcRenderer.send("getUser");
@@ -130,7 +129,7 @@ export default {
 
   beforeDestroy() {
     window.onkeydown = null;
-  }
+  },
 };
 </script>
 
@@ -145,7 +144,7 @@ export default {
   justify-content: center;
   align-items: center;
   .login_box {
-    transition: .3s;
+    transition: 0.3s;
     background: url("../../assets/icon/loginbox_bg.png") no-repeat;
     background-size: contain;
     width: 1000px;

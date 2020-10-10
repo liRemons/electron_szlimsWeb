@@ -4,37 +4,19 @@
       <div :class="{ eventCover: !ableInput }"></div>
       <table class="myTable">
         <tr :class="thisPageIndex === 0 ? '' : 'delLine'">
-          <td class="___relative tc">
-            <span>统计</span>
-          </td>
-          <td class="___relative tc">
-            <span>电场强度E(V/m)</span>
-          </td>
-          <td class="___relative tc">
-            <span>综合场强值Eₛ(V/m)</span>
-          </td>
+          <td>统计</td>
+          <td>电场强度E(V/m)</td>
+          <td>综合场强值Eₛ(V/m)</td>
         </tr>
         <tr>
-          <td class="___relative tc">
-            <span>其他场强值</span>
-          </td>
-          <td class="___relative tc">
-            <div>{{ data.valueData.Other[0] }}</div>
-          </td>
-          <td class="___relative tc">
-            <div>{{ data.valueData.Other[1] }}</div>
-          </td>
+          <td>其他场强值</td>
+          <td>{{ data.valueData.Other[0] }}</td>
+          <td>{{ data.valueData.Other[1] }}</td>
         </tr>
         <tr>
-          <td class="___relative tc">
-            <span>总场强值</span>
-          </td>
-          <td class="___relative tc">
-            <div>{{ data.valueData.total[0] }}</div>
-          </td>
-          <td class="___relative tc">
-            <div>{{ data.valueData.total[1] }}</div>
-          </td>
+          <td>总场强值</td>
+          <td>{{ data.valueData.total[0] }}</td>
+          <td>{{ data.valueData.total[1] }}</td>
         </tr>
       </table>
     </div>
@@ -42,25 +24,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   data() {
-    return {
-      selectItem: "",
-      selectItemIndex: "",
-      sampleOption: "",
-    };
+    return {};
   },
-  watch: {
-    dchjbgPoint(){
-      this.getElectromagnetismData();
-    }
-  },
-  computed: {
-    ...mapState({
-      dchjbgPoint: (state) => state.laboratory.dchjbgPoint,
-    }),
-  },
+
   props: [
     "ipdTemplate",
     "pageNumber",
@@ -76,48 +44,8 @@ export default {
     "deviceData",
   ],
   filters: {},
-  methods: {
-    gatThisVal(data) {
-      let arr = [
-        { title: "其他场强值", key: "Other" },
-        { title: "总场强值", key: "total" },
-      ];
-      arr.forEach((item, index) => {
-        let obj = data.find((val, num) => item.title === val.v1);
-        if (obj) {
-          let average = this.average([obj.v4, obj.v5, obj.v6, obj.v7, obj.v8]);
-          this.data.valueData[item.key][0] = average;
-          this.data.valueData[item.key][1] = Math.sqrt(average * average);
-        }
-      });
-    },
-    getElectromagnetismData() {
-      if (this.data.valueData.Judge) {
-        this.data.valueData.Judge = false;
-        // 方法已经写好data为接口数据
-       
-        let totalData = this.dchjbgPoint;
-        
-        let obj = this.jsonString.find(
-          (item, index) => item.to === "project_dc_dchjxpclbg"
-        );
-        if (obj) {
-          this.jsonString.forEach((item, index) => {
-            if (item.to === "project_dc_dchjxpclbg") {
-              item.data.valueData.point = [];
-            }
-          });
-          this.gatThisVal(totalData);
-          this.$set(obj.data.valueData, "point", totalData);
-          this.$forceUpdate();
-          this.$emit('redefinition')
-        }
-      }
-    },
-  },
-  mounted() {
-    
-  },
+  methods: {},
+  mounted() {},
 };
 </script>
 

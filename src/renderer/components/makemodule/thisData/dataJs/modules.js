@@ -1315,7 +1315,7 @@ export default [
           Dosage: "",
           constantVolume: "",
           concentration: "",
-          standardValue:"",
+          standardValue: "",
           numbering: "",
           validityPeriod: "",
           count: 1,
@@ -1359,7 +1359,7 @@ export default [
       point: [
         {
           id: "",
-          materialNum:"",
+          materialNum: "",
           materialName: "",
           Dosage: "",
           constantVolume: "",
@@ -1399,7 +1399,7 @@ export default [
           id: "",
           materialName: "",
           constantVolume: "",
-          num:[]
+          num: [],
         },
       ],
     },
@@ -2232,9 +2232,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 113,
+        fixed: 96,
         value: function(obj) {
-          return 113 + obj.point.length * 32;
+          return 96 + obj.point.length * 32;
         },
       },
       _short: {
@@ -2430,14 +2430,14 @@ export default [
     height: {
       //模块高度
       _normal: {
-        carried: false,
-        fixed: 90,
+        carried: true,
+        fixed: 113,
         value: function(obj) {
-          return 90 + obj.point.length * 32;
+          return 113 + obj.point.length * 32;
         },
       },
       _short: {
-        carried: true,
+        carried: false,
         value: function(obj) {
           return 0;
         },

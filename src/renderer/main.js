@@ -136,8 +136,8 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$message = Message;
 Vue.prototype.$utils = $utils;
 Vue.prototype.$ = $;
-Vue.prototype.hostUrl = "http://120.77.153.63:8022";
-Vue.prototype.imgUrl = "http://120.77.153.63:8002";
+Vue.prototype.hostUrl = "http://120.77.153.63:8033";
+Vue.prototype.imgUrl = "http://120.77.153.63:8003";
 Vue.prototype.global = global;
 Vue.prototype.$ipcRenderer = ipcRenderer;
 Vue.prototype.computeObj = computes;
@@ -249,7 +249,33 @@ Vue.prototype.sizeMin = function(arr) {
   });
   return Math.min(...data);
 };
+Vue.prototype.deepCopy = function(target) {
+  let copyed_objs = []; //此数组解决了循环引用和相同引用的问题，它存放已经递归到的目标对象
+  function _deepCopy(target) {
+    if (typeof target !== "object" || !target) {
+      return target;
+    }
+    for (let i = 0; i < copyed_objs.length; i++) {
+      if (copyed_objs[i].target === target) {
+        return copyed_objs[i].copyTarget;
+      }
+    }
+    let obj = {};
+    if (Array.isArray(target)) {
+      obj = []; //处理target是数组的情况
+    }
+    copyed_objs.push({ target: target, copyTarget: obj });
+    Object.keys(target).forEach((key) => {
+      if (obj[key]) {
+        return;
+      }
+      obj[key] = _deepCopy(target[key]);
+    });
+    return obj;
+  }
 
+  return _deepCopy(target);
+};
 Vue.prototype.getRange = function(val, arr) {
   let result = "";
   let dataKeyTotel = [];
@@ -300,7 +326,7 @@ Vue.prototype.IntegerAdd0 = function(val) {
 };
 // 两位小数，不足补0
 Vue.prototype.IntegerAdd2 = function(val) {
-  if (!isNaN(val)&&(val + "").split(".").length) {
+  if (!isNaN(val) && (val + "").split(".").length) {
     if ((val + "").split(".")[1].length == 1) {
       val += "0";
     }

@@ -151,6 +151,7 @@
           <el-col :span="14">
             <el-form-item label="标准物质:" prop="materialId">
               <el-select
+                multiple
                 v-model="addCurve.materialId"
                 @change="changeMaterial"
                 placeholder="请选择"
@@ -359,18 +360,42 @@ export default {
   },
   methods: {
     changeMaterial(val) {
-      let point = this.curveCbyndPoint.filter((item) => item.id === val);
-      if (point.length) {
-        let series0 = JSON.parse(JSON.stringify(this.addCurve.series[0]));
-        this.addCurve.series = [];
-        point[0].rows.forEach((item) => {
-          this.addCurve.series.push({
-            testProject: item,
-            response: "",
-          });
+      let point = [];
+      this.curveCbyndPoint.forEach((item) => {
+        val.forEach((a) => {
+          if (item.id === a) {
+            point.push(item.rows);
+          }
         });
-        this.addCurve.series.unshift(series0);
+      });
+
+      let rows = [];
+      function isBlank(val) {
+        if (val == null || val == "") {
+          return true;
+        }
       }
+      // 保存结果的数组
+      let result = [];
+      // 遍历json
+      for (let key in point) {
+        // 遍历数组的每一项
+        point[key].forEach((value, index) => {
+          if (isBlank(result[index])) {
+            result[index] = 0;
+          }
+          result[index] = (result[index] + value).toFixed46(3);
+        });
+      }
+      let series0 = JSON.parse(JSON.stringify(this.addCurve.series[0]));
+      this.addCurve.series = [];
+      result.forEach((item) => {
+        this.addCurve.series.push({
+          testProject: item,
+          response: "",
+        });
+      });
+      this.addCurve.series.unshift(series0);
     },
     getRowKeys(row) {
       return row.id;
