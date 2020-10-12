@@ -7,13 +7,13 @@
         :style="thisPageIndex === 0 ? '' : { borderTop: 'none' }"
         style="border: 1px solid black; border-bottom: none"
       >
-        <span class="ml5">运营商名称:</span>
+        <span class="ml5">运营商名称: </span>
         <div class="___absolute t0" style="width: 100px; left: 75px">
           <div v-if="target == 0">
             <selectModel
               @returnVal="returnVal"
               :Judge="true"
-              v-if="!data.valueData.showInput"
+              v-if="!data.valueData.showInput || !data.valueData.correct"
               :special="'title'"
               :multi-select="false"
               :transmitText="data.valueData.correct"
@@ -35,7 +35,7 @@
               "
             ></myInput>
           </div>
-          <div v-else>{{ data.valueData.correct }}</div>
+          <div v-else>&nbsp;{{ data.valueData.correct }}</div>
         </div>
         <div
           class="___absolute toolBar"
@@ -61,18 +61,10 @@
       </div>
       <table class="myTable">
         <tr>
-          <td class="___relative tc">
-            <span>服务</span>
-          </td>
-          <td class="___relative tc">
-            <span>频段</span>
-          </td>
-          <td class="___relative tc">
-            <span>电场强度E(V/m)</span>
-          </td>
-          <td class="___relative tc">
-            <span>综合场强值Eₛ(V/m)</span>
-          </td>
+          <td>服务</td>
+          <td>频段</td>
+          <td>电场强度E(V/m)</td>
+          <td>综合场强值Eₛ(V/m)</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td class="___relative tc">
@@ -95,9 +87,7 @@
             </div>
             <div v-else>{{ item.service }}</div>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.frequencyBand }}</div>
-          </td>
+          <td>{{ item.frequencyBand }}</td>
           <td class="___relative tc">
             <div>{{ item.electricField }}</div>
             <div
@@ -136,6 +126,7 @@
 </template>
 
 <script>
+import dcmodules from "@/components/makemodule/thisData/dataJs/sonModules/dc.js";
 export default {
   data() {
     return {
@@ -170,6 +161,21 @@ export default {
   ],
   filters: {},
   methods: {
+    // 新的数据
+    newPoint() {
+      let data;
+      dcmodules.forEach((item) => {
+        item.name === "project_dc_yysmc" && (data = this.deepCopy(item));
+      });
+      data.valueData.multipleId = window.uuid();
+      data.valueData.pointId = this.data.valueData.pointId;
+      data.valueData.foreverId = this.data.valueData.foreverId;
+      return {
+        to: data.name,
+        type: null,
+        data: data,
+      };
+    },
     returnVal(val, name, index, obj) {
       if (index === "title") {
         this.data.valueData.point = [];
@@ -179,7 +185,10 @@ export default {
         } else {
           let dataArr = [];
           this.jsonString.forEach((item, index) => {
-            if (item.to === "project_dc_dchjxpclbg") {
+            if (
+              item.to === "project_dc_dchjxpclbg" &&
+              this.data.valueData.pointId === item.data.valueData.pointId
+            ) {
               dataArr.push(...item.data.valueData.point);
             }
             if (
@@ -206,7 +215,7 @@ export default {
           dataArr.forEach((item, index) => {
             if (
               Identification.every((val, num) => {
-                return !item.v2.includes(val);
+                return item.v2 ? !item.v2.includes(val) : false;
               })
             ) {
               this.data.valueData.filterOperateList.push(item);
@@ -257,7 +266,10 @@ export default {
     reset(Identification) {
       let dataArr = [];
       this.jsonString.forEach((item, index) => {
-        if (item.to === "project_dc_dchjxpclbg") {
+        if (
+          item.to === "project_dc_dchjxpclbg" &&
+          this.data.valueData.pointId === item.data.valueData.pointId
+        ) {
           dataArr.push(...item.data.valueData.point);
         }
         if (
@@ -268,7 +280,7 @@ export default {
         }
       });
       dataArr.forEach((item, index) => {
-        if (item.v2&&item.v2.includes(Identification)) {
+        if (item.v2 && item.v2.includes(Identification)) {
           let arr = [item.v4, item.v5, item.v6, item.v7, item.v8];
           this.data.valueData.point.push({
             pointId: window.uuid(),
@@ -337,82 +349,14 @@ export default {
           this.data.valueData.point[index + 1].heBingId = id;
         }
       } else if (Judge === 2) {
-        let modular = {
-          name: "project_dc_yysmc",
-          projectName: "运营商名称",
-          switch: true,
-          type: null,
-          publicData: [], //本模块的公共数据
-          noCopyArr: [],
-          //添加行使用的模板数据
-          modelRow: {
-            pointId: window.uuid(),
-            foreverId: window.uuid(), //永久的id 用于重复样
-            noShow: true,
-            heBingId: "",
-            heBingLength: "",
-            service: "",
-            frequencyBand: "",
-            electricField: "",
-            fieldStrength: "",
-          },
-          valueData: {
-            //模块内容键值对
-            testProject: "project_dc_yysmc",
-            correct: "",
-            heBingChange: true,
-            heBingJudge: true,
-            filterOperateList: this.data.valueData.filterOperateList,
-            point: [
-              {
-                pointId: window.uuid(),
-                foreverId: window.uuid(), //永久的id 用于重复样
-                noShow: true,
-                heBingId: "project_dc_yysmc-0-0-0",
-                heBingLength: "",
-                service: "",
-                frequencyBand: "",
-                electricField: "",
-                fieldStrength: "",
-              },
-            ],
-          },
-        };
-        let index = "";
-        let json = this.jsonString.length;
-        for (let i = 0; i < json; i++) {
-          if (this.jsonString[i].to === "project_dc_yysmc") {
-            index = i;
-          }
-        }
-        index = index > 0 ? index : 0;
-        let obj = JSON.parse(JSON.stringify(modular));
-        obj.height = {
-          //模块高度
-          _normal: {
-            carried: true,
-            fixed: 105,
-            value: function (obj) {
-              return 105 + 32 * obj.point.length;
-            },
-          },
-          _short: {
-            carried: false,
-            value: function (obj) {
-              return 0;
-            },
-          },
-        };
-        this.jsonString.splice(index + 1, 0, {
-          to: "project_dc_yysmc",
-          type: null,
-          data: obj,
+        let lastIndex;
+        let smcData = this.newPoint();
+        this.jsonString.forEach((item, index) => {
+          this.data.valueData.pointId === item.data.valueData.pointId &&
+            (lastIndex = index);
         });
-        this.jsonString
-          .filter((item, index) => item.to === "project_dc_yysmc")
-          .forEach((item, index) => {
-            item.data.valueData.multipleId = index;
-          });
+        // 将新表格插入到此点位模板最后面
+        this.jsonString.splice(lastIndex + 1, 0, smcData);
       }
       this.$emit("redefinition");
     },
@@ -423,19 +367,41 @@ export default {
           cancelButtonText: "取消",
           modal: false,
         }).then(() => {
+          let pointIndex = [];
           if (Judge === 1) {
-            let subNum = this.jsonString.findIndex(
-              (item, index) =>
+            let data = this.jsonString.filter(
+              (item) =>
+                item.to === "project_dc_yysmc" &&
+                this.data.valueData.pointId === item.data.valueData.pointId
+            );
+            let ids = data.map((item) => item.data.valueData.multipleId);
+            // 取出当前的表格索引
+            this.jsonString.forEach((item, index) => {
+              if (
                 item.to === "project_dc_yysmc" &&
                 item.data.valueData.multipleId ===
                   this.data.valueData.multipleId
-            );
-            if (
-              this.jsonString.filter(
-                (item, index) => item.to === "project_dc_yysmc"
-              ).length > 1
-            ) {
-              this.jsonString.splice(subNum, 1);
+              ) {
+                pointIndex.push(index);
+              }
+            });
+
+            const del = () => {
+              this.data.valueData.correct = "";
+              if (pointIndex.length > 1) {
+                let count = Math.max(...pointIndex) - Math.min(...pointIndex);
+                this.jsonString.splice(pointIndex[0], count + 1);
+              } else {
+                this.jsonString.splice(pointIndex[0], 1);
+              }
+            };
+            // 判断当前的数量，只有一个不删除
+            if ([...new Set(ids)].length > 1) {
+              del();
+            } else {
+              del();
+              let smcData = this.newPoint();
+              this.jsonString.splice(pointIndex[0], 0, smcData);
             }
           } else if (Judge === 2) {
             this.data.valueData.point.splice(index, 1);

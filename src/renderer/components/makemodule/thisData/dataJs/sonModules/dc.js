@@ -505,8 +505,6 @@ export default [
       filterOperateList: [],
       point: [
         {
-          pointId: window.uuid(),
-          foreverId: window.uuid(), //永久的id 用于重复样
           noShow: true,
           heBingId: "project_dc_yysmc-0-0-0",
           heBingLength: "",

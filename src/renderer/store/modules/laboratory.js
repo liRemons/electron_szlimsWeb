@@ -8,6 +8,7 @@ const laboratory = {
     // 录入界面
     deviceType: "",
     cultureTime: "",
+    dchjbgPoint: [],
   },
   mutations: {
     CHANGETIME: (state, time) => {
@@ -30,6 +31,9 @@ const laboratory = {
     },
     UPDATE_DEVICETYPE: (state, data) => {
       state.deviceType = data;
+    },
+    CHANGE_DCHJXPCLBG: (state, data) => {
+      state.dchjbgPoint = data;
     },
   },
   actions: {

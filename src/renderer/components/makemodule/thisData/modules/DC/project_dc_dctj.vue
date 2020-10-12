@@ -24,9 +24,20 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {};
+  },
+  computed: {
+    ...mapState({
+      dchjbgPoint: (state) => state.laboratory.dchjbgPoint,
+    }),
+  },
+  watch: {
+    dchjbgPoint() {
+      this.createPoint();
+    },
   },
 
   props: [
@@ -44,7 +55,65 @@ export default {
     "deviceData",
   ],
   filters: {},
-  methods: {},
+  methods: {
+    //  let arr = [
+    //     { title: "其他场强值", key: "Other" },
+    //     { title: "总场强值", key: "total" },
+    //   ];
+    //   arr.forEach((item, index) => {
+    //     let obj = data.find((val, num) => item.title === val.v1);
+    //     if (obj) {
+    //       let average = this.average([obj.v4, obj.v5, obj.v6, obj.v7, obj.v8]);
+    //       this.data.valueData[item.key][0] = average;
+    //       this.data.valueData[item.key][1] = Math.sqrt(average * average);
+    //     }
+    //   });
+    createPoint() {
+      let nowIndex = [],
+        data;
+      this.jsonString.forEach((item, index) => {
+        if (
+          item.to === "project_dc_dchjxpclbg" &&
+          item.data.valueData.pointId === this.dchjbgPoint.pointId
+        ) {
+          nowIndex.push(index);
+          data = item;
+        }
+      });
+      if (nowIndex.length === 1) {
+        this.jsonString.splice(nowIndex[0], 1);
+      } else {
+        let count = Math.max(...nowIndex) - Math.min(...nowIndex);
+        this.jsonString.splice(nowIndex[0], count + 1);
+      }
+      this.jsonString.splice(nowIndex[0], 0, data);
+      this.jsonString.forEach((item) => {
+        if (
+          item.to === "project_dc_dchjxpclbg" &&
+          item.data.valueData.pointId === this.dchjbgPoint.pointId
+        ) {
+          item.data.valueData.point = this.dchjbgPoint.point;
+        }
+      });
+      this.data.valueData.pointId === this.dchjbgPoint.pointId &&
+        this.calculate(this.dchjbgPoint.point);
+      this.$emit("redefinition");
+    },
+    calculate(data) {
+      let arr = [
+        { title: "其他场强值", key: "Other" },
+        { title: "总场强值", key: "total" },
+      ];
+      arr.forEach((item, index) => {
+        let obj = data.find((val, num) => item.title === val.v1);
+        if (obj) {
+          let average = this.average([obj.v4, obj.v5, obj.v6, obj.v7, obj.v8]);
+          this.data.valueData[item.key][0] = average;
+          this.data.valueData[item.key][1] = Math.sqrt(average * average);
+        }
+      });
+    },
+  },
   mounted() {},
 };
 </script>

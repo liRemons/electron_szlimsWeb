@@ -41,6 +41,24 @@
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td class="___relative tc">
+            <div class="___absolute leftBtn" style="top: 0; left: -80px">
+              <el-tooltip content="导入数据" placement="top" :open-delay="500">
+                <el-button
+                  @click="dcUpload(item)"
+                  size="mini"
+                  icon="el-icon-folder-add"
+                  circle
+                >
+                </el-button>
+              </el-tooltip>
+              <input
+                v-if="inputFile"
+                type="file"
+                @change="fileImport"
+                id="file"
+                style="display: none"
+              />
+            </div>
             <myInput
               style="text-align: center"
               v-model="item.rows[0]"
@@ -175,23 +193,6 @@
                 <i class="el-icon-search"></i>
               </div>
             </div>
-            <div class="___absolute" style="top: 0; left: 370px">
-              <el-button
-                @click="dcUpload"
-                style=""
-                size="mini"
-                type="primary"
-                round
-                >上传文件
-              </el-button>
-              <input
-                v-if="inputFile"
-                type="file"
-                @change="fileImport"
-                id="file"
-                style="display: none"
-              />
-            </div>
           </td>
         </tr>
       </table>
@@ -208,7 +209,8 @@ export default {
       selectItem: "",
       selectItemIndex: "",
       sampleOption: "",
-      inputFile: true,
+      inputFile: false,
+      pointId: "",
     };
   },
   computed: {},
@@ -227,15 +229,15 @@ export default {
     "deviceData",
   ],
   filters: {},
-  watch: {
-    "data.valueData.point": function (val) {
-      // console.log(this.data.valueData.point)
-    },
-  },
+  watch: {},
   methods: {
     // 上传文件=====================START
-    dcUpload() {
-      document.querySelector("#file").click();
+    dcUpload(data) {
+      this.inputFile = true;
+      this.pointId = data.pointId;
+      this.$nextTick(() => {
+        document.querySelector("#file").click();
+      });
     },
     fileImport() {
       //获取读取文件的File对象
@@ -243,7 +245,7 @@ export default {
       var reader = new FileReader(); //这是核心,读取操作就是由它完成.
       reader.readAsBinaryString(selectedFile);
       let this_ = this;
-      reader.onload = function (e) {
+      reader.onload = (e) => {
         let persons = [];
         var data = e.target.result;
         var workbook = XLSX.read(data, { type: "binary" });
@@ -268,13 +270,17 @@ export default {
             v8: item.E5.split(" ")[0],
             v9: item.E1.split(" ")[1],
           };
-				});
-				// project_dc_dchjxpclbg
-				
-        this_.inputFile = false;
-        this_.$nextTick(() => {
-          this_.inputFile = true;
         });
+        if (this.pointId && newArr.length) {
+          this.$store.commit("CHANGE_DCHJXPCLBG", {
+            pointId: this.pointId,
+            point: newArr,
+          });
+        } else {
+          this.$message.error("解析失败");
+        }
+
+        this.inputFile = false;
       };
     },
     // ========================= END

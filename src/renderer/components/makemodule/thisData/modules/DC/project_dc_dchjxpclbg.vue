@@ -4,65 +4,41 @@
       <div :class="{ eventCover: !ableInput }"></div>
       <table class="myTable">
         <tr :class="thisPageIndex === 0 ? '' : 'delLine'">
-          <td class="___relative tc" rowspan="2" style="width: 80px">
-            <span>索引</span>
-          </td>
-          <td class="___relative tc" rowspan="2" style="width: 120px">
-            <span>服务</span>
-          </td>
-          <td class="___relative tc" rowspan="2" style="width: 160px">
-            <span>频段</span>
-          </td>
-          <td class="___relative tc" colspan="5" style="width: 340px">
-            <span>电场强度</span>
-          </td>
+          <td rowspan="2" style="width: 80px">索引</td>
+          <td rowspan="2" style="width: 120px">服务</td>
+          <td rowspan="2" style="width: 160px">频段</td>
+          <td colspan="5" style="width: 340px">电场强度</td>
         </tr>
         <tr>
-          <td class="___relative tc">
-            <span>E₁</span>
-          </td>
-          <td class="___relative tc">
-            <span>E₂</span>
-          </td>
-          <td class="___relative tc">
-            <span>E₃</span>
-          </td>
-          <td class="___relative tc">
-            <span>E₄</span>
-          </td>
-          <td class="___relative tc">
-            <span>E₅</span>
-          </td>
+          <td>E₁</td>
+          <td>E₂</td>
+          <td>E₃</td>
+          <td>E₄</td>
+          <td>E₅</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
-          <td class="___relative tc">
-            <span>{{ item.v1 }}</span>
+          <td>{{ item.v1 }}</td>
+          <td>{{ item.v2 }}</td>
+          <td>{{ item.v3 }}</td>
+          <td style="line-height: 16px">
+            {{ item.v4 }}<br>
+            {{ item.v9 }}
           </td>
-          <td class="___relative tc">
-            <span>{{ item.v2 }}</span>
+          <td style="line-height: 16px">
+            {{ item.v5 }}<br>
+            {{ item.v9 }}
           </td>
-          <td class="___relative tc">
-            <span>{{ item.v3 }}</span>
+          <td style="line-height: 16px">
+            {{ item.v6 }}<br>
+            {{ item.v9 }}
           </td>
-          <td class="___relative tc" style="line-height: 16px">
-            <div class="___relative tc" style="height: 16px">{{ item.v4 }}</div>
-            <div class="___relative tc" style="height: 16px">{{ item.v9 }}</div>
+          <td style="line-height: 16px">
+            {{ item.v7 }}<br>
+            {{ item.v9 }}
           </td>
-          <td class="___relative tc" style="line-height: 16px">
-            <div class="___relative tc" style="height: 16px">{{ item.v5 }}</div>
-            <div class="___relative tc" style="height: 16px">{{ item.v9 }}</div>
-          </td>
-          <td class="___relative tc" style="line-height: 16px">
-            <div class="___relative tc" style="height: 16px">{{ item.v6 }}</div>
-            <div class="___relative tc" style="height: 16px">{{ item.v9 }}</div>
-          </td>
-          <td class="___relative tc" style="line-height: 16px">
-            <div class="___relative tc" style="height: 16px">{{ item.v7 }}</div>
-            <div class="___relative tc" style="height: 16px">{{ item.v9 }}</div>
-          </td>
-          <td class="___relative tc" style="line-height: 16px">
-            <div class="___relative tc" style="height: 16px">{{ item.v8 }}</div>
-            <div class="___relative tc" style="height: 16px">{{ item.v9 }}</div>
+          <td style="line-height: 16px">
+            {{ item.v8 }}<br>
+            {{ item.v9 }}
           </td>
         </tr>
       </table>
@@ -97,9 +73,9 @@ export default {
   filters: {},
   methods: {},
   mounted() {
-   this.$nextTick(()=>{
-		 this.$emit("redefinition");
-	 })
+    this.$nextTick(() => {
+      this.$emit("redefinition");
+    });
   },
 };
 </script>

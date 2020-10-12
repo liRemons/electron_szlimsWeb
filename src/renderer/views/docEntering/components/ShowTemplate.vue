@@ -413,10 +413,6 @@ export default {
         );
       }
       // ---------------------------END----------------------------
-      // --------------------------电磁START----------------
-      // this.jsonString.filter((item) => item.to == "project_dc_jcxx").length &&
-      //   this.dcInit();
-      // --------------------------END-----------------
       this.jsonString.forEach((item, index) => {
         let obj = {};
         let findIndex = redefinitionArr.findIndex((val) => {
