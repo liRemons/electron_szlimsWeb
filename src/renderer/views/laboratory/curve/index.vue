@@ -24,7 +24,7 @@
                 tooltip-effect="dark"
                 :data="props.row.curves"
                 style="width: 100%; margin-left: 50px"
-                @row-dblclick="editCurve"
+                @row-dblclick="editCurve(props.row.curves, props.row)"
               >
                 <el-table-column type="index" width="50px;"></el-table-column>
                 <el-table-column
@@ -167,12 +167,13 @@
           </el-col>
         </el-row>
 
-        <div class="addBut">
+        <!-- <div class="addBut">
           <el-button @click="addBiaoZhunArr">新增标准系列</el-button>
-        </div>
+        </div> -->
         <el-row v-for="(item, index) in addCurve.series" :key="index">
           <el-col :offset="4" :span="8" v-if="item.response != response">
             <el-input
+              disabled
               v-model="item.testProject"
               @input="
                 item.testProject = item.testProject.replace(/[^\d.]/g, '')
@@ -183,9 +184,9 @@
             <el-input v-model="item.response"></el-input>
           </el-col>
           <el-col :span="2" v-if="item.response != response">
-            <el-button type="danger" @click="delBiaoZhunArr(index)"
+            <!-- <el-button type="danger" @click="delBiaoZhunArr(index)"
               >删除</el-button
-            >
+            > -->
           </el-col>
           <el-col :offset="4" :span="8" v-if="item.response == response">
             <el-input
@@ -623,7 +624,7 @@ export default {
         }
       });
     },
-    editCurve(data) {
+    editCurve(data, row) {
       if (typeof data === "number") {
         data = this.curveList[data];
       }
@@ -631,8 +632,8 @@ export default {
         (item) => item.id === data.solutionId
       );
 
-      let materialArr = JSON.myParse(selectConfig.materialArr);
-      let curves = selectConfig.curves;
+      let materialArr = JSON.myParse(row.materialArr);
+      let curves = row.curves;
       this.materialList = materialArr.filter((item) => {
         let index = curves.findIndex((item2) => {
           return item2.materialId === item.id;
@@ -644,12 +645,12 @@ export default {
         }
       });
       let obj = materialArr.find((item) => item.id === data.materialId);
-      this.materialList.push(obj);
-
+      obj && this.materialList.push(obj);
       this.isAdd = false;
-      let addCurveObj = JSON.myParse(JSON.stringify(data));
-      addCurveObj.series = JSON.myParse(addCurveObj.series);
-      this.addCurve = addCurveObj;
+      // console.log(addCurveObj)
+      // let addCurveObj = JSON.myParse(JSON.stringify(data));
+      // addCurveObj.series = JSON.myParse(addCurveObj.series);
+      // this.addCurve = addCurveObj;
       this.showAddCurve = true;
     },
     toEditCurve() {

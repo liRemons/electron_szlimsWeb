@@ -221,7 +221,7 @@ export default [
   },
   {
     name: "project_ct_ctdi",
-    projectName: "CTDI",
+    projectName: "CTDIw",
     switch: true,
     type: null,
     publicData: [], //本模块的公共数据
@@ -229,7 +229,7 @@ export default [
     valueData: {
       //模块内容键值对
       testProject: "project_ct_ctdi",
-      correct: "CTDI",
+      correct: "CTDIw",
       pointId: window.uuid(),
       foreverId: window.uuid(), //永久的id 用于重复样
       factorArr: "",

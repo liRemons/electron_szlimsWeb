@@ -333,6 +333,13 @@ Vue.prototype.IntegerAdd2 = function(val) {
   }
   return val;
 };
+Vue.prototype.significantFigure3 = (data) => {
+  if (data !== "") {
+    data += "";
+    data.split(".")[1] && data.split(".")[1].length == 2 ? (data += "0") : "";
+  }
+  return data;
+};
 Vue.prototype.detectionType = function(val) {
   if (val == "环保验收" || val == "卫生验收") {
     return "验收检测";

@@ -54,11 +54,13 @@ export default {
         item.rows = [];
         item.num.forEach((a, b) => {
           item.rows.push(
-            (
-              (item.concentration * a.Dosage) /
-              a.constantVolume /
-              1000
-            ).toFixed46(3)
+            this.significantFigure3(
+              (
+                (item.concentration * a.Dosage) /
+                a.constantVolume /
+                1000
+              ).toFixed46(3)
+            )
           );
         });
       });

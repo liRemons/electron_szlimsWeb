@@ -144,7 +144,7 @@
               ></myInput>
               mGy
           </td>
-          <td>CTDI 显示值</td>
+          <td>CTDIw 显示值</td>
           <td>
             <myInput
               style="text-align: center; width: 65%"
