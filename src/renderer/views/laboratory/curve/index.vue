@@ -24,7 +24,9 @@
                 tooltip-effect="dark"
                 :data="props.row.curves"
                 style="width: 100%; margin-left: 50px"
-                @row-dblclick="editCurve(props.row.curves, props.row)"
+                @row-dblclick="
+                  (row, col, e) => editCurve(row, col, e, props.row)
+                "
               >
                 <el-table-column type="index" width="50px;"></el-table-column>
                 <el-table-column
@@ -480,22 +482,17 @@ export default {
     },
 
     getList() {
-      let that = this;
-      getCurveList(this.pageIndex, this.pageSize)
-        .then((res) => {
-          if (res.success) {
-            that.curveList = res.datas;
-            that.count = res.total;
-          } else {
-            that.$notify({
-              type: "error",
-              message: res.msg,
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      getCurveList(this.pageIndex, this.pageSize).then((res) => {
+        if (res.success) {
+          this.curveList = res.datas;
+          this.count = res.total;
+        } else {
+          this.$notify({
+            type: "error",
+            message: res.msg,
+          });
+        }
+      });
     },
     //显示新增曲线
     toShowAddCurve(row) {
@@ -506,17 +503,12 @@ export default {
         .map((item) => item.point)
         .flat();
       let materialArr = JSON.myParse(row.materialArr);
-      let curves = row.curves;
-      this.materialList = materialArr.filter((item) => {
-        let index = curves.findIndex((item2) => {
-          return item2.materialId === item.id;
-        });
-        if (index === -1) {
-          return true;
-        } else {
-          return false;
-        }
-      });
+      let curvesMaterialId = row.curves
+        .map((item) => item.materialId.split(","))
+        .flat();
+      this.materialList = materialArr.filter(
+        (item) => !curvesMaterialId.includes(item.id)
+      );
       this.addCurve = {
         curveNum: "",
         materialId: "",
@@ -624,34 +616,44 @@ export default {
         }
       });
     },
-    editCurve(data, row) {
-      if (typeof data === "number") {
-        data = this.curveList[data];
-      }
-      let selectConfig = this.curveList.find(
-        (item) => item.id === data.solutionId
+    editCurve(row, col, e, propsRow) {
+      let solutionPreparationData = JSON.parse(
+        propsRow.solutionPreparationData
       );
-
-      let materialArr = JSON.myParse(row.materialArr);
-      let curves = row.curves;
-      this.materialList = materialArr.filter((item) => {
-        let index = curves.findIndex((item2) => {
-          return item2.materialId === item.id;
-        });
-        if (index === -1) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      let obj = materialArr.find((item) => item.id === data.materialId);
-      obj && this.materialList.push(obj);
+      this.curveCbyndPoint = solutionPreparationData
+        .filter((item) => item.testProject == "curve_cbynd")
+        .map((item) => item.point)
+        .flat();
+      let materialArr = JSON.myParse(propsRow.materialArr);
+      let CurvesMaterialId = propsRow.curves
+        .map((item) => (item.id !== row.id ? item.materialId.split(",") : ""))
+        .flat()
+        .filter((item) => item);
+      this.materialList = materialArr.filter(
+        (item) => !CurvesMaterialId.includes(item.id)
+      );
+      let materialIdArr = row.materialId.split(",");
+      this.addCurve.materialId = materialIdArr;
       this.isAdd = false;
-      // console.log(addCurveObj)
-      // let addCurveObj = JSON.myParse(JSON.stringify(data));
-      // addCurveObj.series = JSON.myParse(addCurveObj.series);
-      // this.addCurve = addCurveObj;
       this.showAddCurve = true;
+      this.changeMaterial(materialIdArr);
+      this.addCurve.series = JSON.parse(row.series);
+
+      let arr = [
+        "regressionEquation",
+        "regressionEquationValue1",
+        "regressionEquationValue3",
+        "coefficient",
+        "materialName",
+        "curveNum",
+        "id",
+      ];
+      arr.forEach((item) => {
+        this.addCurve[item] = row[item];
+      });
+      this.addCurve.regressionEquationValue2 = row.regressionEquationValue2.split(
+        row.regressionEquationValue3
+      )[0];
     },
     toEditCurve() {
       let addCurve = this.addCurve;

@@ -201,6 +201,11 @@ export default {
             item["disabled"] = true;
           }
         }
+      } else if (this.target == 1) {
+        let nowManId = JSON.myParse(getToken()).id;
+        if (item.id === nowManId) {
+          item["disabled"] = true;
+        }
       }
     });
     //获取所有检测员

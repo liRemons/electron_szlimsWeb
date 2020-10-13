@@ -233,10 +233,16 @@ export default {
   methods: {
     // 上传文件=====================START
     dcUpload(data) {
-      this.inputFile = true;
-      this.pointId = data.pointId;
-      this.$nextTick(() => {
-        document.querySelector("#file").click();
+      this.$confirm("点击上传会将原有数据覆盖，是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.inputFile = true;
+        this.pointId = data.pointId;
+        this.$nextTick(() => {
+          document.querySelector("#file").click();
+        });
       });
     },
     fileImport() {
@@ -279,12 +285,19 @@ export default {
         } else {
           this.$message.error("解析失败");
         }
-
         this.inputFile = false;
       };
     },
     // ========================= END
     create(data, index) {
+      if(!data.row[0]){
+        this.$message.warning('点位未填写')
+        return
+      }
+      if(data.rows[1]==''||data.rows[0]==''){
+        this.$message.warning('天线距离缺失')
+        return
+      }
       let createRepeatArr = [
         "project_dc_dchjxpcl",
         "project_dc_dchjxpclbg",

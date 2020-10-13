@@ -201,8 +201,8 @@ export default {
           this.data.valueData.showInput = true;
           this.data.valueData.correct = " ";
           let row = JSON.parse(JSON.stringify(this.data.modelRow));
-          row.pointId = window.uuid();
-          row.foreverId = window.uuid();
+          row.pointId = this.data.valueData.pointId;
+          row.foreverId = this.data.valueData.foreverId;
           row.heBingId = "project_dc_yysmc-0-0-0";
           this.data.valueData.point.push(row);
           let Identification = [
@@ -283,8 +283,8 @@ export default {
         if (item.v2 && item.v2.includes(Identification)) {
           let arr = [item.v4, item.v5, item.v6, item.v7, item.v8];
           this.data.valueData.point.push({
-            pointId: window.uuid(),
-            foreverId: window.uuid(), //永久的id 用于重复样
+            pointId: this.data.valueData.pointId,
+            foreverId: this.data.valueData.foreverId, //永久的id 用于重复样
             noShow: true,
             heBingId: "project_dc_yysmc-0-0-0",
             heBingLength: "",

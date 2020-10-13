@@ -19,36 +19,11 @@
             <span :class="item.state === 0 ? 'red' : ''">{{
               item.state | toDot
             }}</span>
-            <div
-              class="___absolute toolBar"
-              v-if="item.title === '现场检测照片'"
-              style="left: 635px; top: 0; width: 60px"
-            >
-              <div
-                title="往指定行后面增加一行"
-                class="___absolute tc"
-                @click="addRow(index)"
-              >
-                +
-              </div>
-              <div
-                title="删除当前行"
-                class="___absolute tc"
-                style="left: 30px"
-                @click="deleteRow(index)"
-              >
-                -
-              </div>
-            </div>
+
             <div
               v-if="target === '0'"
               class="___absolute toolBar"
-              :style="
-                item.title === '现场检测照片'
-                  ? { left: '700px' }
-                  : { left: '635px' }
-              "
-              style="top: 0; width: 120px"
+              style="top: 0; width: 120px; left: 635px"
             >
               <div
                 title="上传图片"
@@ -80,6 +55,27 @@
                 style="left: 90px"
               >
                 <i class="el-icon-close"></i>
+              </div>
+            </div>
+            <div
+              class="___absolute toolBar"
+              v-if="item.title === '现场检测照片'"
+              style="left: 760px; top: 0; width: 60px"
+            >
+              <div
+                title="往指定行后面增加一行"
+                class="___absolute tc"
+                @click="addRow(index)"
+              >
+                +
+              </div>
+              <div
+                title="删除当前行"
+                class="___absolute tc"
+                style="left: 30px"
+                @click="deleteRow(index)"
+              >
+                -
               </div>
             </div>
           </td>
