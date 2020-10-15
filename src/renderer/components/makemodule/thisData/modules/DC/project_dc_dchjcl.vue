@@ -41,9 +41,15 @@
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td class="___relative tc">
-            <div class="___absolute leftBtn" style="top: 0; left: -80px">
+            <div
+              class="___absolute leftBtn"
+              
+              style="top: 0; left: -80px"
+            >
+            <a :href="'#point' + item.rows[0].split('#')[0]">{{ item.rows[0] }}</a>
               <el-tooltip content="导入数据" placement="top" :open-delay="500">
                 <el-button
+                v-if="item.rows[9] < limit && target == 0"
                   @click="dcUpload(item)"
                   size="mini"
                   icon="el-icon-folder-add"
@@ -51,6 +57,7 @@
                 >
                 </el-button>
               </el-tooltip>
+              
               <input
                 v-if="inputFile"
                 type="file"
@@ -59,11 +66,7 @@
                 style="display: none"
               />
             </div>
-            <myInput
-              style="text-align: center"
-              v-model="item.rows[0]"
-              :defaultValue="item.rows[0]"
-            ></myInput>
+            {{ item.rows[0] }}
           </td>
           <td class="___relative tc">
             <myInput
@@ -137,6 +140,7 @@
               v-if="target == 0"
             >
               <div
+                v-if="index == data.valueData.point.length - 1"
                 title="往指定行后面增加一行"
                 class="___absolute tc"
                 @click="addRow(index, 2, item.heBingId)"
@@ -211,6 +215,7 @@ export default {
       sampleOption: "",
       inputFile: false,
       pointId: "",
+      limit: 200, //条件，用于判断是否需要环境选频测量
     };
   },
   computed: {},
@@ -229,20 +234,50 @@ export default {
     "deviceData",
   ],
   filters: {},
-  watch: {},
+
   methods: {
     // 上传文件=====================START
     dcUpload(data) {
-      this.$confirm("点击上传会将原有数据覆盖，是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      }).then(() => {
+      let arr = [],
+        pointArr = [];
+      this.jsonString.forEach((item) => {
+        if (data.pointId === item.data.valueData.pointId) {
+          if (item.to === "project_dc_dchjxpcl") {
+            arr.push(item);
+          }
+          if (item.to === "project_dc_dchjxpclbg") {
+            pointArr.push(item);
+          }
+        }
+      });
+      let pointNum;
+      if (arr.length) {
+        pointNum = arr[0].data.valueData.pointNum;
+      }
+      if (!pointNum) {
+        this.$message.warning("您还未生成点位");
+        return;
+      }
+      const open = () => {
         this.inputFile = true;
         this.pointId = data.pointId;
         this.$nextTick(() => {
           document.querySelector("#file").click();
         });
+      };
+      if (pointArr.length) {
+        let point = pointArr.map((item) => item.data.valueData.point).flat();
+        if (point.length === 1 && !point[0].v2) {
+          open();
+          return;
+        }
+      }
+      this.$confirm("点击上传会将原有数据覆盖，是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        open();
       });
     },
     fileImport() {
@@ -290,22 +325,79 @@ export default {
     },
     // ========================= END
     create(data, index) {
-      if(!data.row[0]){
-        this.$message.warning('点位未填写')
-        return
+      if (!data.rows[0]) {
+        this.$message.warning("点位未填写");
+        return;
       }
-      if(data.rows[1]==''||data.rows[0]==''){
-        this.$message.warning('天线距离缺失')
-        return
+
+      if (data.rows[1] == "" || data.rows[2] == "") {
+        this.$message.warning("天线距离缺失");
+        return;
       }
+      if (
+        data.rows[3] &&
+        data.rows[4] &&
+        data.rows[5] &&
+        data.rows[6] &&
+        data.rows[7]
+      ) {
+      } else {
+        this.$message.warning("电场强度缺失");
+        return;
+      }
+      if (!data.rows[10]) {
+        this.$message.warning("检测点位名称缺失");
+        return;
+      }
+
       let createRepeatArr = [
-        "project_dc_dchjxpcl",
-        "project_dc_dchjxpclbg",
-        "project_dc_dctj",
-        "project_dc_yysmc",
-      ];
+          "project_dc_dchjxpcl",
+          "project_dc_dchjxpclbg",
+          "project_dc_dctj",
+          "project_dc_yysmc",
+        ],
+        empty = [];
+      // 满足条件则不生成，如果之前生成过，则删除==========
+      if (data.rows[9] > +this.limit) {
+        this.jsonString.forEach((item, index) => {
+          if (
+            createRepeatArr.includes(item.to) &&
+            item.data.valueData.pointId === data.pointId
+          ) {
+            empty.push(index);
+          }
+        });
+        if (empty.length) {
+          this.$confirm("此操作将此点位选频测量的数据清空, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          }).then(() => {
+            this.jsonString.splice(
+              Math.min(...empty),
+              Math.max(...empty) - Math.min(...empty) + 1
+            );
+            this.$emit("redefinition");
+            return;
+          });
+        }
+        return;
+      }
+
+      // 下面是不满足条件生成============
       let createArr = [];
       let NewDcmodules = this.deepCopy(dcmodules);
+      let dchjcl = this.jsonString.filter(
+        (item) => item.to == "project_dc_dchjcl"
+      );
+      // 总的点位
+      let point = dchjcl.map((item) => item.data.valueData.point).flat();
+      let pointNum = point.map((item) => item.rows[0]);
+      let newPointNum = [...new Set(pointNum)];
+      if (newPointNum.length !== pointNum.length) {
+        this.$message.warning("有重复的点位");
+        return;
+      }
       NewDcmodules.forEach((item) => {
         createRepeatArr.forEach((a) => {
           if (item.name === a) {
@@ -325,11 +417,7 @@ export default {
         });
       });
       // 此处获取当前点位前一位的点位ID
-      let dchjcl = this.jsonString.filter(
-        (item) => item.to == "project_dc_dchjcl"
-      );
-      // 总的点位
-      let point = dchjcl.map((item) => item.data.valueData.point).flat();
+
       let prevPoint, lastIndex;
       if (data.index !== 1) {
         // 获取最后一个出现的位置

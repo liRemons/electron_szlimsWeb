@@ -27,9 +27,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 315,
+        fixed: 340,
         value: function(obj) {
-          return 315;
+          return 340;
         },
       },
       _short: {
@@ -147,8 +147,8 @@ export default [
       //模块内容键值对
       testProject: "project_dc_jcdxxx",
       correct: "检测对象信息",
-      pointId: window.uuid(),
-      foreverId: window.uuid(), //永久的id 用于重复样
+      // pointId: window.uuid(),
+      // foreverId: window.uuid(), //永久的id 用于重复样
       antenna: "",
       heightGround: "",
       longitudeTitle: "东经",

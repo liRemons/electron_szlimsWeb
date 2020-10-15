@@ -52,7 +52,6 @@
         v-if="target == 0 || target == 2 || target == 3"
         >索引
       </el-button>
-      
 
       <el-button
         @click="temporaryData"
@@ -117,7 +116,7 @@
         @click="entryYuanShi"
         size="mini"
         type="primary"
-        :disabled="$route.query.isEdit=='true'"
+        :disabled="$route.query.isEdit == 'true'"
         v-else-if="target == 5 && showSave"
         >保存</el-button
       >
@@ -545,11 +544,12 @@ export default {
     end() {
       const time = () => {
         this.entryEndTime = this.$utils.dateFormat();
+        let modules = ["project_jbxx", "project_dc_jcxx"];
         this.$nextTick(() => {
           this.importData.tasks.tasks[0].endTime = this.entryEndTime;
           this.taskDatas[0].showing.forEach((item) => {
             item.forEach((a) => {
-              if (a.to == "project_jbxx") {
+              if (modules.includes(a.to)) {
                 a.data.valueData.endTime = this.entryEndTime;
               }
             });
@@ -1935,7 +1935,6 @@ export default {
           console.log(error);
         });
     },
-    
   },
 
   created() {

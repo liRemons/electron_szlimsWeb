@@ -511,22 +511,6 @@ export default {
 };
 </script>
 
-<style>
-.viewer-button {
-  right: 50px;
-  top: 50px;
-}
-.viewer-button::before {
-  content: " ";
-  display: block;
-  height: 40px;
-  width: 40px;
-  background: url("../../../../assets/icon/closeV.png");
-  background-size: 100%;
-  bottom: 20px;
-  left: 20px;
-}
-</style>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .btn {
   position: fixed;

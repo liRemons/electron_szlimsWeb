@@ -9,77 +9,47 @@
       <p>{{ data.valueData.correct }}:</p>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测对象名称</span>
-          </td>
-          <td class="___relative tc" style="width: 560px">
+          <td>检测对象名称</td>
+          <td colspan="4">
             <myInput
               style="text-align: center"
-              v-model="data.valueData.detectionObjName"
-              :defaultValue="data.valueData.detectionObjName"
+              v-model="data.valueData.monitorObjectName"
+              :defaultValue="data.valueData.monitorObjectName"
             ></myInput>
           </td>
         </tr>
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测时间</span>
-          </td>
-          <td class="___relative tc" style="width: 560px">
-            <myInput
-              style="text-align: center"
-              v-model="data.valueData.detectionTime"
-              :defaultValue="data.valueData.detectionTime"
-            ></myInput>
+          <td>检测时间</td>
+          <td colspan="4">
+            {{ data.valueData.detectionTime }} - {{ data.valueData.endTime }}
           </td>
         </tr>
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测编号</span>
-          </td>
-          <td
-            class="___relative tc"
-            style="width: 560px"
-            @click="generateSampleNum(data.valueData)"
-          >
+          <td>检测编号</td>
+          <td colspan="4" @click="generateSampleNum(data.valueData)">
             <span>{{
               data.valueData.sampleNum + "" + data.valueData.sampleNumIndex
             }}</span>
           </td>
         </tr>
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测对象地址</span>
-          </td>
-          <td class="___relative tc" style="width: 560px">
+          <td>检测对象地址</td>
+          <td colspan="4">{{ data.valueData.monitorObjectAddress }}</td>
+        </tr>
+        <tr>
+          <td>检测地址</td>
+          <td colspan="4">
             <myInput
               style="text-align: center"
-              v-model="data.valueData.detectionObjAddress"
-              :defaultValue="data.valueData.detectionObjAddress"
+              v-model="data.valueData.clientUnitAddress"
+              :defaultValue="data.valueData.clientUnitAddress"
             ></myInput>
           </td>
         </tr>
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测地址</span>
-          </td>
-          <td class="___relative tc" style="width: 560px">
-            <myInput
-              style="text-align: center"
-              v-model="data.valueData.detectionAddress"
-              :defaultValue="data.valueData.detectionAddress"
-            ></myInput>
-          </td>
-        </tr>
-        <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测依据</span>
-          </td>
-          <td class="___relative tc" style="width: 560px">
-            <myInput
-              style="text-align: center"
-              v-model="data.valueData.DetectionBasis"
-              :defaultValue="data.valueData.DetectionBasis"
-            ></myInput>
+          <td>检测依据</td>
+          <td colspan="4" style="word-wrap:break-word !important;white-space: normal;line-height:20px">
+            {{ data.valueData.standard }}
           </td>
         </tr>
       </table>
@@ -112,18 +82,47 @@ export default {
     "deviceData",
   ],
   filters: {},
+  watch: {
+    "data.valueData.endTime": function () {
+      this.target == 0
+        ? (this.data.valueData.endTime = this.dateCH(
+            this.data.valueData.endTime
+          ))
+        : "";
+    },
+  },
   methods: {
     generateSampleNum(item) {
       this.$eventBus.$emit(
         "generateSamplenum",
-        item,
+        item.point,
         this.data.valueData.multipleId
       );
     },
+    dateCH(val) {
+      let time;
+      if (val) {
+        time = this.$utils.dateFormat(
+          new Date(val).getTime(),
+          "yyyy年MM月dd日 HH时mm分ss秒"
+        );
+        time = time.substring(0, time.length - 3);
+      } else {
+        time = "";
+      }
+
+      return time;
+    },
   },
   mounted() {
-		// console.log(this.data)
-	},
+    
+    if (this.target == 0 && !this.data.valueData.endTime) {
+      this.data.valueData.detectionTime = this.dateCH(
+        this.data.valueData.detectionTime
+      );
+      this.data.valueData.endTime = this.dateCH(this.data.valueData.endTime);
+    }
+  },
 };
 </script>
 

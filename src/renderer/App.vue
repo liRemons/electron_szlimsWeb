@@ -1,18 +1,19 @@
 <template>
   <div id="app" @contextmenu="showRightClickMenu">
     <div class="control">
-      <div style="float: left;">
-        <span style="line-height: 24px; padding-left: 20px;"
+      <div style="float: left">
+        <span style="line-height: 24px; padding-left: 20px"
           >深圳市瑞达智能检测系统用户端V{{ version }} （{{
             $isUpdate ? "正式版" : "测试版"
           }}）</span
         >
       </div>
       <div class="action">
+        <span v-if="staffName">登录人：{{ staffName }}</span>
         <img
           @click="clean"
           src="@/assets/icon/clean.png"
-          style="padding-top: 1px;"
+          style="padding-top: 1px"
           v-if="$route.path == '/login'"
         />
         <el-tooltip
@@ -24,7 +25,7 @@
           <img
             src="@/assets/icon/upload.png"
             @click="getUpdateVersion"
-            style="padding-top: 1px; width: 25px;"
+            style="padding-top: 1px; width: 25px"
           />
         </el-tooltip>
         <img @click="mini" src="@/assets/icon/mini.png" />
@@ -33,7 +34,7 @@
         <img @click="close" src="@/assets/icon/close.png" />
       </div>
     </div>
-    <div style="height: 30px;"></div>
+    <div style="height: 30px"></div>
 
     <div class="content" id="content">
       <router-view />
@@ -52,7 +53,7 @@
       :close-on-click-modal="false"
       :show-close="false"
     >
-      <p style="margin-bottom: 10px;" v-if="!downloadState">
+      <p style="margin-bottom: 10px" v-if="!downloadState">
         {{ downloadText }}
         <i class="el-icon-loading"></i>
       </p>
@@ -62,10 +63,10 @@
         :status="downloadState"
         :stroke-width="10"
       ></el-progress>
-      <div v-if="downloadState" style="margin-top: 20px;">
+      <div v-if="downloadState" style="margin-top: 20px">
         {{ downloadText }}
         <i class="el-icon-check"></i><br />
-        <p style="margin-top: 20px;">
+        <p style="margin-top: 20px">
           <span>文件保存在：</span
           ><el-tag class="el_tag" type="success">{{ filePath }}</el-tag
           ><br />
@@ -109,6 +110,7 @@ export default {
       downloadState: "",
       downloadText: "正在下载，请稍后",
       filePath: "",
+      staffName: "",
     };
   },
   mounted() {
@@ -126,6 +128,7 @@ export default {
       if (this.$route.path == "/login") {
         return;
       }
+
       if (getToken()) {
         updateStaffOnlineTime(JSON.parse(getToken()).id).then((res) => {
           if (!res.success) {
@@ -233,6 +236,9 @@ export default {
   },
   watch: {
     $route() {
+      if (getToken()) {
+        this.staffName = JSON.parse(getToken()).staffName;
+      }
       sessionStorage.setItem("routerPath", this.$route.path);
     },
   },
@@ -540,6 +546,20 @@ export default {
 </style>
 
 <style >
+.viewer-button {
+  right: 50px;
+  top: 50px;
+}
+.viewer-button::before {
+  content: " ";
+  display: block;
+  height: 40px;
+  width: 40px;
+  background: url("./assets/icon/closeV.png");
+  background-size: 100%;
+  bottom: 20px;
+  left: 20px;
+}
 ::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: 8px; /*高宽分别对应横竖滚动条的尺寸*/

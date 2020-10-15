@@ -327,6 +327,7 @@ export default {
       }
     },
     addRow(index, Judge, heBingId) {
+      // project_dc_dchjcl
       let row = {};
       if (Judge === 1) {
         row = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
@@ -352,6 +353,21 @@ export default {
         let lastIndex;
         let smcData = this.newPoint();
         this.jsonString.forEach((item, index) => {
+          if (
+            item.to === "project_dc_dchjxpcl" &&
+            item.data.valueData.pointId === this.data.valueData.pointId
+          ) {
+            let keys = [
+              "testNum",
+              "pointNum",
+              "pointName",
+              "level",
+              "vertical",
+            ];
+            keys.forEach((key) => {
+              smcData.data.valueData[key] = item.data.valueData[key];
+            });
+          }
           this.data.valueData.pointId === item.data.valueData.pointId &&
             (lastIndex = index);
         });

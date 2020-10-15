@@ -499,6 +499,9 @@ export default {
           if (po != "") {
             po.index = i + 1;
           }
+          if (item.to === "project_dc_dchjcl" && po !== "") {
+            po.rows[0] = i + 1 + "#";
+          }
         });
         let lastProject = Adaptive(decompose, height);
         let surplusHiehgt = 0;
@@ -575,6 +578,9 @@ export default {
             ) {
               fatherData.push(sonData);
               sonData = [];
+            } else {
+              console.log(1);
+              // fatherData.push([val])
             }
           });
         }
@@ -588,8 +594,6 @@ export default {
         }
       });
       this.jsonString = [];
-
-      // this.jfpbtData(decompose); //修复重复数据屏蔽体现场调查   (失败)
 
       this.jsonString = decompose;
       // 获取检测类型-------START
@@ -614,7 +618,7 @@ export default {
         this.generateTestprojectId();
         this.getContents();
       }, 100);
-      
+
       this.jsonString.forEach((item) => {
         if (this.target != 0 && item.data.toBeShow) {
           setTimeout(() => {
@@ -623,48 +627,6 @@ export default {
         }
       });
     },
-    // =====================修复重复数据屏蔽体现场调查==(修复失败)=======START
-    jfpbtData(decompose) {
-      let arr1 = [],
-        arr2 = [],
-        jcxcxxPoint = [];
-      decompose.forEach((item, index) => {
-        if (item.to == "projcet_jgyst") {
-          arr1.push(index);
-        }
-        if (item.to == "projcet_jgysnr") {
-          arr2.push(index);
-        }
-        if (item.to == "project_jcxcxx") {
-          jcxcxxPoint = item.data.valueData.point;
-        }
-      });
-      decompose.forEach((item) => {
-        arr2.forEach((a) => {
-          arr1.forEach((c) => {
-            if (a > c) {
-              decompose[a].data.valueData.exposureMode =
-                decompose[c].data.valueData.exposureMode;
-              decompose[a].data.valueData.harnessDirection =
-                decompose[c].data.valueData.harnessDirection;
-            }
-          });
-        });
-      });
-      decompose.forEach((item, index) => {
-        if (item.to == "projcet_jgysnr") {
-          jcxcxxPoint.forEach((a, b) => {
-            if (
-              item.data.valueData.exposureMode == a.exposureMode &&
-              item.data.valueData.harnessDirection == a.harnessDirection
-            ) {
-              item.data.valueData.jcxcxxIndex = b;
-            }
-          });
-        }
-      });
-    },
-    // ========================================================END
     success(msg) {
       this.$notify({
         title: "成功",
@@ -878,7 +840,15 @@ export default {
           contentArray.push(projectData[i].testProject);
         }
       } else {
-        contentArray = JSON.myParse(this.task.testProjectList);
+        let arr = [
+          "project_dc_dchjxpcl",
+          "project_dc_dchjxpclbg",
+          "project_dc_dctj",
+          "project_dc_yysmc",
+        ];
+        contentArray = JSON.myParse(this.task.testProjectList).filter(
+          (item) => !arr.includes(item.testProjectName)
+        );
         contentArray.forEach((item, index) => {
           if (
             item.testProjectArr != null &&
@@ -1327,16 +1297,62 @@ export default {
       }
     },
 
-    
-
     dataFormat(template, content, task) {
       let name = template.name;
       switch (name) {
         case "project_jbxx":
-          let keyArr = [
+          {
+            let keyArr = [
+              "clientUnitName",
+              "checkUnitName",
+              "clientUnitAddress",
+              "checkUnitAddress",
+              "deviceTypeName",
+              "testingPurpose",
+              "mechanismName",
+              "subCompanyAddress",
+              "businessLicenseNum",
+              "metrologicalCertificate",
+              "staffName",
+              "standard",
+              "staffName",
+            ];
+            let localArr = [
+              "entrustedUnitName",
+              "UnitExaminationName",
+              "UnitExaminationAddress",
+              "detectionObjects",
+              "purposeDetection",
+              "organizationName",
+              "institutionalAddress",
+              "licenseNumber",
+              "metrologyCertificate",
+              "detectionTime",
+              "samplingPersonnel",
+              "detectionBasis",
+            ];
+            keyArr.forEach((item, index) => {
+              if (task[item] != null && task[item] != undefined) {
+                template.valueData[localArr[index]] = task[item];
+              }
+            });
+            template.valueData.detectionTime = this.taskData.startTime;
+            try {
+              template.valueData.assessArr = JSON.myParse(task["assessArr"])
+                .map((item) => item.evaluateName)
+                .toString();
+            } catch (e) {
+              template.valueData.assessArr = "";
+            }
+          }
+          break;
+        case "project_dc_jcxx":
+          let newKey = [
             "clientUnitName",
             "checkUnitName",
+            "clientUnitAddress",
             "checkUnitAddress",
+            "detectionTime",
             "deviceTypeName",
             "testingPurpose",
             "mechanismName",
@@ -1346,35 +1362,21 @@ export default {
             "staffName",
             "standard",
             "staffName",
+            "monitorObjectName",
+            "monitorObjectAddress",
+            'endTime'
           ];
-          let localArr = [
-            "entrustedUnitName",
-            "UnitExaminationName",
-            "UnitExaminationAddress",
-            "detectionObjects",
-            "purposeDetection",
-            "organizationName",
-            "institutionalAddress",
-            "licenseNumber",
-            "metrologyCertificate",
-            "detectionTime",
-            "samplingPersonnel",
-            "detectionBasis",
-          ];
-          keyArr.forEach((item, index) => {
-            if (task[item] != null && task[item] != undefined) {
-              template.valueData[localArr[index]] = task[item];
-            }
+          newKey.forEach((item) => {
+            template.valueData[item] = task[item];
           });
           template.valueData.detectionTime = this.taskData.startTime;
-          try {
-            template.valueData.assessArr = JSON.myParse(task["assessArr"])
-              .map((item) => item.evaluateName)
-              .toString();
-          } catch (e) {
-            template.valueData.assessArr = "";
-          }
-          // template.valueData.purposeDetection = '状态'
+
+          break;
+        case "project_dc_jcdxxx":
+          let newDCjcdxxx = ["antennaHeight", "lat", "lng"];
+          newDCjcdxxx.forEach((item) => {
+            template.valueData[item] = task[item];
+          });
           break;
         case "project_jcxcxx": {
           let localArr = [
@@ -1401,9 +1403,7 @@ export default {
             }
           });
         }
-        case "project_dc_jcxx":
-          console.log(task);
-          break;
+
         case "project_cyhj":
           {
             template.valueData.point.forEach((item, index) => {

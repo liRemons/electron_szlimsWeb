@@ -11,11 +11,20 @@
         style="display: none"
       />
       <div :class="{ eventCover: !ableInput }"></div>
-      <p>{{ data.valueData.correct }}:</p>
-      <table class="myTable">
+      <p>电磁环境选频测量:</p>
+      <table class="myTable ___relative">
+        <div
+          class="___absolute"
+          :id="
+            data.valueData.pointNum
+              ? 'point' + data.valueData.pointNum.split('#')[0]
+              : ''
+          "
+          style="top: -100px"
+        ></div>
         <tr>
-          <td style="width: 120px">对应检测编号</td>
-          <td style="width: 560px">
+          <td>对应检测编号</td>
+          <td colspan="3">
             <myInput
               style="text-align: center"
               v-model="data.valueData.testNum"
@@ -24,18 +33,18 @@
           </td>
         </tr>
         <tr>
-          <td style="width: 120px">对应点位序号</td>
-          <td style="width: 560px">{{ data.valueData.pointNum }}</td>
-        </tr>
-        <tr>
-          <td style="width: 120px">对应点位名称</td>
-          <td style="width: 560px">
-            {{ data.valueData.pointName }}
+          <td>对应点位序号</td>
+          <td colspan="3">
+            {{ data.valueData.pointNum }}
           </td>
         </tr>
         <tr>
-          <td style="width: 120px">点位与天线距离</td>
-          <td class="___relative tc" style="width: 560px">
+          <td>对应点位名称</td>
+          <td colspan="3">{{ data.valueData.pointName }}</td>
+        </tr>
+        <tr>
+          <td>点位与天线距离</td>
+          <td colspan="3">
             水平：{{ data.valueData.level }} m; 垂直：{{
               data.valueData.vertical
             }}
@@ -43,22 +52,18 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="___relative tc">
-            <span>原始记录数据仪器截图</span>
-          </td>
+          <td colspan="4">原始记录数据仪器截图</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.imgList">
-          <td class="___relative tc" style="width: 120px">
-            <span>{{ item.title }}</span>
-          </td>
-          <td class="___relative tc" style="width: 560px">
+          <td>{{ item.title }}</td>
+          <td colspan="3" class="___relative tc">
             <span :class="item.img.length > 0 ? '' : 'red'">{{
               item.img | toDot
             }}</span>
             <div
               class="___absolute toolBar"
-              style="top: 0; width: 90px; left: 635px"
-              v-if="target === '0'"
+              style="top: 0; width: 90px; left: 600px"
+              v-if="target == 0"
             >
               <div
                 title="上传图片"
@@ -88,30 +93,10 @@
         </tr>
       </table>
     </div>
-    <el-dialog title="图片" :visible.sync="showImg" width="60%" :modal="false">
-      <div v-if="showImg">
-        <el-radio
-          v-for="(item, index) in data.valueData.imgList[currencyIndex].img"
-          v-model="radio"
-          :label="index"
-        >
-          {{ item.name }}
-        </el-radio>
-        <img
-          style="max-width: 80%; max-height: 500px"
-          class="mt20"
-          :src="hostUrl + data.valueData.imgList[currencyIndex].img[radio].url"
-          alt=""
-        />
-      </div>
-      <div slot="footer">
-        <el-button @click="showImg = false">取消</el-button>
-      </div>
-    </el-dialog>
     <el-dialog
       title="删除"
       :visible.sync="deleteImg"
-      width="60%"
+      width="400px"
       :modal="false"
     >
       <div v-if="deleteImg">
@@ -119,6 +104,7 @@
           v-for="(item, index) in data.valueData.imgList[currencyIndex].img"
           v-model="radio"
           :label="index"
+          :key="index + 'label'"
         >
           {{ item.name }}
         </el-radio>
@@ -128,6 +114,16 @@
         <el-button @click="deleteImg = false">取消</el-button>
       </div>
     </el-dialog>
+    <viewer v-if="imgUrl.length" class="viewer" :images="imgUrl">
+      <img
+        id="viewer"
+        v-for="item in imgUrl"
+        :src="item"
+        ref="img"
+        style="display: none"
+        :key="item.index"
+      />
+    </viewer>
   </div>
 </template>
 
@@ -141,13 +137,13 @@ export default {
       radio: 0,
       currencyIndex: 0,
       deleteImg: false,
-      showImg: false,
       selectItem: "",
       selectItemIndex: "",
       sampleOption: "",
       title: "",
       fullscreenLoading: false,
       inputFile: true,
+      imgUrl: [],
     };
   },
   computed: {},
@@ -196,7 +192,7 @@ export default {
         let compressLength = compressFiles.length;
         for (let i = 0; i < compressLength; i++) {
           let imgName =
-            that.data.valueData.pointName +
+            that.data.valueData.pointNum +
             "-" +
             that.title +
             "-" +
@@ -205,7 +201,7 @@ export default {
           let fromData = new FormData();
           fromData.append("file", compressFiles[i]);
           fromData.append("taskId", that.task.id);
-          fromData.append("imageName", imgName);
+          fromData.append("imageName", imgName.replace(/#/g, "-"));
           promiseAll.push(taskXcImage(fromData));
         }
         Promise.all(promiseAll).then((posts) => {
@@ -224,11 +220,10 @@ export default {
 
             this.inputFile = false;
             this.$nextTick(() => {
-             
               this.data.valueData.imgList[this.currencyIndex].img.push(
                 ...imgNameArr
               );
-               this.$forceUpdate();
+              this.$forceUpdate();
               this.inputFile = true;
             });
           } else {
@@ -256,10 +251,12 @@ export default {
       this.deleteImg = true;
     },
     show(index) {
-      this.currencyIndex = index;
-      this.radio = 0;
-      if (this.data.valueData.imgList[index].img.length > 0) {
-        this.showImg = true;
+      let imgArr = this.data.valueData.imgList[index].img;
+      if (imgArr.length) {
+        this.imgUrl = imgArr.map((item) => this.hostUrl + item.url);
+        this.$nextTick(() => {
+          document.getElementById("viewer").click();
+        });
       } else {
         this.$notify({
           type: "error",

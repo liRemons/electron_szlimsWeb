@@ -32,6 +32,7 @@
               >
                 +
               </div>
+
               <div
                 title="查看图片"
                 @click="show(index)"
@@ -87,52 +88,34 @@
         </tr>
       </table>
     </div>
-    <el-dialog
-      title="图片"
-      top="200px"
-      :visible.sync="showImg"
-      width="60%"
-      :modal="false"
-    >
+
+    <viewer v-if="imgUrl" class="viewer" :images="[hostUrl + imgUrl]">
       <img
-        v-if="showImg"
-        style="max-width: 80%; max-height: 500px"
-        :src="hostUrl + data.valueData.point[currencyIndex].img"
-        alt=""
+        id="viewer"
+        v-for="item in [hostUrl + imgUrl]"
+        :src="item"
+        ref="img"
+        style="display: none"
+        :key="item.index"
       />
-      <div slot="footer">
-        <el-button @click="showImg = false">取消</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog
-      title="删除"
-      :visible.sync="deleteImg"
-      width="60%"
-      :modal="false"
-    >
-      <p class="bold">确认删除？</p>
-      <div slot="footer">
-        <el-button type="primary" @click="deleteConfirm()">确定</el-button>
-        <el-button @click="deleteImg = false">取消</el-button>
-      </div>
-    </el-dialog>
+    </viewer>
   </div>
 </template>
 
 <script>
 import { taskXcImage } from "@/api/local";
+import Viewer from "viewerjs";
 import lrz from "lrz";
 
 export default {
   data() {
     return {
       currencyIndex: "",
-      deleteImg: false,
-      showImg: false,
       selectItem: "",
       selectItemIndex: "",
       sampleOption: "",
       title: "",
+      imgUrl: "",
     };
   },
   computed: {},
@@ -219,23 +202,25 @@ export default {
         });
       });
     },
-    deleteConfirm() {
-      this.deleteImg = false;
-      this.data.valueData.point[this.currencyIndex].img = "";
-      this.data.valueData.point[this.currencyIndex].state = 0;
-    },
     deleteSrue(index) {
-      this.currencyIndex = index;
-      this.deleteImg = true;
+      this.$confirm("删除图片?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.data.valueData.point[index].img = "";
+        this.data.valueData.point[index].state = 0;
+      });
     },
     show(index) {
-      if (this.data.valueData.point[index].img !== "") {
-        this.showImg = true;
-      } else {
-        this.$notify({
-          type: "error",
-          message: "请先上传图片",
+      let img = this.data.valueData.point[index].img;
+      if (img) {
+        this.imgUrl = img;
+        this.$nextTick(() => {
+          document.getElementById("viewer").click();
         });
+      } else {
+        this.$message.error("暂无图片");
       }
     },
     addRow(index) {

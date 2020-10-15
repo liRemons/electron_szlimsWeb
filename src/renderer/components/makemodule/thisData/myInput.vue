@@ -4,9 +4,9 @@
     style="
       border: none;
       width: 95%;
-      height: 29px;
-      border: none;
+      height: 27px;
       text-align: center;
+      margin-top:1px
     "
     ref="myBox"
     :placeholder="placeholder"
