@@ -210,6 +210,21 @@
         </div>
       </el-row>
     </el-dialog>
+    <div class="anchor_dc" v-if="pointDCAnchorArr.length">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item title="点位" name="1">
+          <div
+            class="tc"
+            style="margin-top: 5px"
+            v-for="item in pointDCAnchorArr"
+          >
+            <el-tag type="success">
+              <a :href="'#point' + item.split('#')[0]">{{ item }}</a></el-tag
+            >
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
   </div>
 </template>
 
@@ -236,7 +251,9 @@ export default {
   data() {
     return {
       purposeDetection: "",
+      pointDCAnchorArr: [],
       time: "",
+      activeNames: [],
       heads,
       pageBox: false,
       staffId: "",
@@ -578,9 +595,6 @@ export default {
             ) {
               fatherData.push(sonData);
               sonData = [];
-            } else {
-              console.log(1);
-              // fatherData.push([val])
             }
           });
         }
@@ -605,7 +619,18 @@ export default {
           project_jbxxData.data.valueData.purposeDetection
         );
       }
+
       // ----------------END
+      // =================电磁点位跳转
+      let pointDCAnchorArr = [];
+      let dc_dchjcl = this.jsonString.filter(
+        (item) => item.to === "project_dc_dchjcl"
+      );
+      pointDCAnchorArr = dc_dchjcl
+        .map((item) => item.data.valueData.point)
+        .filter((item) => item)
+        .flat();
+      this.pointDCAnchorArr = pointDCAnchorArr.map((item) => item.rows[0]);
       this.$forceUpdate();
       this.Reset();
 
@@ -1364,7 +1389,7 @@ export default {
             "staffName",
             "monitorObjectName",
             "monitorObjectAddress",
-            'endTime'
+            "endTime",
           ];
           newKey.forEach((item) => {
             template.valueData[item] = task[item];
@@ -1906,7 +1931,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less" >
 #showTemplateBox {
   position: relative !important;
   text-align: left;
@@ -2081,5 +2106,39 @@ export default {
 
 #showTemplateBox .closeContent:hover {
   color: red;
+}
+
+.anchor_dc {
+  position: fixed;
+  top: 25vh;
+  left: 200px;
+  .el-collapse{
+    border: none;
+  }
+  .el-collapse-item__wrap {
+    margin-top: 10px;
+    border-radius: 10px;
+    max-height:200px;
+    overflow: auto;
+  }
+  .el-collapse-item__header {
+    border-radius: 40px;
+    height: 20px;
+    background:#409EFF;
+    color:#fff;
+    line-height: 20px;
+    padding: 5px 10px;
+    border: none;
+  }
+  .el-collapse-item__content {
+    padding-bottom: 5px;
+  }
+  .el-tag {
+    display: inline-block;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+  }
 }
 </style>

@@ -46,7 +46,7 @@
               
               style="top: 0; left: -80px"
             >
-            <a :href="'#point' + item.rows[0].split('#')[0]">{{ item.rows[0] }}</a>
+           
               <el-tooltip content="导入数据" placement="top" :open-delay="500">
                 <el-button
                 v-if="item.rows[9] < limit && target == 0"
