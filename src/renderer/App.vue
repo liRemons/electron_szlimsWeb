@@ -177,23 +177,28 @@ export default {
         spinner: "el-icon-loading",
         background: "rgba(0, 0, 0, 0.7)",
       });
-      this.$updateAxios.post("/getOnlineApk", data).then((res) => {
-        loading.close();
-        let apkVersion = JSON.parse(res.data.data[0].apkVersion);
-        this.updateMain = apkVersion.update;
-        this.updateVersion = apkVersion.code;
-        sessionStorage.setItem("version", {
-          updateVersion: this.updateVersion,
-          version: this.version,
-        });
+      this.$updateAxios
+        .post("/getOnlineApk", data)
+        .then((res) => {
+          loading.close();
+          let apkVersion = JSON.parse(res.data.data[0].apkVersion);
+          this.updateMain = apkVersion.update;
+          this.updateVersion = apkVersion.code;
+          sessionStorage.setItem("version", {
+            updateVersion: this.updateVersion,
+            version: this.version,
+          });
 
-        if (Number(this.updateVersion) > Number(this.version)) {
-          this.updateflag = true;
-          this.apkUrl = res.data.data[0].apkUrl;
-        } else {
-          this.$message.warning("暂无最新版本");
-        }
-      });
+          if (Number(this.updateVersion) > Number(this.version)) {
+            this.updateflag = true;
+            this.apkUrl = res.data.data[0].apkUrl;
+          } else {
+            this.$message.warning("暂无最新版本");
+          }
+        })
+        .catch((err) => {
+          loading.close();
+        });
     },
     clean() {
       this.$confirm(
@@ -369,13 +374,9 @@ export default {
         return data;
       }
     }
-    localStorage.getItem = (key) => {
-      console.log(get());
-    };
+    
     //=============================END
-    // setTimeout(() => {
-    //   localStorage.getItem("bb")
-    // }, 1000);
+   
     Number.prototype.toFixed46 = function (
       decimalPlaces,
       Judge = false,

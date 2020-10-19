@@ -41,15 +41,12 @@
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td class="___relative tc">
-            <div
-              class="___absolute leftBtn"
-              
-              style="top: 0; left: -80px"
-            >
-           
+            <div class="___absolute leftBtn" style="top: 0; left: -80px">
               <el-tooltip content="导入数据" placement="top" :open-delay="500">
                 <el-button
-                v-if="item.rows[9] < limit && target == 0"
+                  v-if="
+                    (item.rows[8] >= 12 || item.rows[9] >= 40) && target == 0
+                  "
                   @click="dcUpload(item)"
                   size="mini"
                   icon="el-icon-folder-add"
@@ -57,7 +54,6 @@
                 >
                 </el-button>
               </el-tooltip>
-              
               <input
                 v-if="inputFile"
                 type="file"
@@ -68,21 +64,21 @@
             </div>
             {{ item.rows[0] }}
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[1]"
               :defaultValue="item.rows[1]"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[2]"
               :defaultValue="item.rows[2]"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[3]"
@@ -90,7 +86,7 @@
               :defaultValue="item.rows[3]"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[4]"
@@ -98,7 +94,7 @@
               :defaultValue="item.rows[4]"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[5]"
@@ -106,7 +102,7 @@
               :defaultValue="item.rows[5]"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[6]"
@@ -114,7 +110,7 @@
               :defaultValue="item.rows[6]"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
               style="text-align: center"
               v-model="item.rows[7]"
@@ -122,12 +118,8 @@
               :defaultValue="item.rows[7]"
             ></myInput>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.rows[8] }}</div>
-          </td>
-          <td class="___relative tc">
-            <div>{{ item.rows[9] }}</div>
-          </td>
+          <td>{{ item.rows[8] }}</td>
+          <td>{{ item.rows[9] }}</td>
           <td class="___relative tc">
             <myInput
               style="text-align: center"
@@ -358,7 +350,7 @@ export default {
         ],
         empty = [];
       // 满足条件则不生成，如果之前生成过，则删除==========
-      if (data.rows[9] > +this.limit) {
+      if (data.rows[8] < 12 && data.rows[9] < 40) {
         this.jsonString.forEach((item, index) => {
           if (
             createRepeatArr.includes(item.to) &&
@@ -390,6 +382,7 @@ export default {
       let dchjcl = this.jsonString.filter(
         (item) => item.to == "project_dc_dchjcl"
       );
+      let project_deleteReason=this.jsonString.findIndex(item=>item.to==='project_deleteReason')
       // 总的点位
       let point = dchjcl.map((item) => item.data.valueData.point).flat();
       let pointNum = point.map((item) => item.rows[0]);

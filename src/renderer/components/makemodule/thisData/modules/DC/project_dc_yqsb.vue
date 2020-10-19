@@ -5,21 +5,11 @@
       <p>{{ data.valueData.correct }}:</p>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>检测用途</span>
-          </td>
-          <td class="___relative tc" style="width: 130px">
-            <span>仪器编号</span>
-          </td>
-          <td class="___relative tc" style="width: 130px">
-            <span>仪器型号</span>
-          </td>
-          <td class="___relative tc" style="width: 200px">
-            <span>仪器名称</span>
-          </td>
-          <td class="___relative tc" style="width: 100px">
-            <span>频率范围</span>
-          </td>
+          <td>检测用途</td>
+          <td>仪器编号</td>
+          <td>仪器型号</td>
+          <td colspan="2">仪器名称</td>
+          <td>频率范围</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td class="___relative tc">
@@ -39,7 +29,6 @@
               >
               </selectModel>
               <myInput
-                style="text-align: center"
                 v-else
                 v-model="item.rows[0]"
                 @change.native="
@@ -54,7 +43,7 @@
           <td class="___relative tc">
             <querySelect
               v-model="item.rows[1]"
-              v-if="target === '0'"
+              v-if="target == 0"
               ref="querySelect"
               :num="index"
               :list="deviceData"
@@ -67,12 +56,8 @@
               {{ item.rows[1] }}
             </div>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.rows[2] }}</div>
-          </td>
-          <td class="___relative tc">
-            <div>{{ item.rows[3] }}</div>
-          </td>
+          <td>{{ item.rows[2] }}</td>
+          <td colspan="2">{{ item.rows[3] }}</td>
           <td class="___relative tc">
             <div>{{ item.rows[4] }}</div>
             <div
@@ -172,6 +157,45 @@ export default {
       }
     },
     returnVal2(index, val) {
+      let point = [],
+        flag = false;
+      if (this.data.valueData.point[index].rows[0] == "电场强度") {
+        this.jsonString.forEach((item) => {
+          if (item.to === "project_dc_yqsb") {
+            point.push(...item.data.valueData.point);
+          }
+        });
+        let repeatPoint = point.filter((item) => item.rows[0] == "电场强度");
+        let repeatPointId = repeatPoint.map((item) => {
+          return {
+            deviceId: item.deviceObj && item.deviceObj.id,
+            pointId: item.pointId,
+          };
+        });
+
+        repeatPointId.forEach((item) => {
+          if (
+            item.pointId !== this.data.valueData.point[index].pointId &&
+            item.deviceId === val.id
+          ) {
+            this.$refs.querySelect[index].searchBox.value = "";
+            this.data.valueData.point[index].rows[1] = "";
+            this.data.valueData.point[index].SampleTools = val.id;
+            this.$set(this.data.valueData.point[index].rows, 2, "");
+            this.$set(this.data.valueData.point[index].rows, 3, "");
+            this.$set(this.data.valueData.point[index].rows, 4, "");
+            this.data.valueData.point[index].deviceObj = {};
+            this.$forceUpdate();
+            flag = true;
+          }
+        });
+        if (flag) {
+          this.$message.error("不能选择重复仪器");
+          return;
+        }
+        return;
+      }
+
       this.data.valueData.point[index].rows[1] = val.deviceNum;
       this.data.valueData.point[index].SampleTools = val.id;
       this.$set(this.data.valueData.point[index].rows, 2, val.deviceModel);

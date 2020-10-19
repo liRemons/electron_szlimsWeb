@@ -235,7 +235,7 @@ import { queryListType } from "@/api/local";
 import { getToken } from "@/utils/auth";
 import heads from "@/components/makemodule/thisData/dataJs/heads.js";
 import modules from "@/components/makemodule/thisData/dataJs/modules.js";
-
+import dcmodules from "@/components/makemodule/thisData/dataJs/sonModules/dc.js";
 import bus from "@/utils/bus.js";
 import { getInstrumentList } from "@/api/entering";
 import { setTimeout } from "timers";
@@ -247,6 +247,7 @@ import {
 } from "@/api/local";
 import { mapState } from "vuex";
 import { currentTime } from "@/utils/dateTime.js";
+import { log } from "util";
 export default {
   data() {
     return {
@@ -599,16 +600,14 @@ export default {
           });
         }
         if (fatherData.length) {
-          let projcetSubsidiary = this.deepCopy(projcet);
           fatherData.forEach((val, num) => {
+            let projcetSubsidiary = this.deepCopy(projcet);
             projcetSubsidiary.data.valueData.point = this.deepCopy(val);
             decompose.push(projcetSubsidiary);
             decompose[decompose.length - 1].data.height = item.data.height;
           });
         }
       });
-      this.jsonString = [];
-
       this.jsonString = decompose;
       // 获取检测类型-------START
       let project_jbxxData = this.jsonString.find(
@@ -1110,6 +1109,12 @@ export default {
         let subNum = this.jsonString.findIndex(
           (val) => val.data.valueData.testProjectId === item.testProjectId
         );
+
+        if (item.testProjectName === "project_dc") {
+          subNum = this.jsonString.findIndex(
+            (val) => val.to === "project_dc_dchjcl"
+          );
+        }
         if (subNum !== -1) {
           this.control[index] = true;
         }
@@ -1129,6 +1134,13 @@ export default {
 
     changeModule(obj, index) {
       this.reasonMsgArr = this.getIdPoint("project_deleteReason");
+      let cancel = [
+        "project_dc_dchjcl",
+        "project_dc_dchjxpcl",
+        "project_dc_dchjxpclbg",
+        "project_dc_dctj",
+        "project_dc_yysmc",
+      ];
       if (this.control[index] === false) {
         this.$prompt("请输入取消检测原因", "提示", {
           confirmButtonText: "确定",
@@ -1170,6 +1182,11 @@ export default {
               } else {
                 modelName = [obj.name];
               }
+              if (obj.testProjectName === "project_dc") {
+                modelName = modelName.filter((item) => {
+                  return cancel.includes(item);
+                });
+              }
               modelName.forEach((item) => {
                 this.jsonString = this.jsonString.filter(
                   (val, index) => val.to !== item
@@ -1192,6 +1209,33 @@ export default {
         } else {
           modelName = [obj.name];
         }
+        // 如果是电磁========START
+        if (obj.testProjectName === "project_dc") {
+          let NewDcmodules = this.deepCopy(dcmodules);
+          let createArr = [];
+          NewDcmodules.forEach((item) => {
+            cancel.forEach((a) => {
+              if (item.name === a) {
+                let id = window.uuid();
+                item.valueData.foreverId = id;
+                item.valueData.pointId = id;
+                item.valueData.multipleId = id;
+                createArr.push({
+                  type: item.type,
+                  to: item.name,
+                  data: this.deepCopy(item),
+                });
+              }
+            });
+          });
+          this.reasonMsgArr = [];
+          this.jsonString.push(...createArr);
+          bus.$emit("getDeleteArr", this.reasonMsgArr);
+          this.setReasonToModule();
+          this.redefinition();
+          return;
+        }
+        // =====================END
         let modelObj = [];
 
         modelName.forEach((item) => {
@@ -1226,10 +1270,12 @@ export default {
             type: null,
             data: val,
           };
-          let index = this.jsonString.findIndex(
-            (item) => item.to === "project_deleteReason"
-          );
-
+          let index;
+          this.jsonString.forEach((item, index) => {
+            if (item.to === "project_deleteReason") {
+              index = index;
+            }
+          });
           this.jsonString.splice(index, 0, json);
         });
         let testprojectId = obj.testProjectId;
@@ -2112,20 +2158,20 @@ export default {
   position: fixed;
   top: 25vh;
   left: 200px;
-  .el-collapse{
+  .el-collapse {
     border: none;
   }
   .el-collapse-item__wrap {
     margin-top: 10px;
     border-radius: 10px;
-    max-height:200px;
+    max-height: 200px;
     overflow: auto;
   }
   .el-collapse-item__header {
     border-radius: 40px;
     height: 20px;
-    background:#409EFF;
-    color:#fff;
+    background: #409eff;
+    color: #fff;
     line-height: 20px;
     padding: 5px 10px;
     border: none;

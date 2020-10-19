@@ -91,7 +91,7 @@
 
     <viewer v-if="imgUrl" class="viewer" :images="[hostUrl + imgUrl]">
       <img
-        id="viewer"
+        :id="'project_dc_xcdc-show' + pageNumber"
         v-for="item in [hostUrl + imgUrl]"
         :src="item"
         ref="img"
@@ -217,7 +217,9 @@ export default {
       if (img) {
         this.imgUrl = img;
         this.$nextTick(() => {
-          document.getElementById("viewer").click();
+          document
+            .getElementById("project_dc_xcdc-show" + this.pageNumber)
+            .click();
         });
       } else {
         this.$message.error("暂无图片");

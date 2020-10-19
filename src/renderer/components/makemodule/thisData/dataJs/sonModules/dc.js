@@ -1,6 +1,7 @@
 export default [
   {
     name: "project_dc_jcxx",
+    isHead:true,
     projectName: "检测信息",
     switch: true,
     type: null,
@@ -27,9 +28,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 340,
+        fixed: 308,
         value: function(obj) {
-          return 340;
+          return 308;
         },
       },
       _short: {
@@ -380,10 +381,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 395,
+        fixed: 362,
         confirm: true,
         value: function(obj) {
-          return 395;
+          return 362;
         },
       },
       _short: {

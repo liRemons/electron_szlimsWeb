@@ -842,7 +842,8 @@ export default {
       );
       this.jsonString.forEach((item, index) => {
         if (item.data.name === "project_jcxcxx") {
-          dataArr.push(...item.data.valueData.point.filter((a) => a.checked));
+          // dataArr.push(...item.data.valueData.point.filter((a) => a.checked));
+          dataArr = item.data.valueData.point;
         }
         if (
           item.to === "projcet_jcbt" ||
@@ -899,10 +900,12 @@ export default {
           this.$emit("refre");
         }, 10);
       }
-
       for (let i = 0; i < pointNum; i++) {
         projcetArr[0].valueData.deviceState = "开机";
         projcetArr[0].valueData.exposureMode = dataArr[i].exposureMode;
+        projcetArr[1].valueData.exposureMode = dataArr[i].exposureMode;
+        projcetArr[2].valueData.exposureMode = dataArr[i].exposureMode;
+        projcetArr[3].valueData.exposureMode = dataArr[i].exposureMode;
         projcetArr[0].valueData.harnessDirection = dataArr[i].harnessDirection;
         projcetArr[0].valueData.checked = dataArr[i].checked;
         let jcbt = JSON.myParse(
@@ -1024,13 +1027,32 @@ export default {
       if (insertIndex !== -1) {
         usedData.splice(insertIndex + 1, 0, ...newData);
       }
+      let delarr = [];
+      dataArr.forEach((item, index) => {
+        usedData.forEach((a, b) => {
+          if (
+            !item.checked &&
+            item.exposureMode == a.data.valueData.exposureMode
+          ) {
+            delarr.push(b);
+          }
+          // console.log(item.data.valueData.multipleId)
+        });
+      });
+      if (delarr.length) {
+        let maxdel = Math.max(...delarr);
+        let mindel = Math.min(...delarr);
+        let dellength = maxdel - mindel + 1;
+        usedData.splice(mindel, dellength);
+      }
       this.$emit("changeJson", [...usedData]);
-      if (completeArr.length) {
+
+      // this.$store.dispatch("actionsClear", completeArr);
+      this.$store.dispatch("actionsSetTestprojectId", true);
+      this.$store.dispatch("actionsSurgeon");
+      if (completeArr.length > 0) {
         this.$store.dispatch("actionsSurgeonArr", completeArr);
       }
-      this.$store.dispatch("actionsSetTestprojectId", true);
-
-      this.$store.dispatch("actionsSurgeon");
 
       if (flag !== 1) {
         this.importData.isCreate = true;

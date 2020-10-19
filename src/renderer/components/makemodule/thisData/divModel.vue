@@ -1,7 +1,7 @@
 <template>
   <div
     class="box historyValue"
-    style="background: #fff; max-width: 99%; margin: 0 2px"
+    style="background: #fff; max-width: 98%; margin: 0 2px"
   >
     <!--数字框-->
     <section

@@ -377,54 +377,52 @@ export default {
       this.$emit("redefinition");
     },
     deleteRow(index, Judge) {
-      if (this.data.valueData.point.length) {
-        this.$confirm("确认删除吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          modal: false,
-        }).then(() => {
-          let pointIndex = [];
-          if (Judge === 1) {
-            let data = this.jsonString.filter(
-              (item) =>
-                item.to === "project_dc_yysmc" &&
-                this.data.valueData.pointId === item.data.valueData.pointId
-            );
-            let ids = data.map((item) => item.data.valueData.multipleId);
-            // 取出当前的表格索引
-            this.jsonString.forEach((item, index) => {
-              if (
-                item.to === "project_dc_yysmc" &&
-                item.data.valueData.multipleId ===
-                  this.data.valueData.multipleId
-              ) {
-                pointIndex.push(index);
-              }
-            });
-
-            const del = () => {
-              this.data.valueData.correct = "";
-              if (pointIndex.length > 1) {
-                let count = Math.max(...pointIndex) - Math.min(...pointIndex);
-                this.jsonString.splice(pointIndex[0], count + 1);
-              } else {
-                this.jsonString.splice(pointIndex[0], 1);
-              }
-            };
-            // 判断当前的数量，只有一个不删除
-            if ([...new Set(ids)].length > 1) {
-              del();
-            } else {
-              del();
-              let smcData = this.newPoint();
-              this.jsonString.splice(pointIndex[0], 0, smcData);
+      this.$confirm("确认删除吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        modal: false,
+      }).then(() => {
+        let pointIndex = [];
+        if (Judge === 1) {
+          let data = this.jsonString.filter(
+            (item) =>
+              item.to === "project_dc_yysmc" &&
+              this.data.valueData.pointId === item.data.valueData.pointId
+          );
+          let ids = data.map((item) => item.data.valueData.multipleId);
+          // 取出当前的表格索引
+          this.jsonString.forEach((item, index) => {
+            if (
+              item.to === "project_dc_yysmc" &&
+              item.data.valueData.multipleId === this.data.valueData.multipleId
+            ) {
+              pointIndex.push(index);
             }
-          } else if (Judge === 2) {
-            this.data.valueData.point.splice(index, 1);
+          });
+
+          const del = () => {
+            this.data.valueData.correct = "";
+            if (pointIndex.length > 1) {
+              let count = Math.max(...pointIndex) - Math.min(...pointIndex);
+              this.jsonString.splice(pointIndex[0], count + 1);
+            } else {
+              this.jsonString.splice(pointIndex[0], 1);
+            }
+          };
+          // 判断当前的数量，只有一个不删除
+          if ([...new Set(ids)].length > 1) {
+            del();
+          } else {
+            del();
+            let smcData = this.newPoint();
+            this.$message.warning("最后一个不可删除");
+            this.jsonString.splice(pointIndex[0], 0, smcData);
           }
-          this.$emit("redefinition");
-        });
-      }
+        } else if (Judge === 2) {
+          this.data.valueData.point.splice(index, 1);
+        }
+        this.$emit("redefinition");
+      });
     },
     heBing() {
       let idArr = [];

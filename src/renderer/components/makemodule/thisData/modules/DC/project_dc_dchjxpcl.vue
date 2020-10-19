@@ -22,7 +22,7 @@
           "
           style="top: -100px"
         ></div>
-        <tr>
+        <!-- <tr>
           <td>对应检测编号</td>
           <td colspan="3">
             <myInput
@@ -30,7 +30,7 @@
               v-model="data.valueData.testNum"
               :defaultValue="data.valueData.testNum"
             ></myInput>
-          </td>
+          </td> -->
         </tr>
         <tr>
           <td>对应点位序号</td>
@@ -116,7 +116,7 @@
     </el-dialog>
     <viewer v-if="imgUrl.length" class="viewer" :images="imgUrl">
       <img
-        id="viewer"
+        id="viewer_xpcl"
         v-for="item in imgUrl"
         :src="item"
         ref="img"
@@ -255,7 +255,7 @@ export default {
       if (imgArr.length) {
         this.imgUrl = imgArr.map((item) => this.hostUrl + item.url);
         this.$nextTick(() => {
-          document.getElementById("viewer").click();
+          document.getElementById("viewer_xpcl").click();
         });
       } else {
         this.$notify({

@@ -24,14 +24,14 @@
             {{ data.valueData.detectionTime }} - {{ data.valueData.endTime }}
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td>检测编号</td>
           <td colspan="4" @click="generateSampleNum(data.valueData)">
             <span>{{
               data.valueData.sampleNum + "" + data.valueData.sampleNumIndex
             }}</span>
           </td>
-        </tr>
+        </tr> -->
         <tr>
           <td>检测对象地址</td>
           <td colspan="4">{{ data.valueData.monitorObjectAddress }}</td>
