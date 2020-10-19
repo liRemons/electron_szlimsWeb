@@ -382,7 +382,9 @@ export default {
       let dchjcl = this.jsonString.filter(
         (item) => item.to == "project_dc_dchjcl"
       );
-      let project_deleteReason=this.jsonString.findIndex(item=>item.to==='project_deleteReason')
+      let project_deleteReason = this.jsonString.findIndex(
+        (item) => item.to === "project_deleteReason"
+      );
       // 总的点位
       let point = dchjcl.map((item) => item.data.valueData.point).flat();
       let pointNum = point.map((item) => item.rows[0]);
@@ -461,7 +463,11 @@ export default {
       let arr = this.JudgeNum([item1, item2, item3, item4, item5]);
       if (arr.length === 5) {
         let average = this.average(arr);
-        this.$set(this.data.valueData.point[index].rows, 8, average);
+        this.$set(
+          this.data.valueData.point[index].rows,
+          8,
+          average.toFixed46(2)
+        );
         this.$set(
           this.data.valueData.point[index].rows,
           9,
