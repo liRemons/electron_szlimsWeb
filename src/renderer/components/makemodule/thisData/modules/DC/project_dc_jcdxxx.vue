@@ -5,9 +5,7 @@
       <p>{{ data.valueData.correct }}:</p>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>天线类型</span>
-          </td>
+          <td style="width: 120px">天线类型</td>
           <td class="___relative tc" style="width: 560px">
             <div v-if="target == 0">
               <selectModel
@@ -51,20 +49,16 @@
       </table>
       <table class="myTable">
         <tr class="delLine">
-          <td class="___relative tc" style="width: 120px">
-            <span>天线离地高度</span>
-          </td>
+          <td style="width: 120px">天线离地高度</td>
           <td class="___relative tc" style="width: 220px">
             <myInput
               style="text-align: center; width: 50px"
               v-model="data.valueData.antennaHeight"
               :defaultValue="data.valueData.antennaHeight"
             ></myInput>
-            <span>米</span>
+            米
           </td>
-          <td class="___relative tc" rowspan="2" style="width: 120px">
-            <span>经纬度坐标</span>
-          </td>
+          <td rowspan="2" style="width: 120px">经纬度坐标</td>
           <td class="___relative tc" style="width: 220px">
             <div class="___absolute tc t0" style="width: 70px">
               <div v-if="target == 0">
@@ -103,9 +97,7 @@
           </td>
         </tr>
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>周围环境性质</span>
-          </td>
+          <td style="width: 120px">周围环境性质</td>
           <td class="___relative tc" style="width: 220px">
             <div v-if="target == 0">
               <selectModel
@@ -184,9 +176,7 @@
       </table>
       <table class="myTable">
         <tr class="delLine">
-          <td class="___relative tc" style="width: 120px">
-            <span>最近敏感点</span>
-          </td>
+          <td style="width: 120px">最近敏感点</td>
           <td class="___relative tc" style="width: 560px">
             <myInput
               style="text-align: center"
@@ -198,9 +188,7 @@
       </table>
       <table class="myTable">
         <tr class="delLine">
-          <td class="___relative tc" style="width: 354px">
-            <span>天线与最近敏感点的距离</span>
-          </td>
+          <td style="width: 354px">天线与最近敏感点的距离</td>
           <td class="___relative tc" style="width: 350px">
             <span>水平：</span>
             <myInput
@@ -220,9 +208,7 @@
       </table>
       <table class="myTable">
         <tr class="delLine">
-          <td class="___relative tc" style="width: 120px">
-            <span>运营单位</span>
-          </td>
+          <td style="width: 120px">运营单位</td>
           <td class="___relative tc" style="width: 223px">
             <div v-if="target == 0">
               <selectModel
@@ -252,9 +238,7 @@
             </div>
             <div v-else>{{ data.valueData.operationUnit }}</div>
           </td>
-          <td class="___relative tc" style="width: 120px">
-            <span>网络制式类型</span>
-          </td>
+          <td style="width: 120px">网络制式类型</td>
           <td class="___relative tc" style="width: 220px">
             <div v-if="target == 0">
               <selectModel
@@ -286,9 +270,7 @@
           </td>
         </tr>
         <tr>
-          <td class="___relative tc" style="width: 120px">
-            <span>运行状态</span>
-          </td>
+          <td style="width: 120px">运行状态</td>
           <td class="___relative tc" style="width: 220px">
             <div v-if="target == 0">
               <selectModel
@@ -318,9 +300,7 @@
             </div>
             <div v-else>{{ data.valueData.runningState }}</div>
           </td>
-          <td class="___relative tc" style="width: 120px">
-            <span>天线数量</span>
-          </td>
+          <td style="width: 120px">天线数量</td>
           <td class="___relative tc" style="width: 220px">
             <myInput
               style="text-align: center"
@@ -332,9 +312,7 @@
       </table>
       <table class="myTable">
         <tr class="delLine">
-          <td class="___relative tc" style="width: 120px">
-            <span>发射频率范围</span>
-          </td>
+          <td style="width: 120px">发射频率范围</td>
           <td class="___relative tc" style="width: 560px">
             <myInput
               style="text-align: center; width: 50px"
@@ -436,7 +414,19 @@ export default {
       this.$forceUpdate();
     },
   },
-  mounted() {},
+  mounted() {
+    if (this.data.valueData.latLngType) {
+      this.data.valueData.longitudeTitle = this.data.valueData.latLngType.split(
+        "-"
+      )[0];
+      this.data.valueData.latitudeTitle = this.data.valueData.latLngType.split(
+        "-"
+      )[1];
+    }
+
+    this.data.valueData.longitude = this.data.valueData.lng;
+    this.data.valueData.latitude = this.data.valueData.lat;
+  },
 };
 </script>
 

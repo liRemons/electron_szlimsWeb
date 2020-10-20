@@ -484,7 +484,6 @@ export default {
   },
   mounted() {
     this.getDetailData();
-    console.log(this.data.valueData.point, "poont");
     this.$eventBus.$on("getDevice", (device) => {
       this.devices = device;
     });

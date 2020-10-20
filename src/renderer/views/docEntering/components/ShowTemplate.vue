@@ -1379,7 +1379,6 @@ export default {
               "clientUnitName",
               "checkUnitName",
               "clientUnitAddress",
-              "checkUnitAddress",
               "deviceTypeName",
               "testingPurpose",
               "mechanismName",
@@ -1446,7 +1445,7 @@ export default {
 
           break;
         case "project_dc_jcdxxx":
-          let newDCjcdxxx = ["antennaHeight", "lat", "lng"];
+          let newDCjcdxxx = ["antennaHeight", "lat", "lng",'latLngType'];
           newDCjcdxxx.forEach((item) => {
             template.valueData[item] = task[item];
           });

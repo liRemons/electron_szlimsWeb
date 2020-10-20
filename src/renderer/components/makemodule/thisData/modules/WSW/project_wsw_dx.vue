@@ -19,8 +19,28 @@
         <td>单位</td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point">
-        <td v-if="item.realItem" :rowspan="item.analysisItemsLength">
+        <td
+          class="___relative"
+          v-if="item.realItem"
+          :rowspan="item.analysisItemsLength"
+        >
           {{ name(item) }}
+          <div class="___absolute" style="left: -100px; top: 0" v-if="false">
+            <el-tooltip
+              effect="dark"
+              content="观察记录"
+              :open-delay="500"
+              placement="top"
+            >
+              <el-button
+                @click="openRecordDialog(item)"
+                type="primary"
+                size="mini"
+                icon="el-icon-edit"
+                circle
+              ></el-button>
+            </el-tooltip>
+          </div>
         </td>
         <td
           :colspan="projectName == '委托送样' && 2"
@@ -153,6 +173,9 @@ export default {
     projectHead,
   },
   methods: {
+    openRecordDialog(data) {
+      console.log(data.analysisItems);
+    },
     headShow() {
       if (this.pageNumber > 0) {
         if (this.thisPageIndex == 0) {

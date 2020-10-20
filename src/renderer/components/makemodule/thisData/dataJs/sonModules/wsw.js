@@ -663,6 +663,35 @@ export default [
       },
     },
   },
+  {
+    name: "project_wsw_dxgcjl",
+    projectName: "定性观察记录",
+    type: null,
+    switch: false,
+    publicData: [], //本模块的公共数据
+    valueData: {
+      //模块内容键值对
+      testProject: "project_wsw_dxgcjl",
+      id: "",
+      point: [{}],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 145,
+        value: function(obj) {
+          return 145 + 32 * obj.point.length;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 26 * (3 + obj.point.length);
+        },
+      },
+    },
+  },
 
   {
     name: "project_wsw_dx",
@@ -699,6 +728,7 @@ export default [
           realItem: "",
           analysisItems: [],
           detectionLimitPieces: "",
+          sysObservationResult: "",
         },
       ],
       remarks: "" /*备注*/,

@@ -24,7 +24,13 @@
                 :receive="'id'"
                 :single="true"
                 :rows="false"
-                :list="['电场强度', '环境温湿度', '距离测量', '自定义']"
+                :list="[
+                  '电场强度',
+                  '环境温湿度',
+                  '距离测量',
+                  '选频检测',
+                  '自定义',
+                ]"
                 :Obj="''"
               >
               </selectModel>
@@ -193,7 +199,6 @@ export default {
           this.$message.error("不能选择重复仪器");
           return;
         }
-        return;
       }
 
       this.data.valueData.point[index].rows[1] = val.deviceNum;

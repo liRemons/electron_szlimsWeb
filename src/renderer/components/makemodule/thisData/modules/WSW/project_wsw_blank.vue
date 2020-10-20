@@ -103,7 +103,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.data)
     let blanks = [];
     // return
     try {
