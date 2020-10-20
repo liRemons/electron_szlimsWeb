@@ -39,7 +39,7 @@
             :rowspan="item.heBingLength"
             @click="generateSampleNum(data.valueData.point)"
           >
-            <span>{{ item.sampleNum + "" + item.sampleNumIndex }}</span>
+            {{ item.sampleNum + "" + item.sampleNumIndex }}
           </td>
           <td v-if="item.noShow" :rowspan="item.heBingLength">
             <selectModel
