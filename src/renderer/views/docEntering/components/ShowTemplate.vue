@@ -882,8 +882,10 @@ export default {
           ) {
             let preservationArr = [];
             item.testProjectArr.forEach((val) => {
-              let newObj = Object.assign(this.deepCopy(item), val);
-              preservationArr.push(newObj);
+              if (!arr.includes(val.name)) {
+                let newObj = Object.assign(this.deepCopy(item), val);
+                preservationArr.push(newObj);
+              }
             });
             contentArray.splice(index, 1, preservationArr);
           } else {
@@ -1658,7 +1660,9 @@ export default {
                     (v, n) => v.sampleNum !== item.sampleNum
                   );
                   point = this.deepCopy(point);
-                  val.data.valueData.point = [...point];
+                  if (point.length) {
+                    val.data.valueData.point = [...point];
+                  }
                 }
               });
             }

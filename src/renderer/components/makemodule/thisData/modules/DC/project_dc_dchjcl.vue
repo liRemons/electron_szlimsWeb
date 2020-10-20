@@ -349,8 +349,8 @@ export default {
           "project_dc_yysmc",
         ],
         empty = [];
-      // 满足条件则不生成，如果之前生成过，则删除==========
-      if (data.rows[8] < 12 && data.rows[9] < 40) {
+      // 获取所有将要清空的模块位置
+      const initEmpty = () => {
         this.jsonString.forEach((item, index) => {
           if (
             createRepeatArr.includes(item.to) &&
@@ -359,100 +359,127 @@ export default {
             empty.push(index);
           }
         });
+      };
+      // 清空事件
+      const emptyEvent = () => {
+        this.jsonString.splice(
+          Math.min(...empty),
+          Math.max(...empty) - Math.min(...empty) + 1
+        );
+        this.$emit("redefinition");
+        return;
+      };
+      // 生成事件
+      const createEvent = () => {
+        let createArr = [];
+        let NewDcmodules = this.deepCopy(dcmodules);
+        let dchjcl = this.jsonString.filter(
+          (item) => item.to == "project_dc_dchjcl"
+        );
+        let project_deleteReason = this.jsonString.findIndex(
+          (item) => item.to === "project_deleteReason"
+        );
+        // 总的点位
+        let point = dchjcl.map((item) => item.data.valueData.point).flat();
+        let pointNum = point.map((item) => item.rows[0]);
+        let newPointNum = [...new Set(pointNum)];
+        if (newPointNum.length !== pointNum.length) {
+          this.$message.warning("有重复的点位");
+          return;
+        }
+        NewDcmodules.forEach((item) => {
+          createRepeatArr.forEach((a) => {
+            if (item.name === a) {
+              item.valueData.pointNum = data.rows[0];
+              item.valueData.level = data.rows[1];
+              item.valueData.vertical = data.rows[2];
+              item.valueData.pointName = data.rows[10];
+              item.valueData.foreverId = data.foreverId;
+              item.valueData.pointId = data.pointId;
+              item.valueData.multipleId = window.uuid();
+              createArr.push({
+                type: item.type,
+                to: item.name,
+                data: this.deepCopy(item),
+              });
+            }
+          });
+        });
+        // 此处获取当前点位前一位的点位ID
+
+        let prevPoint, lastIndex;
+        if (data.index !== 1) {
+          // 获取最后一个出现的位置
+          prevPoint = point.filter((item) => item.index == data.index - 1)[0];
+          let pointIdArr = this.jsonString.map(
+            (item) => item.data.valueData.pointId
+          );
+          lastIndex = pointIdArr.lastIndexOf(prevPoint.pointId);
+        }
+
+        let now = this.jsonString.filter(
+          (item) => item.data.valueData.pointId === data.pointId
+        );
+        // 如果未生成过点位
+        if (now.length === 0) {
+          lastIndex > 0
+            ? this.jsonString.splice(lastIndex + 1, 0, ...createArr)
+            : this.jsonString.push(...createArr);
+          this.$emit("redefinition");
+          return;
+        }
+        // 如果已生成过这个点位
+        this.jsonString.forEach((item) => {
+          let val = item.data.valueData;
+          if (val.foreverId && val.pointId) {
+            if (val.pointId === data.pointId) {
+              createRepeatArr.forEach((a) => {
+                if (item.to === a) {
+                  val.pointNum = data.rows[0];
+                  val.level = data.rows[1];
+                  val.vertical = data.rows[2];
+                  val.pointName = data.rows[10];
+                  val.foreverId = data.foreverId;
+                  val.pointId = data.pointId;
+                }
+              });
+            }
+          }
+        });
+        this.$emit("redefinition");
+      };
+      // 满足条件则不生成，如果之前生成过，则删除==========
+      if (data.rows[8] < 12 && data.rows[9] < 40) {
+        initEmpty();
         if (empty.length) {
           this.$confirm("此操作将此点位选频测量的数据清空, 是否继续?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning",
           }).then(() => {
-            this.jsonString.splice(
-              Math.min(...empty),
-              Math.max(...empty) - Math.min(...empty) + 1
-            );
-            this.$emit("redefinition");
-            return;
+            emptyEvent();
           });
         }
         return;
       }
-
       // 下面是不满足条件生成============
-      let createArr = [];
-      let NewDcmodules = this.deepCopy(dcmodules);
-      let dchjcl = this.jsonString.filter(
-        (item) => item.to == "project_dc_dchjcl"
-      );
-      let project_deleteReason = this.jsonString.findIndex(
-        (item) => item.to === "project_deleteReason"
-      );
-      // 总的点位
-      let point = dchjcl.map((item) => item.data.valueData.point).flat();
-      let pointNum = point.map((item) => item.rows[0]);
-      let newPointNum = [...new Set(pointNum)];
-      if (newPointNum.length !== pointNum.length) {
-        this.$message.warning("有重复的点位");
-        return;
-      }
-      NewDcmodules.forEach((item) => {
-        createRepeatArr.forEach((a) => {
-          if (item.name === a) {
-            item.valueData.pointNum = data.rows[0];
-            item.valueData.level = data.rows[1];
-            item.valueData.vertical = data.rows[2];
-            item.valueData.pointName = data.rows[10];
-            item.valueData.foreverId = data.foreverId;
-            item.valueData.pointId = data.pointId;
-            item.valueData.multipleId = window.uuid();
-            createArr.push({
-              type: item.type,
-              to: item.name,
-              data: this.deepCopy(item),
-            });
-          }
-        });
-      });
-      // 此处获取当前点位前一位的点位ID
-
-      let prevPoint, lastIndex;
-      if (data.index !== 1) {
-        // 获取最后一个出现的位置
-        prevPoint = point.filter((item) => item.index == data.index - 1)[0];
-        let pointIdArr = this.jsonString.map(
-          (item) => item.data.valueData.pointId
-        );
-        lastIndex = pointIdArr.lastIndexOf(prevPoint.pointId);
-      }
-
-      let now = this.jsonString.filter(
-        (item) => item.data.valueData.pointId === data.pointId
-      );
-      // 如果未生成过点位
-      if (now.length === 0) {
-        lastIndex > 0
-          ? this.jsonString.splice(lastIndex + 1, 0, ...createArr)
-          : this.jsonString.push(...createArr);
-        this.$emit("redefinition");
-        return;
-      }
-      // 如果已生成过这个点位
-      this.jsonString.forEach((item) => {
-        let val = item.data.valueData;
-        if (val.foreverId && val.pointId) {
-          if (val.pointId === data.pointId) {
-            createRepeatArr.forEach((a) => {
-              if (item.to === a) {
-                val.pointNum = data.rows[0];
-                val.level = data.rows[1];
-                val.vertical = data.rows[2];
-                val.pointName = data.rows[10];
-                val.foreverId = data.foreverId;
-                val.pointId = data.pointId;
-              }
-            });
-          }
+      this.$confirm(
+        "是否生成：此操作不可逆，若点击取消会将此点位选频测量的数据清空, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         }
-      });
-      this.$emit("redefinition");
+      )
+        .then(() => {
+          createEvent();
+        })
+        .catch(() => {
+          // 清空
+          initEmpty();
+          emptyEvent();
+        });
     },
     changeNum(index) {
       let item1 = this.data.valueData.point[index].rows[3];

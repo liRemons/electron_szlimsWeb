@@ -319,7 +319,7 @@
           row.pointId = window.uuid();
           row.foreverId = window.uuid();
           this.data.valueData.point.splice(num, 0, row);
-          this.data.valueData.point[num].heBingId = id + '-' + (subscript + 1);
+          this.data.valueData.point[num].heBingId = id + '-' + (subscript + window.uuid());
         }
         this.$emit("redefinition");
       },

@@ -119,13 +119,17 @@
                     <div class="___absolute">（温湿度表仪器编号：</div>
                     <div
                       class="___absolute"
-                      style="left: 150px; border-bottom: 1px solid black"
+                      style="
+                        left: 150px;
+                        border-bottom: 1px solid black;
+                        top: -6px;
+                      "
                     >
                       <querySelect
                         v-model="data.valueData.deviceNum1"
-                        v-if="target === '0'"
+                        v-if="target == 0"
                         ref="querySelect"
-                        :list="deviceData2"
+                        :list="getDevice('温湿度')"
                         @getSelectItem="
                           (val, index) => {
                             returnVal2(
@@ -152,6 +156,7 @@
                     <div
                       class="___absolute"
                       style="
+                        top: -6px;
                         left: 118px;
                         width: 150px;
                         border-bottom: 1px solid black;
@@ -159,8 +164,8 @@
                     >
                       <querySelect
                         v-model="data.valueData.deviceNum2"
-                        v-if="target === '0'"
-                        :list="deviceData2"
+                        v-if="target == 0"
+                        :list="getDevice('气压')"
                         @getSelectItem="
                           (val, index) => {
                             returnVal2(
@@ -456,6 +461,10 @@ export default {
     },
   },
   methods: {
+    getDevice(name) {
+      return this.deviceData2.filter((item) => item.deviceName.includes(name));
+    },
+
     noShowInput(el, item, showInput) {
       let val = el.target.value;
       el.target.value = el.target.value.replace(" ", "");
@@ -562,6 +571,7 @@ export default {
     this.standard = arr.map((item) => item + "<br/>").join("");
     let assessArr = this.data.valueData.assess.split(",");
     this.assess = assessArr.map((item) => item + "<br/>").join("");
+    console.log(this.deviceData2);
   },
 };
 </script>

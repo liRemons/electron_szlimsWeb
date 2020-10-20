@@ -6,7 +6,7 @@
       width: 95%;
       height: 27px;
       text-align: center;
-      margin-top:1px
+      margin-top: 1px;
     "
     ref="myBox"
     :placeholder="placeholder"
@@ -20,6 +20,11 @@
 export default {
   name: "querySelect",
   props: ["reg", "placeholder", "defaultValue"],
+  data() {
+    return {
+      inputPop: "",
+    };
+  },
   computed: {
     disable() {
       return this.$attrs.disabled;
@@ -33,6 +38,7 @@ export default {
   methods: {
     toInput(e) {
       let value = e.target.value;
+      this.inputPop = JSON.parse(JSON.stringify(value));
       this.$emit("input", value);
     },
     limit(e) {

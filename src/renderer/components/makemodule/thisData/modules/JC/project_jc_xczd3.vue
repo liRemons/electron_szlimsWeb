@@ -20,42 +20,18 @@
       </div>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 100px">
-            <span>样品编号</span>
-          </td>
-          <td class="___relative tc" style="width: 210px">
-            <span>检测地点</span>
-          </td>
-          <td class="___relative tc" style="width: 60px">
-            <span>检测点位</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>读数1</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>读数2</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>读数3</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>修正信息</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>检测结果</span>
-          </td>
-          <td class="___relative tc" style="width: 70px; line-height: 16px">
-            <span>检测结果<br />平均值</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>检测时间</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>仪器编号</span>
-          </td>
-          <td class="___relative tc" style="width: 120px">
-            <span>备注</span>
-          </td>
+          <td style="width: 100px">样品编号</td>
+          <td style="width: 210px">检测地点</td>
+          <td style="width: 60px">检测点位</td>
+          <td style="width: 70px">读数1</td>
+          <td style="width: 70px">读数2</td>
+          <td style="width: 70px">读数3</td>
+          <td style="width: 70px">修正信息</td>
+          <td style="width: 80px">检测结果</td>
+          <td style="width: 70px; line-height: 16px">检测结果<br />平均值</td>
+          <td style="width: 80px">检测时间</td>
+          <td style="width: 80px">仪器编号</td>
+          <td style="width: 120px">备注</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td
@@ -65,11 +41,7 @@
           >
             <span>{{ item.sampleNum + "" + item.sampleNumIndex }}</span>
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td v-if="item.noShow" :rowspan="item.heBingLength">
             <selectModel
               @returnVal="returnVal"
               :single="true"
@@ -88,15 +60,21 @@
             </selectModel>
           </td>
           <td class="___relative tc">
-            <myInput
-              style="text-align: center"
-              v-model="item.point"
-              :defaultValue="item.point"
-            ></myInput>
+             <el-tooltip
+              effect="dark"
+              :disabled="item.point == ''"
+              :content="item.point"
+              placement="top"
+            >
+              <myInput
+                style="text-align: center"
+                v-model="item.point"
+                :defaultValue="item.point"
+              ></myInput>
+            </el-tooltip>
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
               v-model="item.reading[0]"
               :defaultValue="item.reading[0]"
               @change.native="changeNum(index)"
@@ -104,7 +82,6 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
               v-model="item.reading[1]"
               :defaultValue="item.reading[1]"
               @change.native="changeNum(index)"
@@ -112,7 +89,6 @@
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
               v-model="item.reading[2]"
               :defaultValue="item.reading[2]"
               @change.native="changeNum(index)"
@@ -139,22 +115,17 @@
               </div>
             </div>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.correction | toDot(item.algorithm) }}</div>
+          <td>
+            {{ item.correction | toDot(item.algorithm) }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
-            <div>{{ item.result }}</div>
+          <td v-if="item.noShow" :rowspan="item.heBingLength">
+            {{ item.result }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
-            <div>{{ item.resultAverage }}</div>
+          <!-- <td v-if="item.noShow" :rowspan="item.heBingLength">
+            {{ item.resultAverage }}
+          </td> -->
+          <td v-if="item.first" :rowspan="item.size">
+            {{ item.resultAverage }}
           </td>
           <td
             v-if="item.noShow"
@@ -269,7 +240,7 @@
       :modal="false"
       :title="'操作'"
     >
-      <el-form :inline="true">
+      <el-form :inline="true" v-if="sampleOption">
         <el-row>
           <el-col :span="12">
             <el-form-item label="采样布点">
@@ -663,6 +634,7 @@ export default {
       } else if (Judge === 2) {
         let id =
           "project_jc_xczd3-" + this.pageNumber + "-" + this.thisPageIndex;
+
         let subscript = parseFloat(heBingId.split("-")[3]);
         let num = "";
         this.data.valueData.point.forEach((v, n) => {
@@ -683,7 +655,8 @@ export default {
         row.foreverId = window.uuid();
         row.SampleAddress = this.data.valueData.point[index].SampleAddress;
         this.data.valueData.point.splice(num, 0, row);
-        this.data.valueData.point[num].heBingId = id + "-" + (subscript + 1);
+        this.data.valueData.point[num].heBingId =
+          id + "-" + (subscript + window.uuid());
       }
       this.$emit("redefinition");
     },
@@ -847,10 +820,27 @@ export default {
         }
       });
     },
+    merge() {
+      this.data.valueData.point.forEach((item, index) => {
+        item.size =
+          item.sampleNum === ""
+            ? 1
+            : this.data.valueData.point.filter(
+                (a) => a.sampleNum === item.sampleNum
+              ).length;
+        item.first =
+          this.data.valueData.point.findIndex(
+            (a) => a.sampleNum === item.sampleNum
+          ) === index || item.sampleNum === "";
+      });
+    },
   },
   watch: {
     "data.valueData.heBingChange": function () {
       this.heBing();
+    },
+    "data.valueData.point": function () {
+      this.merge();
     },
   },
   mounted() {
@@ -864,6 +854,7 @@ export default {
     });
     setTimeout(() => {
       this.heBing();
+      this.merge();
     }, 10);
   },
 };

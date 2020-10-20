@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%">
+  <div style="width:100%;display:inline-block">
     <input
       class="box"
       style="width:100%;height:32px;line-height:32px"

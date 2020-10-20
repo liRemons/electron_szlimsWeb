@@ -46,7 +46,7 @@
             ></myInput>
             <span>至</span>
             <myInput
-              style="text-align: center; width: 50px"
+              style="width: 50px"
               v-model="data.valueData.temperature[1]"
               :defaultValue="data.valueData.temperature[1]"
             ></myInput>
@@ -55,13 +55,13 @@
           <td class="___relative tc" style="width: 220px">
             <span class="ml5">湿度：</span>
             <myInput
-              style="text-align: center; width: 50px"
+              style="width: 50px"
               v-model="data.valueData.humidity[0]"
               :defaultValue="data.valueData.humidity[0]"
             ></myInput>
             <span>至</span>
             <myInput
-              style="text-align: center; width: 50px"
+              style="width: 50px"
               v-model="data.valueData.humidity[1]"
               :defaultValue="data.valueData.humidity[1]"
             ></myInput>

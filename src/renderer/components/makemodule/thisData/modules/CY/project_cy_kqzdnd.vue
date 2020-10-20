@@ -75,7 +75,14 @@
         </td>
         <!-- 检测点位 -->
         <td>
-          <myInput v-model="item.point"></myInput>
+          <el-tooltip
+            effect="dark"
+            :disabled="item.point == ''"
+            :content="item.point"
+            placement="top"
+          >
+            <myInput v-model="item.point"></myInput>
+          </el-tooltip>
         </td>
         <!-- 第一周期 -->
         <td>
@@ -91,7 +98,9 @@
         <!-- 检测结果 -->
         <td>{{ item.result }}</td>
         <!-- 检测结果平均值 -->
-        <td>{{ item.resultAverage }}</td>
+        <td v-if="item.first" :rowspan="item.size">
+          {{ item.resultAverage }}
+        </td>
         <!-- 检测时间 -->
         <td class="___relative tc">
           <timePickerModel
@@ -205,6 +214,7 @@ export default {
     },
     "data.valueData.point": function () {
       this.calculateAverage();
+      this.merge();
     },
   },
   methods: {
@@ -270,10 +280,25 @@ export default {
         this.data.valueData.multipleId
       );
     },
+    // 合并
+    merge() {
+      this.data.valueData.point.forEach((item, index) => {
+        item.size =
+          item.sampleNum === ""
+            ? 1
+            : this.data.valueData.point.filter(
+                (a) => a.sampleNum === item.sampleNum
+              ).length;
+        item.first =
+          this.data.valueData.point.findIndex(
+            (a) => a.sampleNum === item.sampleNum
+          ) === index || item.sampleNum === "";
+      });
+    },
   },
   mounted() {
     this.getDetailData();
-
+    this.merge();
     this.$eventBus.$on("getDevice", (device) => {
       this.devices = device;
     });

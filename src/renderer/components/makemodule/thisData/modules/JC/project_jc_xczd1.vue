@@ -20,34 +20,34 @@
       </div>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 100px;">
+          <td class="___relative tc" style="width: 100px">
             <span>样品编号</span>
           </td>
-          <td class="___relative tc" style="width: 210px;">
+          <td class="___relative tc" style="width: 210px">
             <span>检测地点</span>
           </td>
-          <td class="___relative tc" style="width: 70px;">
+          <td class="___relative tc" style="width: 70px">
             <span>检测点位</span>
           </td>
-          <td class="___relative tc" style="width: 200px;">
+          <td class="___relative tc" style="width: 200px">
             <span>读数</span>
           </td>
-          <td class="___relative tc" style="width: 70px;">
+          <td class="___relative tc" style="width: 70px">
             <span>修正信息</span>
           </td>
-          <td class="___relative tc" style="width: 80px;">
+          <td class="___relative tc" style="width: 80px">
             <span>检测结果</span>
           </td>
-          <td class="___relative tc" style="width: 70px; line-height: 16px;">
+          <td class="___relative tc" style="width: 70px; line-height: 16px">
             <span>检测结果<br />平均值</span>
           </td>
-          <td class="___relative tc" style="width: 80px;">
+          <td class="___relative tc" style="width: 80px">
             <span>检测时间</span>
           </td>
-          <td class="___relative tc" style="width: 80px;">
+          <td class="___relative tc" style="width: 80px">
             <span>仪器编号</span>
           </td>
-          <td class="___relative tc" style="width: 120px;">
+          <td class="___relative tc" style="width: 120px">
             <span>备注</span>
           </td>
         </tr>
@@ -82,15 +82,22 @@
             </selectModel>
           </td>
           <td class="___relative tc">
-            <myInput
-              style="text-align: center;"
-              v-model="item.point"
-              :defaultValue="item.point"
-            ></myInput>
+            <el-tooltip
+              effect="dark"
+              :disabled="item.point == ''"
+              :content="item.point"
+              placement="top"
+            >
+              <myInput
+                style="text-align: center"
+                v-model="item.point"
+                :defaultValue="item.point"
+              ></myInput>
+            </el-tooltip>
           </td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.reading"
               :defaultValue="item.reading"
               @change.native="changeNum(index)"
@@ -98,7 +105,7 @@
             <div
               class="___absolute toolBar"
               v-if="false"
-              style="left: 763px; top: 0; width: 62px;"
+              style="left: 763px; top: 0; width: 62px"
             >
               <div
                 title="往指定行后面增加一行"
@@ -110,7 +117,7 @@
               <div
                 title="删除当前行"
                 class="___absolute tc"
-                style="left: 30px;"
+                style="left: 30px"
                 @click="deleteRow(index)"
               >
                 -
@@ -127,12 +134,8 @@
           >
             <div>{{ item.result }}</div>
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
-            <div>{{ item.resultAverage }}</div>
+          <td v-if="item.first" :rowspan="item.size">
+            {{ item.resultAverage }}
           </td>
           <td
             v-if="item.noShow"
@@ -152,8 +155,8 @@
           >
             <querySelect
               v-model="item.deviceNum"
-              style="width: 78px;"
-              v-if="target ==0"
+              style="width: 78px"
+              v-if="target == 0"
               ref="querySelect"
               :num="index"
               :list="deviceData"
@@ -170,7 +173,7 @@
             :rowspan="item.heBingLength"
           >
             <myInput
-              style="text-align: center;"
+              style="text-align: center"
               v-model="item.remarks"
               :defaultValue="item.remarks"
               @change.native="
@@ -181,9 +184,9 @@
               "
             ></myInput>
             <div
-            v-if="target ==0"
+              v-if="target == 0"
               class="___absolute toolBar"
-              style="left: 200px; top: 0; width: 180px;"
+              style="left: 200px; top: 0; width: 180px"
             >
               <div
                 title="往指定行后面增加一行"
@@ -195,7 +198,7 @@
               <div
                 title="删除当前行"
                 class="___absolute tc"
-                style="left: 30px;"
+                style="left: 30px"
                 @click="deleteRow(index, item)"
               >
                 -
@@ -203,7 +206,7 @@
               <div
                 title="复制部分数据"
                 class="___absolute tc"
-                style="left: 60px;"
+                style="left: 60px"
                 @click="copyRow(index, 'copy')"
               >
                 c
@@ -211,7 +214,7 @@
               <div
                 title="复制全部数据"
                 class="___absolute tc"
-                style="left: 90px;"
+                style="left: 90px"
                 @click="copyRow(index, 'copyAll')"
               >
                 C
@@ -219,7 +222,7 @@
               <div
                 title="粘贴数据"
                 class="___absolute tc"
-                style="left: 120px;"
+                style="left: 120px"
                 @click="pasteRow(index)"
               >
                 p
@@ -227,7 +230,7 @@
               <div
                 title="生成重复样"
                 class="___absolute tc"
-                style="left: 150px;"
+                style="left: 150px"
                 @click="addSample(index)"
               >
                 r
@@ -274,9 +277,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <div style="text-align: right; margin-right: 50px;">
+      <div style="text-align: right; margin-right: 50px">
         <el-button
-          style="margin-top: 15px; margin-left: 470px;"
+          style="margin-top: 15px; margin-left: 470px"
           type="primary"
           @click="sureSampleNum"
           >确定</el-button
@@ -648,7 +651,8 @@ export default {
         row.foreverId = window.uuid();
         row.SampleAddress = this.data.valueData.point[index].SampleAddress;
         this.data.valueData.point.splice(num, 0, row);
-        this.data.valueData.point[num].heBingId = id + "-" + (subscript + 1);
+        this.data.valueData.point[num].heBingId =
+          id + "-" + (subscript + window.uuid());
       }
       this.$emit("redefinition");
     },
@@ -812,10 +816,27 @@ export default {
         }
       });
     },
+    merge() {
+      this.data.valueData.point.forEach((item, index) => {
+        item.size =
+          item.sampleNum === ""
+            ? 1
+            : this.data.valueData.point.filter(
+                (a) => a.sampleNum === item.sampleNum
+              ).length;
+        item.first =
+          this.data.valueData.point.findIndex(
+            (a) => a.sampleNum === item.sampleNum
+          ) === index || item.sampleNum === "";
+      });
+    },
   },
   watch: {
     "data.valueData.heBingChange": function () {
       this.heBing();
+    },
+    "data.valueData.point": function () {
+      this.merge();
     },
   },
   mounted() {
@@ -829,6 +850,7 @@ export default {
     });
     setTimeout(() => {
       this.heBing();
+      this.merge();
     }, 10);
   },
 };
