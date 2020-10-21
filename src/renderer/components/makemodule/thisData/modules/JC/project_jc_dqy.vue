@@ -76,44 +76,40 @@
             >
             </selectModel>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.temperature"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.meterVal"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.scaleVal }}</div>
+          <td>
+            {{ item.scaleVal }}
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.temperatureCoefficient"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.supplementVal"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.result }}</div>
+          <td>
+            {{ item.result }}
           </td>
           <td v-if="item.first" :rowspan="item.size">
             {{ item.resultAverage }}
           </td>
-          <td class="___relative tc">
+          <td class="___relative">
             <timePickerModel
               :data="item"
               :showTime="item.time"
@@ -482,6 +478,21 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
+       if (copy === "copyAll") {
+        let now = this.jsonString
+          .filter(
+            (item) =>
+              item.data.valueData.testProjectId ===
+              this.data.valueData.testProjectId
+          )
+          .map((item) => item.data.valueData.point)
+          .flat()
+          .map((item) => item.sampleNum + item.sampleNumIndex);
+        if (now.includes(newObjData.sampleNum + newObjData.sampleNumIndex)) {
+          this.$message.warning("不能在同一项目下生成两个同样的样品编号");
+          return;
+        }
+      }
       keys.forEach((item) => {
         if (copy === "copyAll") {
           this.data.valueData.point[index][item] = newObjData[item];

@@ -1255,7 +1255,7 @@ export default {
           }
         });
       }
-      if (modelResult.name === "project_wsw_dx" && this.target === "1") {
+      if (modelResult.name === "project_wsw_dx" && this.target ==1) {
         let id = modelResult.valueData.point[0].testProjectId
           ? modelResult.valueData.point[0].testProjectId
           : this.testProject.testProjectId;
@@ -1273,8 +1273,6 @@ export default {
                     let obj = JSON.parse(JSON.stringify(item3));
                     let resultIndex = 0;
                     if (index === 0) {
-                      // obj.analysisResult = [];
-                      // obj.analysisResult.length = analysisItems.length;
                       obj.resultIndex = resultIndex;
                       obj.analysisItems = analysisItems;
                     } else {

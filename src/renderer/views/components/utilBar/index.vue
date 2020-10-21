@@ -256,10 +256,18 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-      let sampleNumArr = this.data.valueData.point.map(
-        (item) => item.sampleNum + item.sampleNumIndex
-      );
-      if (sampleNumArr.includes(newObjData.sampleNum)) {
+      let sampleNumArr = this.jsonString
+        .filter(
+          (item) =>
+            item.data.valueData.testProjectId ===
+            this.data.valueData.testProjectId
+        )
+        .map((item) => item.data.valueData.point)
+        .flat()
+        .map((item) => item.sampleNum + item.sampleNumIndex);
+      if (
+        sampleNumArr.includes(newObjData.sampleNum + newObjData.sampleNumIndex)
+      ) {
         this.$message.warning("同一检测项目下不得含有相同的样品编号");
         newObjData.sampleNum = "";
       }

@@ -58,18 +58,10 @@
           </td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
-          <td
-            v-if="item.noShow"
-            :rowspan="item.heBingLength"
-            @click="generateSampleNum(data.valueData.point)"
-          >
-            <span>{{ item.sampleNum + "" + item.sampleNumIndex }}</span>
+          <td @click="generateSampleNum(data.valueData.point)">
+            {{ item.sampleNum + "" + item.sampleNumIndex }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td>
             <selectModel
               @returnVal="returnVal1"
               :single="true"
@@ -92,7 +84,6 @@
               <myInput
                 style="text-align: center; width: 110px; height: 24px"
                 v-model="item.position"
-                @change.native
               ></myInput>
             </div>
             <div class="___relative tl" style="line-height: 24px">
@@ -200,81 +191,42 @@
               </div>
             </div>
           </td>
-          <td class="___relative tc">
-            <div>{{ item.correction }}</div>
+          <td>
+            {{ item.correction }}
           </td>
           <td class="___relative tc">
             <myInput
               style="text-align: center"
               v-model="item.temperature"
-              @change.native
             ></myInput>
-            <div
-              class="___absolute toolBar"
-              style="left: 417px; top: 0; width: 62px"
-              v-if="false"
-            >
-              <div
-                title="往指定行后面增加一行"
-                class="___absolute tc"
-                @click="addRow(index, 1)"
-              >
-                +
-              </div>
-              <div
-                title="删除当前行"
-                class="___absolute tc"
-                style="left: 30px"
-                @click="deleteRow(index)"
-              >
-                -
-              </div>
-            </div>
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.number"
               :defaultValue="item.number"
               @change.native="changePeople(index, item.number, item.heBingId)"
             ></myInput>
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
-            <div>{{ item.airVolume }}</div>
+          <td>
+            {{ item.airVolume }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td class="___relative">
             <timePickerModel
               :data="item"
               :showTime="item.time"
               @setTime="(time) => (item.time = time)"
             />
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td class="___relative tc">
             <div class="___relative">
               <div class="___relative" style="line-height: 16px">
-                <span>风口面积测量</span>
+                风口面积测量
               </div>
               <div class="___relative" style="line-height: 16px">
                 <querySelect
                   v-model="item.tuyereNum"
                   style="height: 16px"
-                  v-if="target === '0'"
+                  v-if="target == 0"
                   ref="querySelect"
                   :num="index"
                   :list="deviceData"
@@ -285,7 +237,7 @@
                 <div v-else>{{ item.tuyereNum }}</div>
               </div>
               <div class="___relative" style="line-height: 16px">
-                <span>房间体积测量</span>
+                房间体积测量
               </div>
               <div class="___relative" style="line-height: 16px">
                 <querySelect
@@ -301,9 +253,7 @@
                 ></querySelect>
                 <div v-else>{{ item.tuyereNum }}</div>
               </div>
-              <div class="___relative" style="line-height: 16px">
-                <span>风速测量</span>
-              </div>
+              <div class="___relative" style="line-height: 16px">风速测量</div>
               <div class="___relative" style="line-height: 16px">
                 <querySelect
                   v-model="item.windSpeedNum"
@@ -805,35 +755,7 @@ export default {
         });
       }
     },
-    heBing() {
-      let idArr = [];
-      this.data.valueData.point.forEach((item, index) => {
-        if (item.heBingId !== "") {
-          idArr.push(item.heBingId);
-        }
-      });
-      let setIdArr = Array.from(new Set(idArr));
-      let sequence = 0;
-      setIdArr.forEach((item, index) => {
-        let merge = 0;
-        let inside = sequence;
-        let position = this.data.valueData.point
-          .slice(sequence)
-          .findIndex((val, num) => item === val.heBingId);
-        let pointSliceData = this.data.valueData.point.slice(sequence);
-        for (let i = 0; i < pointSliceData.length; i++) {
-          if (pointSliceData[i].heBingId === item) {
-            pointSliceData[i].noShow = false;
-            merge++;
-            sequence++;
-          } else {
-            break;
-          }
-        }
-        this.data.valueData.point.slice(inside)[position].noShow = true;
-        this.data.valueData.point.slice(inside)[position].heBingLength = merge;
-      });
-    },
+
     copyRow(index, copyName) {
       let obj = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
       sessionStorage.setItem("copy", copyName);
@@ -845,6 +767,21 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
+       if (copy === "copyAll") {
+        let now = this.jsonString
+          .filter(
+            (item) =>
+              item.data.valueData.testProjectId ===
+              this.data.valueData.testProjectId
+          )
+          .map((item) => item.data.valueData.point)
+          .flat()
+          .map((item) => item.sampleNum + item.sampleNumIndex);
+        if (now.includes(newObjData.sampleNum + newObjData.sampleNumIndex)) {
+          this.$message.warning("不能在同一项目下生成两个同样的样品编号");
+          return;
+        }
+      }
       keys.forEach((item) => {
         if (copy === "copyAll") {
           this.data.valueData.point[index][item] = newObjData[item];
@@ -965,8 +902,8 @@ export default {
     },
   },
   watch: {
-    "data.valueData.heBingChange": function () {
-      this.heBing();
+    "data.valueData.point": function () {
+      this.merge();
     },
   },
   mounted() {
@@ -979,7 +916,7 @@ export default {
       });
     });
     setTimeout(() => {
-      this.heBing();
+      this.merge();
     }, 10);
   },
 };

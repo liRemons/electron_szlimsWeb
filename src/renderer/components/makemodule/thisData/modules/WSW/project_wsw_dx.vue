@@ -25,7 +25,11 @@
           :rowspan="item.analysisItemsLength"
         >
           {{ name(item) }}
-          <div class="___absolute" style="left: -100px; top: 0" v-if="false">
+          <div
+            class="___absolute"
+            style="left: -100px; top: 0"
+            v-if="target == 0"
+          >
             <el-tooltip
               effect="dark"
               content="观察记录"
@@ -140,12 +144,26 @@
         </div>
       </td>
     </table>
+    <el-dialog
+      title="观察记录"
+      :visible.sync="dialogVisible"
+      width="800px"
+      v-if="dialogVisible"
+      :close-on-click-modal="false"
+      append-to-body
+    >
+      <project_wsw_dx_recordDialog
+        @close="dialogVisible = false"
+        @submit="submit"
+        :sampleData="sampleData"
+      ></project_wsw_dx_recordDialog>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import projectHead from "./project_head";
-
+import project_wsw_dx_recordDialog from "./project_wsw_dx_recordDialog.vue";
 export default {
   name: "project_wsw_dx",
   props: [
@@ -167,14 +185,51 @@ export default {
     return {
       showInput: false,
       list: ["检出", "不合格自定义输入", "未检出", "合格自定义输入"],
+      dialogVisible: false,
+      sampleData: "",
     };
   },
   components: {
     projectHead,
+    project_wsw_dx_recordDialog,
   },
   methods: {
     openRecordDialog(data) {
-      console.log(data.analysisItems);
+      let dxData = this.jsonString
+        .filter((item) => item.to === "project_wsw_dx")
+        .map((item) => item.data.valueData.point)
+        .flat();
+      let nowPoint = dxData.filter(
+        (item) =>
+          data.parallelLetter + data.sampleNum ===
+          item.parallelLetter + item.sampleNum
+      );
+      let sysObservationRecordData = nowPoint.map((item) => {
+        return {
+          analysisItem: item.sysAnalysisItem,
+          result: " ",
+        };
+      });
+      let sysObservationRecordArr = [];
+      if (data.sysObservationRecordArr) {
+        if (data.sysObservationRecordArr instanceof Array) {
+          sysObservationRecordArr = data.sysObservationRecordArr;
+        } else {
+          data.sysObservationRecordArr !== "undefined" &&
+            (sysObservationRecordArr = JSON.parse(
+              data.sysObservationRecordArr
+            ));
+        }
+      }
+
+      this.sampleData = {
+        sysObservationRecordArr: sysObservationRecordArr,
+        id: data.id,
+        name: "样品编号: " + data.sampleNum + data.parallelLetter,
+        sampleNumAndIndex: data.sampleNum + data.parallelLetter,
+        analysisItems: sysObservationRecordData,
+      };
+      this.dialogVisible = true;
     },
     headShow() {
       if (this.pageNumber > 0) {
@@ -258,6 +313,44 @@ export default {
         }
       });
     },
+    submit(data) {
+      let flag = false;
+      this.jsonString.forEach((item) => {
+        item.data.valueData.point.forEach((a) => {
+          if (a.sampleNum + a.parallelLetter === data.sampleNumAndIndex) {
+            if (
+              a.sysObservationRecordArr &&
+              a.sysObservationRecordArr !== "undefined"
+            ) {
+              if (a.sysObservationRecordArr instanceof Array) {
+              } else {
+                a.sysObservationRecordArr = JSON.parse(
+                  a.sysObservationRecordArr
+                );
+              }
+            } else {
+              a.sysObservationRecordArr = [];
+            }
+            a.sysObservationRecordArr.forEach((b) => {
+              if (b.date === data.date) {
+                b.resultArr = data.resultArr;
+                flag = true;
+              }
+            });
+            if (flag) return;
+            a.sysObservationRecordArr.push({
+              date: data.date,
+              resultArr: data.resultArr,
+            });
+            a.sysObservationRecordArr.sort((r, b) => {
+              return r.date < b.date ? -1 : r.date > b.date ? 1 : 0;
+            });
+          }
+        });
+      });
+      this.$emit("redefinition");
+      this.dialogVisible = false;
+    },
   },
   mounted() {
     let _this = this;
@@ -286,8 +379,8 @@ export default {
         this.data.valueData.point.find(
           (val) => this.name(val) === item
         ).realItem = true;
-        this.$forceUpdate();
       });
+      this.$forceUpdate();
     }, 1000);
   },
 };

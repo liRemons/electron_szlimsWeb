@@ -64,18 +64,10 @@
           </td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
-          <td
-            v-if="item.noShow"
-            :rowspan="item.heBingLength"
-            @click="generateSampleNum(data.valueData.point)"
-          >
-           {{ item.sampleNum + "" + item.sampleNumIndex }}
+          <td @click="generateSampleNum(data.valueData.point)">
+            {{ item.sampleNum + "" + item.sampleNumIndex }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td class="___relative tc">
             <selectModel
               @returnVal="returnVal"
               :single="true"
@@ -94,7 +86,7 @@
             </selectModel>
           </td>
           <td class="___relative tc">
-             <el-tooltip
+            <el-tooltip
               effect="dark"
               :disabled="item.point == ''"
               :content="item.point"
@@ -115,68 +107,39 @@
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.reading[1]"
               :defaultValue="item.reading[1]"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.reading[2]"
               :defaultValue="item.reading[2]"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.reading[3]"
               :defaultValue="item.reading[3]"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td class="___relative tc">
+          <td>
             <myInput
-              style="text-align: center"
               v-model="item.reading[4]"
               :defaultValue="item.reading[4]"
               @change.native="changeNum(index)"
             ></myInput>
-            <div
-              class="___absolute toolBar"
-              v-if="false"
-              style="left: 580px; top: 0; width: 62px"
-            >
-              <div
-                title="往指定行后面增加一行"
-                class="___absolute tc"
-                @click="addRow(index, 1)"
-              >
-                +
-              </div>
-              <div
-                title="删除当前行"
-                class="___absolute tc"
-                style="left: 30px"
-                @click="deleteRow(index)"
-              >
-                -
-              </div>
-            </div>
           </td>
           <td class="___relative tc">
-            <div>{{ item.correction | toDot(item.algorithm) }}</div>
+            {{ item.correction | toDot(item.algorithm) }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
-            <div>{{ item.result }}</div>
+          <td>
+            {{ item.result }}
           </td>
           <!-- <td v-if="item.noShow" class="___relative tc" :rowspan="item.heBingLength">
 						<div>{{item.resultAverage}}</div>
@@ -184,22 +147,14 @@
           <td v-if="item.first" :rowspan="item.size">
             {{ item.resultAverage }}
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td class="___relative">
             <timePickerModel
               :data="item"
               :showTime="item.time"
               @setTime="(time) => (item.time = time)"
             />
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td class="___relative tc">
             <querySelect
               v-model="item.deviceNum"
               style="width: 78px"
@@ -217,11 +172,7 @@
               {{ item.deviceNum }}
             </div>
           </td>
-          <td
-            v-if="item.noShow"
-            class="___relative tc"
-            :rowspan="item.heBingLength"
-          >
+          <td class="___relative tc">
             <myInput
               style="text-align: center"
               v-model="item.remarks"
@@ -731,35 +682,7 @@ export default {
         });
       }
     },
-    heBing() {
-      let idArr = [];
-      this.data.valueData.point.forEach((item, index) => {
-        if (item.heBingId !== "") {
-          idArr.push(item.heBingId);
-        }
-      });
-      let setIdArr = Array.from(new Set(idArr));
-      let sequence = 0;
-      setIdArr.forEach((item, index) => {
-        let merge = 0;
-        let inside = sequence;
-        let position = this.data.valueData.point
-          .slice(sequence)
-          .findIndex((val, num) => item === val.heBingId);
-        let pointSliceData = this.data.valueData.point.slice(sequence);
-        for (let i = 0; i < pointSliceData.length; i++) {
-          if (pointSliceData[i].heBingId === item) {
-            pointSliceData[i].noShow = false;
-            merge++;
-            sequence++;
-          } else {
-            break;
-          }
-        }
-        this.data.valueData.point.slice(inside)[position].noShow = true;
-        this.data.valueData.point.slice(inside)[position].heBingLength = merge;
-      });
-    },
+
     copyRow(index, copyName) {
       let obj = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
       sessionStorage.setItem("copy", copyName);
@@ -771,6 +694,21 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
+       if (copy === "copyAll") {
+        let now = this.jsonString
+          .filter(
+            (item) =>
+              item.data.valueData.testProjectId ===
+              this.data.valueData.testProjectId
+          )
+          .map((item) => item.data.valueData.point)
+          .flat()
+          .map((item) => item.sampleNum + item.sampleNumIndex);
+        if (now.includes(newObjData.sampleNum + newObjData.sampleNumIndex)) {
+          this.$message.warning("不能在同一项目下生成两个同样的样品编号");
+          return;
+        }
+      }
       keys.forEach((item) => {
         if (copy === "copyAll") {
           this.data.valueData.point[index][item] = newObjData[item];
@@ -891,9 +829,6 @@ export default {
     },
   },
   watch: {
-    "data.valueData.heBingChange": function () {
-      this.heBing();
-    },
     "data.valueData.point": function () {
       this.merge();
     },
@@ -909,7 +844,6 @@ export default {
     });
 
     setTimeout(() => {
-      this.heBing();
       this.merge();
     }, 10);
   },
