@@ -179,7 +179,7 @@
                         :defaultValue="data.valueData.deviceNum2"
                         :name="'deviceNum'"
                       ></querySelect>
-                      <div v-else>{{ data.valueData.deviceNum1 | toDot }}</div>
+                      <div v-else>{{ data.valueData.deviceNum2 | toDot }}</div>
                     </div>
                     <div class="___absolute" style="left: 280px">）</div>
                   </div>

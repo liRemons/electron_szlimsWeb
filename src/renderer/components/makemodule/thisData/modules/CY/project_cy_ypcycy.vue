@@ -76,14 +76,6 @@
         <td>
           <myInput v-model="item.Remarks"></myInput>
           <div class="___relative" v-if="target == 0">
-            <!-- <div class="___absolute toolBar" style="left: 245px;top: -28px; width: 180px;">
-														<div title="往指定行后面增加一行" class="___absolute" @click="addRow(index)">+</div>
-														<div title="删除当前行"  class="___absolute"  style="left: 30px;"  @click="deleteRow(index)">-</div>
-														<div title="复制部分数据" class="___absolute" style="left: 60px;" @click="copyRow(index, 'copy')">c</div>
-														<div title="复制全部数据"class="___absolute" style="left: 90px;" @click="copyRow(index, 'copyAll')">C</div>
-														<div title="粘贴数据" class="___absolute" style="left: 120px;" @click="pasteRow(index)">p</div>
-														<div title="生成重复样" class="___absolute" style="left: 150px;" @click="addSample(index)" v-if="item.isPrototype">r</div>
-						</div>-->
             <utilBar
               v-if="ableInput"
               :data="data"
@@ -204,54 +196,8 @@ export default {
     },
   },
   methods: {
-    addRow(index) {
-      let row = JSON.parse(JSON.stringify(this.data.modelRow));
-      row.pointId = window.uuid();
-      row.foreverId = window.uuid();
-      this.data.valueData.point.splice(index + 1, 0, row);
-      this.$emit("redefinition");
-    },
     returnVal(showText, receive, special) {
       this.data.valueData.point[special][receive] = showText;
-    },
-    deleteRow(index, item) {
-      if (this.data.valueData.point.length > 1) {
-        this.$confirm("确认删除吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          modal: false,
-        }).then(({}) => {
-          this.data.valueData.point.splice(index, 1);
-          this.$emit("deleteSample", item);
-        });
-      }
-    },
-    copyRow(index, copyName) {
-      let obj = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
-      sessionStorage.setItem("copy", copyName);
-      sessionStorage.setItem("cyhjRowData", JSON.stringify(obj));
-    },
-    pasteRow(index) {
-      let newObjData = JSON.myParse(sessionStorage.getItem("cyhjRowData"));
-      newObjData.pointId = window.uuid();
-      newObjData.foreverId = window.uuid();
-      let keys = Object.keys(this.data.valueData.point[index]);
-      let copy = sessionStorage.getItem("copy");
-      keys.forEach((item) => {
-        if (copy === "copyAll") {
-          this.data.valueData.point[index][item] = newObjData[item];
-        } else {
-          let noCopy = this.data.noCopyArr;
-          let result = noCopy.some((key) => key === item);
-          if (newObjData[item] && result === false) {
-            this.data.valueData.point[index][item] = newObjData[item];
-          }
-        }
-      });
-
-      setTimeout(() => {
-        this.$eventBus.$emit("showText");
-      }, 10);
     },
 
     getSampleQuantity(value) {
@@ -266,12 +212,6 @@ export default {
       } else {
         this.myCaiSampleNum = "";
       }
-    },
-
-    addSample(index) {
-      this.selectItem = this.data.valueData.point[index];
-      this.selectItemIndex = index;
-      this.sampleOption = true;
     },
 
     clearPingXing() {

@@ -234,30 +234,9 @@ ipcMain.on("close", (event, arg) => {
 });
 // END+++++++++++++++++
 
-// 模拟localStorage  START++++++++++++
-// 存数据
-ipcMain.on("setStorage", (event, arg) => {
-  let file = path.join(
-    `C:/Program Files/szlimsLocal/${arg.staffPhone}`,
-    "localStorage.json"
-  );
-  writeFile(file, arg.data, event);
-});
-// 取数据
-ipcMain.on("getStorage", (event, staffPhone) => {
-  let file = path.join(
-    `C:/Program Files/szlimsLocal/${staffPhone}`,
-    "localStorage.json"
-  );
-  readFile(file, event);
-});
-
-// END +++++++++++++++++++
 mkdir("./data");
-mkdir(`C:/Program Files/szlimsLocal/`);
 ipcMain.on("mkdir", function(event, arg) {
   mkdir(`./data/${arg.staffPhone}`);
-  mkdir(`C:/Program Files/szlimsLocal/${arg.staffPhone}`);
 });
 
 // 读取文件
@@ -285,8 +264,6 @@ ipcMain.on("delFile", function(event, arg) {
 // 清理缓存，将创建的文件及文件夹全部删除
 ipcMain.on("delDir", function(event, arg) {
   delDir("./data");
-  delDir("C:/Program Files/szlimsLocal");
-  mkdir(`C:/Program Files/szlimsLocal/`);
   mkdir("./data");
 });
 

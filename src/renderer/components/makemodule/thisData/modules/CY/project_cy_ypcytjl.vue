@@ -200,54 +200,9 @@ export default {
     },
   },
   methods: {
-    addRow(index) {
-      let row = JSON.parse(JSON.stringify(this.data.modelRow));
-      row.pointId = window.uuid();
-      row.foreverId = window.uuid();
-      this.data.valueData.point.splice(index + 1, 0, row);
-      this.$emit("redefinition");
-    },
+
     returnVal(showText, receive, special) {
       this.data.valueData.point[special][receive] = showText;
-    },
-    deleteRow(index, item) {
-      if (this.data.valueData.point.length > 1) {
-        this.$confirm("确认删除吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          modal: false,
-        }).then(({}) => {
-          this.data.valueData.point.splice(index, 1);
-          this.$emit("deleteSample", item);
-        });
-      }
-    },
-    copyRow(index, copyName) {
-      let obj = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
-      sessionStorage.setItem("copy", copyName);
-      sessionStorage.setItem("cyhjRowData", JSON.stringify(obj));
-    },
-    pasteRow(index) {
-      let newObjData = JSON.myParse(sessionStorage.getItem("cyhjRowData"));
-      newObjData.pointId = window.uuid();
-      newObjData.foreverId = window.uuid();
-      let keys = Object.keys(this.data.valueData.point[index]);
-      let copy = sessionStorage.getItem("copy");
-      keys.forEach((item) => {
-        if (copy === "copyAll") {
-          this.data.valueData.point[index][item] = newObjData[item];
-        } else {
-          let noCopy = this.data.noCopyArr;
-          let result = noCopy.some((key) => key === item);
-          if (newObjData[item] && result === false) {
-            this.data.valueData.point[index][item] = newObjData[item];
-          }
-        }
-      });
-
-      setTimeout(() => {
-        this.$eventBus.$emit("showText");
-      }, 10);
     },
 
     getSampleQuantity(value) {
@@ -262,12 +217,6 @@ export default {
       } else {
         this.myCaiSampleNum = "";
       }
-    },
-
-    addSample(index) {
-      this.selectItem = this.data.valueData.point[index];
-      this.selectItemIndex = index;
-      this.sampleOption = true;
     },
 
     clearPingXing() {

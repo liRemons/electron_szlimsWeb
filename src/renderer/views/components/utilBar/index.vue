@@ -35,13 +35,13 @@
 
       <li
         v-if="barNum && barNum.indexOf(6) !== -1"
-        title="生成重复样"
+        title="生成平行样"
         @click="addSample(index)"
       >
         <div class="___relative">
           <el-popover
             placement="top-start"
-            title="生成重复样"
+            title="生成平行样"
             width="320"
             trigger="click"
           >
@@ -78,7 +78,7 @@
             <div style="text-align: right">
               <el-button type="primary" @click="sureSampleNum">确定</el-button>
             </div>
-            <div class="myBtn" slot="reference" title="生成重复样">r</div>
+            <div class="myBtn" slot="reference" title="生成平行样">r</div>
           </el-popover>
         </div>
       </li>
@@ -154,7 +154,7 @@ export default {
       if (this.data.valueData.point.length <= 1) {
         this.$notify({
           type: "warning",
-          message: "最后一行不可删除！",
+          message: "当页本项目只有一行时不可删除，如下页还有本项目，请在上方其他项目增加行后方可删除",
         });
         return;
       }

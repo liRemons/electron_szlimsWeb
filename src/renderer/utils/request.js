@@ -5,11 +5,11 @@ import { getToken } from "@/utils/auth";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: "http://120.77.153.63:8033", // api 的 base_url
+  baseURL: process.env.BASE_API, // api 的 base_url
   timeout: 20000, // 请求超时时间
 });
 const requestImg = axios.create({
-  baseURL: "http://120.77.153.63:8033", // api 的 base_url
+  baseURL: process.env.BASE_API, // api 的 base_url
   timeout: 20000, // 请求超时时间
 });
 
@@ -29,7 +29,7 @@ service.interceptors.request.use(
         this.$message.error("当前无网络");
       return;
     }
-    if (config.baseURL == "http://120.77.153.63:8033") {
+    if (config.baseURL !== "http://xtroms.com:5013") {
       // console.log(config.url)
       if (
         window.location.hash.split("#")[1] == "/local/entering" &&

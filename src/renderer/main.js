@@ -15,6 +15,7 @@ import "viewerjs/dist/viewer.css";
 import axios from "./utils/request";
 import Viewer from "v-viewer";
 import $utils from "methods-remons";
+var pjson = require("../../package.json");
 Vue.use(Viewer, {
   defaultOptions: {
     zIndex: 9999,
@@ -136,16 +137,17 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$message = Message;
 Vue.prototype.$utils = $utils;
 Vue.prototype.$ = $;
-Vue.prototype.hostUrl = "http://120.77.153.63:8033";
-Vue.prototype.imgUrl = "http://120.77.153.63:8003";
+Vue.prototype.hostUrl = process.env.BASE_API;
+Vue.prototype.imgUrl = process.env.HOST_URL;
 Vue.prototype.global = global;
 Vue.prototype.$ipcRenderer = ipcRenderer;
 Vue.prototype.computeObj = computes;
 Vue.config.productionTip = false;
 Vue.prototype.remote = remote;
 Vue.prototype.$updateAxios = axios.updateAxios;
-Vue.prototype.$isUpdate = false;
-Vue.prototype.version = "1.15";
+Vue.prototype.$isUpdate = process.env.BASE_API === "http://120.77.153.63:8022";
+Vue.prototype.version =
+  pjson.version.split(".")[0] + "." + pjson.version.split(".")[1];
 Vue.prototype.getFactor = function(val, arr) {
   let result = 0;
   let index = "";

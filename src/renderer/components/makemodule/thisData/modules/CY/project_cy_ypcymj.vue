@@ -16,13 +16,13 @@
     <table class="myTable ___relative">
       <div :class="{ eventCover: !ableInput }"></div>
       <tr class="delLine">
-        <td style="width: 150px;">
+        <td style="width: 150px">
           样品编号
           <div>
             <div
               title="复制该检测项目下所有样品"
               class="myBtn"
-              style="margin-bottom: 2px; margin-left: 30px;"
+              style="margin-bottom: 2px; margin-left: 30px"
               @click="computeObj.copyAllSample(data.valueData)"
             >
               <span>c</span>
@@ -31,7 +31,7 @@
               <div
                 title="粘贴样品"
                 class="___absolute myBtn"
-                style="top: -30px; left: 90px;"
+                style="top: -30px; left: 90px"
                 @click="computeObj.pasteAllSample(data.valueData)"
               >
                 <span>p</span>
@@ -39,9 +39,11 @@
             </div>
           </div>
         </td>
-        <td style="width: 250px;">采样地点</td>
-        <td style="width: 250px;" v-if="data.valueData.isSampleName">样品名称</td>
-        <td style="width: 250px;">采样面积（cm²）</td>
+        <td style="width: 250px">采样地点</td>
+        <td style="width: 250px" v-if="data.valueData.isSampleName">
+          样品名称
+        </td>
+        <td style="width: 250px">采样面积（cm²）</td>
         <td>备注</td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point" :key="item.pointId">
@@ -53,7 +55,7 @@
             @returnVal="returnVal"
             :single="true"
             :rows="false"
-            style="line-height: 30px;"
+            style="line-height: 30px"
             :special="index"
             :Judge="true"
             :input="false"
@@ -95,7 +97,7 @@
               ]"
               :jsonString="jsonString"
               class="___absolute"
-              style="left: 245px; top: -28px;"
+              style="left: 245px; top: -28px"
             ></utilBar>
           </div>
         </td>
@@ -139,9 +141,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <div style="text-align: right; margin-right: 50px;">
+      <div style="text-align: right; margin-right: 50px">
         <el-button
-          style="margin-top: 15px; margin-left: 470px;"
+          style="margin-top: 15px; margin-left: 470px"
           type="primary"
           @click="sureSampleNum"
           >确定
@@ -154,7 +156,7 @@
 <script>
 export default {
   name: "project_cy_ypcymj",
-  props: ["data", "jsonString", "target", "task","ableInput"],
+  props: ["data", "jsonString", "target", "task", "ableInput"],
   data() {
     return {
       selectItem: "",
@@ -194,56 +196,8 @@ export default {
     },
   },
   methods: {
-    addRow(index) {
-      let row = JSON.parse(JSON.stringify(this.data.modelRow));
-      row.pointId = window.uuid();
-      row.foreverId = window.uuid();
-      this.data.valueData.point.splice(index + 1, 0, row);
-      this.$emit("redefinition");
-    },
-
     returnVal(showText, receive, special) {
       this.data.valueData.point[special][receive] = showText;
-    },
-
-    deleteRow(index, item) {
-      if (this.data.valueData.point.length > 1) {
-        this.$confirm("确认删除吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          modal: false,
-        }).then(({}) => {
-          this.data.valueData.point.splice(index, 1);
-          this.$emit("deleteSample", item);
-        });
-      }
-    },
-    copyRow(index, copyName) {
-      let obj = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
-      sessionStorage.setItem("copy", copyName);
-      sessionStorage.setItem("cyhjRowData", JSON.stringify(obj));
-    },
-    pasteRow(index) {
-      let newObjData = JSON.myParse(sessionStorage.getItem("cyhjRowData"));
-      newObjData.pointId = window.uuid();
-      newObjData.foreverId = window.uuid();
-      let keys = Object.keys(this.data.valueData.point[index]);
-      let copy = sessionStorage.getItem("copy");
-      keys.forEach((item) => {
-        if (copy === "copyAll") {
-          this.data.valueData.point[index][item] = newObjData[item];
-        } else {
-          let noCopy = this.data.noCopyArr;
-          let result = noCopy.some((key) => key === item);
-          if (newObjData[item] && result === false) {
-            this.data.valueData.point[index][item] = newObjData[item];
-          }
-        }
-      });
-
-      setTimeout(() => {
-        this.$eventBus.$emit("showText");
-      }, 10);
     },
 
     getSampleQuantity(value) {
@@ -258,12 +212,6 @@ export default {
       } else {
         this.myCaiSampleNum = "";
       }
-    },
-
-    addSample(index) {
-      this.selectItem = this.data.valueData.point[index];
-      this.selectItemIndex = index;
-      this.sampleOption = true;
     },
 
     clearPingXing() {
@@ -339,10 +287,8 @@ export default {
           }
           arr.push(obj);
         }
-
         this.data.valueData.point.splice(this.selectItemIndex, 0, ...arr);
       }
-
       this.$emit("redefinition");
     },
   },

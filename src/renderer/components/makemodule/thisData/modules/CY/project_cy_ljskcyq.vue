@@ -22,7 +22,7 @@
             <div
               title="复制该检测项目下所有样品"
               class="myBtn"
-              style="margin-bottom: 2px; margin-left: 10px;"
+              style="margin-bottom: 2px; margin-left: 10px"
               @click="computeObj.copyAllSample(data.valueData)"
             >
               <span>c</span>
@@ -31,7 +31,7 @@
               <div
                 title="粘贴样品"
                 class="___absolute myBtn"
-                style="top: -30px; left: 55px;"
+                style="top: -30px; left: 55px"
                 @click="computeObj.pasteAllSample(data.valueData)"
               >
                 <span>p</span>
@@ -39,14 +39,14 @@
             </div>
           </div>
         </td>
-        <td style="width: 150px;">采样地点</td>
-        <td style="width: 90px;" v-if="data.valueData.isSampleName">样品名称</td>
-        <td style="width: 100px;">采样流量(L/min)</td>
-        <td style="width: 95px;">采样时长(min)</td>
-        <td style="width: 90px;">采样体积(L)</td>
-        <td style="width: 90px;">采样点位</td>
-        <td style="width: 90px;">平皿数量</td>
-        <td style="width: 100px;">采样时间(时:分)</td>
+        <td style="width: 150px">采样地点</td>
+        <td style="width: 90px" v-if="data.valueData.isSampleName">样品名称</td>
+        <td style="width: 100px">采样流量(L/min)</td>
+        <td style="width: 95px">采样时长(min)</td>
+        <td style="width: 90px">采样体积(L)</td>
+        <td style="width: 90px">采样点位</td>
+        <td style="width: 90px">平皿数量</td>
+        <td style="width: 100px">采样时间(时:分)</td>
         <td>仪器编号</td>
         <td>备注</td>
       </tr>
@@ -59,7 +59,7 @@
             @returnVal="returnVal"
             :single="true"
             :rows="false"
-            style="line-height: 30px;"
+            style="line-height: 30px"
             :special="index"
             :Judge="true"
             :input="false"
@@ -93,7 +93,7 @@
           <div class="___relative">
             <div
               @click="toShowTimeBox(index)"
-              style="text-align: center; line-height: 32px; height: 30px;"
+              style="text-align: center; line-height: 32px; height: 30px"
             >
               {{ computeObj.myTime(item) }}
             </div>
@@ -111,21 +111,21 @@
         </td>
         <td>
           <querySelect
-          v-if="target==0"
+            v-if="target == 0"
             v-model="item.deviceNum"
             ref="querySelect"
-            style="width: 90px;"
+            style="width: 90px"
             :num="index"
             :list="devices"
             :defaultValue="item.deviceNum"
             @getSelectItem="returnVal2"
             :name="'deviceNum'"
           ></querySelect>
-          <span v-else>{{item.deviceNum}}</span>
+          <span v-else>{{ item.deviceNum }}</span>
         </td>
         <td>
           <myInput v-model="item.Remarks"></myInput>
-          <div class="___relative" v-if="target == 0&&ableInput">
+          <div class="___relative" v-if="target == 0 && ableInput">
             <utilBar
               :data="data"
               :index="index"
@@ -155,7 +155,7 @@
                 'Remarks',
               ]"
               class="___absolute"
-              style="left: 145px; top: -28px;"
+              style="left: 145px; top: -28px"
             ></utilBar>
           </div>
         </td>
@@ -199,9 +199,9 @@
           </el-col>
         </el-row>
       </el-form>
-      <div style="text-align: right; margin-right: 50px;">
+      <div style="text-align: right; margin-right: 50px">
         <el-button
-          style="margin-top: 15px; margin-left: 470px;"
+          style="margin-top: 15px; margin-left: 470px"
           type="primary"
           @click="sureSampleNum"
           >确定
@@ -214,7 +214,7 @@
 <script>
 export default {
   name: "project_cy_ljskcyq",
-  props: ["data", "jsonString", "target", "task", "deviceData","ableInput"],
+  props: ["data", "jsonString", "target", "task", "deviceData", "ableInput"],
   data() {
     return {
       selectItem: "",
@@ -256,54 +256,8 @@ export default {
     },
   },
   methods: {
-    addRow(index) {
-      let row = JSON.parse(JSON.stringify(this.data.modelRow));
-      row.pointId = window.uuid();
-      row.foreverId = window.uuid();
-      this.data.valueData.point.splice(index + 1, 0, row);
-      this.$emit("redefinition");
-    },
     returnVal(showText, receive, special) {
       this.data.valueData.point[special][receive] = showText;
-    },
-    deleteRow(index, item) {
-      if (this.data.valueData.point.length > 1) {
-        this.$confirm("确认删除吗？", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          modal: false,
-        }).then(({}) => {
-          this.data.valueData.point.splice(index, 1);
-          this.$emit("deleteSample", item);
-        });
-      }
-    },
-    copyRow(index, copyName) {
-      let obj = JSON.parse(JSON.stringify(this.data.valueData.point[index]));
-      sessionStorage.setItem("copy", copyName);
-      sessionStorage.setItem("cyhjRowData", JSON.stringify(obj));
-    },
-    pasteRow(index) {
-      let newObjData = JSON.myParse(sessionStorage.getItem("cyhjRowData"));
-      newObjData.pointId = window.uuid();
-      newObjData.foreverId = window.uuid();
-      let keys = Object.keys(this.data.valueData.point[index]);
-      let copy = sessionStorage.getItem("copy");
-      keys.forEach((item) => {
-        if (copy === "copyAll") {
-          this.data.valueData.point[index][item] = newObjData[item];
-        } else {
-          let noCopy = this.data.noCopyArr;
-          let result = noCopy.some((key) => key === item);
-          if (newObjData[item] && result === false) {
-            this.data.valueData.point[index][item] = newObjData[item];
-          }
-        }
-      });
-
-      setTimeout(() => {
-        this.$eventBus.$emit("showText");
-      }, 10);
     },
 
     returnVal2(index, val) {
@@ -323,12 +277,6 @@ export default {
       } else {
         this.myCaiSampleNum = "";
       }
-    },
-
-    addSample(index) {
-      this.selectItem = this.data.valueData.point[index];
-      this.selectItemIndex = index;
-      this.sampleOption = true;
     },
 
     clearPingXing() {

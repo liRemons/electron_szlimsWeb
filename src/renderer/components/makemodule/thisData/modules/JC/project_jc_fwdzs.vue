@@ -141,27 +141,6 @@
               :showTime="item.time"
               @setTime="(time) => (item.time = time)"
             />
-            <div
-              class="___absolute toolBar"
-              v-if="false"
-              style="left: 325px; top: 0; width: 62px"
-            >
-              <div
-                title="往指定行后面增加一行"
-                class="___absolute tc"
-                @click="addRow(index, 1)"
-              >
-                +
-              </div>
-              <div
-                title="删除当前行"
-                class="___absolute tc"
-                style="left: 30px"
-                @click="deleteRow(index)"
-              >
-                -
-              </div>
-            </div>
           </td>
           <td>
             <querySelect
@@ -233,7 +212,7 @@
                 p
               </div>
               <div
-                title="生成重复样"
+                title="生成平行样"
                 class="___absolute tc"
                 style="left: 150px"
                 @click="addSample(index)"
@@ -588,6 +567,10 @@ export default {
           this.data.valueData.point.splice(index, 1);
           this.$emit("deleteSample", item);
         });
+      } else {
+        this.$message.warning(
+          "当页本项目只有一行时不可删除，如下页还有本项目，请在上方其他项目增加行后方可删除"
+        );
       }
     },
 
@@ -602,7 +585,7 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-       if (copy === "copyAll") {
+      if (copy === "copyAll") {
         let now = this.jsonString
           .filter(
             (item) =>
