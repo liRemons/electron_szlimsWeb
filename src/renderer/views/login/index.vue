@@ -56,21 +56,15 @@ export default {
         let staffFingerprint = res.staff.staffFingerprint; //返回的是该人员的多个指纹 以逗号分隔
         this.staff = res.staff;
         if (staffFingerprint == "" || staffFingerprint == null) {
-          this.$notify({
-            message: "该人员没有录入指纹",
-            type: "error",
-          });
+          this.$message.warning("该人员没有录入指纹");
         } else {
-          this.$notify({
-            message: "获取指纹信息成功, 请录入指纹.",
-            type: "success",
-          });
+          this.$message.success("获取指纹信息成功, 请录入指纹");
           this.staffFingerprints = staffFingerprint.split(",");
           setToken(this.staff);
           // 创建本人的文件夹
           this.mkdir(this.staff);
           setTimeout(() => {
-            this.$router.push("/");
+            this.$router.replace("/");
           }, 100);
           // this.GetMatTemplate();//指纹
         }

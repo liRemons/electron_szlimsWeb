@@ -1,126 +1,126 @@
-<template>
-  <div class="layout-container">
-    <el-container>
-      <el-header class="header">
-        <el-row>
-          <el-col :span="7">
-            <span class="title" style="font-family: SimSun"
-              >深圳市瑞达智能检测系统用户端</span
+<template >
+  <el-container style="height: 100%">
+    <el-header height="auto">
+      <div class="header">
+        <span style="line-height: 24px; padding-left: 20px"
+          >深圳市瑞达智能检测系统用户端V{{ version }} （{{
+            $isUpdate ? "正式版" : "测试版"
+          }}）</span
+        >
+        <div style="-webkit-app-region: no-drag">
+          <span v-if="staffName">登录人：{{ staffName }}</span>
+          <img
+            @click="$emit('clean')"
+            src="@/assets/icon/clean.png"
+            style="padding-top: 1px"
+            v-if="$route.path == '/login'"
+          />
+          <el-tooltip
+            class="item"
+            content="检查更新"
+            placement="bottom"
+            v-if="$isUpdate"
+          >
+            <img
+              src="@/assets/icon/upload.png"
+              @click="$emit('update')"
+              style="padding-top: 1px; width: 25px"
+            />
+          </el-tooltip>
+          <img @click="$emit('mini')" src="@/assets/icon/mini.png" />
+          <img
+            @click="$emit('max')"
+            v-if="!isMax"
+            src="@/assets/icon/big.png"
+          />
+          <img
+            v-else
+            @click="$emit('minisize')"
+            src="@/assets/icon/small.png"
+          />
+          <img @click="$emit('close')" src="@/assets/icon/close.png" />
+        </div>
+      </div>
+      <div class="header_bottom" v-if="$route.path !== '/'">
+        <div style="display: flex">
+          <span class="sysTitle"> 深圳市瑞达智能检测系统用户端 </span>
+          <el-menu
+            @select="handleSelect"
+            :default-active="activeItem()"
+            class="el-menu-demo"
+            mode="horizontal"
+            background-color="#545c64"
+            text-color="#fff"
+            active-text-color="#ffd04b"
+            router
+          >
+            <el-menu-item
+              :index="item.path"
+              v-for="(item, index) in getMenu()"
+              :key="index + 'route'"
+              >{{ item.name }}</el-menu-item
             >
-          </el-col>
-          <el-col :span="12">
-            <el-menu
-              mode="horizontal"
-              @select="storageRouter"
-              background-color="#545c64"
-              text-color="#fff"
-              active-text-color="#ffd04b"
-              style="user-select: none"
-              :default-active="activeItem"
-              router
-            >
-              <template
-                v-if="menuState && $route.path.split('/')[2] !== 'doc-entering'"
-              >
-                <el-menu-item index="entering" @click="storageRouter()"
-                  >录入</el-menu-item
-                >
-                <el-menu-item index="review" @click="storageRouter()"
-                  >审核</el-menu-item
-                >
-                <el-menu-item index="upload" @click="storageRouter()"
-                  >上传</el-menu-item
-                >
-              </template>
-              <template
-                v-if="
-                  !menuState && $route.path.split('/')[2] !== 'doc-entering'
-                "
-              >
-                <el-menu-item index="pickUp" @click="storageRouter()"
-                  >接样</el-menu-item
-                >
-                <el-menu-item index="curve" @click="storageRouter()"
-                  >配标</el-menu-item
-                >
-                <el-menu-item index="analysisItem" @click="storageRouter()"
-                  >分析项管理</el-menu-item
-                >
-                <el-menu-item index="analysis" @click="storageRouter()"
-                  >分析</el-menu-item
-                >
-                <el-menu-item index="upload" @click="storageRouter()"
-                  >审核</el-menu-item
-                >
-              </template>
-            </el-menu>
-          </el-col>
-          <el-col :span="4">
-            <div class="back" @click="back">
-              <span class="cancel">返回主界面</span>
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
-      <div style="height: 60px"></div>
-      <el-main class="main">
-        <router-view />
-      </el-main>
-    </el-container>
-  </div>
+          </el-menu>
+        </div>
+
+        <span @click="toHome" class="goHome">返回主界面</span>
+      </div>
+    </el-header>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </el-container>
 </template>
+
 
 <script>
 export default {
+  props: ["version", "isMax", "staffName"],
   data() {
     return {
-      data: null,
-      uploadShow: false,
-      multipleSelection: [],
+      menu: [
+        { name: "录入", path: "entering", type: 0 },
+        { name: "审核", path: "review", type: 0 },
+        { name: "上传", path: "upload", type: 0 },
+        { name: "接样", path: "pickUp", type: 1 },
+        { name: "配标", path: "curve", type: 1 },
+        { name: "分析项管理", path: "analysisItem", type: 1 },
+        { name: "分析", path: "analysis", type: 1 },
+        { name: "审核", path: "upload", type: 1 },
+      ],
     };
   },
+  mounted() {
+    sessionStorage.setItem("TolocalNo", 1);
+  },
+  computed: {
+    menuState() {
+      return this.$route.path.indexOf("local") === -1 ? false : true;
+    },
+  },
   methods: {
-    storageRouter() {
+    activeItem() {
+      return sessionStorage.getItem("nowRouter");
+    },
+    getMenu() {
+      let menu = [];
+      if (sessionStorage.getItem("ToggleBlock") === "local") {
+        menu = this.menu.filter((item) => item.type == 0);
+      } else {
+        menu = this.menu.filter((item) => item.type == 1);
+      }
+      return menu;
+    },
+    handleSelect(data, path) {
       sessionStorage.setItem("TolocalNo", 1);
       sessionStorage.removeItem("analysisInitial_index");
       sessionStorage.removeItem("laboratoryUpload_initialIndex");
       sessionStorage.removeItem("flag");
       sessionStorage.removeItem("laboratoryUploadTab");
       sessionStorage.removeItem("analysis");
-      let path = this.$route.path.split("/")[2];
-      if (this.menuState) {
-        switch (path) {
-          case "entering":
-            sessionStorage.setItem("nowRouter", "entering");
-            break;
-          case "review":
-            sessionStorage.setItem("nowRouter", "review");
-            break;
-          case "upload":
-            sessionStorage.setItem("nowRouter", "upload");
-            break;
-        }
-      } else {
-        switch (path) {
-          case "pickUp":
-            sessionStorage.setItem("nowRouter", "pickUp");
-            break;
-          case "curve":
-            sessionStorage.setItem("nowRouter", "curve");
-            break;
-          case "analysis":
-            sessionStorage.setItem("nowRouter", "analysisLabel");
-            break;
-          case "upload":
-            sessionStorage.setItem("nowRouter", "upload");
-            break;
-          case "analysisItem":
-            sessionStorage.setItem("nowRouter", "analysisItem");
-            break;
-        }
-      }
+      sessionStorage.setItem("nowRouter", data);
     },
-    back() {
+    toHome() {
       if (this.$route.path) {
         if (this.$route.path.split("0")[0] == "/local/doc-entering/") {
           this.$confirm("此处返回可能造成您的数据丢失, 是否继续?", "提示", {
@@ -139,65 +139,55 @@ export default {
       }
     },
   },
-  computed: {
-    activeItem() {
-      return sessionStorage.getItem("nowRouter");
-    },
-    menuState() {
-      return this.$route.path.indexOf("local") === -1 ? false : true;
-    },
-  },
-  created() {
-    this.storageRouter();
-  },
-  mounted() {},
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.header {
-  position: fixed;
-  width: 100%;
-  z-index: 999;
-  overflow: hidden;
-  background: #545c64;
+<style lang="less" scoped>
+.el-header {
+  padding: 0;
+  color: #ffffff;
 }
-.layout {
-  &-container {
-    .el-header {
-      background-color: rgb(84, 92, 100);
-      .title {
-        color: #fff;
-        margin: 0;
-        line-height: 60px;
-        letter-spacing: 4px;
-        font-weight: 500;
-        text-align: left;
-        font-size: 1.6em;
-      }
-      .back {
-        line-height: 60px;
-        text-align: right;
-        a {
-          color: #fff;
-          font-size: 1.2em;
-        }
-        a:hover {
-          color: bisque;
-        }
-      }
-    }
+.el-main {
+  padding: 0;
+  text-align: center;
+  margin-bottom: 10px;
+  -webkit-app-region: no-drag;
+}
+.header {
+  background: #373942;
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  img {
+    width: 24px;
+    cursor: pointer;
+    padding: 0 2px;
   }
 }
-.cancel {
-  color: #fff;
-  cursor: pointer;
-  font-size: 1.5em;
+.header_bottom {
+  background: #545c64;
+  -webkit-app-region: no-drag;
+  display: flex;
+  justify-content: space-between;
+  .sysTitle {
+    letter-spacing: 6px;
+    font-weight: 500;
+    text-align: left;
+    line-height: 60px;
+    font-size: 18px;
+    padding-left: 20px;
+  }
+  .goHome {
+    line-height: 60px;
+    font-size: 18px;
+    padding-right: 20px;
+    cursor: pointer;
+  }
 }
-.cancel:hover {
-  color: #19caad;
+.el-menu.el-menu--horizontal {
+  border: 0;
 }
-.tabDiv {
-  width: 100%;
+.el-menu-demo {
+  margin-left: 30px;
 }
 </style>

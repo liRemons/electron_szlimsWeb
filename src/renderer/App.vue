@@ -1,44 +1,16 @@
 <template>
   <div id="app" @contextmenu="showRightClickMenu">
-    <div class="control">
-      <div style="float: left">
-        <span style="line-height: 24px; padding-left: 20px"
-          >深圳市瑞达智能检测系统用户端V{{ version }} （{{
-            $isUpdate ? "正式版" : "测试版"
-          }}）</span
-        >
-      </div>
-      <div class="action">
-        <span v-if="staffName">登录人：{{ staffName }}</span>
-        <img
-          @click="clean"
-          src="@/assets/icon/clean.png"
-          style="padding-top: 1px"
-          v-if="$route.path == '/login'"
-        />
-        <el-tooltip
-          class="item"
-          content="检查更新"
-          placement="bottom"
-          v-if="$isUpdate"
-        >
-          <img
-            src="@/assets/icon/upload.png"
-            @click="getUpdateVersion"
-            style="padding-top: 1px; width: 25px"
-          />
-        </el-tooltip>
-        <img @click="mini" src="@/assets/icon/mini.png" />
-        <img @click="max" v-if="!isMax" src="@/assets/icon/big.png" />
-        <img v-else @click="miniSize" src="@/assets/icon/small.png" />
-        <img @click="close" src="@/assets/icon/close.png" />
-      </div>
-    </div>
-    <div style="height: 30px"></div>
-
-    <div class="content" id="content">
-      <router-view />
-    </div>
+    <Layout
+      @mini="mini"
+      @max="max"
+      @minisize="miniSize"
+      @close="close"
+      @clean="clean"
+      @update="getUpdateVersion"
+      :isMax="isMax"
+      :version="version"
+      :staffName="staffName"
+    ></Layout>
     <update
       @close="updateflag = false"
       v-if="updateflag"
@@ -91,13 +63,13 @@ import update from "./components/update";
 import { getToken } from "@/utils/auth";
 import { add, addValue, addNengPuValue } from "@/api/task";
 import { updateStaffOnlineTime } from "@/api/login";
-import { wgs84togcj02, gcj02tobd09 } from "@/utils/conversion";
+import Layout from "./views/layout";
 import moment from "moment";
 const { remote } = require("electron");
 const { Menu, MenuItem } = remote;
 export default {
   name: "App",
-  components: { update },
+  components: { update, Layout },
   data() {
     return {
       isMax: true,
@@ -224,6 +196,7 @@ export default {
       });
     },
     mini() {
+      console.log(1);
       this.$ipcRenderer.send("mini", true);
     },
     max() {
@@ -374,9 +347,9 @@ export default {
         return data;
       }
     }
-    
+
     //=============================END
-   
+
     Number.prototype.toFixed46 = function (
       decimalPlaces,
       Judge = false,
@@ -499,42 +472,9 @@ export default {
 
 <style lang="scss" scoped>
 #app {
-  height: 100%;
-  overflow: hidden;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  .control {
-    background: #373942;
-    color: #fff;
-    padding: 4px 0;
-    height: 24px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    -webkit-app-region: drag;
-    -webkit-user-select: none;
-    .action {
-      -webkit-app-region: no-drag;
-      float: right;
-      padding: 0 10px;
-      img {
-        width: 24px;
-        padding-left: 4px;
-      }
-      img:hover {
-        cursor: pointer;
-      }
-    }
-  }
-  .content {
-    height: 100%;
-    overflow: auto;
-    -webkit-app-region: no-drag;
-  }
+  overflow: hidden;
+  height: 100%;
 }
 
 .el_tag {

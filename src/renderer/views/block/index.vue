@@ -38,7 +38,7 @@ export default {
     toggleScene(scene) {
       if (scene == 0) {
         // 现场
-        sessionStorage.setItem("TolocalNo", 0);
+        sessionStorage.setItem("TolocalNo", 1);
         sessionStorage.setItem("ToggleBlock", "local");
         sessionStorage.setItem("nowRouter", "entering");
         this.$router.push(`/local`);

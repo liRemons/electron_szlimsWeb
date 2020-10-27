@@ -23,8 +23,8 @@ const constantRouterMap = [
   //   redirect: "/login",
   // },
   {
-    path:"/camera",
-    component:()=>import('@/views/camera')
+    path: "/camera",
+    component: () => import("@/views/camera"),
     // component:()=>import('@/views/demo')
   },
   {
@@ -46,11 +46,10 @@ const constantRouterMap = [
   },
   {
     path: "/local",
-    component: () => import("../views/layout/index"),
+    component: () => import("../views/main"),
     redirect: "/local/entering",
     children: [
       {
-        
         path: "entering",
         component: () => import("../views/local/entering/index"),
       },
@@ -71,7 +70,7 @@ const constantRouterMap = [
   },
   {
     path: "/laboratory",
-    component: () => import("../views/layout/index"),
+    component: () => import("../views/main"),
     redirect: "/laboratory/pickUp",
     children: [
       {
@@ -82,7 +81,8 @@ const constantRouterMap = [
         path: "curve",
         component: () => import("../views/laboratory/curve/index"),
       },
-      {name: "doc-entering",
+      {
+        name: "doc-entering",
         path: "doc-entering/:target",
         component: () => import("../views/docEntering/index"),
       },

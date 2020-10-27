@@ -2072,9 +2072,8 @@ export default {
   },
 
   destroyed() {
-    let that = this;
-    if (that.timerId) {
-      clearInterval(that.timerId);
+    if (this.timerId) {
+      clearInterval(this.timerId);
     }
     // window.removeEventListener("popstate", this.goBack, false);
   },
@@ -2085,6 +2084,7 @@ export default {
 .floatMybar {
   position: fixed;
   right: 10px;
+  top: 100px;
   z-index: 1000;
 }
 .btnFile {

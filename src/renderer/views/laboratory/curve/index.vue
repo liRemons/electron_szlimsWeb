@@ -387,7 +387,7 @@ export default {
           if (isBlank(result[index])) {
             result[index] = 0;
           }
-          result[index] = (result[index] + value).toFixed46(3);
+          result[index] = (result[index] + Number(value)).toFixed46(3);
         });
       }
       let series0 = JSON.parse(JSON.stringify(this.addCurve.series[0]));
