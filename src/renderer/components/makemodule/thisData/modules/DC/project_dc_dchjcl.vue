@@ -275,7 +275,7 @@ export default {
     fileImport() {
       //获取读取文件的File对象
       var selectedFile = document.getElementById("file").files[0];
-      var reader = new FileReader(); //这是核心,读取操作就是由它完成.
+      var reader = new FileReader(); 
       reader.readAsBinaryString(selectedFile);
       let this_ = this;
       reader.onload = (e) => {
@@ -288,9 +288,10 @@ export default {
             persons = persons.concat(
               XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
             );
-            break; // 如果只取第一张表，就取消注释这行
+            break; 
           }
         }
+        // 格式化数据
         let newArr = persons.map((item) => {
           return {
             v1: item["索引"],

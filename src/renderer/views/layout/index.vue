@@ -41,7 +41,7 @@
           <img @click="$emit('close')" src="@/assets/icon/close.png" />
         </div>
       </div>
-      <div class="header_bottom" v-if="$route.path !== '/'">
+      <div class="header_bottom" v-if="$route.path !== '/'&&$route.path !== '/login'">
         <div style="display: flex">
           <span class="sysTitle"> 深圳市瑞达智能检测系统用户端 </span>
           <el-menu
