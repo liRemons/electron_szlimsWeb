@@ -643,7 +643,7 @@ export default {
             this.deleteData = [];
           }
 
-          if (this.deleteData.length > 0) {
+          if (this.deleteData.length) {
             this.deleteDialog = true;
           } else {
             this.confirmDelete();
@@ -1231,32 +1231,22 @@ export default {
           tasktemp.startTime,
           this.entryEndTime,
           JSON.stringify(this.templateArr)
-        )
-          .then((res) => {
-            if (res.success) {
-              this.readFile(JSON.parse(getToken()), "enteringList");
-              this.readFileEvent().then((a) => {
-                let arr = JSON.parse(a);
-                arr.list.map((item, index) => {
-                  item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
-                });
-                this.whrite(arr, JSON.parse(getToken()));
+        ).then((res) => {
+          if (res.success) {
+            this.readFile(JSON.parse(getToken()), "enteringList");
+            this.readFileEvent().then((a) => {
+              let arr = JSON.parse(a);
+              arr.list.map((item, index) => {
+                item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
               });
-              this.$notify({
-                message: res.msg,
-                type: "success",
-              });
-              this.toChangeState();
-            } else {
-              this.$notify({
-                message: res.msg,
-                type: "error",
-              });
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+              this.whrite(arr, JSON.parse(getToken()));
+            });
+            this.$message.success(res.msg);
+            this.toChangeState();
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
       }
     },
     //实验室更新data数据
@@ -1926,14 +1916,10 @@ export default {
         this.reason,
         this.staffName,
         JSON.myParse(getToken()).id
-      )
-        .then((res) => {
-          this.showFingerprint = false;
-          this.$router.push("/local/entering");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      ).then((res) => {
+        this.showFingerprint = false;
+        this.$router.push("/local/entering");
+      });
     },
   },
 

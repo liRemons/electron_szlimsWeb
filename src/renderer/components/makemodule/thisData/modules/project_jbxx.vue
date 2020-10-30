@@ -131,7 +131,7 @@
               ></divModel>
             </div>
           </div>
-          <div class="___relative borderBottom">
+          <!-- <div class="___relative borderBottom">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">
                 <div class="tc">营业执照编号</div>
@@ -160,7 +160,7 @@
                 class="Full warp2 rowsInput2 hide focusBg"
               ></divModel>
             </div>
-          </div>
+          </div> -->
           <div class="___relative borderBottom">
             <div style="width: 90px;" class="borderRight">
               <div style="height: 32px;">

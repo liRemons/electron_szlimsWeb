@@ -1851,13 +1851,13 @@ export default [
         carried: true,
         disable: true, //禁用现场可删除
         value: function(obj) {
-          return 1010;
+          return 988;
         },
       },
       _short: {
         carried: false,
         value: function(obj) {
-          return 1010;
+          return 988;
         },
       },
     },
