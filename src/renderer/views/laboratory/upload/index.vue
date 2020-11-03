@@ -4,7 +4,7 @@
       <el-radio-group
         v-model="nowPage"
         @change="getNewData"
-        style="width: 400px; text-align: left;"
+        style="width: 400px; text-align: left;margin-top:10px"
       >
         <el-radio-button label="待审核"></el-radio-button>
         <el-radio-button label="已审核"></el-radio-button>

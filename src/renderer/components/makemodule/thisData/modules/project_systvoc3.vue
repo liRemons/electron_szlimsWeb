@@ -145,7 +145,7 @@
           {{ item.sysConcentration }}
         </td>
 
-        <td v-if="showXieGan3(item)">
+        <td v-if="showReport(item)">
           <!--报告值-->
           <div>/</div>
         </td>
@@ -196,14 +196,15 @@ export default {
         this.concentration();
       });
     },
-    'data.valueData.point':function(){
-       this.$nextTick(() => {
+    "data.valueData.point": function () {
+      this.$nextTick(() => {
         this.concentration();
       });
-    }
+    },
   },
   props: [
     "ipdTemplate",
+    "projectTeprojectName",
     "data",
     "pageNumber",
     "thisPageIndex",
@@ -221,6 +222,17 @@ export default {
     "target",
   ],
   methods: {
+    showReport(item) {
+      let arr = ["苯", "甲苯", "TVOC总计", "对二甲苯+间二甲苯", "邻二甲苯"];
+      if (
+        !this.projectTeprojectName.includes("50325") &&
+        item.testProject.trim() !== "TVOC总计"
+      ) {
+        return true;
+      } else {
+        return !arr.includes(item.testProject.trim());
+      }
+    },
     synchronizationId() {
       this.jsonString.forEach((item, index) => {
         if (item.data.valueData.multipleId === this.data.valueData.multipleId) {
@@ -317,8 +329,25 @@ export default {
       ];
     },
     showBaoGao(item) {
+      let arr = ["对二甲苯+间二甲苯", "邻二甲苯"];
+      let data = this.data.valueData.allPoint.filter((item) =>
+        arr.includes(item.testProject.trim())
+      );
+      console.log();
+      if (
+        arr.includes(item.testProject.trim()) &&
+        this.projectTeprojectName.includes("50325")
+      ) {
+        item.sysReport = (
+          data[0].sysConcentration + data[1].sysConcentration
+        ).toPrecision(2);
+        return item.sysReport;
+      }
       let sysReport = Number(item.sysConcentration).toFixed46(3);
-      if (sysReport < Number(this.detectionLimitObj.detectionLimit)) {
+      if (
+        item.testProject.trim() == "TVOC总计" &&
+        sysReport < Number(this.detectionLimitObj.detectionLimit)
+      ) {
         item.sysReport = `< ${this.detectionLimitObj.detectionLimit}`;
         item.sysReportCount = Number(
           Number(item.sysConcentration).toFixed46(3)
@@ -329,6 +358,7 @@ export default {
           Number(item.sysConcentration).toFixed46(3)
         ).toPrecision(2);
         item.sysReportCount = item.sysReport;
+
         return item.sysReport;
       }
     },
@@ -370,7 +400,7 @@ export default {
   },
 
   mounted() {
-    console.log(this.data, "data");
+    console.log(this.data);
     this.data.valueData.sampleNum = this.mySample;
     this.data.valueData.pageNumber = this.pageNumber;
     this.data.valueData.sysSampleId = this.data.valueData.allPoint[0].sysSampleId;

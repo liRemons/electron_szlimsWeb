@@ -251,6 +251,7 @@
               :bs="bs"
               :xieLv="xieLv"
               :projectName="projectObj"
+              :projectTeprojectName="projectName"
               :regressionEquationValue1="regressionEquationValue1"
               :regressionEquationValue2="regressionEquationValue2"
               :regressionEquationValue3="regressionEquationValue3"
@@ -569,7 +570,6 @@ export default {
           }
           sampleNum.push(sampleObj);
         });
-
         querySysDeviceData(sampleNum).then((res) => {
           this.SampleDataArr = [];
           let arr = [];
@@ -676,7 +676,6 @@ export default {
           } else {
             content.push({ name: _that.testProject.modelName });
           }
-
           let analysis = sessionStorage.getItem("analysis");
           let flag = false;
           if (analysis === "已分析") {
@@ -736,13 +735,12 @@ export default {
     querySearchAsync(queryString, cb, title) {
       let arr = [];
       this.curveArr.forEach((item) => {
-        
-        if (item.materialCurveName&&title.includes(item.materialCurveName)) {
+        if (item.materialCurveName && title.includes(item.materialCurveName)) {
           arr.push(...item.curves);
-          // this.curveName=item.materialName
         }
       });
       let restaurants = arr;
+      console.log(this.curveArr)
       let results = queryString
         ? restaurants.filter(this.createStateFilter(queryString))
         : restaurants;
@@ -969,7 +967,6 @@ export default {
       }
 
       valData = this.deepCopy(valData);
-
       if (name.indexOf("project_systvoc") != -1) {
         let myBlankSample = data.value[0].myBlankSample;
         if (name == "project_systvoc1") {
@@ -1016,22 +1013,25 @@ export default {
             ) {
               if (dataStart != 0) {
                 valData.valueData.allPoint = this.SampleDataArr[index]; //将完整的数据存进去, 计算要用到
-                valData.valueData.point = this.SampleDataArr[index].slice(
-                  dataStart,
-                  this.SampleDataArr[index].length
-                );
+                valData.valueData.point = this.SampleDataArr[index];
+                // valData.valueData.point = this.SampleDataArr[index].slice(
+                //   dataStart,
+                //   this.SampleDataArr[index].length
+                // );
                 valData.valueData.hasAll = hasAll;
               } else {
                 valData.valueData.allPoint = this.SampleDataArr[index]; //将完整的数据存进去, 计算要用到
-                valData.valueData.point = this.SampleDataArr[index].slice(
-                  dataStart,
-                  dataLength
-                );
+                // valData.valueData.point = this.SampleDataArr[index].slice(
+                //   dataStart,
+                //   dataLength
+                // );
+                valData.valueData.point = this.SampleDataArr[index];
                 valData.valueData.hasAll = hasAll;
               }
             }
           });
         }
+        console.log(valData, "valDatade");
       } else {
         if (data.value.length && data.value[0].testDeviceCheckBox) {
           valData.valueData.sysDilutionDegree = data.value[0].sysDilutionDegree;
@@ -1214,7 +1214,7 @@ export default {
       modelResult.valueData.multipleId = templateName.name + Math.random();
       /*如果isDeviceData这个字段是true， 自动使用仪器数据*/
       //给需要使用仪器数据的模板isDeviceData设为true
-      if (modelResult.isDeviceData && this.target === "1") {
+      if (modelResult.isDeviceData && this.target == 1) {
         let sampleNum = [];
 
         this.testProject.value.forEach((item) => {
@@ -1255,7 +1255,7 @@ export default {
           }
         });
       }
-      if (modelResult.name === "project_wsw_dx" && this.target ==1) {
+      if (modelResult.name === "project_wsw_dx" && this.target == 1) {
         let id = modelResult.valueData.point[0].testProjectId
           ? modelResult.valueData.point[0].testProjectId
           : this.testProject.testProjectId;
@@ -1386,9 +1386,11 @@ export default {
           obj.push(modelResult);
         } else {
           let modelResult = _that.heads.find((mod) => mod.name == item.name);
+
           if (modelResult) {
             modelResult.valueData.modelName = modelResult.valueData.testProject;
             modelResult = _that.deepCopy(modelResult);
+
             if (_that.testProject.value[0].data != null) {
               let sampleValueDataStr = _that.testProject.value[0]["data"];
               let sampleValueData = JSON.myParse(sampleValueDataStr);
@@ -1521,7 +1523,6 @@ export default {
   },
 
   mounted() {
-    console.log(111)
     this.$nextTick(() => {
       if (this.target == 1) {
         this.allFeng = this.labtemplate[0].value[0].sysBlankTotalArea;

@@ -4,7 +4,7 @@
       <el-radio-group
         v-model="nowPage"
         @change="getNewData"
-        style="width: 400px; text-align: left"
+        style="width: 400px; text-align: left;margin:10px 0"
       >
         <el-radio-button label="待分析"></el-radio-button>
         <el-radio-button label="正在分析"></el-radio-button>

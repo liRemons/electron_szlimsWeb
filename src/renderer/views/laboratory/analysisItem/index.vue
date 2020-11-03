@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div style="text-align: left; margin-bottom: 10px;">
+    <div style="text-align: left; margin: 10px 0">
       <el-button
         icon="plus"
         type="primary"

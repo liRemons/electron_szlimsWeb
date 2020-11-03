@@ -1272,13 +1272,13 @@ export default {
             type: null,
             data: val,
           };
-          let index;
+          let pushIndex = null;
           this.jsonString.forEach((item, index) => {
             if (item.to === "project_deleteReason") {
-              index = index;
+              pushIndex = index;
             }
           });
-          this.jsonString.splice(index, 0, json);
+          this.jsonString.splice(pushIndex, 0, json);
         });
         let testprojectId = obj.testProjectId;
         let myindex = this.reasonMsgArr.findIndex(
@@ -1445,7 +1445,7 @@ export default {
 
           break;
         case "project_dc_jcdxxx":
-          let newDCjcdxxx = ["antennaHeight", "lat", "lng",'latLngType'];
+          let newDCjcdxxx = ["antennaHeight", "lat", "lng", "latLngType"];
           newDCjcdxxx.forEach((item) => {
             template.valueData[item] = task[item];
           });

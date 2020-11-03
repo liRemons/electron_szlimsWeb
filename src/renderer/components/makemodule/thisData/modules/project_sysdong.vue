@@ -115,18 +115,18 @@ export default {
     "watchSign",
     "isTemplate",
     "ableInput",
-    "target"
+    "target",
   ],
   data() {
     return {
       showTime: false,
       devices: [],
       testTiem: "",
-      detectionLimitObj: ""
+      detectionLimitObj: "",
     };
   },
   components: {
-    projectHead
+    projectHead,
   },
   computed: {
     canEdit() {
@@ -154,7 +154,7 @@ export default {
         }
       });
       return str;
-    }
+    },
   },
   methods: {
     headShow() {
@@ -192,7 +192,7 @@ export default {
       let name = `${item.sampleNum}${
         item.sampleNumIndex ? item.sampleNumIndex : ""
       }${item.parallelLetter}`;
-      return name.replace(/\s*/g, "");
+      return item.sampleNum ? name.replace(/\s*/g, "") : "";
     },
     toShowTimeBox() {
       if (this.target != 4) {
@@ -206,8 +206,10 @@ export default {
     getReport(item) {
       item.sysReport = Number(item.sysConcentration).toFixed46(1);
       item.sysReportCount = Number(item.sysConcentration).toFixed46(1);
-
-      if (item.sysReport < Number(this.detectionLimitObj.detectionLimit)) {
+      if (
+        this.detectionLimitObj &&
+        item.sysReport < Number(this.detectionLimitObj.detectionLimit)
+      ) {
         item.sysReport = `< ${this.detectionLimitObj.detectionLimit}`;
       }
 
@@ -262,14 +264,14 @@ export default {
       return item.sysDifference;
     },
     returnVal(a, b, c, d, valueArr) {
-      this.data.valueData.testDeviceCheckBox = valueArr.map(item => item.id);
-    }
+      this.data.valueData.testDeviceCheckBox = valueArr.map((item) => item.id);
+    },
   },
   mounted() {
-    queryByPurpose("实验室").then(res => {
+    queryByPurpose("实验室").then((res) => {
       if (res.success) {
         this.devices = res.data;
-        this.devices.forEach(item => {
+        this.devices.forEach((item) => {
           item.showName =
             item.deviceName + " " + item.deviceModel + " " + item.deviceNum;
         });
@@ -282,7 +284,7 @@ export default {
     setTimeout(() => {
       this.$forceUpdate();
     }, 200);
-  }
+  },
 };
 </script>
 

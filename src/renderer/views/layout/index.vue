@@ -150,7 +150,6 @@ export default {
 .el-main {
   padding: 0;
   text-align: center;
-  margin-bottom: 10px;
   -webkit-app-region: no-drag;
 }
 .header {

@@ -1226,7 +1226,7 @@ export default [
         fixed: 253,
         confirm: true,
         value: function(obj) {
-          return 32 * (3 + obj.point.length);
+          return 253+ 32 * (3 + obj.point.length);
         },
       },
       _short: {
@@ -1714,7 +1714,6 @@ export default [
     height: {
       //模块高度
       _normal: {
-        confirm: true,
         carried: true,
         fixed: 64,
         value: function(obj) {

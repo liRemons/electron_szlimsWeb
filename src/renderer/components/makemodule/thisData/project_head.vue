@@ -15,10 +15,11 @@
                 type="datetime"
                 :clearable="false"
                 @change="changeTime"
-                :picker-options="pickerOptions"
+                
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss"
               >
+              <!-- :picker-options="pickerOptions" -->
               </el-date-picker>
             </div>
           </div>
@@ -44,9 +45,10 @@
                 type="datetime"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                :picker-options="pickerOptions1"
+                
               >
               </el-date-picker>
+              <!-- :picker-options="pickerOptions1" -->
             </div>
           </div>
           <div v-else>

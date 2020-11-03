@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div class="add" style="text-align: left">
+    <div class="add" style="text-align: left;margin:10px 0">
       <el-button icon="plus" type="primary" @click="add" size="small"
         >新增配制记录</el-button
       >

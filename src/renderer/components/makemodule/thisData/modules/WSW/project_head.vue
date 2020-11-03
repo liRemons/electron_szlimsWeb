@@ -15,10 +15,11 @@
                 type="datetime"
                 :clearable="false"
                 @change="changeTime"
-                :picker-options="pickerOptions"
+               
                 format="yyyy年MM月dd日 HH时mm分ss秒"
                 value-format="yyyy-MM-dd HH:mm:ss"
               ></el-date-picker>
+              <!--  :picker-options="pickerOptions" -->
             </div>
           </div>
           <div v-else>{{ data.valueData.sysTestingTime }}</div>
@@ -41,8 +42,9 @@
                 type="datetime"
                 format="yyyy年MM月dd日 HH时mm分ss秒"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                :picker-options="pickerOptions1"
+                
               ></el-date-picker>
+              <!-- :picker-options="pickerOptions1" -->
             </div>
           </div>
           <div v-else>{{ data.valueData.sysTestingEndTime }}</div>
