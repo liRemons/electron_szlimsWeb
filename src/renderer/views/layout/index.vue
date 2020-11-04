@@ -41,7 +41,10 @@
           <img @click="$emit('close')" src="@/assets/icon/close.png" />
         </div>
       </div>
-      <div class="header_bottom" v-if="$route.path !== '/'&&$route.path !== '/login'">
+      <div
+        class="header_bottom"
+        v-if="$route.path !== '/' && $route.path !== '/login'"
+      >
         <div style="display: flex">
           <span class="sysTitle"> 深圳市瑞达智能检测系统用户端 </span>
           <el-menu
@@ -109,7 +112,13 @@ export default {
       } else {
         menu = this.menu.filter((item) => item.type == 1);
       }
-      return menu;
+      let name = this.$route.name;
+      let arr = ["local-doc-entering", "doc-entering"];
+      if (arr.includes(name)) {
+        return [];
+      } else {
+        return menu;
+      }
     },
     handleSelect(data, path) {
       sessionStorage.setItem("TolocalNo", 1);

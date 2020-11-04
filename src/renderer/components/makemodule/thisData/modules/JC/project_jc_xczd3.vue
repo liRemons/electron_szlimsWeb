@@ -655,7 +655,7 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-       if (copy === "copyAll") {
+      if (copy === "copyAll") {
         let now = this.jsonString
           .filter(
             (item) =>
@@ -787,6 +787,7 @@ export default {
             (a) => a.sampleNum === item.sampleNum
           ) === index || item.sampleNum === "";
       });
+      this.$forceUpdate()
     },
   },
   watch: {
@@ -805,6 +806,7 @@ export default {
     });
     setTimeout(() => {
       this.merge();
+
     }, 10);
   },
 };

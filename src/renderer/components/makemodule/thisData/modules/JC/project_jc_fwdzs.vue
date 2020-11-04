@@ -720,6 +720,7 @@ export default {
             (a) => a.sampleNum === item.sampleNum
           ) === index || item.sampleNum === "";
       });
+       this.$forceUpdate()
     },
   },
   watch: {
