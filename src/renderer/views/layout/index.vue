@@ -77,6 +77,7 @@
 
 
 <script>
+import { getToken } from "@/utils/auth";
 export default {
   props: ["version", "isMax", "staffName"],
   data() {
@@ -85,11 +86,21 @@ export default {
         { name: "录入", path: "entering", type: 0 },
         { name: "审核", path: "review", type: 0 },
         { name: "上传", path: "upload", type: 0 },
-        { name: "接样", path: "pickUp", type: 1 },
-        { name: "配标", path: "curve", type: 1 },
-        { name: "分析项管理", path: "analysisItem", type: 1 },
-        { name: "分析", path: "analysis", type: 1 },
-        { name: "审核", path: "upload", type: 1 },
+        { name: "接样", path: "pickUp", type: 1, role: ["接样人"] },
+        { name: "配标", path: "curve", type: 1, role: ["理化检验员"] },
+        {
+          name: "分析项管理",
+          path: "analysisItem",
+          type: 1,
+          role: ["微生物检验员"],
+        },
+        {
+          name: "分析",
+          path: "analysis",
+          type: 1,
+          role: ["放射检验员", "理化检验员", "微生物检验员"],
+        },
+        { name: "审核", path: "upload", type: 1, role: ["实验室审核员"] },
       ],
     };
   },
@@ -106,6 +117,7 @@ export default {
       return sessionStorage.getItem("nowRouter");
     },
     getMenu() {
+      // let power = JSON.parse(getToken()).modList.split(",");
       let menu = [];
       if (sessionStorage.getItem("ToggleBlock") === "local") {
         menu = this.menu.filter((item) => item.type == 0);
@@ -114,11 +126,49 @@ export default {
       }
       let name = this.$route.name;
       let arr = ["local-doc-entering", "doc-entering"];
+
+      // 人员权限   ========START
+
+
+
+      // const { redirectedFrom, path } = this.$route;
+      // let routerPath = path.split(redirectedFrom)[1];
+      // let nowRoterMenu = menu.filter((item) => "/" + item.path === routerPath);
+      // if (nowRoterMenu.length) {
+      //   if (!nowRoterMenu[0].role) {
+      //     return menu;
+      //   }
+      //   if (nowRoterMenu[0].role.length) {
+      //     let newRole = nowRoterMenu[0].role.filter((item) =>
+      //       power.includes(item)
+      //     );
+      //     if (!newRole.length) {
+      //       this.$message.warning("您无权限访问此页面，请联系管理员添加");
+      //       this.$router.replace("/");
+      //       return;
+      //     }
+      //   }
+      // }
+
+      // 菜单显示
+      // if (power.length) {
+      //   menu = menu.filter((item) => {
+      //     if (!item.role || !item.role.length) {
+      //       return true;
+      //     } else {
+      //       return item.role.filter((a) => power.includes(a)).length;
+      //     }
+      //   });
+      // }
+
+      // ======= end
+
       if (arr.includes(name)) {
         return [];
       } else {
         return menu;
       }
+      this.$forceUpdate()
     },
     handleSelect(data, path) {
       sessionStorage.setItem("TolocalNo", 1);

@@ -20,6 +20,7 @@
         :initial-index="analysisInitial_index"
       >
         <el-carousel-item :key="1" label="理化">
+          <!--  v-if="power.includes('理化检验员')" -->
           <div style="margin-bottom: 10px; height: 100%; overflow-y: auto">
             <my-table
               ref="myt"
@@ -30,6 +31,7 @@
           </div>
         </el-carousel-item>
         <el-carousel-item :key="2" label="放射">
+          <!--  v-if="power.includes('放射检验员')" -->
           <div style="margin-bottom: 20px; height: 100%; overflow-y: auto">
             <my-table
               :data="dataFangshe"
@@ -39,6 +41,7 @@
           </div>
         </el-carousel-item>
         <el-carousel-item :key="3" label="微生物">
+           <!-- v-if="power.includes('微生物检验员')" -->
           <div style="margin-bottom: 20px; height: 100%; overflow-y: auto">
             <my-table
               :data="dataWeishenghu"
@@ -210,6 +213,7 @@ import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
+      power:JSON.parse(getToken()).modList.split(","),
       labelIndex: "",
       analysisInitial_index: 0,
       template: [], //检测项目数组

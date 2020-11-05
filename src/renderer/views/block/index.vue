@@ -30,12 +30,13 @@ import { setToken, getToken } from "@/utils/auth";
 export default {
   data() {
     return {
-      name: ""
+      name: "",
     };
   },
   methods: {
     // 切换场景
     toggleScene(scene) {
+      // let power = JSON.parse(getToken()).modList.split(",");
       if (scene == 0) {
         // 现场
         sessionStorage.setItem("TolocalNo", 1);
@@ -46,14 +47,35 @@ export default {
         // 实验室
         sessionStorage.setItem("ToggleBlock", "laboratory");
         sessionStorage.setItem("nowRouter", "pickUp");
-        this.$router.push(`/laboratory`);
+        this.$router.push(`/laboratory`)
+        // if (power.includes("接样人")) {
+        //   this.$router.push(`/laboratory/pickUp`);
+        //   return;
+        // }
+        // if (power.includes("理化检验员")) {
+        //   this.$router.push(`/laboratory/curve`);
+        //   return;
+        // }
+        // if (power.includes("微生物检验员")) {
+        //   this.$router.push(`/laboratory/analysisItem`);
+        //   return;
+        // }
+        // if (power.includes("放射检验员")) {
+        //   this.$router.push(`/laboratory/analysis`);
+        //   return;
+        // }
+        // if (power.includes("实验室审核员")) {
+        //   this.$router.push(`/laboratory/upload`);
+        //   return;
+        // }
+        // this.$message.warning("您无权限访问此页面，请联系管理员添加");
       }
     },
     toLogout() {
       this.$confirm("确定退出?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           setToken("");
@@ -75,11 +97,11 @@ export default {
       } else {
         this.name = JSON.myParse(token).staffName;
       }
-    }
+    },
   },
   mounted() {
     this.userIsLogin();
-  }
+  },
 };
 </script>
 
@@ -151,7 +173,7 @@ export default {
     box-shadow: 0px 0px 15px #cfcfcf;
   }
 }
-@media screen and (max-width:1200px) {
+@media screen and (max-width: 1200px) {
   .bg {
     .left,
     .right {
@@ -207,5 +229,4 @@ export default {
     }
   }
 }
-
 </style>

@@ -1,19 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import Layout from "../views/layout/index";
-
-// 现场操作
-// import DocEntering from "../views/docEntering/index";
-// import LocalEntering from "../views/local/entering/index";
-// import LocalUpload from "../views/local/upload/index";
-// import Review from "../views/local/Review/index";
-
-// 实验室操作
-// import LaboratoryPickUp from "../views/laboratory/pickup/index";
-// import LaboratoryAnalysis from "../views/laboratory/analysis/index";
-// import LaboratoryUpload from "../views/laboratory/upload/index";
-// import Curve from "../views/laboratory/curve/index";
-// import AnalysisItem from "../views/laboratory/analysisItem/index";
 
 Vue.use(Router);
 import { getToken } from "../utils/auth";
@@ -22,11 +8,11 @@ const constantRouterMap = [
   //   path: "/",
   //   redirect: "/login",
   // },
-  {
-    path: "/camera",
-    component: () => import("@/views/camera"),
-    // component:()=>import('@/views/demo')
-  },
+  // {
+  //   path: "/camera",
+  //   component: () => import("@/views/camera"),
+  //   component:()=>import('@/views/demo')
+  // },
   {
     path: "/",
     component: () => import("@/views/block/index"),
