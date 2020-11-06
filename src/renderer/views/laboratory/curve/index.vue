@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <div class="add" style="text-align: left;margin:10px 0">
+    <div class="add" style="text-align: left; margin: 10px 0">
       <el-button icon="plus" type="primary" @click="add" size="small"
         >新增配制记录</el-button
       >
@@ -704,23 +704,31 @@ export default {
       }
     },
     regressionEquation() {
-      return `Y=${this.addCurve.regressionEquationValue1}*X${this.addCurve.regressionEquationValue2}${this.addCurve.regressionEquationValue3}`;
+      if (
+        this.addCurve.regressionEquationValue2 === "+" &&
+        (this.addCurve.regressionEquationValue3.includes("-") ||
+          this.addCurve.regressionEquationValue3.includes("+"))
+      ) {
+        return `Y=${this.addCurve.regressionEquationValue1}*X${this.addCurve.regressionEquationValue3}`;
+      } else {
+        return `Y=${this.addCurve.regressionEquationValue1}*X${this.addCurve.regressionEquationValue2}${this.addCurve.regressionEquationValue3}`;
+      }
     },
     // 以下为公式————————————————————————————————————————————
     // 对数的拟合曲线
     logFitting(x, y) {
-      let yem = 0.0;
-      let y1 = 0.0;
-      let xem = 0.0;
-      let x1 = 0.0;
-      let x2 = 0.0;
-      let x3 = 0.0;
-      let avgx = 0.0;
-      let avgy = 0.0;
-      let dxy = 0.0;
-      let dx2 = 0.0;
-      let dy2 = 0.0;
-      let y2 = 0.0;
+      let yem = 0.0,
+        y1 = 0.0,
+        xem = 0.0,
+        x1 = 0.0,
+        x2 = 0.0,
+        x3 = 0.0,
+        avgx = 0.0,
+        avgy = 0.0,
+        dxy = 0.0,
+        dx2 = 0.0,
+        dy2 = 0.0,
+        y2 = 0.0;
 
       for (let i = 0; i < y.length; i++) {
         yem += y[i];

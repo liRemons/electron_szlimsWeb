@@ -44,7 +44,9 @@
       </tr>
 
       <tr v-for="(item, index) in data.valueData.point" :key="index">
-        <td>{{ item.testProject }}</td>
+        <td>
+          {{ item.testProject }}
+        </td>
         <!--样品编号-->
 
         <td>
@@ -149,7 +151,12 @@
           <!--报告值-->
           <div>/</div>
         </td>
-        <td v-else>
+        <td
+          v-else
+          v-show="item.testProject.trim() !== '邻二甲苯'"
+          :rowspan="item.testProject.trim() === '对二甲苯+间二甲苯' ? 2 : 1"
+        >
+          <!--  :colspan="item.testProject.trim() === '对二甲苯+间二甲苯' ? 2 : 1" -->
           <div>{{ showBaoGao(item) }}</div>
         </td>
 
@@ -224,6 +231,7 @@ export default {
   methods: {
     showReport(item) {
       let arr = ["苯", "甲苯", "TVOC总计", "对二甲苯+间二甲苯", "邻二甲苯"];
+
       if (
         !this.projectTeprojectName.includes("50325") &&
         item.testProject.trim() !== "TVOC总计"

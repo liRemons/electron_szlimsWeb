@@ -298,8 +298,25 @@ export default {
             }
             Promise.all(DeviceTypeIdPromise)
               .then((DeviceTypeIdRes) => {
-                arr.map((item) => {
-                  DeviceTypeIdRes.map((a) => {
+                arr.forEach((item) => {
+                  DeviceTypeIdRes.forEach((a) => {
+                    a.data.forEach((item) => {
+                      if (
+                        item.purpose === "公共卫生" &&
+                        item.deviceFactor.length > 1
+                      ) {
+                        item.deviceFactor.sort((a, b) => {
+                          if (
+                            Number(!a.measure1 ? 0 : a.measure1) >
+                            Number(!b.measure1 ? 0 : b.measure1)
+                          ) {
+                            return 1;
+                          } else {
+                            return -1;
+                          }
+                        });
+                      }
+                    });
                     item.taskList.deviceTypeId == a.deviceTypeId
                       ? (item["device"] = a)
                       : "";

@@ -36,7 +36,9 @@ export default {
   methods: {
     // 切换场景
     toggleScene(scene) {
-      // let power = JSON.parse(getToken()).modList.split(",");
+      let power =
+        JSON.parse(getToken()).modList &&
+        JSON.parse(getToken()).modList.split(",");
       if (scene == 0) {
         // 现场
         sessionStorage.setItem("TolocalNo", 1);
@@ -47,28 +49,30 @@ export default {
         // 实验室
         sessionStorage.setItem("ToggleBlock", "laboratory");
         sessionStorage.setItem("nowRouter", "pickUp");
-        this.$router.push(`/laboratory`)
-        // if (power.includes("接样人")) {
-        //   this.$router.push(`/laboratory/pickUp`);
-        //   return;
-        // }
-        // if (power.includes("理化检验员")) {
-        //   this.$router.push(`/laboratory/curve`);
-        //   return;
-        // }
-        // if (power.includes("微生物检验员")) {
-        //   this.$router.push(`/laboratory/analysisItem`);
-        //   return;
-        // }
-        // if (power.includes("放射检验员")) {
-        //   this.$router.push(`/laboratory/analysis`);
-        //   return;
-        // }
-        // if (power.includes("实验室审核员")) {
-        //   this.$router.push(`/laboratory/upload`);
-        //   return;
-        // }
-        // this.$message.warning("您无权限访问此页面，请联系管理员添加");
+        this.$router.push(`/laboratory`);
+        if (power) {
+          if (power.includes("接样人")) {
+            this.$router.push(`/laboratory/pickUp`);
+            return;
+          }
+          if (power.includes("理化检验员")) {
+            this.$router.push(`/laboratory/curve`);
+            return;
+          }
+          if (power.includes("微生物检验员")) {
+            this.$router.push(`/laboratory/analysisItem`);
+            return;
+          }
+          if (power.includes("放射检验员")) {
+            this.$router.push(`/laboratory/analysis`);
+            return;
+          }
+          if (power.includes("实验室审核员")) {
+            this.$router.push(`/laboratory/upload`);
+            return;
+          }
+          this.$message.warning("您无权限访问此页面，请联系管理员添加");
+        }
       }
     },
     toLogout() {

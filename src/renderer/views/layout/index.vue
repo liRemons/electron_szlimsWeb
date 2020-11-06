@@ -117,7 +117,9 @@ export default {
       return sessionStorage.getItem("nowRouter");
     },
     getMenu() {
-      // let power = JSON.parse(getToken()).modList.split(",");
+      let power =
+        JSON.parse(getToken()).modList &&
+        JSON.parse(getToken()).modList.split(",");
       let menu = [];
       if (sessionStorage.getItem("ToggleBlock") === "local") {
         menu = this.menu.filter((item) => item.type == 0);
@@ -129,37 +131,37 @@ export default {
 
       // 人员权限   ========START
 
+      if (power) {
+        const { redirectedFrom, path } = this.$route;
+        let routerPath = path.split(redirectedFrom)[1];
+        let nowRoterMenu = menu.filter(
+          (item) => "/" + item.path === routerPath
+        );
+        if (nowRoterMenu.length) {
+          if (!nowRoterMenu[0].role) return menu;
+          if (nowRoterMenu[0].role.length) {
+            let newRole = nowRoterMenu[0].role.filter((item) =>
+              power.includes(item)
+            );
+            if (!newRole.length) {
+              this.$message.warning("您无权限访问此页面，请联系管理员添加");
+              this.$router.replace("/");
+              return;
+            }
+          }
+        }
 
-
-      // const { redirectedFrom, path } = this.$route;
-      // let routerPath = path.split(redirectedFrom)[1];
-      // let nowRoterMenu = menu.filter((item) => "/" + item.path === routerPath);
-      // if (nowRoterMenu.length) {
-      //   if (!nowRoterMenu[0].role) {
-      //     return menu;
-      //   }
-      //   if (nowRoterMenu[0].role.length) {
-      //     let newRole = nowRoterMenu[0].role.filter((item) =>
-      //       power.includes(item)
-      //     );
-      //     if (!newRole.length) {
-      //       this.$message.warning("您无权限访问此页面，请联系管理员添加");
-      //       this.$router.replace("/");
-      //       return;
-      //     }
-      //   }
-      // }
-
-      // 菜单显示
-      // if (power.length) {
-      //   menu = menu.filter((item) => {
-      //     if (!item.role || !item.role.length) {
-      //       return true;
-      //     } else {
-      //       return item.role.filter((a) => power.includes(a)).length;
-      //     }
-      //   });
-      // }
+        // 菜单显示;
+        if (power.length) {
+          menu = menu.filter((item) => {
+            if (!item.role || !item.role.length) {
+              return true;
+            } else {
+              return item.role.filter((a) => power.includes(a)).length;
+            }
+          });
+        }
+      }
 
       // ======= end
 
@@ -168,7 +170,7 @@ export default {
       } else {
         return menu;
       }
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     handleSelect(data, path) {
       sessionStorage.setItem("TolocalNo", 1);

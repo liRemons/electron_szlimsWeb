@@ -740,7 +740,7 @@ export default {
         }
       });
       let restaurants = arr;
-      console.log(this.curveArr)
+      console.log(this.curveArr);
       let results = queryString
         ? restaurants.filter(this.createStateFilter(queryString))
         : restaurants;
@@ -1013,7 +1013,15 @@ export default {
             ) {
               if (dataStart != 0) {
                 valData.valueData.allPoint = this.SampleDataArr[index]; //将完整的数据存进去, 计算要用到
-                valData.valueData.point = this.SampleDataArr[index];
+                let mergeTestProject = ["对二甲苯+间二甲苯", "邻二甲苯"],
+                  mergePoint = this.SampleDataArr[index].filter((a) =>
+                    mergeTestProject.includes(a.testProject.trim())
+                  ),
+                  newPoint = this.SampleDataArr[index].filter(
+                    (a) => !mergeTestProject.includes(a.testProject.trim())
+                  );
+                newPoint = [...mergePoint, ...newPoint];
+                valData.valueData.point = newPoint;
                 // valData.valueData.point = this.SampleDataArr[index].slice(
                 //   dataStart,
                 //   this.SampleDataArr[index].length
@@ -1025,7 +1033,15 @@ export default {
                 //   dataStart,
                 //   dataLength
                 // );
-                valData.valueData.point = this.SampleDataArr[index];
+                let mergeTestProject = ["对二甲苯+间二甲苯", "邻二甲苯"],
+                  mergePoint = this.SampleDataArr[index].filter((a) =>
+                    mergeTestProject.includes(a.testProject.trim())
+                  ),
+                  newPoint = this.SampleDataArr[index].filter(
+                    (a) => !mergeTestProject.includes(a.testProject.trim())
+                  );
+                newPoint = [...mergePoint, ...newPoint];
+                valData.valueData.point = newPoint;
                 valData.valueData.hasAll = hasAll;
               }
             }
