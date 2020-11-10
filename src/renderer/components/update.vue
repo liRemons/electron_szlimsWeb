@@ -1,6 +1,6 @@
 <template>
   <transition name="bounce">
-    <div class="update">
+    <div class="update tc">
       <div class="close">
         <i class="el-icon-circle-close" @click="$emit('close')"></i>
       </div>

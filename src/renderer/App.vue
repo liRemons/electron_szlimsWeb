@@ -20,6 +20,7 @@
       @download="download"
     ></update>
     <el-dialog
+    class="tc"
       :visible.sync="dialogVisible"
       width="400px"
       :close-on-click-modal="false"
@@ -458,7 +459,7 @@ export default {
     window.sampleNum4 = "";
     JSON.myParse = function (value) {
       try {
-        value = value.replace(/[\r\n]/g, "");
+        value = value.replace(/[\r\n]/g, "").replace(/\\/g,'/');
         let obj = this.parse(value);
         return obj;
       } catch (e) {

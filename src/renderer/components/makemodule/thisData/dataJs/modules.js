@@ -103,7 +103,7 @@ export default [
           ],
         },
       ],
-      计算结果: "偏差=校准平均值-标称值",
+      // 计算结果: "偏差=校准平均值-标称值",
     },
     height: {
       //模块高度
@@ -147,7 +147,7 @@ export default [
           item5: "", // 平均值
         },
       ],
-      计算结果: "半值层取各个状态下的平均值",
+      // 计算结果: "半值层取各个状态下的平均值",
     },
     height: {
       //模块高度
@@ -1226,7 +1226,7 @@ export default [
         fixed: 253,
         confirm: true,
         value: function(obj) {
-          return 253+ 32 * (3 + obj.point.length);
+          return 253 + 32 * (3 + obj.point.length);
         },
       },
       _short: {
@@ -5784,6 +5784,42 @@ export default [
         fixed: 600,
         value: function(obj) {
           return 600;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "project_fh_bd",
+    projectName: "本底",
+    switch: true,
+    type: null,
+    publicData: [], //本模块的公共数据
+    //添加行使用的模板数据
+    valueData: {
+      //模块内容键值对
+      testProject: "project_fh_bd",
+      testProjectChineseName: "本底",
+      point: [
+        { row: ["1", "2", "3", "4", "5", "最小值", ""] },
+        { row: ["", "", "", "", "", "平均值", ""] },
+        { row: ["6", "7", "8", "9", "10", "最大值", ""] },
+        { row: ["", "", "", "", "", "本底范围", ""] },
+      ],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        confirm: true,
+        carried: true,
+        fixed: 190,
+        value: function(obj) {
+          return 190;
         },
       },
       _short: {

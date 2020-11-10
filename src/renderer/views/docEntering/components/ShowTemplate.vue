@@ -895,8 +895,10 @@ export default {
         contentArray = contentArray.flat();
 
         contentArray.splice(0, 0, { name: this.task.headTestProjectName });
+
         if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
+          contentArray.splice(2, 0, { name: "project_fh_bd" });
           let index = contentArray.findIndex(
             (item) => item.name === "project_fs_fh"
           );
@@ -929,6 +931,7 @@ export default {
       if (this.pointUrl) {
         contentArray.push("project_point");
       }
+      console.log(contentArray, "contentArray");
 
       let obj = [];
       this.taskData.showing = [];

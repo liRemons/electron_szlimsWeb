@@ -31,6 +31,7 @@ import project_systvoc4 from './project_systvoc4.vue';
 import project_systvoc5 from './project_systvoc5.vue';
 import project_jbxx from './project_jbxx.vue';
 import project_jcxcxx from './project_jcxcxx.vue';
+import project_fh_bd from './project_fh_bd.vue';
 import projcet_jcjg from './projcet_jcjg.vue';
 import projcet_jfcsl from './projcet_jfcsl.vue';
 import projcet_szpbt from './projcet_szpbt.vue';
@@ -268,6 +269,7 @@ export default {
     Vue.component('project_systvoc5', project_systvoc5);
     Vue.component('project_jbxx', project_jbxx);
     Vue.component('project_jcxcxx', project_jcxcxx);
+    Vue.component('project_fh_bd', project_fh_bd);
     Vue.component('projcet_jcjg', projcet_jcjg);
     Vue.component('projcet_jfcsl', projcet_jfcsl);
     Vue.component('projcet_szpbt', projcet_szpbt);
