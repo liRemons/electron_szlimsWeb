@@ -8,6 +8,7 @@ const StomatologyLinkage = {
     deviceFactor: "",
     deviceFactor2: "",
     deviceFactorObj: "",
+    deviceFactorObj2: "",
     workArr: [],
     windowArr: [],
     doorArr: [],
@@ -158,6 +159,9 @@ const StomatologyLinkage = {
     },
     saveDeviceFactorObj(state, payload) {
       state.deviceFactorObj = payload;
+    },
+    saveDeviceFactorObj2(state, payload) {
+      state.deviceFactorObj2 = payload;
     },
 
     saveSizeList(state, payload) {

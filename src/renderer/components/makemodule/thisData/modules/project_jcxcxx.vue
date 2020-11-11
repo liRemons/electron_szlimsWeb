@@ -1099,7 +1099,6 @@ export default {
   watch: {
     purposeDetection(val) {
       if (this.target == 0) {
-        console.log(val)
         let deviceStatus = "";
         if (val === "豁免检测" || val === "环保验收") {
           deviceStatus = "开机，关机";

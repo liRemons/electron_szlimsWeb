@@ -898,7 +898,7 @@ export default {
 
         if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
-          contentArray.splice(2, 0, { name: "project_fh_bd" });
+          // contentArray.splice(2, 0, { name: "project_fh_bd" });
           let index = contentArray.findIndex(
             (item) => item.name === "project_fs_fh"
           );
@@ -931,7 +931,6 @@ export default {
       if (this.pointUrl) {
         contentArray.push("project_point");
       }
-      console.log(contentArray, "contentArray");
 
       let obj = [];
       this.taskData.showing = [];
@@ -1611,21 +1610,7 @@ export default {
       // return
       this.requestNo++;
       if (this.saveData !== "") {
-        // let globalLoading;
-        // if (globalLoading) {
-        // } else {
-        //   globalLoading = this.$loading({
-        //     lock: true,
-        //     text: this.requestNo !== 1 ? "网络不佳，正在重新提交" : "加载中…",
-        //     background: "rgba(0, 0, 0, 0.7)"
-        //   });
-        // }
-        // console.log(this.task.id)
-        // return
-        // console.log(JSON.parse(this.importData.tasks.tasks[0].data),'importData')
-        // console.log(JSON.parse(this.saveData) ,'this.saveData ')
         let data = this.deepCopy(this.importData);
-        let this_ = this;
         data.tasks.tasks[0].data = this.saveData;
         this.whrite(data, JSON.parse(getToken()));
         this.writeFileEvent().then((res) => {

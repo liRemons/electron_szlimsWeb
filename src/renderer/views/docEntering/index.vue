@@ -613,7 +613,45 @@ export default {
         this.historyEdit = historyEdit;
       });
     },
+    bgInit() {
+      let showing = this.taskDatas[0].showing.flat();
+      let bd = showing.filter((item) => item.to === "project_fh_bd")[0];
+      let bdMax = bd.data.valueData.point[2].row[6],
+        bdAverage = bd.data.valueData.point[1].row[6],
+        purposeDetection = bd.data.valueData.purposeDetection,
+        remark = ["无法到达", "不适用"],
+        factor = "",
+        to = "";
+      showing.forEach((item) => {
+        if (item.to === "projcet_jgysnr" || item.to === "projcet_jcbnr") {
+          if (purposeDetection === "验收检测") {
+            to = "projcet_jgyst";
+          } else {
+            to = "projcet_jcbt";
+          }
+          let arr = showing.filter(
+            (el) =>
+              el.to === to &&
+              el.data.valueData.multipleId === item.data.valueData.multipleId
+          );
+          if (arr.length) {
+            factor = arr[0].data.valueData.calibrationFactor;
+          }
+          item.data.valueData.point.forEach((a) => {
+            if (remark.includes(a.rows[6])) {
+              a.bd = a.rows[6];
+            } else if (a.rows[6] < bdMax * 2) {
+              a.bd = "≤" + bdMax * 2;
+            } else {
+              a.bd = ((a.rows[6] - bdAverage) * factor).toFixed46(2);
+            }
+          });
+        }
+      });
+    },
     submitSongshen() {
+      // this.bgInit()
+
       this.deleteData = [];
       if (this.tasks[0].docPass == 1) {
         this.getHistoryEdit();
@@ -626,30 +664,28 @@ export default {
           cancelButtonText: "取消",
           type: "warning",
         }
-      )
-        .then(() => {
-          if (!this.entryEndTime) {
-            this.$message.error("请点击检测结束");
-            return;
-          }
-          let data = this.taskDatas[0].showing
-            .flat()
-            .filter((item) => item.to == "project_deleteReason");
-          if (data.length) {
-            this.deleteData = data
-              .map((item) => item.data.valueData.point)
-              .flat();
-          } else {
-            this.deleteData = [];
-          }
+      ).then(() => {
+        if (!this.entryEndTime) {
+          this.$message.error("请点击检测结束");
+          return;
+        }
+        let data = this.taskDatas[0].showing
+          .flat()
+          .filter((item) => item.to == "project_deleteReason");
+        if (data.length) {
+          this.deleteData = data
+            .map((item) => item.data.valueData.point)
+            .flat();
+        } else {
+          this.deleteData = [];
+        }
 
-          if (this.deleteData.length) {
-            this.deleteDialog = true;
-          } else {
-            this.confirmDelete();
-          }
-        })
-        .catch(() => {});
+        if (this.deleteData.length) {
+          this.deleteDialog = true;
+        } else {
+          this.confirmDelete();
+        }
+      });
     },
     confirmDelete() {
       this.deleteDialog = false;

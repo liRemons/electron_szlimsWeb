@@ -5805,6 +5805,7 @@ export default [
       //模块内容键值对
       testProject: "project_fh_bd",
       testProjectChineseName: "本底",
+      purposeDetection:'',
       point: [
         { row: ["1", "2", "3", "4", "5", "最小值", ""] },
         { row: ["", "", "", "", "", "平均值", ""] },
