@@ -329,7 +329,9 @@ Vue.prototype.IntegerAdd0 = function(val) {
 // 两位小数，不足补0
 Vue.prototype.IntegerAdd2 = function(val) {
   if (!isNaN(val) && (val + "").split(".").length) {
-    if ((val + "").split(".")[1].length == 1) {
+    if (!(val + "").split(".")[1]) {
+      val += ".00";
+    } else if ((val + "").split(".")[1].length == 1) {
       val += "0";
     }
   }

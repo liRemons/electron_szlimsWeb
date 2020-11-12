@@ -227,18 +227,22 @@ export default {
         if (!min) {
           // 如果输入的值比最小值还小
           let mini = deviceFactor_gdy[0];
-          return (+mini.value1 / +mini.value2) * +data;
+          if (mini) {
+            return (+mini.value1 / +mini.value2) * +data;
+          }
         }
 
         if (!max) {
           // 如果输入的值比最大值还大
           let big = deviceFactor_gdy[deviceFactor_gdy.length - 1];
-          return (+big.value1 / +big.value2) * +data;
+          if (big) {
+            return (+big.value1 / +big.value2) * +data;
+          }
         }
-        let A1 = +min.value2;
-        let B2 = +max.value1;
-        let B1 = +min.value1;
-        let A2 = +max.value2;
+        let A1 = +(min ? min.value2 : 0);
+        let B2 = +(max ? max.value1 : 0);
+        let B1 = +(min ? min.value1 : 0);
+        let A2 = +(max ? max.value2 : 0);
         let Bn = ((An - A1) * (B2 - B1)) / (A2 - A1) + B1;
         return Bn;
       };
