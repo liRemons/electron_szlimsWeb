@@ -4,6 +4,7 @@
       <div :class="{ eventCover: !ableInput }"></div>
       <input
         type="file"
+        v-if="inputFlag"
         :id="'project_dc_xcdc-filename' + pageNumber + '-' + thisPageIndex"
         accept="image/*"
         @change="changFile"
@@ -110,6 +111,7 @@ import lrz from "lrz";
 export default {
   data() {
     return {
+      inputFlag: true,
       currencyIndex: "",
       selectItem: "",
       selectItemIndex: "",
@@ -141,17 +143,23 @@ export default {
   },
   methods: {
     upload(index, title) {
-      this.data.valueData.point[index].Identification = "Identification";
-      this.title = title;
-      this.currencyIndex = index;
-      document
-        .getElementById(
-          "project_dc_xcdc-filename" +
-            this.pageNumber +
-            "-" +
-            this.thisPageIndex
-        )
-        .click();
+      this.inputFlag = false;
+      this.$nextTick(() => {
+        this.inputFlag = true;
+        setTimeout(() => {
+          this.data.valueData.point[index].Identification = "Identification";
+          this.title = title;
+          this.currencyIndex = index;
+          document
+            .getElementById(
+              "project_dc_xcdc-filename" +
+                this.pageNumber +
+                "-" +
+                this.thisPageIndex
+            )
+            .click();
+        }, 100);
+      });
     },
     changFile() {
       let dataArr = [];

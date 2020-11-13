@@ -275,7 +275,7 @@ export default {
     fileImport() {
       //获取读取文件的File对象
       var selectedFile = document.getElementById("file").files[0];
-      var reader = new FileReader(); 
+      var reader = new FileReader();
       reader.readAsBinaryString(selectedFile);
       let this_ = this;
       reader.onload = (e) => {
@@ -288,7 +288,7 @@ export default {
             persons = persons.concat(
               XLSX.utils.sheet_to_json(workbook.Sheets[sheet])
             );
-            break; 
+            break;
           }
         }
         // 格式化数据
@@ -471,15 +471,18 @@ export default {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning",
+          distinguishCancelAndClose: true,
         }
       )
         .then(() => {
           createEvent();
         })
-        .catch(() => {
+        .catch((action) => {
           // 清空
-          initEmpty();
-          emptyEvent();
+          if (action === "cancel") {
+            initEmpty();
+            emptyEvent();
+          }
         });
     },
     changeNum(index) {

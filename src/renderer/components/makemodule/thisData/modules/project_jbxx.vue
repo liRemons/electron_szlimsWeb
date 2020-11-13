@@ -45,15 +45,15 @@
             </div>
           </div>
           <div class="___relative borderBottom">
-            <div style="width: 90px" class="borderRight">
-              <div style="height: 32px">
+            <div style="width: 90px;height:40px" class="borderRight">
+              <div style="height: 40px">
                 <div class="tc editHistoryTitle">受检单位地址</div>
               </div>
             </div>
-            <div style="width: 619px; left: 91px" class="___absolute t0 Full">
+            <div style="width: 619px; left: 91px;" class="___absolute t0 Full">
               <divModel
                 v-model="data.valueData.UnitExaminationAddress"
-                style="width: 100%; text-align: center"
+                style="width: 100%; text-align: center;line-height:20px"
                 class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
               ></divModel>
             </div>
