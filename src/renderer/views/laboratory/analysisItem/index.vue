@@ -10,7 +10,7 @@
       >
     </div>
     <el-card>
-      <div style="min-height: 71vh;">
+      <div style="min-height: 71vh">
         <el-table
           ref="multipleTable"
           :data="list"
@@ -25,7 +25,7 @@
                 <el-table
                   tooltip-effect="dark"
                   :data="props.row.analysis"
-                  style="width: 100%; margin-left: 50px;"
+                  style="width: 100%; margin-left: 50px"
                 >
                   <el-table-column type="index" width="50px;"></el-table-column>
                   <el-table-column width="400px;" label="创建日期">
@@ -77,13 +77,13 @@
         size="tiny"
         width="50%"
       >
-        <div style="min-height: 400px; width: 30vw; padding-left: 7vw;">
+        <div style="min-height: 400px; width: 30vw; padding-left: 7vw">
           <div v-if="flag === 0">
             <el-form label-width="120px">
               <el-form-item label="检测项目名称">
                 <el-select
                   v-model="addTestProjectId"
-                  style="width: 25vw;padding: 0; margin: 0!important;"
+                  style="width: 25vw; padding: 0; margin: 0 !important"
                   filterable
                   placeholder="请选择检测项目"
                 >
@@ -109,7 +109,7 @@
                   <div
                     class="myBtn ___absolute"
                     @click="addAnalysisItem(index)"
-                    style="left: -7vw; width: 3vw; font-size: 14px;"
+                    style="left: -7vw; width: 3vw; font-size: 14px"
                     title="添加分析项"
                   >
                     添加
@@ -117,7 +117,7 @@
                   <div
                     class="myBtn ___absolute"
                     @click="delAnalysisItem(index)"
-                    style="left: -3.5vw; width: 3vw;  font-size: 14px;"
+                    style="left: -3.5vw; width: 3vw; font-size: 14px"
                     title="删除分析项"
                   >
                     删除
@@ -136,7 +136,7 @@
                       line:
                         index2 !== item.analysisResultArr.length - 1
                           ? true
-                          : false
+                          : false,
                     }"
                   >
                     <myInput v-model="item2.result"></myInput>
@@ -145,7 +145,7 @@
                     class="myBtn ___absolute"
                     @click="analysisResultOption(index, index2, 0)"
                     title="添加分析结果"
-                    style="width: 2vw; right: -2.5vw; top: 0px;"
+                    style="width: 2vw; right: -2.5vw; top: 0px"
                   >
                     +
                   </div>
@@ -153,7 +153,7 @@
                     class="myBtn ___absolute"
                     title="删除分析结果"
                     @click="analysisResultOption(index, index2, 1)"
-                    style="width: 2vw; right: -5vw; top: 0px;"
+                    style="width: 2vw; right: -5vw; top: 0px"
                   >
                     -
                   </div>
@@ -162,7 +162,7 @@
             </tr>
           </table>
         </div>
-        <div style="text-align: right; padding-right: 20px;">
+        <div style="text-align: right; padding-right: 20px">
           <el-button>取消</el-button>
           <el-button
             type="primary"
@@ -194,7 +194,7 @@ import {
   queryAllTestProject,
   addTestProjectAnalysis,
   delTestProjectAnalysis,
-  toUpdateTestProjectAnalysis
+  toUpdateTestProjectAnalysis,
 } from "@/api/laboratory";
 
 export default {
@@ -212,9 +212,9 @@ export default {
         {
           analysisItem: "",
           analysisResultArr: [{ result: "", id: uuid() }],
-          id: uuid()
-        }
-      ]
+          id: uuid(),
+        },
+      ],
     };
   },
   filters: {},
@@ -223,29 +223,29 @@ export default {
     getList() {
       let that = this;
       getAnalysisItemList(this.pageIndex, this.pageSize)
-        .then(function(res) {
+        .then(function (res) {
           if (res.success) {
             that.list = res.datas;
             that.count = res.total;
           } else {
             that.$notify({
               type: "error",
-              message: res.msg
+              message: res.msg,
             });
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
     getAllTestProject() {
-      queryAllTestProject("").then(res => {
+      queryAllTestProject("").then((res) => {
         if (res.success) {
           this.allTestProjects = res.datas;
         } else {
           this.$notify({
             type: "error",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
@@ -254,7 +254,7 @@ export default {
       let analySisObj = {
         analysisItem: "",
         analysisResultArr: [{ result: "", id: uuid() }],
-        id: uuid()
+        id: uuid(),
       };
       this.analysisItem.splice(index + 1, 0, analySisObj);
     },
@@ -278,35 +278,35 @@ export default {
       if (this.addTestProjectId === "") {
         this.$notify({
           type: "warning",
-          message: "请选择检测项目"
+          message: "请选择检测项目",
         });
         return;
       }
       let analysisItemFlag = 1;
-      // let 
-      this.analysisItem.map(item => {
+      // let
+      this.analysisItem.map((item) => {
         item.analysisItem ? "" : (analysisItemFlag = 0);
       });
       if (!analysisItemFlag) {
         this.$notify({
           type: "warning",
-          message: "请填写分析项"
+          message: "请填写分析项",
         });
         return;
       }
       addTestProjectAnalysis(this.addTestProjectId, this.analysisItem).then(
-        res => {
+        (res) => {
           if (res.success) {
             this.showAnalysisDialog = false;
             this.getList();
             this.$notify({
               type: "success",
-              message: res.msg
+              message: res.msg,
             });
           } else {
             this.$notify({
               type: "error",
-              message: res.msg
+              message: res.msg,
             });
           }
         }
@@ -320,15 +320,15 @@ export default {
         {
           analysisItem: "",
           analysisResultArr: [{ result: "", id: uuid() }],
-          id: uuid()
-        }
+          id: uuid(),
+        },
       ];
     },
     editAnalysis(row) {
       row = JSON.parse(JSON.stringify(row));
       this.addTestProjectId = row.id;
       let analysisItem = row.analysis;
-      analysisItem.forEach(item => {
+      analysisItem.forEach((item) => {
         item.analysisResultArr = JSON.parse(item.analysisResultArr);
       });
       this.analysisItem = analysisItem;
@@ -339,18 +339,18 @@ export default {
       toUpdateTestProjectAnalysis(
         this.addTestProjectId,
         this.analysisItem
-      ).then(res => {
+      ).then((res) => {
         if (res.success) {
           this.showAnalysisDialog = false;
           this.getList();
           this.$notify({
             type: "success",
-            message: res.msg
+            message: res.msg,
           });
         } else {
           this.$notify({
             type: "error",
-            message: res.msg
+            message: res.msg,
           });
         }
       });
@@ -359,37 +359,30 @@ export default {
       this.$confirm("确认删除吗？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        modal: false
-      })
-        .then(({}) => {
-          delTestProjectAnalysis(row.id).then(res => {
-            if (res.success) {
-              this.getList();
-              this.$notify({
-                type: "success",
-                message: res.msg
-              });
-            } else {
-              this.$notify({
-                type: "error",
-                message: res.msg
-              });
-            }
-          });
-        })
-        .catch(() => {
-          this.$notify({
-            message: "取消删除！",
-            type: "success"
-          });
+        modal: false,
+      }).then(({}) => {
+        delTestProjectAnalysis(row.id).then((res) => {
+          if (res.success) {
+            this.getList();
+            this.$notify({
+              type: "success",
+              message: res.msg,
+            });
+          } else {
+            this.$notify({
+              type: "error",
+              message: res.msg,
+            });
+          }
         });
-    }
+      });
+    },
   },
   created() {
     this.getList();
     this.getAllTestProject();
   },
-  mounted() {}
+  mounted() {},
 };
 </script>
 

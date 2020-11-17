@@ -186,7 +186,8 @@ export function updateCurve(
 //新增配置记录
 export function updateCurveSolutionPreparationData(
   staffId,
-  solutionPreparationData
+  solutionPreparationData,
+  solutionNum
 ) {
   return service({
     url: "/addSolution",
@@ -194,6 +195,7 @@ export function updateCurveSolutionPreparationData(
     data: {
       staffId,
       solutionPreparationData,
+      solutionNum
     },
   });
 }

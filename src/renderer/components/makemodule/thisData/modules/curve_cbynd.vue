@@ -9,7 +9,7 @@
         border-bottom: none;
       "
     >
-      标准储备液浓度
+      标准工作液浓度（μg/mL）
     </div>
     <table style="width: 1140px" border="1" class="curveTable">
       <tr>
@@ -46,6 +46,11 @@ export default {
   },
   watch: {
     "data.valueData.point": function () {
+      this.init();
+    },
+  },
+  methods: {
+    init() {
       this.num = this.data.valueData.point[0].num;
       if (!this.num) {
         return;
@@ -55,18 +60,23 @@ export default {
         item.num.forEach((a, b) => {
           item.rows.push(
             this.significantFigure3(
-              (
-                (item.concentration * a.Dosage) /
-                a.constantVolume /
-                1000
-              ).toFixed46(3)
+              a.materialNum.includes("TVOC")
+                ? (
+                    ((item.standardValue * a.Dosage) / a.constantVolume) *
+                    a.count
+                  ).toFixed46(3)
+                : (
+                    ((item.concentration * a.Dosage) / a.constantVolume) *
+                    a.count
+                  ).toFixed46(3)
             )
           );
         });
       });
     },
   },
-  methods: {},
-  mounted() {},
+  mounted() {
+    this.init();
+  },
 };
 </script>

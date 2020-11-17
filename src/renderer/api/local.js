@@ -5,13 +5,14 @@ let service = request.service;
 let requestImg = request.requestImg;
 
 // 获取现场列表数据
-export function getLocalData(phone) {
+export function getLocalData(phone, pwd) {
   return service({
     url: "/login",
     method: "post",
-    data: qs.stringify({
+    data: {
       phone,
-    }),
+      pwd,
+    },
   });
 }
 
@@ -311,13 +312,13 @@ export function generateMeasure(taskId, measureHtml) {
   });
 }
 // 是否可远程签字
-export function updateUnitGenerateTime(taskId,unitInvalidDuration) {
+export function updateUnitGenerateTime(taskId, unitInvalidDuration) {
   return service({
     url: "/updateUnitGenerateTime",
     method: "post",
     data: {
       taskId: taskId,
-      unitInvalidDuration:unitInvalidDuration
+      unitInvalidDuration: unitInvalidDuration,
     },
   });
 }

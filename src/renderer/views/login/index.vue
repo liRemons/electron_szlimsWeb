@@ -7,15 +7,20 @@
         <!-- @click="$router.replace('/camera')" -->
       </div>
       <div class="right">
-        <el-form class="form_right" ref="form" label-position="top">
+        <el-form class="form_right" ref="form">
           <el-form-item label="手机号码：" required>
             <el-input
               v-model="phone"
               @keyup.native="phone = phone.replace(/[^\d]/g, '')"
               placeholder="请输入手机号码"
             ></el-input>
-            <!-- 下面input没用，为了阻止回车页面刷新事件 -->
-            <el-input v-show="false"></el-input>
+          </el-form-item>
+          <el-form-item label="密码：">
+            <el-input
+              placeholder="请输入密码"
+              v-model="pwd"
+              show-password
+            ></el-input>
           </el-form-item>
         </el-form>
         <el-button type="primary" style="width: 100%" @click="winGetUserInfo"
@@ -34,6 +39,7 @@ export default {
   data() {
     return {
       phone: "",
+      pwd: "",
       staffFingerprints: "", //数据库中的参考指纹
       staff: null,
       fingerprint: {},
@@ -52,21 +58,27 @@ export default {
         });
         return;
       }
-      winGetUserInfo(this.phone).then((res) => {
-        let staffFingerprint = res.staff.staffFingerprint; //返回的是该人员的多个指纹 以逗号分隔
-        this.staff = res.staff;
-        if (staffFingerprint == "" || staffFingerprint == null) {
-          this.$message.warning("该人员没有录入指纹");
+      winGetUserInfo(this.phone,this.$md5(this.pwd)).then((res) => {
+        if (res.success) {
+          let staffFingerprint = res.staff.staffFingerprint; //返回的是该人员的多个指纹 以逗号分隔
+          this.staff = res.staff;
+          this.staff.pwd=this.$md5(this.pwd)
+          if (!staffFingerprint) {
+            this.$message.warning("该人员没有录入指纹");
+          } else {
+            this.$message.success("获取指纹信息成功, 请录入指纹");
+            this.staffFingerprints = staffFingerprint.split(",");
+            
+            setToken(this.staff);
+            // 创建本人的文件夹
+            this.mkdir(this.staff);
+            setTimeout(() => {
+              this.$router.replace("/");
+            }, 100);
+            // this.GetMatTemplate();//指纹
+          }
         } else {
-          this.$message.success("获取指纹信息成功, 请录入指纹");
-          this.staffFingerprints = staffFingerprint.split(",");
-          setToken(this.staff);
-          // 创建本人的文件夹
-          this.mkdir(this.staff);
-          setTimeout(() => {
-            this.$router.replace("/");
-          }, 100);
-          // this.GetMatTemplate();//指纹
+          this.$message.error(res.msg);
         }
       });
     },

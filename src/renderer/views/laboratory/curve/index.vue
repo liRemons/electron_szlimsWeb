@@ -508,7 +508,7 @@ export default {
         .flat();
       this.materialList = materialArr.filter(
         (item) => !curvesMaterialId.includes(item.id)
-      );
+      )
       this.addCurve = {
         curveNum: "",
         materialId: "",

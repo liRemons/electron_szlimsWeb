@@ -41,10 +41,14 @@ export default {
         JSON.parse(getToken()).modList.split(",");
       if (scene == 0) {
         // 现场
-        sessionStorage.setItem("TolocalNo", 1);
-        sessionStorage.setItem("ToggleBlock", "local");
-        sessionStorage.setItem("nowRouter", "entering");
-        this.$router.push(`/local`);
+        if (JSON.parse(getToken()).staffType === 1) {
+          sessionStorage.setItem("TolocalNo", 1);
+          sessionStorage.setItem("ToggleBlock", "local");
+          sessionStorage.setItem("nowRouter", "entering");
+          this.$router.push(`/local`);
+        } else {
+          this.$message.warning("非组长无权限进入");
+        }
       } else {
         // 实验室
         sessionStorage.setItem("ToggleBlock", "laboratory");

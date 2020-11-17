@@ -361,41 +361,45 @@ export default {
             if (res) {
               let uploadingPromiseArr = [];
               let staffPhone = JSON.myParse(getToken()).staffPhone;
-              getLocalData(staffPhone).then((response) => {
-                let uploadTask = response.data.filter((item) => {
-                  return item.pass == "已上传";
-                });
-                let state = response.data.filter((item) => {
-                  return (
-                    item.pass == "未录入" ||
-                    item.pass == "未通过" ||
-                    item.pass == "正在录入"
-                  );
-                });
-                JSON.parse(res).list.forEach((item) => {
-                  state.forEach((a) => {
-                    if (item.taskId == a.taskId) {
-                      item.data
-                        ? uploadingPromiseArr.push(
-                            updateTaskData(item.taskId, item.data)
-                          )
-                        : "";
-                    }
+              getLocalData(staffPhone)
+                .then((response) => {
+                  let uploadTask = response.data.filter((item) => {
+                    return item.pass == "已上传";
                   });
-                });
-                Promise.all(uploadingPromiseArr)
-                  .then((uploadingRes) => {
-                    uploadTask.forEach((a) => {
-                      this.delFile(a.taskId, JSON.parse(getToken()));
+                  let state = response.data.filter((item) => {
+                    return (
+                      item.pass == "未录入" ||
+                      item.pass == "未通过" ||
+                      item.pass == "正在录入"
+                    );
+                  });
+                  JSON.parse(res).list.forEach((item) => {
+                    state.forEach((a) => {
+                      if (item.taskId == a.taskId) {
+                        item.data
+                          ? uploadingPromiseArr.push(
+                              updateTaskData(item.taskId, item.data)
+                            )
+                          : "";
+                      }
                     });
-                    this.getUploadingList(loading);
-                  })
-                  .catch((err) => {
-                    this.$message.error("同步失败");
-                    loading.close();
-                    return;
                   });
-              });
+                  Promise.all(uploadingPromiseArr)
+                    .then((uploadingRes) => {
+                      uploadTask.forEach((a) => {
+                        this.delFile(a.taskId, JSON.parse(getToken()));
+                      });
+                      this.getUploadingList(loading);
+                    })
+                    .catch((err) => {
+                      this.$message.error("同步失败");
+                      loading.close();
+                      return;
+                    });
+                })
+                .catch((err) => {
+                  loading.close();
+                });
               // return;
             } else {
               this.getUploadingList(loading);
@@ -403,6 +407,7 @@ export default {
           });
         })
         .catch(() => {
+          
           return;
         });
     },
@@ -475,6 +480,7 @@ export default {
           this.writeFileEvent().then((res) => {});
         })
         .catch((err) => {
+           loading.close();
           this.$message.error("同步失败");
           return;
         });

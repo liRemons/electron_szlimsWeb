@@ -1,28 +1,38 @@
 <template>
-  <!-- 储备液配制记录 -->
+  <!-- 储备液配制记录 改为 标准工作液-->
   <div class="curve_cby">
     <table style="width: 1140px" border="1" class="curveTable">
       <tr>
-        <td class="tl05" colspan="10">标准储备液配制记录</td>
+        <td class="tl05" colspan="12">标准工作液配制记录</td>
       </tr>
       <tr>
-        <td colspan="3">标准储备液名称</td>
-        <td>取用量</td>
-        <td>定容体积（mL)</td>
-        <td>配制次数</td>
-        <td>标准溶液浓度</td>
-        <td colspan="2">标液编号</td>
+        <td colspan="3">标准物质</td>
+        <td>取用量(μL)</td>
+        <td>定容体积(mL)</td>
+        <td>单位转换系数</td>
+        <td colspan="2">标准溶液浓度</td>
+        <td colspan="3">标液编号</td>
         <td>有效期</td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point" :key="index + 'index'">
-        <td
-          colspan="3"
-          style="line-height: 20px"
-          v-if="index == 0"
-          :rowspan="data.valueData.point.length"
-        >
-          TVOC标准储备液 <br />
-          编号：{{ item.materialNum }}
+        <td colspan="3">
+          <el-popover
+            v-model="item.popoverFlag"
+            placement="right"
+            trigger="click"
+            @show="show(item)"
+          >
+            <div>
+              <p v-for="a in num">
+                <el-link
+                  type="primary"
+                  @click="(item.materialNum = a), (item.popoverFlag = false)"
+                  >{{ a }}</el-link
+                >
+              </p>
+            </div>
+            <divModel v-model="item.materialNum" slot="reference"></divModel>
+          </el-popover>
         </td>
         <td>
           <divModel v-model="item.Dosage"></divModel>
@@ -33,20 +43,24 @@
         <td>
           <divModel :isNumBox="true" v-model="item.count"></divModel>
         </td>
-        <td v-if="index == 0" :rowspan="data.valueData.point.length">
+        <td
+          colspan="2"
+          v-if="index == 0"
+          :rowspan="data.valueData.point.length"
+        >
           见标准储备液浓度
         </td>
-        <td colspan="2" class="___relative">
+        <td colspan="3" class="___relative">
           <divModel v-model="item.numbering"></divModel>
           <div
             class="___absolute"
-            style="top: 0; right: -160px"
+            style="top: 0; right: -140px"
             v-if="!onlyRead"
           >
             <div
               class="rowOption"
               style="display: inline-block"
-              @click="addRow(index)"
+              @click="addRow(item, index)"
             >
               +
             </div>
@@ -67,12 +81,12 @@
           <divModel v-model="item.validityPeriod"></divModel>
           <el-button
             v-if="!onlyRead"
-            @click="create"
             class="___absolute"
-            style="top: 0; right: -100px"
+            style="top: 0; right: -80px"
             size="mini"
             icon="el-icon-search"
             circle
+            @click="create"
           ></el-button>
         </td>
       </tr>
@@ -84,101 +98,96 @@ import bus from "@/utils/bus.js";
 export default {
   props: ["data", "jsonString", "onlyRead"],
   data() {
-    return {};
+    return {
+      num: [],
+    };
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.create();
-    });
-  },
+  mounted() {},
   watch: {},
   methods: {
-    addRow(index) {
-      let json = this.jsonString.filter((item) => item.to == "curve_cby");
-      if (json.length) {
-        let point = json.map((item) => item.data.valueData.point).flat();
-        if (point.length >= 10) {
-          this.$message.warning("您最多只能添加10条");
-          return;
-        }
+    show(data) {
+      let footPoint = this.__getPoint("curve_foot");
+      // 获取储备液或者没有生成过储备液的编号
+      this.num = [
+        ...new Set(
+          footPoint.map((item) => !item.isStockSolution && item.numbering)
+        ),
+      ].filter((item) => item);
+      // 针对 TVOC 50325标准
+      if (footPoint.length === 1 && footPoint[0].materialNum.includes("TVOC")) {
+        this.num.push(footPoint[0].materialNum);
       }
-      let obj = {
-        id: "",
-        materialNum: "",
-        materialName: "",
-        Dosage: "",
-        constantVolume: "",
-        concentration: "",
-        numbering: "",
-        validityPeriod: "临用现配",
-        count: 1,
-        noUse: true,
-      };
+      if (!this.num.length) {
+        data.popoverFlag = false;
+      }
+    },
+    addRow(data, index) {
+      let point = this.__getPoint("curve_cby");
+      if (point.length >= 10) {
+        this.$message.warning("您最多只能添加10条");
+        return;
+      }
+      let obj = Object.assign({}, data);
+      obj.noUse = true;
+      obj.popoverFlag = false;
       this.data.valueData.point.splice(index + 1, 0, obj);
       bus.$emit("reset");
     },
     delRow(index) {
-      if (index == 0) {
+      if (this.__getPoint("curve_cby").length <= 1) {
         return;
       }
       this.data.valueData.point.splice(index, 1);
       bus.$emit("reset");
     },
     create() {
-      let json = this.jsonString.filter((item) => item.to == "curve_cby");
-      if (json.length) {
-        let point = json.map((item) => item.data.valueData.point).flat();
-        let num = point.map((item) => item.numbering).filter((item) => item);
-        let Dosage = point.map((item) => item.Dosage).filter((item) => item);
-        let constantVolume = point
-          .map((item) => item.constantVolume)
-          .filter((item) => item);
-        if (point.length == 1 && point[0].numbering == "") {
-          return;
-        }
-        if (num.length !== point.length) {
-          this.$message.warning("您有编号未填写");
-          return;
-        }
-        if ([...new Set(num)].length !== num.length) {
-          this.$message.warning("您有重复编号");
-          return;
-        }
-        if (Dosage.length !== point.length) {
-          this.$message.warning("您有取用量未填写");
-          return;
-        }
-        if (constantVolume.length !== point.length) {
-          this.$message.warning("您有定容体积未填写");
-          return;
-        }
+      let footPoint = this.__getPoint("curve_foot").filter(
+          (item) => !item.isStockSolution
+        ),
+        point = this.__getPoint("curve_cby"),
+        num = this.__getPoint("curve_cby").map((item) => {
+          return {
+            Dosage: item.Dosage,
+            constantVolume: item.constantVolume,
+            numbering: item.numbering,
+            materialNum: item.materialNum,
+            count: item.count,
+          };
+        }),
+        cdyndPoint = this.__getPoint("curve_cbynd"),
+        rows = [];
+      // 重置curve_cbynd
+      let Index = [];
+      this.jsonString.forEach((item, index) => {
+        if (item.to == "curve_cbynd") Index.push(index);
+      });
+      if (Index.length > 1) {
+        let length = Index.slice(-1) - Index[0];
+        this.jsonString.splice(Index[0] + 1, length);
       }
-      let foot = this.jsonString.filter((item) => item.to == "curve_foot");
-      let point = json.map((item) => item.data.valueData.point).flat();
-      let footPoint = foot.map((item) => item.data.valueData.point).flat();
-      let standardValueArr = footPoint
-        .map((item) => item.standardValue)
-        .filter((item) => item);
-
-      if (standardValueArr.length !== footPoint.length) {
-        this.$message.warning("您有浓度尚未计算");
-        return;
-      }
-      this.jsonString.forEach((item) => {
+      // 针对于 TVOC 50325 的标准
+      // if (
+      //   footPoint.length === 1 &&
+      //   footPoint[0].materialName.includes("TVOC")
+      // ) {
+      let newCdyndPoint = [];
+      footPoint.forEach((item, index) => {
+        newCdyndPoint[index] = {
+          id: item.id,
+          standardValue: item.standardValue,
+          materialName: item.materialName,
+          concentration: item.concentration,
+          num: num,
+          rows: [],
+        };
+      });
+      this.jsonString.forEach((item, index) => {
         if (item.to == "curve_cbynd") {
-          item.data.valueData.point.forEach((a) => {
-            a.num = point;
-            footPoint.forEach((b) => {
-              if (a.id == b.id) {
-                a.constantVolume = b.constantVolume;
-                a.materialName = b.materialName;
-                a.concentration = b.concentration;
-              }
-            });
-          });
+          item.data.valueData.point = newCdyndPoint;
         }
       });
       bus.$emit("reset");
+      // }
     },
   },
 };

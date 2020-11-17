@@ -32,6 +32,7 @@ import {
   Dialog,
   Checkbox,
   Menu,
+  Link,
   Main,
   Container,
   Header,
@@ -43,6 +44,9 @@ import {
   Option,
   Button,
   DatePicker,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
   Popover,
   Tooltip,
   Breadcrumb,
@@ -79,6 +83,7 @@ import {
 import "./public/css/Css.css";
 import "./public/css/curve.css";
 import Axios from "axios";
+import crypto from "crypto";
 Vue.use(Checkbox);
 Vue.use(InputNumber);
 Vue.use(Avatar);
@@ -93,6 +98,10 @@ Vue.use(Container);
 Vue.use(Pagination);
 Vue.use(Dialog);
 Vue.use(Menu);
+Vue.use(Dropdown);
+Vue.use(Link);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 Vue.use(Submenu);
 Vue.use(MenuItem);
 Vue.use(TimePicker);
@@ -137,6 +146,16 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$message = Message;
 Vue.prototype.$utils = $utils;
 Vue.prototype.$ = $;
+function md5(id) {
+  var md5 = crypto.createHash("md5");
+  const hash = md5.update(id).digest("base64");
+  return hash;
+}
+
+Vue.prototype.$md5 = function(id) {
+  let pwd = md5(md5(id).substring(2, 8));
+  return pwd;
+};
 Vue.prototype.hostUrl = process.env.BASE_API;
 Vue.prototype.imgUrl = process.env.HOST_URL;
 Vue.prototype.global = global;
@@ -352,6 +371,12 @@ Vue.prototype.detectionType = function(val) {
   } else {
     return "";
   }
+};
+Vue.prototype.__getPoint = function(name) {
+  return this.jsonString
+    .filter((item) => item.to === name)
+    .map((item) => item.data.valueData.point)
+    .flat();
 };
 // Vue.prototype.getHistory = function() {
 //   let historyList = [];

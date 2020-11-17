@@ -898,7 +898,7 @@ export default {
 
         if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
-          // contentArray.splice(2, 0, { name: "project_fh_bd" });
+          contentArray.splice(2, 0, { name: "project_fh_bd" });
           let index = contentArray.findIndex(
             (item) => item.name === "project_fs_fh"
           );

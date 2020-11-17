@@ -1,12 +1,13 @@
 import request from "@/utils/request";
 let service = request.service;
 
-export function winGetUserInfo(phone) {
+export function winGetUserInfo(phone,pwd) {
   return service({
     url: "/winGetUserInfo",
     method: "post",
     data: {
       phone,
+      pwd
     },
   });
 }

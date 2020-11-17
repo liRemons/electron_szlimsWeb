@@ -95,6 +95,15 @@
 .curveTable td {
   border: 1px solid gray;
 }
+.curveTable .el-select{
+  width: 100%;
+}
+.curveTable .el-input__inner{
+  line-height: 32px !important;
+  height: 32px !important;
+  border-radius: 0;
+  text-align: center;
+}
 
 .checkTab {
   table-layout: fixed;
@@ -105,7 +114,13 @@
   font-size: 20px;
   background: gray;
   width: 20px;
+  text-align: center;
+  display: inline-block;
   cursor: pointer;
+}
+
+a:hover{
+  text-decoration: none;
 }
 
 .addRow {

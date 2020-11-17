@@ -1245,11 +1245,13 @@ export default [
       testProject: "curve_head",
       point: [
         {
+          id: "",
           materialName: "",
+          materialNameData: {},
           standardValue: "",
           batchNum: "",
           laboratoryNum: "",
-          productionTime: "",
+          purchaseTime: "",
           invalidTime: "",
           matrix: "",
         },
@@ -1310,6 +1312,7 @@ export default [
       testProject: "curve_foot",
       point: [
         {
+          isStockSolution:false,//是否有储备液
           id: "",
           materialName: "",
           Dosage: "",
@@ -1321,16 +1324,6 @@ export default [
           count: 1,
           noUse: true,
         },
-        // {
-        //   id: "",
-        //   materialName: "",
-        //   Dosage: "",
-        //   constantVolume: "",
-        //   concentration: "",
-        //   numbering: "",
-        //   validityPeriod: "",
-        //   noUse: false,
-        // },
       ],
     },
     height: {
@@ -1368,6 +1361,7 @@ export default [
           validityPeriod: "临用现配",
           count: 1,
           noUse: true,
+          popoverFlag:false
         },
       ],
     },
@@ -1399,6 +1393,7 @@ export default [
           id: "",
           materialName: "",
           constantVolume: "",
+          concentration:"",
           num: [],
         },
       ],
@@ -5805,7 +5800,7 @@ export default [
       //模块内容键值对
       testProject: "project_fh_bd",
       testProjectChineseName: "本底",
-      purposeDetection:'',
+      purposeDetection: "",
       point: [
         { row: ["1", "2", "3", "4", "5", "最小值", ""] },
         { row: ["", "", "", "", "", "平均值", ""] },

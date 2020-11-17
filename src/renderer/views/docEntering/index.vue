@@ -5,7 +5,18 @@
     </div>
 
     <!--存放按钮的div-->
+    
+   
     <div style="text-align: right; padding-right: 10vw" class="floatMybar">
+      <el-input
+      v-model="solutionNum"
+      v-if="target == 5 && showSave"
+      placeholder="请输入记录编号"
+      size="mini"
+      class="mt10"
+      style="width:200px"
+      :disabled="$route.query.isEdit == 'true'"
+    ></el-input>
       <el-button
         @click="back()"
         size="mini"
@@ -458,6 +469,7 @@ export default {
   data() {
     return {
       inputFlag: true,
+      solutionNum: '',
       inputFile: true,
       deviceMainId: "",
       tasksArrCheck: [],
@@ -650,7 +662,7 @@ export default {
       });
     },
     submitSongshen() {
-      // this.bgInit()
+      this.bgInit();
 
       this.deleteData = [];
       if (this.tasks[0].docPass == 1) {
@@ -1586,9 +1598,14 @@ export default {
     },
 
     updateCurve(labPickSampleStaffId, valueData) {
+      if(!this.solutionNum){
+        this.$message.warning('请输入记录编号')
+        return
+      }
       updateCurveSolutionPreparationData(
         labPickSampleStaffId,
-        JSON.stringify(valueData)
+        JSON.stringify(valueData),
+        this.solutionNum
       ).then((res) => {
         if (res.success) {
           this.$notify({
