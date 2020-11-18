@@ -419,7 +419,6 @@ export default {
         "curve_cby",
         "curve_cbynd",
       ];
-      // let content = ["curve_head", "curve_mid", "curve_foot"];
       this.$router.push(`/laboratory/doc-entering/5`);
       sessionStorage.setItem("templateContent", JSON.stringify(content));
     },
@@ -432,28 +431,35 @@ export default {
       this.getList();
     },
     editConfig(row) {
-      this.$router.push(
-        `/laboratory/doc-entering/5?isEdit=true&solutionId=` +
-          row.id +
-          "&solutionPass=" +
-          row.solutionPass
-      );
       sessionStorage.setItem(
         "newSolutionPreparationData",
         row.solutionPreparationData
       );
+      this.$router.push({
+        path: "/laboratory/doc-entering/5",
+        query: {
+          isEdit: true,
+          solutionId: row.id,
+          solutionPass: row.solutionPass,
+          solutionNum: row.solutionNum,
+        },
+      });
     },
 
     copyConfig(row) {
-      this.$router.push(
-        `/laboratory/doc-entering/5?isEdit=true&solutionId=` +
-          row.id +
-          "&solutionPass=0&copy=true"
-      );
       sessionStorage.setItem(
         "newSolutionPreparationData",
         row.solutionPreparationData
       );
+      this.$router.push({
+        path: "/laboratory/doc-entering/5",
+        query: {
+          isEdit: true,
+          solutionId: row.id,
+          copy: true,
+          solutionPass: 0,
+        },
+      });
     },
 
     delCurve(row) {
@@ -497,18 +503,13 @@ export default {
     //显示新增曲线
     toShowAddCurve(row) {
       this.rowData = row;
-      let solutionPreparationData = JSON.parse(row.solutionPreparationData);
-      this.curveCbyndPoint = solutionPreparationData
-        .filter((item) => item.testProject == "curve_cbynd")
-        .map((item) => item.point)
-        .flat();
-      let materialArr = JSON.myParse(row.materialArr);
+      this.curveCbyndPoint = JSON.myParse(row.materialArr);
       let curvesMaterialId = row.curves
         .map((item) => item.materialId.split(","))
         .flat();
-      this.materialList = materialArr.filter(
+      this.materialList = this.curveCbyndPoint.filter(
         (item) => !curvesMaterialId.includes(item.id)
-      )
+      );
       this.addCurve = {
         curveNum: "",
         materialId: "",
@@ -617,19 +618,12 @@ export default {
       });
     },
     editCurve(row, col, e, propsRow) {
-      let solutionPreparationData = JSON.parse(
-        propsRow.solutionPreparationData
-      );
-      this.curveCbyndPoint = solutionPreparationData
-        .filter((item) => item.testProject == "curve_cbynd")
-        .map((item) => item.point)
-        .flat();
-      let materialArr = JSON.myParse(propsRow.materialArr);
+      this.curveCbyndPoint = JSON.myParse(propsRow.materialArr);
       let CurvesMaterialId = propsRow.curves
         .map((item) => (item.id !== row.id ? item.materialId.split(",") : ""))
         .flat()
         .filter((item) => item);
-      this.materialList = materialArr.filter(
+      this.materialList = this.curveCbyndPoint.filter(
         (item) => !CurvesMaterialId.includes(item.id)
       );
       let materialIdArr = row.materialId.split(",");

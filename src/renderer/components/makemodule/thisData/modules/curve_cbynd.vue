@@ -23,7 +23,7 @@
         </td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point" :key="index">
-        <td colspan="2">{{ item.materialName }}</td>
+        <td colspan="2"><divModel v-model="item.materialName"></divModel></td>
         <td
           v-for="(a, b) in item.rows"
           :colspan="(10 - 2) / item.rows.length"

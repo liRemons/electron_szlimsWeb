@@ -165,11 +165,7 @@ export default {
         let length = Index.slice(-1) - Index[0];
         this.jsonString.splice(Index[0] + 1, length);
       }
-      // 针对于 TVOC 50325 的标准
-      // if (
-      //   footPoint.length === 1 &&
-      //   footPoint[0].materialName.includes("TVOC")
-      // ) {
+
       let newCdyndPoint = [];
       footPoint.forEach((item, index) => {
         newCdyndPoint[index] = {
@@ -187,7 +183,6 @@ export default {
         }
       });
       bus.$emit("reset");
-      // }
     },
   },
 };

@@ -204,7 +204,8 @@ export function updateCurveSolutionPreparationData(
 export function copySolution(
   staffId,
   beCopySolutionId,
-  solutionPreparationData
+  solutionPreparationData,
+  solutionNum
 ) {
   return service({
     url: "/copySolution",
@@ -213,12 +214,13 @@ export function copySolution(
       staffId,
       beCopySolutionId,
       solutionPreparationData,
+      solutionNum
     },
   });
 }
 
 //修改配置记录
-export function updateSolution(staffId, solutionPreparationData, solutionId) {
+export function updateSolution(staffId, solutionPreparationData, solutionId,solutionNum) {
   return service({
     url: "/updateSolution",
     method: "post",
@@ -226,6 +228,7 @@ export function updateSolution(staffId, solutionPreparationData, solutionId) {
       staffId,
       solutionPreparationData,
       solutionId,
+      solutionNum
     },
   });
 }

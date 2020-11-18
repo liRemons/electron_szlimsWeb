@@ -5,18 +5,16 @@
     </div>
 
     <!--存放按钮的div-->
-    
-   
+
     <div style="text-align: right; padding-right: 10vw" class="floatMybar">
       <el-input
-      v-model="solutionNum"
-      v-if="target == 5 && showSave"
-      placeholder="请输入记录编号"
-      size="mini"
-      class="mt10"
-      style="width:200px"
-      :disabled="$route.query.isEdit == 'true'"
-    ></el-input>
+        v-model="solutionNum"
+        v-if="target == 5 && showSave"
+        placeholder="请输入记录编号"
+        size="mini"
+        class="mt10"
+        style="width: 200px"
+      ></el-input>
       <el-button
         @click="back()"
         size="mini"
@@ -127,7 +125,6 @@
         @click="entryYuanShi"
         size="mini"
         type="primary"
-        :disabled="$route.query.isEdit == 'true'"
         v-else-if="target == 5 && showSave"
         >保存</el-button
       >
@@ -469,7 +466,7 @@ export default {
   data() {
     return {
       inputFlag: true,
-      solutionNum: '',
+      solutionNum: "",
       inputFile: true,
       deviceMainId: "",
       tasksArrCheck: [],
@@ -1564,7 +1561,7 @@ export default {
       let jsonString = this.$refs["curveTemplate"].jsonString;
       let valueData = jsonString.map((item) => item.data.valueData);
       let labPickSampleStaffId = JSON.myParse(getToken()).id;
-      if (this.$route.query.isEdit === "true") {
+      if (this.$route.query.isEdit == true) {
         if (this.$route.query.copy) {
           this.copyCurve(
             labPickSampleStaffId,
@@ -1576,7 +1573,8 @@ export default {
           updateSolution(
             labPickSampleStaffId,
             JSON.stringify(valueData),
-            solutionId
+            solutionId,
+            this.solutionNum
           ).then((res) => {
             if (res.success) {
               this.$notify({
@@ -1598,9 +1596,9 @@ export default {
     },
 
     updateCurve(labPickSampleStaffId, valueData) {
-      if(!this.solutionNum){
-        this.$message.warning('请输入记录编号')
-        return
+      if (!this.solutionNum) {
+        this.$message.warning("请输入记录编号");
+        return;
       }
       updateCurveSolutionPreparationData(
         labPickSampleStaffId,
@@ -1623,10 +1621,12 @@ export default {
     },
 
     copyCurve(labPickSampleStaffId, beCopySolutionId, valueData) {
+      console.log(this.$route.query.solutionNum);
       copySolution(
         labPickSampleStaffId,
         beCopySolutionId,
-        JSON.stringify(valueData)
+        JSON.stringify(valueData),
+        this.solutionNum
       ).then((res) => {
         if (res.success) {
           this.$notify({
@@ -1953,11 +1953,7 @@ export default {
           this.templateArr.push(item.data.valueData);
         });
       });
-      updateTaskData(tasktemp.id, JSON.stringify(this.templateArr))
-        .then((res) => {})
-        .catch((err) => {
-          console.log(err);
-        });
+      updateTaskData(tasktemp.id, JSON.stringify(this.templateArr));
     },
 
     toChangeState() {
@@ -1980,33 +1976,30 @@ export default {
     this.isSelect = sessionStorage.getItem("isSelect");
     this.nowAnalysis = sessionStorage.getItem("analysis");
 
-    let _this = this;
-
     // console.log('实验室选择的样品吧：', this.labtemplate)
 
-    _this.target = this.$route.params.target;
+    this.target = this.$route.params.target;
     /* 0 2 3 属于现场 */
-    if (_this.target == 0 || _this.target == 2 || _this.target == 3) {
+    if (this.target == 0 || this.target == 2 || this.target == 3) {
       if (this.$route.params.ids) {
-        _this.ids = this.$route.params.ids.split(",");
+        this.ids = this.$route.params.ids.split(",");
         // 获取任务数据
-        _this.initTasks(_this.ids);
+        this.initTasks(this.ids);
       }
       // 给tab 选项卡赋值
-      _this.tabArray = _this.tasks;
+      this.tabArray = this.tasks;
     }
-
     /* 1 属于实验室分析 */
-    if (_this.target == 1) {
+    if (this.target == 1) {
       this.checkTime = _dateFormat("now", "Y-M-D h:m:s");
       let labtemplate = this.labtemplate;
       for (let i = 0; i < labtemplate.length; i++) {
-        _this.samples = _this.samples.concat(labtemplate[i].value);
+        this.samples = this.samples.concat(labtemplate[i].value);
       }
-      _this.initSamples();
-      this.ids = _this.samples.map((item) => item.id);
+      this.initSamples();
+      this.ids = this.samples.map((item) => item.id);
       // 给tab 选项卡赋值
-      _this.tabArray = _this.labtemplate;
+      this.tabArray = this.labtemplate;
 
       getMan(2).then((res) => {
         this.allPerson = res.data;
@@ -2023,29 +2016,32 @@ export default {
       if (index === -1 && window.location.href.indexOf("localhost") === -1) {
         this.$isUpdate
           ? (this.timerId = setInterval(() => {
-              _this.TemporaryStorage();
+              this.TemporaryStorage();
             }, 10000))
           : "";
       }
     }
 
     /* 实验室审核 */
-    if (_this.target == 4) {
+    if (this.target == 4) {
       let labtemplate = this.labtemplate;
       for (let i = 0; i < labtemplate.length; i++) {
-        _this.samples = _this.samples.concat(labtemplate[i].value);
+        this.samples = this.samples.concat(labtemplate[i].value);
       }
 
-      _this.initSamples();
+      this.initSamples();
       getMan(2).then((res) => {
         this.allPerson = res.data;
       });
-      this.ids = _this.samples.map((item) => item.id);
-      _this.tabArray = _this.labtemplate;
+      this.ids = this.samples.map((item) => item.id);
+      this.tabArray = this.labtemplate;
       this.tasks = this.tabArray;
     }
 
-    if (_this.target == 5) {
+    if (this.target == 5) {
+      if (this.$route.query.isEdit) {
+        this.solutionNum = this.$route.query.solutionNum;
+      }
       this.templateContent = JSON.myParse(
         sessionStorage.getItem("templateContent")
       );
@@ -2075,7 +2071,7 @@ export default {
     },
 
     showSave() {
-      return this.$route.query.solutionPass === "1" ? false : true;
+      return this.$route.query.solutionPass == 1 ? false : true;
     },
 
     changeHasReviewData() {

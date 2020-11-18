@@ -35,10 +35,7 @@
         </td>
         <td class="___relative">
           <divModel v-model="item.validityPeriod"></divModel>
-          <div
-            class="___absolute"
-            style="top: 0; right: -55px; width: 50px; text-align: left"
-          >
+          <div class="___absolute" style="top: 0; right: -20px">
             <el-tooltip
               :open-delay="500"
               v-if="item.noUse && !item.materialName.includes('TVOC')"
@@ -56,12 +53,6 @@
             >
               -
             </div>
-            <el-button
-              v-if="!onlyRead && index == 0"
-              size="mini"
-              icon="el-icon-search"
-              circle
-            ></el-button>
           </div>
         </td>
       </tr>

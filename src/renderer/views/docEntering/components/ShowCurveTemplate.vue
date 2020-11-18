@@ -1,19 +1,18 @@
 <template>
   <div id="box pageBox " style="margin-top: 30px">
-    
     <div
       :class="{ curvePage: true }"
       class="___relative"
-      style="padding: 30px;margin: 100px auto;background:#f9ffff"
+      style="padding: 30px; margin: 100px auto; background: #f9ffff"
       v-for="(page, index) in pages"
       :key="index + 'pages'"
     >
-    <div
-      id="Layer1"
-      class="eventCover"
-      style="left:inherit;top:inherit;z-index:100"
-      v-if="onlyRead"
-    ></div>
+      <div
+        id="Layer1"
+        class="eventCover"
+        style="left: inherit; top: inherit; z-index: 100"
+        v-if="onlyRead"
+      ></div>
       <componet
         :key="teindex + 'page'"
         v-for="(template, teindex) in page"
@@ -50,10 +49,9 @@ export default {
   props: ["templateContent", "target"],
   methods: {
     testShow() {
-      
       let contentArray = [];
       let newSolutionPreparationData = "";
-      if (this.$route.query.isEdit === "true") {
+      if (this.$route.query.isEdit == true) {
         let newSolutionPreparationDataStr = sessionStorage.getItem(
           "newSolutionPreparationData"
         );
@@ -91,16 +89,15 @@ export default {
         this.jsonString.push(json);
       });
 
-      if (this.$route.query.isEdit === "true") {
+      if (this.$route.query.isEdit == true) {
         this.jsonString.forEach((item, index) => {
           item.data.valueData = newSolutionPreparationData[index];
         });
       }
-      
+
       this.pages = Adaptive(this.jsonString, 828);
     },
     reset() {
-     
       this.pages = Adaptive(this.jsonString, 828);
     },
     redefinition(needPorjectName) {
@@ -217,7 +214,6 @@ export default {
   },
 
   created() {
-    
     this.testShow();
   },
   mounted() {
