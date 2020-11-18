@@ -5,8 +5,23 @@
         <th colspan="8">本底测量</th>
       </tr>
       <tr>
-        <th colspan="5">测量读数</th>
-        <th colspan="3">计算结果</th>
+        <th colspan="5" class="___relative">
+          测量读数
+          <selectModel
+            class="___absolute Full"
+            style="width: 50px; right: 140px; top: 5px"
+            @returnVal="changeTestNum"
+            :Judge="true"
+            :special="1"
+            :receive="''"
+            :single="true"
+            :rows="false"
+            :transmitText="data.valueData.unit"
+            :list="['μSv/h', 'nSv/h']"
+            :Obj="''"
+          ></selectModel>
+        </th>
+        <th colspan="3">计算结果 {{ data.valueData.unit }}</th>
       </tr>
       <tr
         v-for="(item, index) in data.valueData.point"
@@ -46,11 +61,14 @@ export default {
   },
   props: ["data", "target", "purposeDetection"],
   mounted() {
-    this.$nextTick(()=>{
+    this.$nextTick(() => {
       this.data.valueData.purposeDetection = this.purposeDetection;
-    })
+    });
   },
   methods: {
+    changeTestNum(unit) {
+      this.data.valueData.unit = unit;
+    },
     calculate(data) {
       let factor = [];
       if (this.deviceFactor) {

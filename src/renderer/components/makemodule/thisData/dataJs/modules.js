@@ -5801,6 +5801,7 @@ export default [
       testProject: "project_fh_bd",
       testProjectChineseName: "本底",
       purposeDetection: "",
+      unit:'',
       point: [
         { row: ["1", "2", "3", "4", "5", "最小值", ""] },
         { row: ["", "", "", "", "", "平均值", ""] },
