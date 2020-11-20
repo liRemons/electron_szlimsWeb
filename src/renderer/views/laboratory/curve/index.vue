@@ -149,6 +149,12 @@
                 placeholder="曲线记录编号"
               ></el-input>
             </el-form-item>
+            <el-form-item label="曲线记录名称:" prop="curveName">
+              <el-input
+                v-model="addCurve.curveName"
+                placeholder="曲线记录名称"
+              ></el-input>
+            </el-form-item>
           </el-col>
           <el-col :span="14">
             <el-form-item label="标准物质:" prop="materialId">
@@ -162,7 +168,7 @@
                   v-for="(item, index) in materialList"
                   :label="item.materialName"
                   :key="index"
-                  :value="item.id"
+                  :value="item.id + '_' + item.materialName"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -307,6 +313,8 @@ export default {
       materialList: [],
       operation: ["+", "-"],
       addCurve: {
+        selectIds: [],
+        curveName: "",
         curveNum: "",
         materialId: "",
         coefficient: "",
@@ -363,20 +371,21 @@ export default {
   },
   methods: {
     changeMaterial(val) {
+      let name = this.materialList
+        .filter((item, index) =>
+          val.includes(item.id + "_" + item.materialName)
+        )
+        .map((item) => item.materialName);
+      this.addCurve.curveName = name.join("+");
       let point = [];
-      this.curveCbyndPoint.forEach((item) => {
-        val.forEach((a) => {
-          if (item.id === a) {
-            point.push(item.rows);
-          }
-        });
+      this.curveCbyndPoint.forEach((item, index) => {
+        if (val.includes(item.id + "_" + item.materialName)) {
+          point.push(item.rows);
+        }
       });
-
       let rows = [];
       function isBlank(val) {
-        if (val == null || val == "") {
-          return true;
-        }
+        return !val;
       }
       // 保存结果的数组
       let result = [];
@@ -467,24 +476,16 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      })
-        .then(() => {
-          deleteCurve(row.id).then((res) => {
-            if (res.success) {
-              this.$notify({
-                type: "success",
-                message: res.msg,
-              });
-              this.getList();
-            } else {
-              this.$notify({
-                type: "error",
-                message: res.msg,
-              });
-            }
-          });
-        })
-        .catch(() => {});
+      }).then(() => {
+        deleteCurve(row.id).then((res) => {
+          if (res.success) {
+            this.$message.success(res.msg);
+            this.getList();
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
+      });
     },
 
     getList() {
@@ -493,10 +494,7 @@ export default {
           this.curveList = res.datas;
           this.count = res.total;
         } else {
-          this.$notify({
-            type: "error",
-            message: res.msg,
-          });
+          this.$message.error(res.msg);
         }
       });
     },
@@ -505,12 +503,14 @@ export default {
       this.rowData = row;
       this.curveCbyndPoint = JSON.myParse(row.materialArr);
       let curvesMaterialId = row.curves
-        .map((item) => item.materialId.split(","))
-        .flat();
+        .map((item) => (item.selectIds ? item.selectIds.split(",") : ""))
+        .flat()
+        .filter((item) => item);
       this.materialList = this.curveCbyndPoint.filter(
-        (item) => !curvesMaterialId.includes(item.id)
+        (item) => !curvesMaterialId.includes(item.id + "_" + item.materialName)
       );
       this.addCurve = {
+        curveName: "",
         curveNum: "",
         materialId: "",
         coefficient: "",
@@ -537,35 +537,22 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      })
-        .then(() => {
-          deleteSolution(row.id).then((res) => {
-            if (res.success) {
-              this.$notify({
-                type: "success",
-                message: res.msg,
-              });
-              this.getList();
-            } else {
-              this.$notify({
-                type: "error",
-                message: res.msg,
-              });
-            }
-          });
-        })
-        .catch(() => {});
+      }).then(() => {
+        deleteSolution(row.id).then((res) => {
+          if (res.success) {
+            this.$message.success(res.msg);
+            this.getList();
+          } else {
+            this.$message.error(res.msg);
+          }
+        });
+      });
     },
 
     forbidCurve(row) {
-      row.materialArr = row.materialArr.replace(/[\r\n]/g, "");
       let materialArr = JSON.myParse(row.materialArr);
       let curves = row.curves;
-      if (materialArr.length === curves.length) {
-        return true;
-      } else {
-        return false;
-      }
+      return materialArr.length === curves.length;
     },
 
     addBiaoZhunArr() {
@@ -580,7 +567,10 @@ export default {
       this.addCurve.series.splice(index, 1);
     },
     toAddCurve() {
-      let addCurve = this.addCurve;
+      this.addCurve.selectIds = this.addCurve.materialId;
+      let addCurve = JSON.parse(JSON.stringify(this.addCurve));
+      let ids = addCurve.materialId.map((item) => item.split("_")[0]);
+      addCurve.materialId = [...new Set(ids)];
       this.$refs["materialTable"].validate((valid) => {
         if (valid) {
           addForCurve(
@@ -592,27 +582,19 @@ export default {
             addCurve.regressionEquationValue1,
             addCurve.regressionEquationValue2,
             addCurve.regressionEquationValue3,
-            this.rowData.id
+            this.rowData.id,
+            addCurve.selectIds
           ).then((res) => {
             if (res.success) {
-              this.$notify({
-                type: "success",
-                message: res.msg,
-              });
+              this.$message.success(res.msg);
               this.showAddCurve = false;
               this.getList();
             } else {
-              this.$notify({
-                type: "error",
-                message: res.msg,
-              });
+              this.$message.error(res.msg);
             }
           });
         } else {
-          this.$notify({
-            type: "warning",
-            message: "有必填项未填",
-          });
+          this.$message.warning("有必填项未填");
           return false;
         }
       });
@@ -626,7 +608,7 @@ export default {
       this.materialList = this.curveCbyndPoint.filter(
         (item) => !CurvesMaterialId.includes(item.id)
       );
-      let materialIdArr = row.materialId.split(",");
+      let materialIdArr = row.selectIds ? row.selectIds.split(",") : [];
       this.addCurve.materialId = materialIdArr;
       this.isAdd = false;
       this.showAddCurve = true;
@@ -650,7 +632,10 @@ export default {
       )[0];
     },
     toEditCurve() {
-      let addCurve = this.addCurve;
+      this.addCurve.selectIds = this.addCurve.materialId;
+      let addCurve = JSON.parse(JSON.stringify(this.addCurve));
+      let ids = addCurve.materialId.map((item) => item.split("_")[0]);
+      addCurve.materialId = [...new Set(ids)];
       this.$refs["materialTable"].validate((valid) => {
         if (valid) {
           updateCurve(
@@ -662,27 +647,19 @@ export default {
             JSON.stringify(this.addCurve.series),
             addCurve.regressionEquationValue1,
             addCurve.regressionEquationValue2,
-            addCurve.regressionEquationValue3
+            addCurve.regressionEquationValue3,
+            addCurve.selectIds
           ).then((res) => {
             if (res.success) {
-              this.$notify({
-                type: "success",
-                message: res.msg,
-              });
+              this.$message.success(res.msg);
               this.showAddCurve = false;
               this.getList();
             } else {
-              this.$notify({
-                type: "error",
-                message: res.msg,
-              });
+              this.$message.error(res.msg);
             }
           });
         } else {
-          this.$notify({
-            type: "warning",
-            message: "有必填项未填",
-          });
+          this.$message.warning(res.msg);
         }
       });
     },

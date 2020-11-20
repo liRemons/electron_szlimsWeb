@@ -230,8 +230,12 @@ import project_dc_yysmc from './DC/project_dc_yysmc'
 
 // 点位图
 import project_point from './project_point'
+
+// 
+import CurveUnit from './curve_unit'
 export default {
   install: function (Vue) {
+    Vue.component('CurveUnit', CurveUnit);
     Vue.component('project_xpczsyzz', Project_xpczsyzz);
     Vue.component('project_gyyzsydyzx', Project_gyyzsydyzx);
     Vue.component('project_gdyzsdpl', Project_gdyzsdpl);

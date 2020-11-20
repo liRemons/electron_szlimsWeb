@@ -129,7 +129,8 @@ export function addForCurve(
   regressionEquationValue1,
   regressionEquationValue2,
   regressionEquationValue3,
-  solutionId
+  solutionId,
+  selectIds
 ) {
   return service({
     url: "/addCurve",
@@ -144,6 +145,7 @@ export function addForCurve(
       regressionEquationValue2,
       regressionEquationValue3,
       solutionId,
+      selectIds,
     },
   });
 }
@@ -164,7 +166,8 @@ export function updateCurve(
   series,
   regressionEquationValue1,
   regressionEquationValue2,
-  regressionEquationValue3
+  regressionEquationValue3,
+  selectIds
 ) {
   return service({
     url: "/updateCurve",
@@ -179,6 +182,7 @@ export function updateCurve(
       regressionEquationValue1,
       regressionEquationValue2,
       regressionEquationValue3,
+      selectIds,
     },
   });
 }
@@ -195,7 +199,7 @@ export function updateCurveSolutionPreparationData(
     data: {
       staffId,
       solutionPreparationData,
-      solutionNum
+      solutionNum,
     },
   });
 }
@@ -214,13 +218,18 @@ export function copySolution(
       staffId,
       beCopySolutionId,
       solutionPreparationData,
-      solutionNum
+      solutionNum,
     },
   });
 }
 
 //修改配置记录
-export function updateSolution(staffId, solutionPreparationData, solutionId,solutionNum) {
+export function updateSolution(
+  staffId,
+  solutionPreparationData,
+  solutionId,
+  solutionNum
+) {
   return service({
     url: "/updateSolution",
     method: "post",
@@ -228,7 +237,7 @@ export function updateSolution(staffId, solutionPreparationData, solutionId,solu
       staffId,
       solutionPreparationData,
       solutionId,
-      solutionNum
+      solutionNum,
     },
   });
 }

@@ -1243,6 +1243,7 @@ export default [
     switch: false,
     valueData: {
       testProject: "curve_head",
+      unit: "μg/μL",
       point: [
         {
           id: "",
@@ -1310,9 +1311,12 @@ export default [
     switch: false,
     valueData: {
       testProject: "curve_foot",
+      volUnit: "mL",
+      DosageUnit: "μL",
+      concentrationUnit: "μg/mL",
       point: [
         {
-          isStockSolution:false,//是否有储备液
+          isStockSolution: false, //是否有储备液
           id: "",
           materialName: "",
           Dosage: "",
@@ -1349,6 +1353,8 @@ export default [
     switch: false,
     valueData: {
       testProject: "curve_cby",
+      volUnit: "mL",
+      DosageUnit: "μL",
       point: [
         {
           id: "",
@@ -1361,7 +1367,7 @@ export default [
           validityPeriod: "临用现配",
           count: 1,
           noUse: true,
-          popoverFlag:false
+          popoverFlag: false,
         },
       ],
     },
@@ -1388,12 +1394,13 @@ export default [
     switch: false,
     valueData: {
       testProject: "curve_cbynd",
+      unit: "μg",
       point: [
         {
           id: "",
           materialName: "",
           constantVolume: "",
-          concentration:"",
+          concentration: "",
           num: [],
         },
       ],
@@ -5801,7 +5808,7 @@ export default [
       testProject: "project_fh_bd",
       testProjectChineseName: "本底",
       purposeDetection: "",
-      unit:'',
+      unit: "",
       point: [
         { row: ["1", "2", "3", "4", "5", "最小值", ""] },
         { row: ["", "", "", "", "", "平均值", ""] },

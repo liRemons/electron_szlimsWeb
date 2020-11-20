@@ -6,10 +6,43 @@
       </tr>
       <tr>
         <td colspan="3">标准物质</td>
-        <td>取用量(μL)</td>
-        <td>定容体积(mL)</td>
+        <td>
+          取用量
+          <CurveUnit
+            :unit="data.valueData.DosageUnit"
+            :type="2"
+            @change="
+              (val) => {
+                data.valueData.DosageUnit = val;
+              }
+            "
+          ></CurveUnit>
+        </td>
+        <td>
+          定容体积
+          <CurveUnit
+            :unit="data.valueData.volUnit"
+            :type="3"
+            @change="
+              (val) => {
+                data.valueData.volUnit = val;
+              }
+            "
+          ></CurveUnit>
+        </td>
         <td>单位转换系数</td>
-        <td colspan="2">标准溶液浓度(μg/μL)</td>
+        <td colspan="2">
+          标准溶液浓度
+          <CurveUnit
+            :unit="data.valueData.concentrationUnit"
+            :type="1"
+            @change="
+              (val) => {
+                data.valueData.concentrationUnit = val;
+              }
+            "
+          ></CurveUnit>
+        </td>
         <td colspan="3">标液编号</td>
         <td>有效期</td>
       </tr>
@@ -62,7 +95,6 @@
 
 <script>
 import bus from "@/utils/bus.js";
-
 export default {
   props: ["data", "jsonString", "onlyRead"],
   name: "curve_foot",
@@ -141,7 +173,9 @@ export default {
       this.$forceUpdate();
     },
     calculateNum(Dosage, standardValue, constantVolume, count) {
-      return (((standardValue * Dosage) / constantVolume) * count).toFixed46(3);
+      return this.IntegerAdd0(
+        (((standardValue * Dosage) / constantVolume) * count).toFixed46(1)
+      );
     },
   },
 };

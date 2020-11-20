@@ -458,8 +458,10 @@ export default {
     window.sampleNum3 = "";
     window.sampleNum4 = "";
     JSON.myParse = function (value) {
+   
+      value = value.replace(/[\r\n]/g, "").replace(/\\/g,'/');
+        //  console.log(value)
       try {
-        value = value.replace(/[\r\n]/g, "").replace(/\\/g,'/');
         let obj = this.parse(value);
         return obj;
       } catch (e) {

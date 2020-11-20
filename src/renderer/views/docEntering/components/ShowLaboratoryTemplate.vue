@@ -55,21 +55,6 @@
         <el-col :span="5" v-if="target == 1 && showCurve()">
           <el-form style="margin-left: 35px">
             <el-form-item required :label="testProjectTitle">
-              <!-- <el-select
-                @change="curveNameChange"
-                v-model="curveName"
-                filterable
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in curveOptions"
-                  :key="item.id"
-                  :label="item.value"
-                  :value="item.id"
-                  
-                >
-                </el-option>
-              </el-select> -->
               <el-autocomplete
                 v-model="nowSel"
                 :clearable="true"
@@ -81,10 +66,6 @@
               ></el-autocomplete>
             </el-form-item>
           </el-form>
-          <!-- <div style="margin-left: 35px; margin-top: 2px;">
-            {{ testProjectTitle }}：
-            
-          </div> -->
         </el-col>
         <el-col
           :span="4"
@@ -333,7 +314,7 @@ export default {
   data() {
     return {
       curveName: "",
-      curveOptions: [],
+      // curveOptions: [],
       ipdTemplate: "ipdTemplate",
       ipdEdit: "ipdEdit",
       heads,
@@ -735,12 +716,13 @@ export default {
     querySearchAsync(queryString, cb, title) {
       let arr = [];
       this.curveArr.forEach((item) => {
-        if (item.materialCurveName && title.includes(item.materialCurveName)) {
-          arr.push(...item.curves);
-        }
+        item.curves.forEach((a) => {
+          if (a.curveName && a.curveName.includes(title)) {
+            arr.push(a);
+          }
+        });
       });
       let restaurants = arr;
-      console.log(this.curveArr);
       let results = queryString
         ? restaurants.filter(this.createStateFilter(queryString))
         : restaurants;
@@ -1114,9 +1096,6 @@ export default {
     },
     curveNameChange(data) {
       this.nowSel = "";
-      // this.curveArr = this.curveOptions.filter(
-      //   item => item.id == data
-      // )[0].curves;
     },
     //查询曲线
     toQueryAllCurve() {
@@ -1130,11 +1109,11 @@ export default {
           });
           let arr = JSON.parse(JSON.stringify(res.datas));
           this.curveArr = JSON.parse(JSON.stringify(res.datas));
-          arr.map((item) => {
-            if (item.materialCurveName == this.testProjectTitle) {
-              this.curveOptions = item.curves;
-            }
-          });
+          // arr.map((item) => {
+          //   if (item.materialCurveName == this.testProjectTitle) {
+          //     this.curveOptions = item.curves;
+          //   }
+          // });
           // 如果暂存的数据曲线不为空
           this.labtemplate[0].value[0].curveArr &&
             this.storeAgeCurve(res.datas);

@@ -281,53 +281,80 @@ export default {
         Promise.all(promiseArr)
           .then((res) => {
             promiseArr = [];
-            arr.map((item) => {
-              res.map((a) => {
+            arr.forEach((item) => {
+              res.forEach((a) => {
                 if (a.datas.length) {
                   item.taskList.name == a.datas[0].deviceTypeName
                     ? (item["getQueryByDeviceTypeName"] = a)
                     : "";
                 }
               });
-            });
-            let DeviceTypeIdPromise = [];
-            for (let i = 0; i < DeviceTypeId.length; i++) {
-              DeviceTypeIdPromise.push(
-                queryDeviceByDeviceTypeId(DeviceTypeId[i])
-              );
-            }
-            Promise.all(DeviceTypeIdPromise)
-              .then((DeviceTypeIdRes) => {
-                arr.forEach((item) => {
-                  DeviceTypeIdRes.forEach((a) => {
-                    a.data.forEach((item) => {
-                      if (
-                        item.purpose === "公共卫生" &&
-                        item.deviceFactor.length > 1
-                      ) {
-                        item.deviceFactor.sort((a, b) => {
-                          if (
-                            Number(!a.measure1 ? 0 : a.measure1) >
-                            Number(!b.measure1 ? 0 : b.measure1)
-                          ) {
-                            return 1;
-                          } else {
-                            return -1;
-                          }
-                        });
-                      }
-                    });
-                    item.taskList.deviceTypeId == a.deviceTypeId
-                      ? (item["device"] = a)
-                      : "";
+              item.taskList.devices.forEach((deItem) => {
+                if (
+                  deItem.purpose === "公共卫生" &&
+                  deItem.deviceFactor.length > 1
+                ) {
+                  deItem.deviceFactor.sort((a, b) => {
+                    if (
+                      Number(!a.measure1 ? 0 : a.measure1) >
+                      Number(!b.measure1 ? 0 : b.measure1)
+                    ) {
+                      return 1;
+                    } else {
+                      return -1;
+                    }
                   });
-                });
-                this.getId(arr, loading);
-              })
-              .catch((err) => {
-                this.$message.error("同步失败");
-                loading.close();
+                }
               });
+
+              item['device'] = {
+                success:true,
+                data: item.taskList.devices,
+                data_fz: item.taskList.devices_fz,
+                deviceTypeId: item.taskList.deviceTypeId,
+              };
+            });
+            this.getId(arr, loading);
+            // console.log(arr,'arr')
+            // ========
+            // let DeviceTypeIdPromise = [];
+            // for (let i = 0; i < DeviceTypeId.length; i++) {
+            //   DeviceTypeIdPromise.push(
+            //     queryDeviceByDeviceTypeId(DeviceTypeId[i])
+            //   );
+            // }
+            // Promise.all(DeviceTypeIdPromise)
+            //   .then((DeviceTypeIdRes) => {
+            //     arr.forEach((item) => {
+            //       DeviceTypeIdRes.forEach((a) => {
+            //         a.data.forEach((item) => {
+            //           if (
+            //             item.purpose === "公共卫生" &&
+            //             item.deviceFactor.length > 1
+            //           ) {
+            //             item.deviceFactor.sort((a, b) => {
+            //               if (
+            //                 Number(!a.measure1 ? 0 : a.measure1) >
+            //                 Number(!b.measure1 ? 0 : b.measure1)
+            //               ) {
+            //                 return 1;
+            //               } else {
+            //                 return -1;
+            //               }
+            //             });
+            //           }
+            //         });
+            //         item.taskList.deviceTypeId == a.deviceTypeId
+            //           ? (item["device"] = a)
+            //           : "";
+            //       });
+            //     });
+            //     this.getId(arr, loading);
+            //   })
+            //   .catch((err) => {
+            //     this.$message.error("同步失败");
+            //     loading.close();
+            //   });
           })
           .catch((err) => {
             this.$message.error("同步失败");
@@ -407,7 +434,6 @@ export default {
           });
         })
         .catch(() => {
-          
           return;
         });
     },
@@ -480,7 +506,7 @@ export default {
           this.writeFileEvent().then((res) => {});
         })
         .catch((err) => {
-           loading.close();
+          loading.close();
           this.$message.error("同步失败");
           return;
         });

@@ -131,36 +131,6 @@
               ></divModel>
             </div>
           </div>
-          <!-- <div class="___relative borderBottom">
-            <div style="width: 90px;" class="borderRight">
-              <div style="height: 32px;">
-                <div class="tc">营业执照编号</div>
-              </div>
-            </div>
-            <div
-              style="width: 260px; left: 91px;"
-              class="___absolute t0 Full borderRight"
-            >
-              <divModel
-                v-model="data.valueData.licenseNumber"
-                style="width: 100%; text-align: center;"
-                class="Full warp2 rowsInput2 hide focusBg"
-              ></divModel>
-            </div>
-            <div
-              style="width: 140px; left: 351px;"
-              class="___absolute t0 Full borderRight"
-            >
-              <div class="tc">计量认证证书</div>
-            </div>
-            <div style="width: 218px; right: 0;" class="___absolute t0 Full">
-              <divModel
-                v-model="data.valueData.metrologyCertificate"
-                style="width: 100%; text-align: center;"
-                class="Full warp2 rowsInput2 hide focusBg"
-              ></divModel>
-            </div>
-          </div> -->
           <div class="___relative borderBottom">
             <div style="width: 90px" class="borderRight">
               <div style="height: 32px">

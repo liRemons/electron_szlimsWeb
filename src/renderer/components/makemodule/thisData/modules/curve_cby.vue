@@ -7,8 +7,28 @@
       </tr>
       <tr>
         <td colspan="3">标准物质</td>
-        <td>取用量(μL)</td>
-        <td>定容体积(mL)</td>
+        <td>取用量
+          <CurveUnit
+            :unit="data.valueData.DosageUnit"
+            :type="2"
+            @change="
+              (val) => {
+                data.valueData.DosageUnit = val;
+              }
+            "
+          ></CurveUnit>
+        </td>
+        <td>定容体积
+           <CurveUnit
+            :unit="data.valueData.volUnit"
+            :type="3"
+            @change="
+              (val) => {
+                data.valueData.volUnit = val;
+              }
+            "
+          ></CurveUnit>
+        </td>
         <td>单位转换系数</td>
         <td colspan="2">标准溶液浓度</td>
         <td colspan="3">标液编号</td>
@@ -48,7 +68,7 @@
           v-if="index == 0"
           :rowspan="data.valueData.point.length"
         >
-          见标准储备液浓度
+          见标准工作液浓度
         </td>
         <td colspan="3" class="___relative">
           <divModel v-model="item.numbering"></divModel>
@@ -114,8 +134,8 @@ export default {
         ),
       ].filter((item) => item);
       // 针对 TVOC 50325标准
-      if (footPoint.length === 1 && footPoint[0].materialNum.includes("TVOC")) {
-        this.num.push(footPoint[0].materialNum);
+      if (footPoint.length === 1 && footPoint[0].materialName.includes("TVOC")) {
+        this.num.push(footPoint[0].materialName);
       }
       if (!this.num.length) {
         data.popoverFlag = false;

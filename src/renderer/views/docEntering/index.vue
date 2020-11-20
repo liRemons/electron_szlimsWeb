@@ -622,9 +622,10 @@ export default {
         this.historyEdit = historyEdit;
       });
     },
-    bgInit() {
+    bdInit() {
       let showing = this.taskDatas[0].showing.flat();
       let bd = showing.filter((item) => item.to === "project_fh_bd")[0];
+      if (!bd) return;
       let bdMax = bd.data.valueData.point[2].row[6],
         bdAverage = bd.data.valueData.point[1].row[6],
         purposeDetection = bd.data.valueData.purposeDetection,
@@ -659,7 +660,7 @@ export default {
       });
     },
     submitSongshen() {
-      this.bgInit();
+      this.bdInit();
 
       this.deleteData = [];
       if (this.tasks[0].docPass == 1) {
@@ -1560,6 +1561,16 @@ export default {
     entryYuanShi() {
       let jsonString = this.$refs["curveTemplate"].jsonString;
       let valueData = jsonString.map((item) => item.data.valueData);
+      let materialNames = jsonString
+        .filter((item) => item.to === "curve_cbynd")
+        .map((item) => item.data.valueData.point)
+        .flat()
+        .map((item) => item.materialName);
+      if (materialNames.length !== [...new Set(materialNames)].length) {
+        this.$message.warning("标准工作液浓度名称不能重复");
+        return;
+      }
+
       let labPickSampleStaffId = JSON.myParse(getToken()).id;
       if (this.$route.query.isEdit == true) {
         if (this.$route.query.copy) {

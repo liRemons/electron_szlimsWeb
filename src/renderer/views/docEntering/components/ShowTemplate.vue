@@ -1944,7 +1944,6 @@ export default {
   },
 
   beforeMount() {
-    // console.log(this.task.detectionTime)
     this.refre = true;
     //获取任务开始录入时间
     if (this.task.startTime == null) {

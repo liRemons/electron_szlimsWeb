@@ -7,7 +7,18 @@
     >
       <tr>
         <td colspan="2">标准物质</td>
-        <td>标准值</td>
+        <td>
+          标准值
+          <CurveUnit
+            :unit="data.valueData.unit"
+            :type="1"
+            @change="
+              (val) => {
+                data.valueData.unit = val;
+              }
+            "
+          ></CurveUnit>
+        </td>
         <td colspan="2">国标号(或批号)</td>
         <td colspan="2">实验室编号</td>
         <td>生产日期</td>
@@ -66,7 +77,6 @@
 <script>
 import bus from "@/utils/bus.js";
 import { queryAllMaterial } from "@/api/laboratory";
-
 export default {
   name: "curveHead",
   props: ["data", "target", "jsonString", "onlyRead"],
