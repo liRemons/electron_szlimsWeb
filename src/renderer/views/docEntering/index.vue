@@ -635,10 +635,11 @@ export default {
       showing.forEach((item) => {
         if (item.to === "projcet_jgysnr" || item.to === "projcet_jcbnr") {
           if (purposeDetection === "验收检测") {
-            to = "projcet_jgyst";
-          } else {
             to = "projcet_jcbt";
+          } else {
+            to = "projcet_jgyst";
           }
+          
           let arr = showing.filter(
             (el) =>
               el.to === to &&
@@ -651,7 +652,7 @@ export default {
             if (remark.includes(a.rows[6])) {
               a.bd = a.rows[6];
             } else if (a.rows[6] < bdMax * 2) {
-              a.bd = "≤" + bdMax * 2;
+              a.bd = a.rows[6] && "≤" + bdMax * 2;
             } else {
               a.bd = ((a.rows[6] - bdAverage) * factor).toFixed46(2);
             }
@@ -661,7 +662,6 @@ export default {
     },
     submitSongshen() {
       this.bdInit();
-
       this.deleteData = [];
       if (this.tasks[0].docPass == 1) {
         this.getHistoryEdit();
@@ -1112,6 +1112,8 @@ export default {
       this.copyDialog = false;
     },
     againCreateHtml() {
+      this.bdInit();
+      return;
       generateMeasure(this.ids[0], this.$refs.templateHTML[0].$el.innerHTML);
     },
     //上传

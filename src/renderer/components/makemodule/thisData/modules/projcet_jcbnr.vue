@@ -71,11 +71,14 @@
               <span class="___absolute" style="right: 0">)</span>
             </div>
           </td>
-          <td rowspan="2" style="font-size: 12px">
-            *报告值(单<br />位：{{ data.valueData.company }})
+          <td rowspan="2" style="font-size: 12px;line-height:20px">
+            *扣除本底值<br />(单位：{{ data.valueData.company }})
           </td>
           <td rowspan="2" style="font-size: 12px" v-if="JudgePhotography">
-            *年剂量(单<br />位：{{ data.valueData.company }})
+            *年剂量<br />(单位：{{ data.valueData.company }})
+          </td>
+          <td rowspan="2" style="font-size: 12px;line-height:20px">
+            *不扣除本底值<br />(单位：{{ data.valueData.company }})
           </td>
           <td rowspan="2" :colspan="!JudgePhotography ? 2 : 1" width="60">
             备注
@@ -110,32 +113,29 @@
               isNumBox
               v-if="item.rows[3] !== '/'"
               v-model="item.rows[3]"
-              style="text-align: center"
             ></divModel>
             <span v-else>/</span>
           </td>
           <td v-if="data.valueData.testPoinrNum[1]">
             <divModel
-            isNumBox
+              isNumBox
               v-model="item.rows[4]"
               v-if="item.rows[4] !== '/'"
-              style="text-align: center"
             ></divModel>
             <span v-else>/</span>
           </td>
           <td v-if="data.valueData.testPoinrNum[2]">
             <divModel
-            isNumBox
+              isNumBox
               v-model="item.rows[5]"
               v-if="item.rows[5] !== '/'"
-              style="text-align: center"
             ></divModel>
             <span v-else>/</span>
           </td>
+           <td>{{item.bd}}</td>
           <td>
             <divModel
               v-model="item.rows[6]"
-              style="text-align: center"
               :edit="false"
               :is-computer="true"
               :computers="
@@ -145,6 +145,7 @@
             >
             </divModel>
           </td>
+          
           <td v-if="JudgePhotography">
             <span>{{ item.rows[7] }}</span>
           </td>
@@ -165,6 +166,10 @@
             >
             </selectModel>
           </td>
+        </tr>
+        <tr>
+          <td>备注</td>
+          <td colspan="8">检测结果未扣除本底值</td>
         </tr>
       </table>
     </div>

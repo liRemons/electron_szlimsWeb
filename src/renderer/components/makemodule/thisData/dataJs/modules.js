@@ -2225,6 +2225,7 @@ export default [
       isObtain: true,
       point: [
         {
+          bd: "",
           rows: ["", "", "", "", "", "", "", "", ""],
         },
       ],
@@ -2424,6 +2425,7 @@ export default [
       // count:0,
       point: [
         {
+          bd: "",
           rows: ["", "", "", "", "", "", "", ""],
         },
       ],
@@ -5808,7 +5810,9 @@ export default [
       testProject: "project_fh_bd",
       testProjectChineseName: "本底",
       purposeDetection: "",
-      unit: "",
+      factor: "",
+      unit: "μSv/h",
+      remark: "",
       point: [
         { row: ["1", "2", "3", "4", "5", "最小值", ""] },
         { row: ["", "", "", "", "", "平均值", ""] },
@@ -5821,9 +5825,9 @@ export default [
       _normal: {
         confirm: true,
         carried: true,
-        fixed: 190,
+        fixed: 255,
         value: function(obj) {
-          return 190;
+          return 255;
         },
       },
       _short: {

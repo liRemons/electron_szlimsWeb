@@ -72,22 +72,23 @@
             <div class="___absolute" style="top: 0px; left: 150px">)</div>
           </div>
         </td>
-        <td rowspan="2" style="width: 80px">
-          最小值(单位:
-          <br />
-          {{ data.valueData.company }})
+        <td rowspan="2" style="font-size: 12px">
+          最小值
+          <br />单位:({{ data.valueData.company }})
         </td>
-        <td rowspan="2" style="width: 80px">
-          最大值(单位:
-          <br />
-          {{ data.valueData.company }})
+        <td rowspan="2" style="font-size: 12px">
+          最大值
+          <br />单位:({{ data.valueData.company }})
         </td>
-        <td rowspan="2" style="width: 80px">
-          平均值(单位:
-          <br />
-          {{ data.valueData.company }})
+        <td rowspan="2" style="font-size: 12px;line-height:20px">
+          平均值<br>(不含本底)
+          <br />单位:({{ data.valueData.company }})
         </td>
-        <td rowspan="2" style="width: 80px">
+        <td rowspan="2" style="font-size: 12px;line-height:20px">
+          平均值<br>(含本底)
+          <br />单位:({{ data.valueData.company }})
+        </td>
+        <td rowspan="2" width="80px" style="font-size: 12px">
           <!-- 标准差(单位:
           <br />
           {{ data.valueData.company }}) -->
@@ -126,7 +127,7 @@
         </td>
         <td v-if="data.valueData.testPoinrNum[1]">
           <divModel
-          isNumBox
+            isNumBox
             v-if="item.rows[2] !== '/'"
             v-model="item.rows[2]"
             style="text-align: center"
@@ -135,7 +136,7 @@
         </td>
         <td v-if="data.valueData.testPoinrNum[2]">
           <divModel
-          isNumBox
+            isNumBox
             v-if="item.rows[3] !== '/'"
             v-model="item.rows[3]"
             style="text-align: center"
@@ -155,12 +156,9 @@
           >
           </divModel>
         </td>
-        <td>
-          <div style="text-align: center">{{ item.rows[5] }}</div>
-        </td>
-        <td>
-          <div style="text-align: center">{{ item.rows[6] }}</div>
-        </td>
+        <td>{{ item.rows[5] }}</td>
+        <td>{{ item.rows[6] }}</td>
+        <td>{{ item.bd }}</td>
         <td>
           <div style="width: 100%; text-align: center">
             <selectModel
@@ -180,6 +178,10 @@
             </selectModel>
           </div>
         </td>
+      </tr>
+      <tr>
+        <td>备注</td>
+        <td colspan="8">检测结果未扣除本底值</td>
       </tr>
     </table>
   </div>
@@ -251,15 +253,7 @@ export default {
                 : "");
         }
         item.name = item.rows[0].split("(")[0];
-
-        // item.rows[9]
-        //   ? ""
-        //   : (item.rows[9] = item.rows[0].split("(")[1]
-        //       ? item.rows[0].split("(")[1].split(")")[0]
-        //       : "");
-        // item.rows[0] = item.rows[0].split("(")[0];
       });
-      // this.$store.commit('saveClear')
       this.$forceUpdate();
     },
     modularShow() {

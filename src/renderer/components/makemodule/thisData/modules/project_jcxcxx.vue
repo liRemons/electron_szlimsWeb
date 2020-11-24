@@ -139,10 +139,13 @@
           >
             <div class="tc editHistoryTitle">所在场所</div>
           </div>
-          <div style="width: 238px; right: 0;line-height: 16px;" class="___absolute t0 Full">
+          <div
+            style="width: 238px; right: 0; line-height: 16px"
+            class="___absolute t0 Full"
+          >
             <divModel
               v-model="data.valueData.location"
-              style="width: 100%; text-align: center;line-height:18px;"
+              style="width: 100%; text-align: center; line-height: 18px"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
@@ -1018,7 +1021,10 @@ export default {
             (item.to === "projcet_jcbnr" || item.to === "projcet_jgysnr")
           ) {
             let data = JSON.parse(
-              JSON.stringify({ rows: ["", "", "", "", "", "", "", "", ""] })
+              JSON.stringify({
+                bd: "",
+                rows: ["", "", "", "", "", "", "", "", ""],
+              })
             );
             item.data.valueData.point.push(data);
           }

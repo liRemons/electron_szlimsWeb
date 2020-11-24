@@ -1,39 +1,27 @@
 <template>
-  <div style="line-height: 30px;" class="___relative project_dr_gdyzsdpl">
-    <div :class="{ eventCover:!ableInput }"></div>
-    <div style="text-align: center;">
-      <div
-        style="border: 1px solid black;font-weight: bolder; text-align: left; padding-left: 15px;"
-      >
-        管电压指示的偏离
-      </div>
-      <div
-        style="border: 1px solid black;font-weight: bolder; border-top: none; line-height: 20px;"
-      >
-        标准要求
-      </div>
-      <div
-        style="border: 1px solid black; border-top: none; min-height: 30px;"
-        class="tl"
-      >
-        {{ getContent(0) }}
-      </div>
-      <div
-        style="border: 1px solid black;font-weight: bolder; border-top: none;"
-      >
-        检测及计算方法
-      </div>
-      <div
-      class="tl"
-        style="border: 1px solid black; border-top: none; padding: 2px; min-height: 20px;line-height:20px"
-      >
-        {{ getContent(1) }}
-      </div>
-      <div
-        style="border: 1px solid black;font-weight: bolder; border-top: none;"
-      >
-        检测结果
-      </div>
+  <div style="line-height: 30px" class="___relative project_dr_gdyzsdpl">
+    <div :class="{ eventCover: !ableInput }"></div>
+    <div style="text-align: center">
+      <table class="myTable">
+        <tr>
+          <th class="tl">管电压指示的偏离</th>
+        </tr>
+        <tr>
+          <th>标准要求</th>
+        </tr>
+        <tr>
+          <td>{{ getContent(0) }}</td>
+        </tr>
+        <tr>
+          <th>检测及计算方法</th>
+        </tr>
+        <tr>
+          <td class="tl" style="white-space: normal;line-height:18px !important" v-html="getContent(1) "></td>
+        </tr>
+        <tr>
+          <th>检测结果</th>
+        </tr>
+      </table>
       <table class="myTable">
         <tr class="delLine">
           <td :colspan="focus ? 2 : 1">检测条件</td>
@@ -50,7 +38,7 @@
         </tr>
       </table>
 
-      <table class="myTable">
+      <table class="myTable" style="line-height: 20px">
         <tr
           v-for="(item, index) of data.valueData.bigFocus"
           :class="{ delLine: index === 0 }"
@@ -74,17 +62,13 @@
               v-model="item.rows[1]"
             ></myInput>
           </td>
-          <td>
-            <span>{{ item.rows[2] }}</span>
-          </td>
-          <td rowspan="3" v-if="item.toRow3">
-            <span>{{ item.rows[4] }}</span>
-          </td>
+          <td>{{ item.rows[2] }}</td>
+          <td rowspan="3" v-if="item.toRow3">{{ item.rows[4] }}</td>
           <td rowspan="3" v-if="item.toRow3 && deviation">
-            <span>{{ item.rows[5] }}</span>
+            {{ item.rows[5] }}
           </td>
           <td rowspan="3" v-if="item.toRow3 && relativeDeviation">
-            <span>{{ item.rows[6] }}</span>
+            {{ item.rows[6] }}
           </td>
         </tr>
       </table>
@@ -106,7 +90,7 @@
               v-model="item.rows[0]"
               v-if="
                 data.valueData.smallFocusChecked &&
-                  (item.getIndex == 0 || rxppsy_ys_flag)
+                (item.getIndex == 0 || rxppsy_ys_flag)
               "
             ></myInput>
           </td>
@@ -117,37 +101,33 @@
               v-model="item.rows[1]"
               v-if="
                 data.valueData.smallFocusChecked &&
-                  (item.getIndex == 0 || rxppsy_ys_flag)
+                (item.getIndex == 0 || rxppsy_ys_flag)
               "
             ></myInput>
           </td>
-          <td>
-            <span>{{ item.rows[2] }}</span>
-          </td>
-          <td rowspan="3" v-if="item.toRow3">
-            <span>{{ item.rows[4] }}</span>
-          </td>
+          <td>{{ item.rows[2] }}</td>
+          <td rowspan="3" v-if="item.toRow3">{{ item.rows[4] }}</td>
           <td rowspan="3" v-if="item.toRow3 && deviation">
-            <span>{{ item.rows[5] }}</span>
+            {{ item.rows[5] }}
           </td>
           <td rowspan="3" v-if="item.toRow3 && relativeDeviation">
-            <span>{{ item.rows[6] }}</span>
+            {{ item.rows[6] }}
           </td>
         </tr>
       </table>
 
       <div
-        style="border: 1px solid black;font-weight: bolder; border-top: none;"
+        style="border: 1px solid black; font-weight: bolder; border-top: none"
       >
         备注
       </div>
-      <div style="border: 1px solid black; border-top: none;">
+      <div style="border: 1px solid black; border-top: none">
         <myInput v-model="data.valueData.note"></myInput>
       </div>
     </div>
     <div
       class="___absolute myBtn tc"
-      style="width:160px;left:750px;bottom:0"
+      style="width: 160px; left: 750px; bottom: 0"
       @click="dialogVisible = true"
       v-if="target == 0"
     >
@@ -183,8 +163,10 @@ export default {
   name: "project_dr_gdyzsdpl",
   data() {
     return {
-      content1:
-        "验收检测时应分别对大小焦点进行测量，状态检测时只测量大焦点即可，管电压测量60kV、80kV、100kV、120kV或电压接近这些值的档位，管电流应设置为允许的最大管电流的50%或多一些。对于加载条件的选择应结合设备实际情况以用户实际需要为准。校准值=测量值×校准因子（校准因子依计量部门证书按线性内插法求得），校准平均值=各校准值之和/测量次数，偏差=校准平均值-预设管电压，相对偏差=（偏差/预设管电压）×100%。",
+      content1: `验收检测时应分别对大小焦点进行测量，状态检测时只测量大焦点即可，管电压测量60kV、80kV、100kV、120kV或电压接近这些值的档位，管电流应设置为允许的最大管电流的50%或多一些。对于加载条件的选择应结合设备实际情况以用户实际需要为准。
+                  <p class="tl"> 校准平均值等于3次管电压测量值求平均值后，平均值依有效的计量部门检定/校准证书的校准结果进行校准后的结果。公式如下：依校准证书可知电压档为A1（送计量院校准仪器的读数）时，相应的校准值为B1（计量部门标准器的读数）。电压档为A2（送计量院校准仪器的读数）时，相应的校准值为B2（计量部门标准器的读数），现在管电压3次测量的平均值An位于A1和A2之间，则管电压校准平均值Bn =（An- A1）*（B2 - B1 ）/（A2 - A1 ）+ B1。 
+                  偏差=校准平均值-预设管电压，相对偏差=（偏差/预设管电压）×100%。
+                  预设管电压≤100kV时，检测结果计算偏差，预设管电压＞100kV时，计算相对偏差。</p>`,
       content2:
         "校准值=测量值×校准因子（校准因子依计量部门证书按线性内插法求得），校准平均值=各校准值之和/测量次数，偏差=校准平均值-预设管电压，相对偏差=（偏差/预设管电压）×100%。",
       content3:
@@ -202,35 +184,35 @@ export default {
         {
           label: 1,
           title:
-            "该设备无大小焦点之分/该设备大焦点无法曝光/该设备小焦点无法曝光"
+            "该设备无大小焦点之分/该设备大焦点无法曝光/该设备小焦点无法曝光",
         },
         {
           label: 2,
-          title: "该设备无 自动下拉单选60/80/100/120 kV电压档，改为相邻电压档"
+          title: "该设备无 自动下拉单选60/80/100/120 kV电压档，改为相邻电压档",
         },
         {
           label: 3,
           title:
-            "该设备最大管电压为自动获取主要参数中的电压kV，无法选择自动下拉单选60/80/100/120kV电压档"
-        }
+            "该设备最大管电压为自动获取主要参数中的电压kV，无法选择自动下拉单选60/80/100/120kV电压档",
+        },
       ],
       detectionObjects: "",
       row0Flag: true,
       type: "",
-      rxppsy_ys_flag: true
+      rxppsy_ys_flag: true,
     };
   },
-  props: ["data","ableInput", "jsonString", "target"],
+  props: ["data", "ableInput", "jsonString", "target"],
   computed: {
     ...mapState({
-      deviceFactor: state => state.StomatologyLinkage.deviceFactor,
-      JudgePhotography: state => state.StomatologyLinkage.JudgePhotography
+      deviceFactor: (state) => state.StomatologyLinkage.deviceFactor,
+      JudgePhotography: (state) => state.StomatologyLinkage.JudgePhotography,
     }),
     mode() {
       return this.jsonString
-        .find(item => item.to === "project_jcxcxx")
-        .data.valueData.point.map(item => item.exposureMode);
-    }
+        .find((item) => item.to === "project_jcxcxx")
+        .data.valueData.point.map((item) => item.exposureMode);
+    },
   },
   watch: {
     deviceFactor(val) {
@@ -241,7 +223,7 @@ export default {
     },
     JudgePhotography() {
       this.judge();
-    }
+    },
   },
   methods: {
     confirm() {
@@ -262,7 +244,11 @@ export default {
       }
     },
     changeNum(index, key, getIndex, e) {
-      if (this.type == "验收检测" && key == "bigFocus"&&this.data.valueData.bigFocus[index].rows[0]!=='') {
+      if (
+        this.type == "验收检测" &&
+        key == "bigFocus" &&
+        this.data.valueData.bigFocus[index].rows[0] !== ""
+      ) {
         if (!this.deviation) {
           let n = Number(this.data.valueData.bigFocus[index].rows[0]);
           if ((n < 25 || n > 32) && n !== "") {
@@ -352,7 +338,7 @@ export default {
         "胃肠机",
         "乳腺DR",
         "乳腺CR",
-        "乳腺屏片摄影设备"
+        "乳腺屏片摄影设备",
       ];
       this.focus = !focusArr.includes(detectionObjects);
       this.deviation = !deviationArr.includes(detectionObjects);
@@ -404,13 +390,13 @@ export default {
     },
     judge() {
       // 检测类型
-       this.rxppsy_ys_flag = true;
+      this.rxppsy_ys_flag = true;
       this.type = this.detectionType(
-        this.jsonString.filter(item => item.to == "project_jbxx")[0].data
+        this.jsonString.filter((item) => item.to == "project_jbxx")[0].data
           .valueData.purposeDetection
       );
       // 检测项目
-      let arr = this.jsonString.filter(item => item.to == "project_jcxcxx");
+      let arr = this.jsonString.filter((item) => item.to == "project_jcxcxx");
       this.detectionObjects = arr[0].data.valueData.point[0].exposureMode;
       // 大小焦点打钩
       this.$set(this.data.valueData, "bigFocusChecked", true);
@@ -428,10 +414,12 @@ export default {
         } else {
           // 如果是验收检测，大小焦点都需要测量（在系统上即两个都打钩，可以填写检测数据）且大小焦点预设值固定为60/80/100/120
           // 但是可以由现场检测人员进行修改（第一种情况没有大小焦点之分（对应修改原因1），第二种情况是没有60/80/100/120这几档，把电压改成相邻档（对应修改原因2），第三种是最高管电压不到120或者100或者80（对应修改原因3）），修改需要填写原因。
-          [...new Set(bigFocus.map(item => item.getIndex))].forEach((a, b) => {
-            bigFocus[a].rows[0] = 60 + b * 20;
-          });
-          [...new Set(smallFocus.map(item => item.getIndex))].forEach(
+          [...new Set(bigFocus.map((item) => item.getIndex))].forEach(
+            (a, b) => {
+              bigFocus[a].rows[0] = 60 + b * 20;
+            }
+          );
+          [...new Set(smallFocus.map((item) => item.getIndex))].forEach(
             (a, b) => {
               smallFocus[a].rows[0] = 60 + b * 20;
             }
@@ -448,11 +436,10 @@ export default {
           this.rxppsy_ys_flag = false;
         }
       }
-      let arr3=['乳腺CR','乳腺DR']
-      if(arr3.includes(this.detectionObjects)){
-        
+      let arr3 = ["乳腺CR", "乳腺DR"];
+      if (arr3.includes(this.detectionObjects)) {
       }
-    }
+    },
   },
 
   mounted() {
@@ -460,7 +447,7 @@ export default {
     this.$nextTick(() => {
       this.judge();
     });
-  }
+  },
 };
 </script>
 

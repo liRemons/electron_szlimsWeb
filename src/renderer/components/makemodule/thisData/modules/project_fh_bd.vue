@@ -46,6 +46,14 @@
           ></divModel>
         </td>
       </tr>
+      <tr>
+        <td colspan="2">校准因子</td>
+        <td colspan="6">{{ data.valueData.factor }}</td>
+      </tr>
+      <tr>
+        <td colspan="2">备注</td>
+        <td colspan="6">本底范围: 最小值*校准因子 ~ 最大值*校准因子</td>
+      </tr>
     </table>
   </div>
 </template>
@@ -99,9 +107,17 @@ export default {
       }
     },
     changeModel(a) {
+      let val = a.split(".");
+      if (val) {
+        if (val.length == 1 || val[1].length !== 2) {
+          this.$message.warning("请输入两位小数");
+          return;
+        }
+      }
+
       let point = [];
       this.data.valueData.point.forEach((item, index) => {
-        if (index === 1 || index === 3) {
+        if ([1, 3].includes(index)) {
           item.row.forEach((el, i) => {
             if (i >= 0 && i <= 4) {
               point.push(el);
@@ -118,9 +134,18 @@ export default {
         this.data.valueData.point[0].row[6] = min;
         this.data.valueData.point[1].row[6] = sum.toFixed46(2);
         this.data.valueData.point[2].row[6] = max;
-        let minScope = (this.calculate(min) * min).toFixed46(2),
-          maxScope = (this.calculate(max) * max).toFixed46(2);
+
+        let minScope = this.IntegerAdd2(
+            (this.calculate(min) * min).toFixed46(2)
+          ),
+          maxScope = this.IntegerAdd2((this.calculate(max) * max).toFixed46(2));
         this.data.valueData.point[3].row[6] = minScope + " ~ " + maxScope;
+        if (this.calculate(min) === this.calculate(max)) {
+          this.data.valueData.factor = this.calculate(min);
+        } else {
+          this.data.valueData.factor =
+            this.calculate(min) + " ~ " + this.calculate(max);
+        }
       }
     },
   },

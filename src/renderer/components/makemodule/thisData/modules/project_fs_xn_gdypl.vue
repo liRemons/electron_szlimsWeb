@@ -222,8 +222,7 @@ export default {
       const fn = (data) => {
         let An = Number(data);
         min = [...deviceFactor_gdy].reverse().find((item) => An > item.value2);
-
-        max = deviceFactor_gdy.find((item) => An < item.value2);
+        max = deviceFactor_gdy.find((item) => An <= item.value2);
         if (!min) {
           // 如果输入的值比最小值还小
           let mini = deviceFactor_gdy[0];
