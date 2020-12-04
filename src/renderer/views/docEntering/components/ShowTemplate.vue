@@ -231,14 +231,12 @@
 <script>
 import Methods from "../methods.js"; //  尼玛 babel版本太低, 无法解析 import {Adaptive, dataRefresh} from './methods.js'
 let { Adaptive } = Methods;
-import { queryListType } from "@/api/local";
 import { getToken } from "@/utils/auth";
 import heads from "@/components/makemodule/thisData/dataJs/heads.js";
 import modules from "@/components/makemodule/thisData/dataJs/modules.js";
 import dcmodules from "@/components/makemodule/thisData/dataJs/sonModules/dc.js";
 import bus from "@/utils/bus.js";
 import { getInstrumentList } from "@/api/entering";
-import { setTimeout } from "timers";
 import {
   updateTaskData,
   fsUpdateTaskData,
@@ -246,8 +244,6 @@ import {
   addSampleNumDelete,
 } from "@/api/local";
 import { mapState } from "vuex";
-import { currentTime } from "@/utils/dateTime.js";
-import { log } from "util";
 export default {
   data() {
     return {
@@ -258,7 +254,6 @@ export default {
       heads,
       pageBox: false,
       staffId: "",
-      delCreateTime: "",
       btnFlag: true,
       modules,
       aObjectsIndex: "",
@@ -271,15 +266,12 @@ export default {
       numObj: "",
       deviceData: [],
       componentFlag: false,
-      toDelete: true,
-      deletedIndex: "",
       oldTestArr: [],
       oldTestArr2: [],
       delRowReasonArr: [],
       jsonString: [],
       showBookValue: false,
       showModuleOption: false,
-      delObj: "",
       timeId: "",
       nowYear: "",
       timeId2: "",
@@ -289,14 +281,11 @@ export default {
       isDelete: false,
       testProjectArray: [],
       reasonMsg: "", //删除原因
-      deletedId: "", //上一个被删除的检测项目id
       mainArr: [],
       aObjects: [],
-      templateArrStr: "",
       fileNumber: "SZRD/LY424-01", //文件编号
       todayDate: _dateFormat("now", "Y年M月D日  h时m分"), //当前日期
       debug: false, //是否开启页面主要区域背景色调试, 如果开启, 则将页面主要区域的背景色变成灰色(原来是白色), 方便调试
-      toShowTable: "", //控制本页面的子组件显示情况
       isTemplate: false, //是否是实例页面(实例页面背景颜色不是白色)
       headInput: false, //头表格是否可以被输入
       ableInput: false, //表格是否可以被输入
@@ -666,42 +655,6 @@ export default {
       });
     },
 
-    // 上传数据
-    toUploadData() {
-      if (this.pass == 1) {
-        this.headInput = !this.headInput;
-      } else {
-        this.ableInput = !this.ableInput;
-        this.headInput = !this.headInput;
-      }
-      this.isTemplate = !this.isTemplate;
-    },
-
-    // 确认上传
-    toConfirmUpload() {
-      let midArray = [...this.taskData.showing];
-      let templateArr = [];
-      midArray.forEach((cld) => {
-        cld.forEach((val) => {
-          templateArr.push(val.data.valueData);
-        });
-      });
-      let url = "";
-      if (this.taskData.disWs == "4") {
-        url = this.winAppUrl + "/addGwCyTaskData";
-      } else {
-        url = this.winAppUrl + "/updateTask";
-      }
-      this.$http
-        .post(url, { taskId: this.task.id, data: JSON.stringify(templateArr) })
-        .then((res) => {
-          if (res.data.success) {
-            this.success(res.data.msg);
-          } else {
-            this.err(res.data.msg);
-          }
-        });
-    },
     // 修改历史记录
     getHistoryInit() {
       this.$nextTick(() => {
@@ -760,8 +713,11 @@ export default {
             that.$set(
               item.data.valueData,
               "deviceData",
-              res.data.filter(
-                (a) => a.testProjectId == item.data.valueData.testProjectId
+              that.$utils.removeArrRepeat(
+                res.data.filter(
+                  (a) => a.testProjectId == item.data.valueData.testProjectId
+                ),
+                "id"
               )
             );
             that.$set(
@@ -1305,11 +1261,6 @@ export default {
       });
       return point;
     },
-    // 复制一个对象
-    clone(origin) {
-      let originProto = Object.getPrototypeOf(origin);
-      return Object.assign(Object.create(originProto), origin);
-    },
 
     //将原因设置上原因模块
     setReasonToModule() {
@@ -1389,7 +1340,7 @@ export default {
               "metrologicalCertificate",
               "staffName",
               "standard",
-              "staffName",
+              // "staffName",
             ];
             let localArr = [
               "entrustedUnitName",
@@ -1403,7 +1354,7 @@ export default {
               "metrologyCertificate",
               "detectionTime",
               "samplingPersonnel",
-              "detectionBasis",
+              // "detectionBasis",
             ];
             keyArr.forEach((item, index) => {
               if (task[item] != null && task[item] != undefined) {

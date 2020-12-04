@@ -2,8 +2,9 @@
   <div style="width:100%;display:inline-block">
     <input
       class="box"
-      style="width:100%;height:32px;line-height:32px"
+      style="width:100%;"
       ref="mySearchBox"
+      :style="{height:height+'px',lineHeight:height+'px'}"
       :defaultVal="defaultValue"
       @input="toInput"
       @focus="showList = true"
@@ -46,6 +47,10 @@ export default {
     defaultValue: {
       type: String,
       default: ""
+    },
+    height:{
+      type:String,
+      default:'32'
     }
   },
   computed: {

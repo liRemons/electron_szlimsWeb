@@ -320,9 +320,7 @@ export default {
       heads,
       modules,
       showing: [],
-      showOtherCurve: false,
       jsonString: [],
-      isSelect: "",
       auxiliaryArr: [],
       mainArr: [],
       bs: 1,
@@ -338,7 +336,6 @@ export default {
       fileNumber: "SZRD/LY424-01", //文件编号
       todayDate: _dateFormat("now", "Y 年 M 月 D 日"), //当前日期
       debug: false, //是否开启页面主要区域背景色调试, 如果开启, 则将页面主要区域的背景色变成灰色(原来是白色), 方便调试
-      toShowTable: "", //控制本页面的子组件显示情况
       isTemplate: false, //是否是实例页面(实例页面背景颜色不是白色)
       headInput: false, //头表格是否可以被输入
       ableInput: false, //表格是否可以被输入
@@ -355,7 +352,6 @@ export default {
       myCurveArr: ["", "", "", "", "", "", ""],
       nowCurve: "",
       nowSel: "",
-      devices: [],
       nowCur1: "",
       nowCur2: "",
       nowCur3: "",
@@ -418,6 +414,7 @@ export default {
     // 显示这个示例
     showExample() {
       this.projectName = this.testProject.name;
+  
       this.projectObj = this.testProject.projectName;
 
       this.$store.dispatch(
@@ -737,11 +734,6 @@ export default {
       };
     },
 
-    // 复制一个对象
-    clone(origin) {
-      let originProto = Object.getPrototypeOf(origin);
-      return Object.assign(Object.create(originProto), origin);
-    },
 
     Reset() {
       let arr = Adaptive(
@@ -1093,9 +1085,6 @@ export default {
       }
       objData = valData.valueData;
       return objData;
-    },
-    curveNameChange(data) {
-      this.nowSel = "";
     },
     //查询曲线
     toQueryAllCurve() {
@@ -1474,46 +1463,9 @@ export default {
         item.data.valueData.multipleId = "project_sysjq_standard_" + index;
       });
     },
-
-    getSysSampleData(sampleNums, modelResult) {
-      querySysSampleData(sampleNums).then((res) => {
-        this.sampleData.showing[0][0].data.valueData = res;
-        this.sampleData.showing[0][0].data.valueData.point = [""];
-        this.sampleData.showing[0][0].data.valueData.getSysSampleData = 0;
-        let imgUrl = this.imgUrl + res.recordStaffUrl;
-        this.getBase64(
-          imgUrl,
-          this.sampleData.showing[0][0].data.valueData,
-          "shiYanJianCe"
-        );
-      });
-    },
-
     changeMyCurve(val, name, index) {
       this.myCurveArr[index] = { name, id: val["id"] };
       this.$emit("changeMyCurve", this.myCurveArr);
-    },
-
-    getBase64(img, obj, name) {
-      //传入图片路径，返回base64
-      function getBase64Image(img, width, height) {
-        let canvas = document.createElement("canvas");
-        canvas.width = width ? width : img.width;
-        canvas.height = height ? height : img.height;
-        let ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        let dataURL = canvas.toDataURL("image/jpeg", 0.5);
-        return dataURL;
-      }
-
-      let image = new Image();
-      image.src = img;
-      image.setAttribute("crossOrigin", "Anonymous");
-      if (img) {
-        image.onload = function () {
-          obj[name] = getBase64Image(image);
-        };
-      }
     },
   },
 
@@ -1530,16 +1482,13 @@ export default {
         : "";
     });
     // 视口高度
-    let viewportH = window.innerHeight || document.documentElement.clientHeight;
 
     // 查询曲线
     this.toQueryAllCurve();
 
     // 设置高度
     let showTemplateBoxs = document.getElementsByClassName("showTemplateBox");
-    for (let i = 0; i < showTemplateBoxs.length; i++) {
-      // showTemplateBoxs[i].style.height = viewportH - 164 + "px";
-    }
+    
     this.isTemplate = true;
     this.ipdTemplate = "ipdTemplate";
     this.refre = true;

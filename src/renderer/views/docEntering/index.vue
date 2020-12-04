@@ -309,11 +309,6 @@
         ></fingerprint>
       </el-dialog>
 
-      <!-- 受检单位陪同人签名 -->
-      <!--        <el-dialog :visible.sync="showSignature">-->
-      <!--            <signature @download="toUpload"></signature>-->
-      <!--        </el-dialog>-->
-
       <!-- 实验室审核 -->
       <el-dialog :visible.sync="showFingerprintFour">
         <fingerprint
@@ -639,7 +634,7 @@ export default {
           } else {
             to = "projcet_jgyst";
           }
-          
+
           let arr = showing.filter(
             (el) =>
               el.to === to &&
@@ -1112,12 +1107,20 @@ export default {
       this.copyDialog = false;
     },
     againCreateHtml() {
-      this.bdInit();
-      return;
       generateMeasure(this.ids[0], this.$refs.templateHTML[0].$el.innerHTML);
     },
     //上传
+
     toUpload(signature) {
+      this.taskDatas.forEach((item) => {
+        item.showing.forEach((a) => {
+          a.forEach((b) => {
+            if (b.to === "project_jbxx") {
+              b.data.valueData.detectionBasis = this.tasks[0].staffName;
+            }
+          });
+        });
+      });
       let flag = false;
       // 点位图
       let result = this.tasks.some((item) => item.pointUrl);
@@ -1138,53 +1141,55 @@ export default {
         }
       }
       let uploadStaffId = JSON.myParse(getToken()).id;
-      generateMeasure(
-        this.ids[0],
-        this.$refs.templateHTML[0].$el.innerHTML
-      ).then((response) => {
-        updateTaskUpload(this.ids.toString(), uploadStaffId).then(
-          (response) => {
-            if (response.success) {
-              this.$notify({
-                type: "success",
-                message: response.msg,
-              });
-              // 平台打回的历史记录
-              if (this.tasks[0].docPass == 1) {
-                this.readFile(JSON.parse(getToken()), "noPass");
-                this.readFileEvent().then((reson) => {
-                  let noPass = JSON.parse(reson);
-                  if (noPass) {
-                    noPass.list.forEach((item, index) => {
-                      if (item.taskId == this.ids[0]) {
-                        noPass.list.splice(index, 1);
-                      }
-                    });
-                    let dataList = {
-                      taskId: "noPass",
-                      list: noPass.list,
-                    };
-                    this.whrite(dataList, JSON.parse(getToken()));
-                  }
+      setTimeout(() => {
+        generateMeasure(
+          this.ids[0],
+          this.$refs.templateHTML[0].$el.innerHTML
+        ).then((response) => {
+          updateTaskUpload(this.ids.toString(), uploadStaffId).then(
+            (response) => {
+              if (response.success) {
+                this.$notify({
+                  type: "success",
+                  message: response.msg,
+                });
+                // 平台打回的历史记录
+                if (this.tasks[0].docPass == 1) {
+                  this.readFile(JSON.parse(getToken()), "noPass");
+                  this.readFileEvent().then((reson) => {
+                    let noPass = JSON.parse(reson);
+                    if (noPass) {
+                      noPass.list.forEach((item, index) => {
+                        if (item.taskId == this.ids[0]) {
+                          noPass.list.splice(index, 1);
+                        }
+                      });
+                      let dataList = {
+                        taskId: "noPass",
+                        list: noPass.list,
+                      };
+                      this.whrite(dataList, JSON.parse(getToken()));
+                    }
+                  });
+                }
+
+                this.delFile(JSON.parse(getToken()), this.ids.toString());
+                this.$router.push("/local/upload");
+              } else {
+                this.$notify({
+                  type: "error",
+                  message: res.msg,
                 });
               }
-
-              this.delFile(JSON.parse(getToken()), this.ids.toString());
-              this.$router.push("/local/upload");
-            } else {
-              this.$notify({
-                type: "error",
-                message: res.msg,
-              });
             }
-          }
-        );
-      });
+          );
+        });
 
-      this.showSignature = false;
-      this.taskDatas.forEach((item) => {
-        this.toUpdateTaskData(item, 1);
-      });
+        this.showSignature = false;
+        this.taskDatas.forEach((item) => {
+          this.toUpdateTaskData(item, 1);
+        });
+      }, 200);
     },
 
     //获取签名图片的formdata

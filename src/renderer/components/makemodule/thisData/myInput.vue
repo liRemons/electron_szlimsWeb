@@ -1,25 +1,23 @@
 <template>
   <input
     class="box"
-    style="
-      border: none;
-      width: 95%;
-      height: 27px;
-      text-align: center;
-      margin-top: 1px;
-    "
+    style="border: none; width: 95%; text-align: center; margin: 1px 0"
     ref="myBox"
     :placeholder="placeholder"
     @change="toInput"
     @blur="limit"
-    :style="disable ? { background: '#FFCCFF' } : {}"
+    :style="
+      disable
+        ? { background: '#FFCCFF', height: (height - 2 || 27) + 'px' }
+        : { height: ((height - 2) || 27) + 'px' }
+    "
   />
 </template>
 
 <script>
 export default {
   name: "querySelect",
-  props: ["reg", "placeholder", "defaultValue"],
+  props: ["reg", "placeholder", "defaultValue", "height"],
   data() {
     return {
       inputPop: "",

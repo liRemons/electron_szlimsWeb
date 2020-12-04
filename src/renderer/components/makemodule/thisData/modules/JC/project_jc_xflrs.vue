@@ -35,13 +35,13 @@
           <td class="___relative tc" style="width: 50px">
             <span>修正值</span>
           </td>
-          <td class="___relative tc" style="width: 50px; line-height: 16px">
+          <td class="___relative tc" style="width: 50px; line-height: 24px">
             <span>
               新风
               <br />温度
             </span>
           </td>
-          <td class="___relative tc" style="width: 50px; line-height: 16px">
+          <td class="___relative tc" style="width: 50px; line-height: 24px">
             <span>
               服务区
               <br />人数
@@ -77,14 +77,14 @@
             ></selectModel>
           </td>
           <td class="___relative">
-            <div class="___relative tl" style="line-height: 16px">
+            <div class="___relative tl" style="line-height: 24px;text-indent:0">
               <span class="ml5">位置：</span>
               <myInput
-                style="text-align: center; width: 110px; height: 16px"
+                style="text-align: center; width: 110px; height: 24px"
                 v-model="item.position"
               ></myInput>
             </div>
-            <div class="___relative tl" style="line-height: 16px">
+            <div class="___relative tl" style="line-height: 24px;text-indent:0">
               <span class="ml5">形状：</span>
               <div
                 class="___absolute"
@@ -92,7 +92,7 @@
               >
                 <selectModel
                   @returnVal="returnVal5"
-                  style="height: 16px"
+                  style="height: 24px"
                   :Judge="true"
                   :special="index"
                   :transmitText="item.shape"
@@ -105,15 +105,15 @@
                 ></selectModel>
               </div>
             </div>
-            <div class="___relative tl" style="line-height: 16px; height: 16px">
+            <div class="___relative tl" style="line-height: 24px; height: 24px;text-indent:0">
               <div v-if="item.shape === '矩形'" class="___relative">
                 <span class="ml5">边长：</span>
                 <myInput
                   class="___relative"
                   style="
-                    width: 45px;
+                    width: 40px;
                     text-align: center;
-                    height: 16px;
+                    height: 24px;
                     top: 1px;
                   "
                   v-model="item.formula[0]"
@@ -124,9 +124,9 @@
                 <myInput
                   class="___relative"
                   style="
-                    width: 45px;
+                    width: 40px;
                     text-align: center;
-                    height: 16px;
+                    height: 24px;
                     top: 1px;
                   "
                   v-model="item.formula[1]"
@@ -142,7 +142,7 @@
                   style="
                     width: 80px;
                     text-align: center;
-                    height: 16px;
+                    height: 24px;
                     top: 1px;
                   "
                   v-model="item.formula[0]"
@@ -152,7 +152,7 @@
                 <span>m</span>
               </div>
             </div>
-            <div class="___relative tl" style="line-height: 16px">
+            <div class="___relative tl" style="line-height: 24px;text-indent:0">
               <span class="ml5" style="margin-right: 95px">面积：</span>
               <div style="width: 95px; left: 40px" class="___absolute t0 tc">
                 {{ item.measureArea }}
@@ -170,17 +170,18 @@
                 v-for="(v, i) in 4"
                 :class="v !== 4 ? '___absolute borderRight' : '___relative'"
                 :style="{ left: 86 * i + 'px' }"
-                style="width: 86px; line-height: 16px"
+                style="width: 86px; line-height: 24px"
               >
                 <div class="___relative borderRight" style="width: 30px">
                   <span>{{ i + 1 + num * 4 }}</span>
                 </div>
                 <div
                   class="___absolute t0"
-                  style="width: 56px; left: 30px; line-height: 16px"
+                  style="width: 56px; left: 30px; line-height: 24px"
                 >
                   <myInput
-                    style="text-align: center; width: 54px; height: 16px"
+                    height="24"
+                    style="text-align: center; width: 54px"
                     v-model="item.windSpeed[i + num * 4]"
                     :defaultValue="item.windSpeed[i + num * 4]"
                     @change.native="changeNum(index)"
@@ -214,14 +215,14 @@
           </td>
           <td class="___relative tc">
             <div class="___relative">
-              <div class="___relative" style="line-height: 16px">
+              <div class="___relative" style="line-height: 24px">
                 <span>风口面积测量</span>
               </div>
-              <div class="___relative" style="line-height: 16px">
+              <div class="___relative" style="line-height: 24px">
                 <querySelect
                   v-model="item.tuyereNum"
-                  style="height: 16px"
-                  v-if="target === '0'"
+                  height="20"
+                  v-if="target ==0"
                   ref="querySelect"
                   :num="index"
                   :list="deviceData"
@@ -231,13 +232,13 @@
                 ></querySelect>
                 <div v-else>{{ item.tuyereNum }}</div>
               </div>
-              <div class="___relative" style="line-height: 16px">
+              <div class="___relative" style="line-height: 24px">
                 <span>风速测量</span>
               </div>
-              <div class="___relative" style="line-height: 16px">
+              <div class="___relative" style="line-height: 24px">
                 <querySelect
                   v-model="item.windSpeedNum"
-                  style="height: 16px"
+                  height="20"
                   v-if="target === '0'"
                   ref="querySelect"
                   :num="index"

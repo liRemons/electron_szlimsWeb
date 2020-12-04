@@ -103,6 +103,7 @@ export default {
         if (data >= newFactor.slice(-1)) {
           return newFactor.slice(-1)[0].γ;
         }
+        console.log(data)
         return newFactor.find((item) => item.scope >= data).γ;
       }
     },
@@ -111,7 +112,6 @@ export default {
       if (val) {
         if (val.length == 1 || val[1].length !== 2) {
           this.$message.warning("请输入两位小数");
-          return;
         }
       }
 

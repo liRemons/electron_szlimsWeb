@@ -20,7 +20,7 @@
       @download="download"
     ></update>
     <el-dialog
-    class="tc"
+      class="tc"
       :visible.sync="dialogVisible"
       width="400px"
       :close-on-click-modal="false"
@@ -62,12 +62,8 @@ import Vue from "vue";
 
 import update from "./components/update";
 import { getToken } from "@/utils/auth";
-import { add, addValue, addNengPuValue } from "@/api/task";
 import { updateStaffOnlineTime } from "@/api/login";
 import Layout from "./views/layout";
-import moment from "moment";
-const { remote } = require("electron");
-const { Menu, MenuItem } = remote;
 export default {
   name: "App",
   components: { update, Layout },
@@ -458,11 +454,14 @@ export default {
     window.sampleNum3 = "";
     window.sampleNum4 = "";
     JSON.myParse = function (value) {
-   
-      value = value.replace(/[\r\n]/g, "").replace(/\\/g,'/');
-        //  console.log(value)
+      value = value.replace(/[\r\n]/g, "")
+      //  console.log(value)
+      // .replace(/\\/g, "/");
       try {
         let obj = this.parse(value);
+        // if (typeof obj === "string") {
+        //   JSON.myParse(obj);
+        // }
         return obj;
       } catch (e) {
         let obj = this.parse(value);

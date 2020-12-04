@@ -294,9 +294,9 @@ export default [{
         _normal: {
             carried: true,
             fixed: 64,
-            itemHeight: 65,
+            itemHeight: 100,
             value: function(obj) {
-                return 64 + 65 * (obj.point.length);
+                return 64 + 100 * (obj.point.length);
             }
         },
         _short: {

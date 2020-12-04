@@ -79,14 +79,14 @@
             ></selectModel>
           </td>
           <td class="___relative">
-            <div class="___relative tl" style="line-height: 24px">
+            <div class="___relative tl" style="line-height: 24px;text-indent: 0 ">
               <span class="ml5">位置：</span>
               <myInput
                 style="text-align: center; width: 110px; height: 24px"
                 v-model="item.position"
               ></myInput>
             </div>
-            <div class="___relative tl" style="line-height: 24px">
+            <div class="___relative tl" style="line-height: 24px;text-indent: 0">
               <span class="ml5">形状：</span>
               <div
                 class="___absolute"
@@ -107,13 +107,13 @@
                 ></selectModel>
               </div>
             </div>
-            <div class="___relative tl" style="line-height: 16px; height: 16px">
+            <div class="___relative tl" style="line-height: 16px; height: 16px;text-indent: 0">
               <div v-if="item.shape === '矩形'" class="___relative">
                 <span class="ml5">边长：</span>
                 <myInput
                   class="___relative"
                   style="
-                    width: 45px;
+                    width: 40px;
                     text-align: center;
                     height: 16px;
                     top: 1px;
@@ -126,7 +126,7 @@
                 <myInput
                   class="___relative"
                   style="
-                    width: 45px;
+                    width: 40px;
                     text-align: center;
                     height: 16px;
                     top: 1px;
@@ -154,7 +154,7 @@
                 <span>m</span>
               </div>
             </div>
-            <div class="___relative tl" style="line-height: 24px">
+            <div class="___relative tl" style="line-height: 24px;text-indent: 0">
               <span class="ml5" style="margin-right: 95px">面积：</span>
               <div style="width: 95px; left: 40px" class="___absolute t0 tc">
                 {{ item.measureArea }}
@@ -182,7 +182,8 @@
                   style="width: 56px; left: 30px; line-height: 24px"
                 >
                   <myInput
-                    style="text-align: center; width: 54px; height: 24px"
+                  height="24"
+                    style="text-align: center; width: 54px; "
                     v-model="item.windSpeed[i + num * 4]"
                     :defaultValue="item.windSpeed[i + num * 4]"
                     @change.native="changeNum(index)"
@@ -225,7 +226,7 @@
               <div class="___relative" style="line-height: 16px">
                 <querySelect
                   v-model="item.tuyereNum"
-                  style="height: 16px"
+                  height="16"
                   v-if="target == 0"
                   ref="querySelect"
                   :num="index"
@@ -242,7 +243,7 @@
               <div class="___relative" style="line-height: 16px">
                 <querySelect
                   v-model="item.tuyereNum"
-                  style="height: 16px"
+                height="16"
                   v-if="target === '0'"
                   ref="querySelect"
                   :num="index"
@@ -257,7 +258,7 @@
               <div class="___relative" style="line-height: 16px">
                 <querySelect
                   v-model="item.windSpeedNum"
-                  style="height: 16px"
+                 height="16"
                   v-if="target === '0'"
                   ref="querySelect"
                   :num="index"

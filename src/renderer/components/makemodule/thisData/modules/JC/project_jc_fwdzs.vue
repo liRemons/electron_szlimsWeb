@@ -156,7 +156,7 @@
             ></querySelect>
             <div v-else>{{ item.deviceNum }}</div>
           </td>
-          <td>
+          <td class="___relative">
             <myInput
               style="text-align: center"
               v-model="item.remarks"

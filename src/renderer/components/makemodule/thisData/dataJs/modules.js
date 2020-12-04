@@ -2234,9 +2234,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 96,
+        fixed: 128,
         value: function(obj) {
-          return 96 + obj.point.length * 32;
+          return 128 + obj.point.length * 32;
         },
       },
       _short: {
@@ -2434,9 +2434,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 113,
+        fixed: 145,
         value: function(obj) {
-          return 113 + obj.point.length * 32;
+          return 145 + obj.point.length * 32;
         },
       },
       _short: {

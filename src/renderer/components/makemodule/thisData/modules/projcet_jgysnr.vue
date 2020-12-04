@@ -181,7 +181,7 @@
       </tr>
       <tr>
         <td>备注</td>
-        <td colspan="8">检测结果未扣除本底值</td>
+        <td colspan="10">检测结果未扣除本底值</td>
       </tr>
     </table>
   </div>
