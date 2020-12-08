@@ -66,6 +66,7 @@
       ref="textbox"
       :contenteditable="edit"
       @blur="changeText"
+      @focus="onfocus"
     ></div>
   </div>
 </template>
@@ -165,6 +166,11 @@ export default {
   },
   computed: {},
   methods: {
+    onfocus(){
+      if(this.value==='请检测员现场核实，感谢配合！'){
+        this.value=''
+      }
+    },
     isSel(index) {
       if (index === 0) {
         return true;

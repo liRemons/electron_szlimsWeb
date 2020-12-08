@@ -22,6 +22,7 @@
           <div
             style="width: 190px; left: 141px"
             class="___absolute t0 Full borderRight"
+            :style="{ color: deviceColor(data.valueData.deviceName) }"
           >
             <divModel
               v-model="data.valueData.deviceName"
@@ -36,7 +37,11 @@
           >
             <div class="tc editHistoryTitle">设备型号</div>
           </div>
-          <div style="width: 238px; right: 0" class="___absolute t0 Full">
+          <div
+            style="width: 238px; right: 0"
+            :style="{ color: deviceColor(data.valueData.deviceModel) }"
+            class="___absolute t0 Full"
+          >
             <divModel
               v-model="data.valueData.deviceModel"
               style="width: 100%; text-align: center"
@@ -52,11 +57,12 @@
           </div>
           <div
             style="width: 190px; left: 141px"
+            :style="{ color: deviceColor(data.valueData.deviceNum) }"
             class="___absolute t0 Full borderRight"
           >
             <divModel
               v-model="data.valueData.deviceNum"
-              style="width: 100%; text-align: center"
+              style="width: 100%; text-align: center; white-space: nowrap"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>
@@ -66,7 +72,11 @@
           >
             <div class="tc editHistoryTitle">生产厂家</div>
           </div>
-          <div style="width: 238px; right: 0" class="___absolute t0 Full">
+          <div
+            style="width: 238px; right: 0"
+            :style="{ color: deviceColor(data.valueData.manufacturer) }"
+            class="___absolute t0 Full"
+          >
             <divModel
               v-model="data.valueData.manufacturer"
               style="width: 100%; text-align: center"
@@ -142,6 +152,7 @@
           <div
             style="width: 238px; right: 0; line-height: 16px"
             class="___absolute t0 Full"
+            :style="{ color: deviceColor(data.valueData.location) }"
           >
             <divModel
               v-model="data.valueData.location"
@@ -515,6 +526,9 @@ export default {
     "headInput",
   ],
   methods: {
+    deviceColor(name) {
+      return name === "请检测员现场核实，感谢配合！" ? "red" : "#000";
+    },
     // 是不是整数
     isInteger(val, type) {
       // if (val % 1 !== 0) {
@@ -541,12 +555,9 @@ export default {
       this.data.valueData.point.push(obj);
       this.$emit("redefinition");
     },
-    reduce() {
+    reduce(index) {
       if (this.data.valueData.point.length > 1) {
-        this.data.valueData.point.splice(
-          this.data.valueData.point.length - 1,
-          1
-        );
+        this.data.valueData.point.splice(index, 1);
         this.$emit("redefinition");
       }
       let result = this.data.valueData.point.findIndex(
@@ -652,8 +663,29 @@ export default {
       }
     },
     sure(Judge) {
+      
       let result = this.checkField(Judge);
       if (!result) {
+        return;
+      }
+      let flag = true;
+      let arr = [
+        "deviceName",
+        "deviceModel",
+        "deviceNum",
+        "manufacturer",
+        "location",
+      ];
+      arr.forEach((item) => {
+        if (
+          this.data.valueData[item] === "请检测员现场核实，感谢配合！" ||
+          ""
+        ) {
+          flag = false;
+        }
+      });
+      if (!flag) {
+        this.$message.warning("请检查设备信息是否填写完整");
         return;
       }
       let StomatologyLinkage = this.$store.state.StomatologyLinkage;

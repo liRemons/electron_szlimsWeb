@@ -227,6 +227,8 @@ import project_dc_dchjxpcl from './DC/project_dc_dchjxpcl'
 import project_dc_dchjxpclbg from './DC/project_dc_dchjxpclbg'
 import project_dc_dctj from './DC/project_dc_dctj'
 import project_dc_yysmc from './DC/project_dc_yysmc'
+import project_dc_gghead from './DC/project_dc_gghead'
+import project_dc_jcjg from './DC/project_dc_jcjg'
 
 // 点位图
 import project_point from './project_point'
@@ -421,7 +423,9 @@ export default {
     Vue.component('project_dc_dchjxpclbg', project_dc_dchjxpclbg);
     Vue.component('project_dc_dctj', project_dc_dctj);
     Vue.component('project_dc_yysmc', project_dc_yysmc);
-
+    Vue.component('project_dc_gghead', project_dc_gghead);
+    Vue.component('project_dc_jcjg', project_dc_jcjg);
+    
     //透视
     Vue.component('project_ts_tssjzrstbkqbsdnldxz1', project_ts_tssjzrstbkqbsdnldxz1);
     Vue.component('project_ts_tssjzrstbkqbsdnldxz2', project_ts_tssjzrstbkqbsdnldxz2);

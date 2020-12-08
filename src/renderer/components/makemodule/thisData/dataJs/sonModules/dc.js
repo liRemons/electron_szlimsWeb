@@ -1,7 +1,7 @@
 export default [
   {
     name: "project_dc_jcxx",
-    isHead:true,
+    isHead: true,
     projectName: "检测信息",
     switch: true,
     type: null,
@@ -523,6 +523,68 @@ export default [
         fixed: 64,
         value: function(obj) {
           return 64 + 32 * obj.point.length;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "project_dc_gghead",
+    projectName: "电磁公共头部",
+    switch: true,
+    isHead: true,
+    type: null,
+    publicData: [], //本模块的公共数据
+    noCopyArr: [],
+    valueData: {
+      //模块内容键值对
+      testProject: "project_dc_gghead",
+      correct: "电磁公共头部",
+      point: [],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 900,
+        confirm: true,
+        value: function(obj) {},
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "project_dc_jcjg",
+    projectName: "电磁检测结果",
+    switch: true,
+    isHead: false,
+    type: null,
+    publicData: [], //本模块的公共数据
+    noCopyArr: [],
+    valueData: {
+      //模块内容键值对
+      testProject: "project_dc_jcjg",
+      correct: "电磁检测结果",
+      point: [],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 32,
+        confirm: false,
+        value: function(obj) {
+          return 32 + obj.point.length * 64;
         },
       },
       _short: {

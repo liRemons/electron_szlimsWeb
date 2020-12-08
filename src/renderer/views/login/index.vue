@@ -2,7 +2,7 @@
   <div class="login">
     <div class="login_box">
       <div class="img">
-        <div class="title">深圳瑞达智能检测系统用户端</div>
+        <div class="title">瑞达智能检验检测管理系统<br>检验检测平台</div>
         <img src="@/assets/icon/login_box.png" alt="" />
         <!-- @click="$router.replace('/camera')" -->
       </div>

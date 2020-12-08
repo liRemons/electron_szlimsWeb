@@ -890,6 +890,11 @@ export default {
 
       let obj = [];
       this.taskData.showing = [];
+      // contentArray = [
+      //   { testProjectName: "project_dc_gghead", name: "project_dc_gghead" },
+      //   { testProjectName: "project_dc_jcjg", name: "project_dc_jcjg" },
+      // ];
+      console.log(contentArray, "contentArray");
       this.jsonString = [];
       for (let i = 0; i < contentArray.length; i++) {
         // 获取模块

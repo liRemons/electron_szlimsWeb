@@ -3,7 +3,7 @@
     <el-header height="auto">
       <div class="header">
         <span style="line-height: 24px; padding-left: 20px"
-          >深圳市瑞达智能检测系统用户端V{{ version }} （{{
+          >瑞达智能检验检测管理系统-检验检测平台V{{ version }} （{{
             $isUpdate ? "正式版" : "测试版"
           }}）</span
         >
@@ -46,7 +46,7 @@
         v-if="$route.path !== '/' && $route.path !== '/login'"
       >
         <div style="display: flex">
-          <span class="sysTitle"> 深圳市瑞达智能检测系统用户端 </span>
+          <span class="sysTitle"> 瑞达智能检验检测管理系统-检验检测平台 </span>
           <el-menu
             @select="handleSelect"
             :default-active="activeItem()"

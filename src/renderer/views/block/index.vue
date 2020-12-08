@@ -39,7 +39,12 @@ export default {
       let power =
         JSON.parse(getToken()).modList &&
         JSON.parse(getToken()).modList.split(",");
+
       if (scene == 0) {
+        if (JSON.parse(getToken()).staffType == null) {
+          this.$message.warning("当前登录人下没有任务");
+          return;
+        }
         // 现场
         if (JSON.parse(getToken()).staffType === 1) {
           sessionStorage.setItem("TolocalNo", 1);
