@@ -275,6 +275,7 @@
               </div>
             </div>
             <div
+            v-if="target==0"
               class="___absolute toolBar"
               style="left: 230px; top: 0; width: 180px"
             >

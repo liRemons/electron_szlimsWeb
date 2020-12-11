@@ -20,42 +20,22 @@
       </div>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 100px">
-            <span>样品编号</span>
-          </td>
-          <td class="___relative tc" style="width: 210px">
-            <span>检测地点</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>检测点位</span>
-          </td>
-          <td class="___relative tc" style="width: 200px">
-            <span>读数</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>修正信息</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>检测结果</span>
-          </td>
-          <td class="___relative tc" style="width: 70px; line-height: 16px">
-            <span>检测结果<br />平均值</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>检测时间</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>仪器编号</span>
-          </td>
-          <td class="___relative tc" style="width: 120px">
-            <span>备注</span>
-          </td>
+          <td>样品编号</td>
+          <td colspan="2">检测地点</td>
+          <td>检测点位</td>
+          <td>读数</td>
+          <td>修正信息</td>
+          <td>检测结果</td>
+          <td style="line-height: 16px">检测结果<br />平均值</td>
+          <td>检测时间</td>
+          <td>仪器编号</td>
+          <td>备注</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
           <td @click="generateSampleNum(data.valueData.point)">
             {{ item.sampleNum + "" + item.sampleNumIndex }}
           </td>
-          <td>
+          <td colspan="2">
             <selectModel
               @returnVal="returnVal"
               :single="true"
@@ -81,7 +61,6 @@
               placement="top"
             >
               <myInput
-                style="text-align: center"
                 v-model="item.point"
                 :defaultValue="item.point"
               ></myInput>
@@ -641,7 +620,7 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-       if (copy === "copyAll") {
+      if (copy === "copyAll") {
         let now = this.jsonString
           .filter(
             (item) =>
@@ -773,7 +752,7 @@ export default {
             (a) => a.sampleNum === item.sampleNum
           ) === index || item.sampleNum === "";
       });
-       this.$forceUpdate()
+      this.$forceUpdate();
     },
   },
   watch: {

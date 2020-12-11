@@ -3,6 +3,7 @@
     <div :class="{ _normalHeight_: true }" class="___relative">
       <div :class="{ eventCover: !ableInput }"></div>
       <div
+        class="___relative"
         style="
           border: 1px solid black;
           line-height: 32px;
@@ -17,57 +18,45 @@
         检测依据:{{ data.valueData.xcStandardNum }} &nbsp;&nbsp;{{
           data.valueData.standardUseTerms
         }}
+
+        <div v-if="target == 0" style="float:right">
+          读数次数：
+          <el-select
+            size="mini"
+            v-model="data.valueData.readingCount"
+            placeholder="请选择"
+            @change="changeReadingCount"
+          >
+            <el-option
+              v-for="item in [1, 2, 3, 4, 5]"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
       <table class="myTable">
         <tr>
-          <td class="___relative tc" style="width: 100px">
-            <span>样品编号</span>
+          <td colspan="2">样品编号</td>
+          <td colspan="2">检测地点</td>
+          <td>检测点位</td>
+          <td :colspan="data.valueData.readingCount">
+            读数 ({{ data.valueData.readingCount }}次)
           </td>
-          <td class="___relative tc" style="width: 21%">
-            <span>检测地点</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>检测点位</span>
-          </td>
-          <td class="___relative tc" style="width: 43px">
-            <span>读数1</span>
-          </td>
-          <td class="___relative tc" style="width: 43px">
-            <span>读数2</span>
-          </td>
-          <td class="___relative tc" style="width: 43px">
-            <span>读数3</span>
-          </td>
-          <td class="___relative tc" style="width: 43px">
-            <span>读数4</span>
-          </td>
-          <td class="___relative tc" style="width: 43px">
-            <span>读数5</span>
-          </td>
-          <td class="___relative tc" style="width: 70px">
-            <span>修正信息</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>检测结果</span>
-          </td>
-          <td class="___relative tc" style="width: 70px; line-height: 16px">
-            <span>检测结果<br />平均值</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>检测时间</span>
-          </td>
-          <td class="___relative tc" style="width: 80px">
-            <span>仪器编号</span>
-          </td>
-          <td class="___relative tc" style="width: 100px">
-            <span>备注</span>
-          </td>
+          <td>修正信息</td>
+          <td>检测结果</td>
+          <td style="line-height: 16px">检测结果<br />平均值</td>
+          <td>检测时间</td>
+          <td>仪器编号</td>
+          <td>备注</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
-          <td @click="generateSampleNum(data.valueData.point)">
+          <td @click="generateSampleNum(data.valueData.point)" colspan="2">
             {{ item.sampleNum + "" + item.sampleNumIndex }}
           </td>
-          <td class="___relative tc">
+          <td class="___relative tc" colspan="2">
             <selectModel
               @returnVal="returnVal"
               :single="true"
@@ -107,28 +96,28 @@
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td>
+          <td v-if="data.valueData.readingCount > 1">
             <myInput
               v-model="item.reading[1]"
               :defaultValue="item.reading[1]"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td>
+          <td v-if="data.valueData.readingCount > 2">
             <myInput
               v-model="item.reading[2]"
               :defaultValue="item.reading[2]"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td>
+          <td v-if="data.valueData.readingCount > 3">
             <myInput
               v-model="item.reading[3]"
               :defaultValue="item.reading[3]"
               @change.native="changeNum(index)"
             ></myInput>
           </td>
-          <td>
+          <td v-if="data.valueData.readingCount > 4">
             <myInput
               v-model="item.reading[4]"
               :defaultValue="item.reading[4]"
@@ -157,7 +146,6 @@
           <td class="___relative tc">
             <querySelect
               v-model="item.deviceNum"
-              style="width: 78px"
               v-if="target == 0"
               ref="querySelect"
               :num="index"
@@ -341,6 +329,21 @@ export default {
     },
   },
   methods: {
+    addProject() {
+      let data = {
+        // to:this.data
+      };
+      console.log(this.jsonString);
+    },
+    // 改变读数次数
+    changeReadingCount() {
+      this.data.valueData.point.forEach((item) => {
+        item.result = "";
+        item.resultAverage = "";
+        item.reading = ["", "", "", "", ""];
+        item.correction = "";
+      });
+    },
     getIdPoint(keyArr, id) {
       this.jsonString.forEach((item, index) => {
         if (
@@ -483,7 +486,10 @@ export default {
       if (
         this.getIdenticalPoint(this.data.valueData.point[index].heBingId).every(
           (item, index, array) => {
-            return this.JudgeNum(item.reading).length === 5;
+            return (
+              this.JudgeNum(item.reading).length ===
+              this.data.valueData.readingCount
+            );
           }
         )
       ) {
@@ -698,7 +704,7 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-       if (copy === "copyAll") {
+      if (copy === "copyAll") {
         let now = this.jsonString
           .filter(
             (item) =>
@@ -830,17 +836,26 @@ export default {
             (a) => a.sampleNum === item.sampleNum
           ) === index || item.sampleNum === "";
       });
-       this.$forceUpdate()
+      this.$forceUpdate();
     },
   },
   watch: {
-    "data.valueData.point": function () {
+    "data.valueData.point": function() {
       this.merge();
     },
   },
   mounted() {
+    let data = ["1", "3", "5"];
+    if (this.data.valueData.readingCount == 0) {
+      data.forEach((item) => {
+        if (this.data.valueData.testProjectChineseName.includes(item)) {
+          this.data.valueData.readingCount = Number(item);
+        }
+      });
+    }
     this.$eventBus.$on("getSampleAddres", (address) => {
       this.myggcspoint = address;
+
       this.data.valueData.point.forEach((item) => {
         if (item.SampleAddress == "") {
           item.SampleAddress = this.myggcspoint[0];

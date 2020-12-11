@@ -13,11 +13,11 @@
         <td colspan="2" rowspan="2">功率密度 <br />(μW/cm2)</td>
       </tr>
       <tr>
-        <td>n1</td>
-        <td>n2</td>
-        <td>n3</td>
-        <td>n4</td>
-        <td>n5</td>
+        <td>n₁</td>
+        <td>n₂</td>
+        <td>n₃</td>
+        <td>n₄</td>
+        <td>n₅</td>
       </tr>
       <template v-for="item in 3">
         <tr>

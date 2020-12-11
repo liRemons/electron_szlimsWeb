@@ -21,37 +21,37 @@
       <table class="myTable">
         <tr>
           <td class="___relative tc" style="width: 100px">
-            <span>样品编号</span>
+            样品编号
           </td>
           <td class="___relative tc" style="width: 160px">
-            <span>检测地点</span>
+            检测地点
           </td>
           <td class="___relative tc" style="width: 90px">
-            <span>仪表附温t(℃)</span>
+            仪表附温t(℃)
           </td>
           <td class="___relative tc" style="width: 80px; line-height: 16px">
-            <span>仪表示值<br />Ps(hPa)</span>
+            仪表示值<br />Ps(hPa)
           </td>
           <td class="___relative tc" style="width: 80px; line-height: 16px">
-            <span>刻度订正值<br />P₁(hPa)</span>
+            刻度订正值<br />P₁(hPa)
           </td>
           <td class="___relative tc" style="width: 90px; line-height: 16px">
-            <span>刻温度系数<br />hPa/℃</span>
+            刻温度系数<br />hPa/℃
           </td>
           <td class="___relative tc" style="width: 100px; line-height: 16px">
-            <span>补充订正值P3<br />(hPa)</span>
+            补充订正值P3<br />(hPa)
           </td>
           <td class="___relative tc" style="width: 100px; line-height: 16px">
-            <span>检测结果P<br />(hPa)</span>
+            检测结果P<br />(hPa)
           </td>
           <td class="___relative tc" style="width: 100px; line-height: 16px">
-            <span>检测结果<br />平均值</span>
+            检测结果<br />平均值
           </td>
           <td class="___relative tc" style="width: 80px">
-            <span>检测时间</span>
+            检测时间
           </td>
           <td class="___relative tc" style="width: 100px">
-            <span>仪器编号</span>
+            仪器编号
           </td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
@@ -133,6 +133,7 @@
               {{ item.deviceNum }}
             </div>
             <div
+              v-if="target == 0"
               class="___absolute toolBar"
               style="left: 157px; top: 0; width: 180px"
             >
@@ -259,7 +260,7 @@ export default {
   },
   computed: {},
   watch: {
-    "data.valueData.point": function () {
+    "data.valueData.point": function() {
       this.merge();
     },
   },
@@ -482,7 +483,7 @@ export default {
       newObjData.foreverId = window.uuid();
       let keys = Object.keys(this.data.valueData.point[index]);
       let copy = sessionStorage.getItem("copy");
-       if (copy === "copyAll") {
+      if (copy === "copyAll") {
         let now = this.jsonString
           .filter(
             (item) =>
@@ -604,7 +605,7 @@ export default {
             (a) => a.sampleNum === item.sampleNum
           ) === index || item.sampleNum === "";
       });
-       this.$forceUpdate()
+      this.$forceUpdate();
     },
   },
   mounted() {

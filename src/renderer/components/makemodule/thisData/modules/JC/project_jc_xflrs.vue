@@ -42,17 +42,15 @@
             </span>
           </td>
           <td class="___relative tc" style="width: 50px; line-height: 24px">
-            <span>
-              服务区
-              <br />人数
-            </span>
+            服务区
+            <br />人数
           </td>
           <td class="___relative tc" style="width: 80px">
-            <span>新风量</span>
+            新风量
           </td>
           <td style="width: 70px">检测时间</td>
           <td class="___relative tc" style="width: 110px">
-            <span>仪器编号</span>
+            仪器编号
           </td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point">
@@ -105,7 +103,10 @@
                 ></selectModel>
               </div>
             </div>
-            <div class="___relative tl" style="line-height: 24px; height: 24px;text-indent:0">
+            <div
+              class="___relative tl"
+              style="line-height: 24px; height: 24px;text-indent:0"
+            >
               <div v-if="item.shape === '矩形'" class="___relative">
                 <span class="ml5">边长：</span>
                 <myInput
@@ -222,7 +223,7 @@
                 <querySelect
                   v-model="item.tuyereNum"
                   height="20"
-                  v-if="target ==0"
+                  v-if="target == 0"
                   ref="querySelect"
                   :num="index"
                   :list="deviceData"
@@ -252,6 +253,7 @@
               </div>
             </div>
             <div
+            v-if="target==0"
               class="___absolute toolBar"
               style="left: 230px; top: 0; width: 180px"
             >

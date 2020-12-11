@@ -849,9 +849,7 @@ export default {
           }
         });
         contentArray = contentArray.flat();
-
         contentArray.splice(0, 0, { name: this.task.headTestProjectName });
-
         if (this.task.deviceMainId == 1) {
           contentArray.splice(0, 0, { name: "project_jbxx" });
           // contentArray.splice(2, 0, { name: "project_fh_bd" });
@@ -891,10 +889,9 @@ export default {
       let obj = [];
       this.taskData.showing = [];
       // contentArray = [
-      //   { testProjectName: "project_dc_gghead", name: "project_dc_gghead" },
-      //   { testProjectName: "project_dc_jcjg", name: "project_dc_jcjg" },
+      //   { testProjectName: "project_jc_xczd5", name: "project_jc_xczd5" },
+      //   { testProjectName: "project_jc_xczd5", name: "project_jc_xczd5" },
       // ];
-      console.log(contentArray, "contentArray");
       this.jsonString = [];
       for (let i = 0; i < contentArray.length; i++) {
         // 获取模块
@@ -967,6 +964,8 @@ export default {
           }
         }
       }
+
+
 
       obj.forEach((item) => {
         if (item.name == "project_point") {

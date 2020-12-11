@@ -169,6 +169,7 @@
               "
             ></myInput>
             <div
+              v-if="target == 0"
               class="___absolute toolBar"
               style="left: 220px; top: 0; width: 180px"
             >
@@ -720,11 +721,11 @@ export default {
             (a) => a.sampleNum === item.sampleNum
           ) === index || item.sampleNum === "";
       });
-       this.$forceUpdate()
+      this.$forceUpdate();
     },
   },
   watch: {
-    "data.valueData.point": function () {
+    "data.valueData.point": function() {
       this.merge();
     },
   },

@@ -183,6 +183,7 @@ export default [{
         testingItems: '',
         heBingChange: true,
         heBingJudge: true,
+        readingCount:0,
         point: [{
             pointId: window.uuid(),
             foreverId: window.uuid(), //永久的id 用于重复样
