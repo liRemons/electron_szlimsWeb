@@ -28,7 +28,7 @@
         type="primary"
         v-if="
           target == 1 &&
-          (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
+            (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
         "
       >
         保存
@@ -86,7 +86,7 @@
         type="primary"
         v-else-if="
           target == 1 &&
-          (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
+            (nowAnalysis === '待分析' || nowAnalysis === '正在分析')
         "
       >
         送审
@@ -643,13 +643,20 @@ export default {
           if (arr.length) {
             factor = arr[0].data.valueData.calibrationFactor;
           }
+
           item.data.valueData.point.forEach((a) => {
+            if (!remark.includes(a.rows[6])) {
+              a.avg =
+                (Number(a.rows[3]) + Number(a.rows[4]) + Number(a.rows[5])) / 3;
+            }
             if (remark.includes(a.rows[6])) {
               a.bd = a.rows[6];
-            } else if (a.rows[6] < bdMax * 2) {
-              a.bd = a.rows[6] && "≤" + bdMax * 2;
+            } else if (a.avg <= bdMax * 2) {
+              a.bd = a.avg && "≤" + bdMax * 2;
             } else {
-              a.bd = ((a.rows[6] - bdAverage) * factor).toFixed46(2);
+              a.bd = this.IntegerAdd2(
+                ((a.avg - bdAverage) * factor).toFixed46(2)
+              );
             }
           });
         }
@@ -2122,6 +2129,9 @@ export default {
     bus.$on("getTuPuUrl", (val) => {
       this.sysAtlasUrl = val;
     });
+    // setTimeout(() => {
+    //   this.bdInit();
+    // }, 1000);
   },
 
   destroyed() {

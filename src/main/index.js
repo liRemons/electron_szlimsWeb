@@ -70,7 +70,7 @@ function createWindow() {
           ]);
           if (item.isPaused()) {
           } else {
-            //这里是主战场
+            
           }
         } else if (state === "interrupted") {
           console.log("终止下载");
