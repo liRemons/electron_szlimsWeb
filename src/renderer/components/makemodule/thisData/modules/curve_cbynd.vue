@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     init() {
-      let headPoint = this.__getPoint("curve_head");
+      let headPoint = this.__getPoint(this.jsonString,"curve_head");
       this.num = this.data.valueData.point[0].num;
       if (!this.num) {
         return;
@@ -101,7 +101,7 @@ export default {
       bus.$emit("reset");
     },
     del(data, index) {
-      let cbyndPoint = this.__getPoint("curve_cbynd");
+      let cbyndPoint = this.__getPoint(this.jsonString,"curve_cbynd");
       if (cbyndPoint.length <= 1) {
         this.$message.error("再删除就没有了");
         return;

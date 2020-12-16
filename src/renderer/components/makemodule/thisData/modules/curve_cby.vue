@@ -126,7 +126,7 @@ export default {
   watch: {},
   methods: {
     show(data) {
-      let footPoint = this.__getPoint("curve_foot");
+      let footPoint = this.__getPoint(this.jsonString,"curve_foot");
       // 获取储备液或者没有生成过储备液的编号
       this.num = [
         ...new Set(
@@ -142,7 +142,7 @@ export default {
       }
     },
     addRow(data, index) {
-      let point = this.__getPoint("curve_cby");
+      let point = this.__getPoint(this.jsonString,"curve_cby");
       if (point.length >= 10) {
         this.$message.warning("您最多只能添加10条");
         return;
@@ -154,18 +154,18 @@ export default {
       bus.$emit("reset");
     },
     delRow(index) {
-      if (this.__getPoint("curve_cby").length <= 1) {
+      if (this.__getPoint(this.jsonString,"curve_cby").length <= 1) {
         return;
       }
       this.data.valueData.point.splice(index, 1);
       bus.$emit("reset");
     },
     create() {
-      let footPoint = this.__getPoint("curve_foot").filter(
+      let footPoint = this.__getPoint(this.jsonString,"curve_foot").filter(
           (item) => !item.isStockSolution
         ),
-        point = this.__getPoint("curve_cby"),
-        num = this.__getPoint("curve_cby").map((item) => {
+        point = this.__getPoint(this.jsonString,"curve_cby"),
+        num = this.__getPoint(this.jsonString,"curve_cby").map((item) => {
           return {
             Dosage: item.Dosage,
             constantVolume: item.constantVolume,
@@ -174,7 +174,7 @@ export default {
             count: item.count,
           };
         }),
-        cdyndPoint = this.__getPoint("curve_cbynd"),
+        cdyndPoint = this.__getPoint(this.jsonString,"curve_cbynd"),
         rows = [];
       // 重置curve_cbynd
       let Index = [];

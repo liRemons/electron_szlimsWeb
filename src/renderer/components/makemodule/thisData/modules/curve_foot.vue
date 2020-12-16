@@ -106,7 +106,7 @@ export default {
     // 生成储备液
     createStockSolution(data, index) {
       data.isStockSolution = true;
-      let point = this.__getPoint("curve_foot");
+      let point = this.__getPoint(this.jsonString,"curve_foot");
       if (
         point.filter((item) => item.id === data.id && data.noUse).length > 1
       ) {
@@ -137,7 +137,7 @@ export default {
       bus.$emit("reset");
     },
     calculate(data, index) {
-      let point = this.__getPoint("curve_foot").filter(
+      let point = this.__getPoint(this.jsonString,"curve_foot").filter(
         (item) => item.id === data.id && item.noUse
       );
       // 标液

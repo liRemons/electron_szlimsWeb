@@ -30,8 +30,8 @@
               v-model="data.valueData.testNum"
               :defaultValue="data.valueData.testNum"
             ></myInput>
-          </td> -->
-        </tr>
+          </td> 
+        </tr>-->
         <tr>
           <td>对应点位序号</td>
           <td colspan="3">

@@ -227,8 +227,10 @@ import project_dc_dchjxpcl from './DC/project_dc_dchjxpcl'
 import project_dc_dchjxpclbg from './DC/project_dc_dchjxpclbg'
 import project_dc_dctj from './DC/project_dc_dctj'
 import project_dc_yysmc from './DC/project_dc_yysmc'
-import project_dc_gghead from './DC/project_dc_gghead'
-import project_dc_jcjg from './DC/project_dc_jcjg'
+import project_dc_gpjcxx from './DC/project_dc_gpjcxx'
+import project_dc_jcgk from './DC/project_dc_jcgk'
+import project_dc_gpspjcdxxx from './DC/project_dc_gpspjcdxxx'
+import project_dc_gpjcjg from './DC/project_dc_gpjcjg'
 
 // 点位图
 import project_point from './project_point'
@@ -423,8 +425,10 @@ export default {
     Vue.component('project_dc_dchjxpclbg', project_dc_dchjxpclbg);
     Vue.component('project_dc_dctj', project_dc_dctj);
     Vue.component('project_dc_yysmc', project_dc_yysmc);
-    Vue.component('project_dc_gghead', project_dc_gghead);
-    Vue.component('project_dc_jcjg', project_dc_jcjg);
+    Vue.component('project_dc_gpjcxx', project_dc_gpjcxx);
+    Vue.component('project_dc_jcgk', project_dc_jcgk);
+    Vue.component('project_dc_gpspjcdxxx', project_dc_gpspjcdxxx);
+    Vue.component('project_dc_gpjcjg', project_dc_gpjcjg);
     
     //透视
     Vue.component('project_ts_tssjzrstbkqbsdnldxz1', project_ts_tssjzrstbkqbsdnldxz1);

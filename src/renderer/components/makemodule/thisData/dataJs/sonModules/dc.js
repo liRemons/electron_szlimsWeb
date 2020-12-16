@@ -201,7 +201,7 @@ export default [
     valueData: {
       //模块内容键值对
       testProject: "project_dc_xcdc",
-      correct: "现场调查",
+      correct: "现场照片",
       point: [
         {
           pointId: window.uuid(),
@@ -534,26 +534,28 @@ export default [
     },
   },
   {
-    name: "project_dc_gghead",
-    projectName: "电磁公共头部",
-    switch: true,
+    name: "project_dc_gpjcxx",
     isHead: true,
+    projectName: "工频检测信息",
+    switch: true,
     type: null,
     publicData: [], //本模块的公共数据
-    noCopyArr: [],
     valueData: {
       //模块内容键值对
-      testProject: "project_dc_gghead",
-      correct: "电磁公共头部",
+      testProject: "project_dc_gpjcxx",
+      correct: "检测信息",
+      pointId: window.uuid(),
+      foreverId: window.uuid(), //永久的id 用于重复样
       point: [],
     },
     height: {
       //模块高度
       _normal: {
         carried: true,
-        fixed: 900,
-        confirm: true,
-        value: function(obj) {},
+        fixed: 425,
+        value: function(obj) {
+          return 425;
+        },
       },
       _short: {
         carried: false,
@@ -564,27 +566,111 @@ export default [
     },
   },
   {
-    name: "project_dc_jcjg",
-    projectName: "电磁检测结果",
+    name: "project_dc_jcgk",
+    projectName: "检测工况",
     switch: true,
-    isHead: false,
     type: null,
     publicData: [], //本模块的公共数据
-    noCopyArr: [],
     valueData: {
       //模块内容键值对
-      testProject: "project_dc_jcjg",
-      correct: "电磁检测结果",
-      point: [],
+      testProject: "project_dc_jcgk",
+      correct: "检测工况",
+      pointId: window.uuid(),
+      foreverId: window.uuid(), //永久的id 用于重复样
+      point: [
+        {
+          deviceName: "",
+          showInput: true,
+          V:'',
+          Vunit:"",
+          I:"",
+          Iunit:"",
+          p:"",
+          Punit:"",
+          Q:"",
+          Qunit:""
+        },
+      ],
     },
     height: {
       //模块高度
       _normal: {
         carried: true,
-        fixed: 32,
-        confirm: false,
+        fixed: 50,
         value: function(obj) {
-          return 32 + obj.point.length * 64;
+          return 50 + obj.point.length * 32;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "project_dc_gpspjcdxxx",
+    projectName: "检测对象信息",
+    switch: true,
+    type: null,
+    publicData: [], //本模块的公共数据
+    valueData: {
+      //模块内容键值对
+      testProject: "project_dc_gpspjcdxxx",
+      correct: "检测对象信息",
+      pointId: window.uuid(),
+      foreverId: window.uuid(), //永久的id 用于重复样
+      point: [{}],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 50,
+        value: function(obj) {
+          return 50 + obj.point.length * 32;
+        },
+      },
+      _short: {
+        carried: false,
+        value: function(obj) {
+          return 0;
+        },
+      },
+    },
+  },
+  {
+    name: "project_dc_gpjcjg",
+    projectName: "工频检测结果",
+    switch: true,
+    type: null,
+    publicData: [], //本模块的公共数据
+    valueData: {
+      //模块内容键值对
+      testProject: "project_dc_gpjcjg",
+      correct: "工频检测结果",
+      pointId: window.uuid(),
+      foreverId: window.uuid(), //永久的id 用于重复样
+      point: [
+        {
+          no: "",
+          pointDescribe: "",
+          argument: "",
+          rows: [
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+          ],
+        },
+      ],
+    },
+    height: {
+      //模块高度
+      _normal: {
+        carried: true,
+        fixed: 50,
+        value: function(obj) {
+          return 50 + obj.point.length * 32;
         },
       },
       _short: {

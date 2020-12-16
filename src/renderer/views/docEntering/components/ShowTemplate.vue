@@ -889,8 +889,13 @@ export default {
       let obj = [];
       this.taskData.showing = [];
       // contentArray = [
-      //   { testProjectName: "project_jc_xczd5", name: "project_jc_xczd5" },
-      //   { testProjectName: "project_jc_xczd5", name: "project_jc_xczd5" },
+      //   { testProjectName: "project_dc_gpjcxx", name: "project_dc_gpjcxx" },
+      //   { testProjectName: "project_dc_yqsb", name: "project_dc_yqsb" },
+      //   { testProjectName: "project_dc_hjtj", name: "project_dc_hjtj" },
+      //   { testProjectName: "project_dc_jcgk", name: "project_dc_jcgk" },
+      //   { testProjectName: "project_dc_xcdc", name: "project_dc_xcdc" },
+      //   { testProjectName: "project_dc_gpspjcdxxx", name: "project_dc_gpspjcdxxx" },
+      //   { testProjectName: "project_dc_gpjcjg", name: "project_dc_gpjcjg" },
       // ];
       this.jsonString = [];
       for (let i = 0; i < contentArray.length; i++) {
@@ -965,8 +970,6 @@ export default {
         }
       }
 
-
-
       obj.forEach((item) => {
         if (item.name == "project_point") {
           item.switch = obj[0].switch;
@@ -1032,14 +1035,19 @@ export default {
         }
       });
       this.jsonString.forEach((item, index) => {
+         item.data.valueData.specifications = this.task.specifications;
         if (
           item.to == "projcet_jcbt" &&
           item.data.valueData.exposureMode == "头颅摄影"
         ) {
           this.jsonString.splice();
         }
+        JSON.parse(this.task.testProjectList).forEach((a) => {
+          if (a.testProjectName === item.to) {
+            item.data.valueData.correct = a.correct;
+          }
+        });
       });
-
       // ————————————————————————————————————
       // this.Reset();
     },
@@ -1067,7 +1075,7 @@ export default {
       this.testContentArray = JSON.myParse(this.task.testProjectList);
       this.control = new Array(this.testContentArray.length).fill(false);
       this.testContentArray.forEach((item, index) => {
-        if (item.name.includes("_dr_") && !item.title) {
+        if (item.name && item.name.includes("_dr_") && !item.title) {
           this.$set(item, "title", "探测器1");
         }
         let subNum = this.jsonString.findIndex(
@@ -1079,7 +1087,7 @@ export default {
             (val) => val.to === "project_dc_dchjcl"
           );
         }
-        if (subNum !== -1) {
+        if (subNum !== -1 || item.testProjectChineseName === "功率密度") {
           this.control[index] = true;
         }
       });
@@ -1763,7 +1771,7 @@ export default {
         var image = new Image();
         image.crossOrigin = "Anonymous";
         image.src = imgSrc;
-        image.onload = function () {
+        image.onload = function() {
           var imageBase64Data = getBase64(image);
           resolve(imageBase64Data);
         };
@@ -1772,7 +1780,10 @@ export default {
     }
     //this.$store.dispatch("actionsTimeExposure", this.data.valueData.valueD);
 
-    this.nowYear = new Date().getFullYear().toString().substring(2, 4);
+    this.nowYear = new Date()
+      .getFullYear()
+      .toString()
+      .substring(2, 4);
     this.numObj = JSON.myParse(sessionStorage.getItem("numObj"));
     bus.$on("showBook", () => {
       this.showBookValue = !this.showBookValue;
@@ -1922,7 +1933,7 @@ export default {
 };
 </script>
 
-<style lang="less" >
+<style lang="less">
 #showTemplateBox {
   position: relative !important;
   text-align: left;

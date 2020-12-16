@@ -372,6 +372,7 @@ export default {
     },
     // 计算
     concentration() {
+      
       this.data.valueData.point.forEach((item) => {
         // 标准体积
         item.standardVo = (
@@ -386,9 +387,10 @@ export default {
             item.standardVo
           ).toFixed46(5);
           Number(item.sysConcentration) < 0 && (item.sysConcentration = 0);
+        }else{
         }
       });
-      let sysConcentration = this.data.valueData.point
+      let sysConcentration = this.__getPoint(this.jsonString,'project_systvoc3') 
         .map((item) => {
           if (this.showXieGan3(item) && item) {
             return Number(item.sysConcentration).toFixed46(5);
@@ -408,7 +410,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.data);
     this.data.valueData.sampleNum = this.mySample;
     this.data.valueData.pageNumber = this.pageNumber;
     this.data.valueData.sysSampleId = this.data.valueData.allPoint[0].sysSampleId;

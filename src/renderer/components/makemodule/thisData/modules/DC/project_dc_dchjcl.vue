@@ -122,7 +122,6 @@
           <td>{{ item.rows[9] }}</td>
           <td class="___relative tc">
             <myInput
-              style="text-align: center"
               v-model="item.rows[10]"
               :defaultValue="item.rows[10]"
             ></myInput>

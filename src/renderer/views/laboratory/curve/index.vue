@@ -575,6 +575,7 @@ export default {
         if (valid) {
           addForCurve(
             addCurve.curveNum,
+            addCurve.curveName,
             addCurve.materialId,
             this.regressionEquation(),
             addCurve.coefficient,
@@ -601,12 +602,19 @@ export default {
     },
     editCurve(row, col, e, propsRow) {
       this.curveCbyndPoint = JSON.myParse(propsRow.materialArr);
-      let CurvesMaterialId = propsRow.curves
-        .map((item) => (item.id !== row.id ? item.materialId.split(",") : ""))
+      // let CurvesMaterialId = propsRow.curves
+
+      //   .map((item) => (item.id !== row.id ? item.materialId.split(",") : ""))
+      //   .flat()
+      //   .filter((item) => item);
+      let selectIds = propsRow.curves
+        .map((item) =>
+          item.selectIds == row.selectIds ? item.selectIds.split(",") : ""
+        )
         .flat()
         .filter((item) => item);
-      this.materialList = this.curveCbyndPoint.filter(
-        (item) => !CurvesMaterialId.includes(item.id)
+      this.materialList = this.curveCbyndPoint.filter((item) =>
+        selectIds.includes(item.id + "_" + item.materialName)
       );
       let materialIdArr = row.selectIds ? row.selectIds.split(",") : [];
       this.addCurve.materialId = materialIdArr;
@@ -622,6 +630,7 @@ export default {
         "coefficient",
         "materialName",
         "curveNum",
+        "curveName",
         "id",
       ];
       arr.forEach((item) => {
@@ -641,6 +650,7 @@ export default {
           updateCurve(
             addCurve.id,
             addCurve.curveNum,
+            addCurve.curveName,
             addCurve.materialId,
             this.regressionEquation(),
             addCurve.coefficient,
@@ -958,12 +968,13 @@ export default {
       let index = "";
       let a = Math.max(...finttIngArr.map((item) => item[0]));
       index = finttIngArr.findIndex((item, index) => item[0] === a);
-      let b = finttIngArr[index][1];
-      this.addCurve.coefficient = Math.sqrt(finttIngArr[index][0]).toFixed46(4);
-      this.addCurve.regressionEquationValue1 = finttIngArr[index][2];
-      this.addCurve.regressionEquationValue2 = finttIngArr[index][3].split(
+      let b = index !== -1 ? finttIngArr[index][1] : [];
+      this.addCurve.coefficient =index!==-1? Math.sqrt(finttIngArr[index][0]).toFixed46(4):0;
+      this.addCurve.regressionEquationValue1 = index!==-1?finttIngArr[index][2]:0;
+      this.addCurve.regressionEquationValue2 =index!==-1? finttIngArr[index][3].split(
         `${this.addCurve.regressionEquationValue2}`
-      )[0];
+      )[0]:0;
+      this.addCurve.regressionEquationValue3= this.addCurve.regressionEquationValue3.replace(/-/g,'')
     },
     // 公式结束——————————————————————————————
   },

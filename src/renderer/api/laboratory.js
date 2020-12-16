@@ -122,6 +122,7 @@ export function getCurveList(pageIndex, pageSize) {
 
 export function addForCurve(
   curveNum,
+  curveName,
   materialId,
   regressionEquation,
   coefficient,
@@ -137,6 +138,7 @@ export function addForCurve(
     method: "post",
     data: {
       curveNum,
+      curveName,
       materialId,
       regressionEquation,
       coefficient,
@@ -160,6 +162,7 @@ export function queryAllMaterial() {
 export function updateCurve(
   curveId,
   curveNum,
+  curveName,
   materialId,
   regressionEquation,
   coefficient,
@@ -175,6 +178,7 @@ export function updateCurve(
     data: {
       curveId,
       curveNum,
+      curveName,
       materialId,
       regressionEquation,
       coefficient,

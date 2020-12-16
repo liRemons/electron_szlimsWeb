@@ -344,7 +344,7 @@ Vue.prototype.IntegerAdd0 = function(val) {
   return val;
 };
 // 两位小数，不足补0
-Vue.prototype.IntegerAdd2 = function(val) {
+Vue.prototype.IntegerAdd2 = (val) => {
   if (!isNaN(val) && (val + "").split(".").length) {
     if (!(val + "").split(".")[1]) {
       val += ".00";
@@ -370,8 +370,8 @@ Vue.prototype.detectionType = function(val) {
     return "";
   }
 };
-Vue.prototype.__getPoint = function(name) {
-  return this.jsonString
+Vue.prototype.__getPoint = (arr, name) => {
+  return arr
     .filter((item) => item.to === name)
     .map((item) => item.data.valueData.point)
     .flat();

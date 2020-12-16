@@ -712,6 +712,7 @@ export default {
 
     querySearchAsync(queryString, cb, title) {
       let arr = [];
+      console.log(this.curveArr,title)
       this.curveArr.forEach((item) => {
         item.curves.forEach((a) => {
           if (a.curveName && a.curveName.includes(title)) {

@@ -98,7 +98,7 @@ export default {
 
     // 得到焦点
     focusMaterial() {
-      let headPoint = this.__getPoint("curve_head");
+      let headPoint = this.__getPoint(this.jsonString,"curve_head");
       this.disabledArr = [
         ...new Set(headPoint.map((item) => item.id).filter((item) => item)),
       ];
@@ -119,13 +119,13 @@ export default {
     },
     // 删除
     delRow(index) {
-      let headPoint = this.__getPoint("curve_head");
+      let headPoint = this.__getPoint(this.jsonString,"curve_head");
       headPoint.length > 1 && this.data.valueData.point.splice(index, 1);
       bus.$emit("reset");
     },
     // 生成foot
     create() {
-      let headPoint = this.__getPoint("curve_head"),
+      let headPoint = this.__getPoint(this.jsonString,"curve_head"),
         footPointData = {}, //单个 curve_foot point 对象数据
         footPoint = [], // 根据当前界面生成的foot point
         Index = [], // 所有curve_foot组件索引，用来重置 jsonString
