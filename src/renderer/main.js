@@ -376,23 +376,7 @@ Vue.prototype.__getPoint = (arr, name) => {
     .map((item) => item.data.valueData.point)
     .flat();
 };
-// Vue.prototype.getHistory = function() {
-//   let historyList = [];
-//   document.querySelectorAll(".historyParent").forEach((item) => {
-//     let obj = {
-//       values: [],
-//       title: item.getElementsByClassName("historyTitle")[0].innerText,
-//     };
-//     Array.prototype.forEach.call(
-//       item.getElementsByClassName("historyValue"),
-//       (el) => {
-//         obj.values.push(el.innerText);
-//       }
-//     );
-//     historyList.push(obj);
-//   });
-//   return historyList
-// };
+
 // 获取当前可能修改记录
 Vue.prototype.getHistory = function() {
   let historyList = [];

@@ -15,7 +15,7 @@
                 type="datetime"
                 :clearable="false"
                 @change="changeTime"
-                
+                :picker-options="pickerOptions"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss"
               >
@@ -45,7 +45,7 @@
                 type="datetime"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                
+                :picker-options="pickerOptions1" 
               >
               </el-date-picker>
               <!-- :picker-options="pickerOptions1" -->

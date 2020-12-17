@@ -45,7 +45,9 @@
               <el-tooltip content="导入数据" placement="top" :open-delay="500">
                 <el-button
                   v-if="
-                    (item.rows[8] >= 12 || item.rows[9] >= 40) && target == 0
+                    (item.rows[8] >= 12 || item.rows[9] >= 40) &&
+                      target == 0 &&
+                      data.valueData.specifications !== '工频'
                   "
                   @click="dcUpload(item)"
                   size="mini"
@@ -183,6 +185,7 @@
                 title="生成点位"
                 class="___absolute tc"
                 style="left: 150px"
+                v-if="data.valueData.specifications !== '工频'"
                 @click="create(item, index)"
               >
                 <i class="el-icon-search"></i>
@@ -524,7 +527,9 @@ export default {
           cancelButtonText: "取消",
           modal: false,
         }).then(({}) => {
-          this.jsonString.splice(first, end - first + 1);
+          if (first > 0) {
+            this.jsonString.splice(first, end - first + 1);
+          }
           this.data.valueData.point.splice(index, 1);
           this.$emit("redefinition");
         });

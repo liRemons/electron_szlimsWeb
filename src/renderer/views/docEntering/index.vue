@@ -548,7 +548,7 @@ export default {
     end() {
       const time = () => {
         this.entryEndTime = this.$utils.dateFormat();
-        let modules = ["project_jbxx", "project_dc_jcxx"];
+        let modules = ["project_jbxx", "project_dc_jcxx", "project_dc_gpjcxx"];
         this.$nextTick(() => {
           this.importData.tasks.tasks[0].endTime = this.entryEndTime;
           this.taskDatas[0].showing.forEach((item) => {

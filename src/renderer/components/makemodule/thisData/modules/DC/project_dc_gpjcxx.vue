@@ -9,43 +9,46 @@
     <table class="myTable">
       <tr>
         <td colspan="2">委托单位</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.clientUnitName }}</td>
       </tr>
       <tr>
         <td colspan="2">委托单位地址</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.clientUnitAddress }}</td>
       </tr>
       <tr>
         <td colspan="2">委托日期</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.entrustTime }}</td>
       </tr>
       <tr>
         <td colspan="2">联系人</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.clientUnitContact }}</td>
       </tr>
       <tr>
         <td colspan="2">联系电话</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.clientUnitPhone }}</td>
       </tr>
       <tr>
         <td colspan="2">受检单位</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.monitorObjectName }}</td>
       </tr>
       <tr>
         <td colspan="2">检测地址</td>
-        <td colspan="6"></td>
+        <td colspan="6">{{ valueData.monitorObjectAddress }}</td>
       </tr>
       <tr>
         <td colspan="2">检测时间</td>
-        <td colspan="6"></td>
-      </tr>
-      <tr>
-        <td colspan="2">检测编号</td>
-        <td colspan="6"></td>
+        <td colspan="6">
+          {{valueData.detectionTime }} - {{valueData.endTime }}
+        </td>
       </tr>
       <tr style="height:64px">
         <td colspan="2">检测依据</td>
-        <td colspan="6" style="word-wrap:break-word !important;white-space: normal;line-height:20px"></td>
+        <td
+          colspan="6"
+          style="word-wrap:break-word !important;white-space: normal;line-height:20px"
+        >
+          {{ valueData.standard }}
+        </td>
       </tr>
     </table>
   </div>
@@ -53,9 +56,46 @@
 
 <script>
 export default {
-  props: ["ableInput", "data"],
+  props: ["ableInput", "data",'target'],
+  data() {
+    return {
+      valueData: {},
+    };
+  },
+  watch: {
+    "data.valueData.endTime": function() {
+      this.target == 0
+        ? (this.data.valueData.endTime = this.dateCH(
+            this.data.valueData.endTime
+          ))
+        : "";
+    },
+  },
+  methods: {
+    dateCH(val) {
+      let time;
+      if (val) {
+        time = this.$utils.dateFormat(
+          new Date(val).getTime(),
+          "yyyy年MM月dd日 HH时mm分ss秒"
+        );
+        time = time.substring(0, time.length - 3);
+      } else {
+        time = "";
+      }
+
+      return time;
+    },
+  },
   mounted() {
-    console.log(this.data)
+    
+    if (this.target == 0 && !this.data.valueData.endTime) {
+      this.data.valueData.detectionTime = this.dateCH(
+        this.data.valueData.detectionTime
+      );
+      this.data.valueData.endTime = this.dateCH(this.data.valueData.endTime);
+    }
+    this.valueData = this.data.valueData;
   },
 };
 </script>

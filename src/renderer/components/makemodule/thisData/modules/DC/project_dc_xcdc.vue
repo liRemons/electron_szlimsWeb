@@ -14,15 +14,18 @@
       <table class="myTable">
         <tr v-for="(item, index) in data.valueData.point">
           <td class="___relative tc" style="width: 120px">
-            <span>{{ item.title }}</span>
+            <span v-if="data.valueData.photoNameArr.includes(item.title)">{{
+              item.title
+            }}</span>
+            <myInput v-model="item.title" v-else></myInput>
           </td>
-          <td class="___relative tc" style="width: 560px" v-if="target === '0'">
+          <td class="___relative tc" style="width: 560px" v-if="target == 0">
             <span :class="item.state === 0 ? 'red' : ''">{{
               item.state | toDot
             }}</span>
 
             <div
-              v-if="target === '0'"
+              v-if="target == 0"
               class="___absolute toolBar"
               style="top: 0; width: 120px; left: 635px"
             >
@@ -61,9 +64,15 @@
             </div>
             <div
               class="___absolute toolBar"
-              v-if="item.title === '现场检测照片'"
+              v-if="
+                !data.valueData.photoNameArr.includes(item.title) ||
+                  ['现场检测照片', '自定义', '北侧围墙外5米', ''].includes(
+                    item.title
+                  )
+              "
               style="left: 760px; top: 0; width: 60px"
             >
+              <!-- v-if="item.title === '现场检测照片'" -->
               <div
                 title="往指定行后面增加一行"
                 class="___absolute tc"
@@ -75,6 +84,7 @@
                 title="删除当前行"
                 class="___absolute tc"
                 style="left: 30px"
+                v-if="['现场检测照片', '自定义', ''].includes(item.title)"
                 @click="deleteRow(index)"
               >
                 -
@@ -235,24 +245,24 @@ export default {
     },
     addRow(index) {
       let row = JSON.parse(JSON.stringify(this.data.modelRow));
+      if (this.data.valueData.specifications === "工频") {
+        row.title = "";
+      }
       row.pointId = window.uuid();
       row.foreverId = window.uuid();
       this.data.valueData.point.splice(index + 1, 0, row);
       this.$emit("redefinition");
     },
     deleteRow(index) {
-      if (this.data.valueData.point.length > 1) {
+      let point = this.__getPoint(this.jsonString, "project_dc_xcdc");
+      if (point.length > 1) {
         this.$confirm("确认删除吗？", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           modal: false,
         }).then(({}) => {
-          let title = this.data.valueData.point[index].title;
-          let title1 = this.data.valueData.point[index - 1].title;
-          if (title === "现场检测照片" && title1 === "现场检测照片") {
-            this.data.valueData.point.splice(index, 1);
-            this.$emit("redefinition");
-          }
+          this.data.valueData.point.splice(index, 1);
+          this.$emit("redefinition");
         });
       }
     },

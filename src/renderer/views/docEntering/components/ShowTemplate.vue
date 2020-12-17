@@ -503,11 +503,14 @@ export default {
           point = item.data.valueData.point;
         }
         point.forEach((po, i) => {
-          if (po != "") {
+          if (po !== "") {
             po.index = i + 1;
-          }
-          if (item.to === "project_dc_dchjcl" && po !== "") {
-            po.rows[0] = i + 1 + "#";
+            if (item.to === "project_dc_dchjcl") {
+              po.rows[0] = i + 1 + "#";
+            }
+            if (item.to === "project_dc_gpjcjg") {
+              po.pointNum = i + 1 + "#";
+            }
           }
         });
         let lastProject = Adaptive(decompose, height);
@@ -881,6 +884,38 @@ export default {
           contentArray = this.addBlankComponet(contentArray);
         }
         contentArray.push({ name: "project_deleteReason" });
+        if (this.task.specifications === "工频") {
+          let photoNameArr = [
+            "点位示意图",
+            "东侧围墙外5米",
+            "南侧围墙外5米",
+            "西侧围墙外5米",
+            "北侧围墙外5米",
+          ];
+          modules.forEach((item) => {
+            if (item.name === "project_dc_yqsb") {
+              item.valueData.point[2].rows[0] = "工频电场";
+              item.valueData.deviceList[3] = "工频电场";
+              item.valueData.deviceList.forEach((a,b)=>{
+                if(a==='电场强度'){
+                  item.valueData.deviceList.splice(b,1)
+                } 
+              })
+            }
+            if (item.name === "project_dc_xcdc") {
+              item.valueData.photoNameArr = photoNameArr;
+              item.valueData.point = photoNameArr.map((a) => {
+                return {
+                  pointId: window.uuid(),
+                  foreverId: window.uuid(),
+                  title: a,
+                  state: 0,
+                  img: "",
+                };
+              });
+            }
+          });
+        }
       }
       if (this.pointUrl) {
         contentArray.push("project_point");
@@ -965,7 +1000,7 @@ export default {
             }
             obj.push(result2);
           } else {
-            console.log("实例中的模块名字有误!");
+            console.log("实例中的模块名字有误!!!");
           }
         }
       }
@@ -1016,6 +1051,7 @@ export default {
         }
       });
       this.todayDate = this.jsonString[0].data.valueData.todayDate;
+
       this.operation();
       this.redefinition();
       this.$nextTick(() => {
@@ -1035,7 +1071,7 @@ export default {
         }
       });
       this.jsonString.forEach((item, index) => {
-         item.data.valueData.specifications = this.task.specifications;
+        item.data.valueData.specifications = this.task.specifications;
         if (
           item.to == "projcet_jcbt" &&
           item.data.valueData.exposureMode == "头颅摄影"
@@ -1087,7 +1123,11 @@ export default {
             (val) => val.to === "project_dc_dchjcl"
           );
         }
-        if (subNum !== -1 || item.testProjectChineseName === "功率密度") {
+        if (
+          subNum !== -1 ||
+          item.testProjectChineseName === "功率密度" ||
+          item.testProjectName === "project_dc_gp"
+        ) {
           this.control[index] = true;
         }
       });
@@ -1406,8 +1446,37 @@ export default {
           newKey.forEach((item) => {
             template.valueData[item] = task[item];
           });
+
           template.valueData.detectionTime = this.taskData.startTime;
 
+          break;
+        case "project_dc_gpjcxx":
+          let gpjcxx_keys = [
+            "clientUnitName",
+            "checkUnitName",
+            "clientUnitAddress",
+            "checkUnitAddress",
+            "detectionTime",
+            "deviceTypeName",
+            "testingPurpose",
+            "mechanismName",
+            "subCompanyAddress",
+            "businessLicenseNum",
+            "metrologicalCertificate",
+            "staffName",
+            "standard",
+            "staffName",
+            "monitorObjectName",
+            "monitorObjectAddress",
+            "endTime",
+            "entrustTime",
+            "clientUnitContact",
+            "clientUnitPhone",
+          ];
+          gpjcxx_keys.forEach((item) => {
+            template.valueData[item] = task[item];
+          });
+          template.valueData.detectionTime = this.taskData.startTime;
           break;
         case "project_dc_jcdxxx":
           let newDCjcdxxx = ["antennaHeight", "lat", "lng", "latLngType"];

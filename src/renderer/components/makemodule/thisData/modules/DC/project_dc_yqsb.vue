@@ -24,13 +24,7 @@
                 :receive="'id'"
                 :single="true"
                 :rows="false"
-                :list="[
-                  '电场强度',
-                  '环境温湿度',
-                  '距离测量',
-                  '选频检测',
-                  '自定义',
-                ]"
+                :list="data.valueData.deviceList"
                 :Obj="''"
               >
               </selectModel>

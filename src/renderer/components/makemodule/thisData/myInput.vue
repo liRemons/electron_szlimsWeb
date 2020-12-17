@@ -1,7 +1,7 @@
 <template>
   <input
-    class="box"
-    style="border: none; width: 95%; text-align: center; margin: 1px 0"
+    class="box tc"
+    style="border: none; width: 95%;  margin: 1px 0"
     ref="myBox"
     :placeholder="placeholder"
     @change="toInput"
@@ -9,7 +9,7 @@
     :style="
       disable
         ? { background: '#FFCCFF', height: (height - 2 || 27) + 'px' }
-        : { height: ((height - 2) || 27) + 'px' }
+        : { height: (height - 2 || 27) + 'px' }
     "
   />
 </template>

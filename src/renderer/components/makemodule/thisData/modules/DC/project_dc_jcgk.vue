@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="_normalHeight_">
     <p>{{ data.valueData.correct }}:</p>
     <table class="myTable">
       <tr>
@@ -9,7 +9,7 @@
         <td>有功功率(P)</td>
         <td>无功功率(Q)</td>
       </tr>
-      <tr v-for="item in data.valueData.point" style="line-height: 32px;">
+      <tr v-for="(item, index) in data.valueData.point" :key="index">
         <td>
           <selectModel
             @returnVal="(a) => returnVal(a, item)"
@@ -110,7 +110,7 @@
             <div
               title="往指定行后面增加一行"
               class="___absolute tc"
-              @click="add(index)"
+              @click="add(item)"
             >
               +
             </div>
@@ -118,7 +118,7 @@
               title="删除当前行"
               class="___absolute tc"
               style="left: 30px"
-              @click="del(index)"
+              @dblclick="del(index)"
             >
               -
             </div>
@@ -131,7 +131,7 @@
 
 <script>
 export default {
-  props: ["data", "target"],
+  props: ["data", "target", "jsonString"],
   methods: {
     returnVal(e, item) {
       if (e === "自定义") {
@@ -149,8 +149,20 @@ export default {
         item.showInput = true;
       }
     },
-    add(data) {},
-    del() {},
+    add(data) {
+      let obj = Object.assign({}, data);
+      for (let keys in obj) {
+        !["showInput", "index"].includes(keys) && (obj[keys] = "");
+      }
+      obj.showInput = true;
+      this.data.valueData.point.push(obj);
+      this.$emit("redefinition");
+    },
+    del(index) {
+      let point = this.__getPoint(this.jsonString, "project_dc_jcgk");
+      point.length > 1 && this.data.valueData.point.splice(index, 1);
+      this.$emit("redefinition");
+    },
   },
 };
 </script>

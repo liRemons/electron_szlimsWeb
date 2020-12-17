@@ -58,6 +58,7 @@ export default [
       //模块内容键值对
       testProject: "project_dc_yqsb",
       correct: "仪器设备",
+      deviceList: ["电场强度", "环境温湿度", "距离测量", "选频检测", "自定义"],
       point: [
         {
           pointId: window.uuid(),
@@ -89,9 +90,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 68,
+        fixed: 65,
         value: function(obj) {
-          return 68 + 32 * obj.point.length;
+          return 65 + 32 * obj.point.length;
         },
       },
       _short: {
@@ -198,68 +199,38 @@ export default [
       state: 0,
       img: "",
     },
+    photoNameArr: [
+      "点位示意图",
+      "近景照片",
+      "远景照片",
+      "远景照片",
+      "西侧照片",
+      "南侧照片",
+      "北侧照片",
+      "现场检测照片",
+    ],
     valueData: {
       //模块内容键值对
       testProject: "project_dc_xcdc",
       correct: "现场照片",
       point: [
-        {
+        "点位示意图",
+        "近景照片",
+        "远景照片",
+        "远景照片",
+        "西侧照片",
+        "南侧照片",
+        "北侧照片",
+        "现场检测照片",
+      ].map((item) => {
+        return {
           pointId: window.uuid(),
           foreverId: window.uuid(),
-          title: "点位示意图",
+          title: item,
           state: 0,
           img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "近景照片",
-          state: 0,
-          img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "远景照片",
-          state: 0,
-          img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "远景照片",
-          state: 0,
-          img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "西侧照片",
-          state: 0,
-          img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "南侧照片",
-          state: 0,
-          img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "北侧照片",
-          state: 0,
-          img: "",
-        },
-        {
-          pointId: window.uuid(),
-          foreverId: window.uuid(),
-          title: "现场检测照片",
-          state: 0,
-          img: "",
-        },
-      ],
+        };
+      }),
     },
     height: {
       //模块高度
@@ -546,15 +517,16 @@ export default [
       correct: "检测信息",
       pointId: window.uuid(),
       foreverId: window.uuid(), //永久的id 用于重复样
+      detectionTime:'',
       point: [],
     },
     height: {
       //模块高度
       _normal: {
         carried: true,
-        fixed: 425,
+        fixed: 395,
         value: function(obj) {
-          return 425;
+          return 395;
         },
       },
       _short: {
@@ -581,14 +553,14 @@ export default [
         {
           deviceName: "",
           showInput: true,
-          V:'',
-          Vunit:"",
-          I:"",
-          Iunit:"",
-          p:"",
-          Punit:"",
-          Q:"",
-          Qunit:""
+          V: "",
+          Vunit: "",
+          I: "",
+          Iunit: "",
+          P: "",
+          Punit: "",
+          Q: "",
+          Qunit: "",
         },
       ],
     },
@@ -596,9 +568,9 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 50,
+        fixed: 68,
         value: function(obj) {
-          return 50 + obj.point.length * 32;
+          return 68 + obj.point.length * 32;
         },
       },
       _short: {
@@ -616,20 +588,19 @@ export default [
     type: null,
     publicData: [], //本模块的公共数据
     valueData: {
+      title: "",
       //模块内容键值对
       testProject: "project_dc_gpspjcdxxx",
       correct: "检测对象信息",
-      pointId: window.uuid(),
-      foreverId: window.uuid(), //永久的id 用于重复样
-      point: [{}],
+      point: [{ id: uuid(), deviceName: "", value: "", detectionType: "" }],
     },
     height: {
       //模块高度
       _normal: {
         carried: true,
-        fixed: 50,
+        fixed: 68,
         value: function(obj) {
-          return 50 + obj.point.length * 32;
+          return 68 + obj.point.length * 32;
         },
       },
       _short: {
@@ -654,12 +625,13 @@ export default [
       foreverId: window.uuid(), //永久的id 用于重复样
       point: [
         {
-          no: "",
+          index: 1,
+          pointNum: "1#",
           pointDescribe: "",
           argument: "",
           rows: [
-            ["", "", "", "", "", ""],
-            ["", "", "", "", "", ""],
+            ["电场强度\nE(V/m)", "", "", "", "", "", ""],
+            ["磁感应强度\nB(μT)", "", "", "", "", "", ""],
           ],
         },
       ],
@@ -668,9 +640,10 @@ export default [
       //模块高度
       _normal: {
         carried: true,
-        fixed: 50,
+        fixed: 98,
+        itemHeight: 66,
         value: function(obj) {
-          return 50 + obj.point.length * 32;
+          return 98 + obj.point.length * 66;
         },
       },
       _short: {
