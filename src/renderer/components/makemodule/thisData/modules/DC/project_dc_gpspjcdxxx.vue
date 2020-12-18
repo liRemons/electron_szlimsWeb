@@ -1,35 +1,35 @@
 <template>
-  <div>
+  <div class="_normalHeight_">
     <p>{{ data.valueData.correct }}:</p>
     <table class="myTable">
       <tr>
         <td colspan="2">检测设备名称</td>
-        <td>主要波源/检测频率</td>
-        <td>类型</td>
+        <td>
+          <selectModel
+            @returnVal="returnVal"
+            :Judge="true"
+            :special="''"
+            :transmitText="data.valueData.dataType"
+            :multi-select="false"
+            :receive="'dataType'"
+            :single="true"
+            :rows="false"
+            :list="['主要波源', '检测频率']"
+            :Obj="''"
+          >
+          </selectModel>
+        </td>
       </tr>
       <tr
         v-for="(item, index) in data.valueData.point"
         style="line-height: 32px;"
       >
         <td colspan="2"><myInput v-model="item.deviceName"></myInput></td>
-        <td><myInput v-model="item.value"></myInput></td>
         <td class="___relative">
-          <selectModel
-            @returnVal="(a) => returnVal(a, item, 'detectionType')"
-            :Judge="true"
-            :special="''"
-            :transmitText="item.detectionType"
-            :multi-select="false"
-            :receive="'detectionType'"
-            :single="true"
-            :rows="false"
-            :list="['射频', '工频', '射频+工频']"
-            :Obj="''"
-          >
-          </selectModel>
+          <myInput v-model="item.value"></myInput>
           <div
             class="___absolute toolBar"
-            style="left: 220px; top: 0; width: 60px"
+            style="left: 300px; top: 0; width: 60px"
             v-if="target == 0"
           >
             <div
@@ -69,8 +69,11 @@ import DCModules from "../../dataJs/sonModules/dc";
 export default {
   props: ["data", "target", "jsonString"],
   methods: {
-    returnVal(e, item, keys) {
-      item[keys] = e;
+    returnVal(a) {
+      this.jsonString.forEach((item) => {
+        item.to === "project_dc_gpspjcdxxx" &&
+          (item.data.valueData.dataType = a);
+      });
     },
     add(data) {
       let obj = Object.assign({}, data);
@@ -90,7 +93,7 @@ export default {
       let point = this.__getPoint(
         this.jsonString,
         "project_dc_gpspjcdxxx"
-      ).filter((item) => item.deviceName && item.value && item.detectionType);
+      ).filter((item) => item.deviceName && item.value);
       if (!point.length) {
         this.$message.warning("请将数据填写完整");
         return;
@@ -127,7 +130,7 @@ export default {
       // 根据类型区分后的点位
       let newPoint = [];
       point.forEach((item) => {
-        item.detectionType.split("+").forEach((a) => {
+        this.data.valueData.specifications.split("+").forEach((a) => {
           newPoint.push({
             deviceName: item.deviceName,
             type: a,
@@ -145,12 +148,14 @@ export default {
       newPoint.forEach((item) => {
         if (item.type === "工频") {
           let id = uuid();
+          GP.data.valueData.deviceName = item.deviceName;
           GP.data.valueData.correct =
             item.deviceName + item.type + "的检测结果";
           GP = initPoint(GP, id);
           pointArr.push(this.deepCopy(GP));
         } else if (item.type === "射频") {
           let id = uuid();
+          SP.data.valueData.deviceName = item.deviceName;
           SP.data.valueData.correct =
             item.deviceName + item.type + "的检测结果";
           SP = initPoint(SP, id);
@@ -161,8 +166,8 @@ export default {
       let Index = this.jsonString.findIndex(
         (item) => item.to === "project_deleteReason"
       );
-      if (index) {
-        this.jsonString.splice(Index, 0, ...pointArr);
+      if (Index > 0) {
+        this.jsonString.splice(Index + 1, 0, ...pointArr);
       } else {
         this.jsonString.push(...pointArr);
       }

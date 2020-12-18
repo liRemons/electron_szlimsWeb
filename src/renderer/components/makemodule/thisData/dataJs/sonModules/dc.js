@@ -518,6 +518,7 @@ export default [
       pointId: window.uuid(),
       foreverId: window.uuid(), //永久的id 用于重复样
       detectionTime:'',
+      endTime:"",
       point: [],
     },
     height: {
@@ -589,10 +590,10 @@ export default [
     publicData: [], //本模块的公共数据
     valueData: {
       title: "",
-      //模块内容键值对
+      dataType:"主要波源",
       testProject: "project_dc_gpspjcdxxx",
       correct: "检测对象信息",
-      point: [{ id: uuid(), deviceName: "", value: "", detectionType: "" }],
+      point: [{ id: uuid(), deviceName: "", value: "" }],
     },
     height: {
       //模块高度
@@ -623,6 +624,7 @@ export default [
       correct: "工频检测结果",
       pointId: window.uuid(),
       foreverId: window.uuid(), //永久的id 用于重复样
+      deviceName:"",
       point: [
         {
           index: 1,

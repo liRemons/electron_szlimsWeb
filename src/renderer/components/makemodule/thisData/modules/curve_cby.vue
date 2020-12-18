@@ -7,7 +7,8 @@
       </tr>
       <tr>
         <td colspan="3">标准物质</td>
-        <td>取用量
+        <td>
+          取用量
           <CurveUnit
             :unit="data.valueData.DosageUnit"
             :type="2"
@@ -18,8 +19,9 @@
             "
           ></CurveUnit>
         </td>
-        <td>定容体积
-           <CurveUnit
+        <td>
+          定容体积
+          <CurveUnit
             :unit="data.valueData.volUnit"
             :type="3"
             @change="
@@ -108,6 +110,22 @@
             circle
             @click="create"
           ></el-button>
+          <el-select
+            @change="changeFormula"
+            v-if="!onlyRead"
+            v-model="data.valueData.formula"
+            placeholder="请选择公式"
+            class="___absolute"
+            style="right:-250px;width:200px"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label"
+            >
+            </el-option>
+          </el-select>
         </td>
       </tr>
     </table>
@@ -120,13 +138,40 @@ export default {
   data() {
     return {
       num: [],
+      options: [
+        {
+          value: "标准溶液浓度*TVOC标准储备液取用量*单位转换系数",
+          label: "TVOC18883",
+        },
+        {
+          value:
+            "标准溶液浓度*TVOC标准储备液取用量/定容体积*单位转换系数\nTVOC标准溶液标准值*TVOC标准储备液取用量/定容体积*单位转换系数",
+          label: "TVOC50325",
+        },
+        {
+          value: "甲醛标准储备液浓度*取用量/工作液定容体积*单位转换系数",
+          label: "甲醛和其他",
+        },
+        {
+          value:
+            "标准溶液浓度*(取用量最大值-取用量）/工作液的定容体积*单位转换系数",
+          label: "臭氧",
+        },
+      ],
     };
   },
   mounted() {},
   watch: {},
   methods: {
+    // 公式改变
+    changeFormula() {
+      this.jsonString.forEach((item) => {
+        item.to === "curve_cby" &&
+          (item.data.valueData.formula = this.data.valueData.formula);
+      });
+    },
     show(data) {
-      let footPoint = this.__getPoint(this.jsonString,"curve_foot");
+      let footPoint = this.__getPoint(this.jsonString, "curve_foot");
       // 获取储备液或者没有生成过储备液的编号
       this.num = [
         ...new Set(
@@ -134,7 +179,10 @@ export default {
         ),
       ].filter((item) => item);
       // 针对 TVOC 50325标准
-      if (footPoint.length === 1 && footPoint[0].materialName.includes("TVOC")) {
+      if (
+        footPoint.length === 1 &&
+        footPoint[0].materialName.includes("TVOC")
+      ) {
         this.num.push(footPoint[0].materialName);
       }
       if (!this.num.length) {
@@ -142,7 +190,7 @@ export default {
       }
     },
     addRow(data, index) {
-      let point = this.__getPoint(this.jsonString,"curve_cby");
+      let point = this.__getPoint(this.jsonString, "curve_cby");
       if (point.length >= 10) {
         this.$message.warning("您最多只能添加10条");
         return;
@@ -154,18 +202,23 @@ export default {
       bus.$emit("reset");
     },
     delRow(index) {
-      if (this.__getPoint(this.jsonString,"curve_cby").length <= 1) {
+      if (this.__getPoint(this.jsonString, "curve_cby").length <= 1) {
         return;
       }
       this.data.valueData.point.splice(index, 1);
       bus.$emit("reset");
     },
     create() {
-      let footPoint = this.__getPoint(this.jsonString,"curve_foot").filter(
+      console.log(this.data.valueData.formula)
+      if (!this.data.valueData.formula) {
+        this.$message.warning("请选择公式！");
+        return;
+      }
+      let footPoint = this.__getPoint(this.jsonString, "curve_foot").filter(
           (item) => !item.isStockSolution
         ),
-        point = this.__getPoint(this.jsonString,"curve_cby"),
-        num = this.__getPoint(this.jsonString,"curve_cby").map((item) => {
+        point = this.__getPoint(this.jsonString, "curve_cby"),
+        num = this.__getPoint(this.jsonString, "curve_cby").map((item) => {
           return {
             Dosage: item.Dosage,
             constantVolume: item.constantVolume,
@@ -174,7 +227,7 @@ export default {
             count: item.count,
           };
         }),
-        cdyndPoint = this.__getPoint(this.jsonString,"curve_cbynd"),
+        cdyndPoint = this.__getPoint(this.jsonString, "curve_cbynd"),
         rows = [];
       // 重置curve_cbynd
       let Index = [];

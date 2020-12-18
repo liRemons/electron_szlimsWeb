@@ -245,7 +245,7 @@ export default {
     },
     addRow(index) {
       let row = JSON.parse(JSON.stringify(this.data.modelRow));
-      if (this.data.valueData.specifications === "工频") {
+      if (this.data.valueData.specifications.includes('工频')) {
         row.title = "";
       }
       row.pointId = window.uuid();

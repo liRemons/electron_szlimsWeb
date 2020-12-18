@@ -209,7 +209,6 @@ export default {
       sampleOption: "",
       inputFile: false,
       pointId: "",
-      limit: 200, //条件，用于判断是否需要环境选频测量
     };
   },
   computed: {},

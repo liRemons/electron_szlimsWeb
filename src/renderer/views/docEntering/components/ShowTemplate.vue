@@ -884,7 +884,7 @@ export default {
           contentArray = this.addBlankComponet(contentArray);
         }
         contentArray.push({ name: "project_deleteReason" });
-        if (this.task.specifications === "工频") {
+        if (this.task.specifications.includes("工频")) {
           let photoNameArr = [
             "点位示意图",
             "东侧围墙外5米",

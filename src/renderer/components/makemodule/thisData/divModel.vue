@@ -251,6 +251,9 @@ export default {
               multiple;
             if (isNaN(result)) result = 0;
             result = Number(result.toFixed46(index, true, true));
+            if(obj.sysCysxhy&&obj.sysFxsqyp&&!isNaN(obj.sysCysxhy)&&!isNaN(obj.sysFxsqyp)){
+              result = result*(Number(obj.sysCysxhy) / Number(obj.sysFxsqyp))
+            }
             obj.sysConcentrationCount = result;
             let limi2 = Number(this.detectionLimitObj.detectionLimit);
             if (result < limi2) {

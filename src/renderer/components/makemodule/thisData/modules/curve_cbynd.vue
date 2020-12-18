@@ -34,7 +34,7 @@
       <tr v-for="(item, index) in data.valueData.point" :key="index">
         <td colspan="2" class="___relative">
           <divModel v-model="item.materialName"></divModel>
-          <div class="___absolute" style="top: 0; right: -955px">
+          <div class="___absolute" v-if="!onlyRead" style="top: 0; left: -45px">
             <el-tooltip :open-delay="500" effect="dark" content="复制一行">
               <div class="rowOption" @click="add(item, index)">+</div>
             </el-tooltip>
@@ -62,37 +62,61 @@ export default {
   data() {
     return {
       num: [],
+      formula: "",
     };
   },
   watch: {
-    "data.valueData.point": function () {
+    "data.valueData.point": function() {
       this.init();
     },
   },
   methods: {
     init() {
-      let headPoint = this.__getPoint(this.jsonString,"curve_head");
+      this.jsonString.forEach((item) => {
+        item.to === "curve_cby" && (this.formula = item.data.valueData.formula);
+      });
+      let headPoint = this.__getPoint(this.jsonString, "curve_head");
       this.num = this.data.valueData.point[0].num;
       if (!this.num) {
         return;
       }
+      // 所有的取用量并得到最大值：针对于臭氧===============
+      let Dosage = 0;
+      console.log(this.formula);
+      if (this.formula === "臭氧") {
+        let DosageArr = this.__getPoint(
+          this.jsonString,
+          "curve_cby"
+        ).map((item) => Number(item.Dosage));
+        Dosage = Math.max(...DosageArr);
+      }
+      // ===================================================
+
       this.data.valueData.point.forEach((item, index) => {
         item.rows = [];
         item.num.forEach((a, b) => {
-          item.rows.push(
-            this.IntegerAdd2(
-              a.materialNum.includes("TVOC") &&
-                a.materialNum === headPoint[0].materialName
-                ? (
-                    ((item.standardValue * a.Dosage) / a.constantVolume) *
-                    a.count
-                  ).toFixed46(2)
-                : (
-                    ((item.concentration * a.Dosage) / a.constantVolume) *
-                    a.count
-                  ).toFixed46(2)
-            )
-          );
+          let num = "";
+          if (
+            a.materialNum.includes("TVOC") &&
+            a.materialNum === headPoint[0].materialName &&
+            this.formula === "TVOC50325"
+          ) {
+            num = (
+              ((item.standardValue * a.Dosage) / a.constantVolume) *
+              a.count
+            ).toFixed46(2);
+          } else if (this.formula !== "臭氧") {
+            num = (
+              ((item.concentration * a.Dosage) / a.constantVolume) *
+              a.count
+            ).toFixed46(2);
+          } else if (this.formula === "臭氧") {
+            num = (
+              ((item.concentration * (Dosage - a.Dosage)) / a.constantVolume) *
+              a.count
+            ).toFixed46(2);
+          }
+          item.rows.push(this.IntegerAdd2(num));
         });
       });
     },
@@ -101,7 +125,7 @@ export default {
       bus.$emit("reset");
     },
     del(data, index) {
-      let cbyndPoint = this.__getPoint(this.jsonString,"curve_cbynd");
+      let cbyndPoint = this.__getPoint(this.jsonString, "curve_cbynd");
       if (cbyndPoint.length <= 1) {
         this.$message.error("再删除就没有了");
         return;

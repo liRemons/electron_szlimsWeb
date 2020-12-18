@@ -1058,6 +1058,8 @@ export default [
           sysConcentration: "", //浓度
           sysReport: "", //报告值
           sysDifference: "", //相对差值
+          sysFxsqyp:"",//分析时取样品
+          sysCysxhy:"" // 采样时吸收液
         },
       ],
     },
@@ -1355,6 +1357,7 @@ export default [
       testProject: "curve_cby",
       volUnit: "mL",
       DosageUnit: "μL",
+      formula:"",
       point: [
         {
           id: "",
