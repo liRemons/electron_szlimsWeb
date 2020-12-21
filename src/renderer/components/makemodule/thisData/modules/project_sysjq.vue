@@ -58,7 +58,7 @@
         </td>
         <td>
           <divModel
-            v-model="item.sysCysxhy"
+            v-model="item.sysSamplingVolume"
             :edit="target != '4'"
             :is-num-box="true"
           ></divModel>
@@ -66,7 +66,7 @@
         </td>
         <td>
           <divModel
-            v-model="item.sysFxsqyp"
+            v-model="item.sysAnalysisVolume"
             :edit="target != '4'"
             :is-num-box="true"
           ></divModel>

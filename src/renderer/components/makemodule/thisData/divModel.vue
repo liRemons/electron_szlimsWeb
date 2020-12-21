@@ -1,7 +1,7 @@
 <template>
   <div
     class="box historyValue"
-    style="background: #fff; max-width: 98%; margin: 0 2px"
+    style="background: #fff; max-width: 98%; margin:1px;"
   >
     <!--数字框-->
     <section
@@ -251,8 +251,8 @@ export default {
               multiple;
             if (isNaN(result)) result = 0;
             result = Number(result.toFixed46(index, true, true));
-            if(obj.sysCysxhy&&obj.sysFxsqyp&&!isNaN(obj.sysCysxhy)&&!isNaN(obj.sysFxsqyp)){
-              result = result*(Number(obj.sysCysxhy) / Number(obj.sysFxsqyp))
+            if(obj.sysSamplingVolume && obj.sysAnalysisVolume &&!isNaN(obj.sysSamplingVolume   )&&!isNaN(obj.sysAnalysisVolume )){
+              result = result*(Number(obj.sysSamplingVolume   ) / Number(obj.sysAnalysisVolume ))
             }
             obj.sysConcentrationCount = result;
             let limi2 = Number(this.detectionLimitObj.detectionLimit);

@@ -230,54 +230,54 @@ export default {
     this.$ipcRenderer.on("isMaximized", (event, arg) => {
       this.isMax = arg;
     });
-    Vue.prototype.mkdir = function (data) {
+    Vue.prototype.mkdir = function(data) {
       this.$ipcRenderer.send("mkdir", data);
     };
     // 写入文件
-    Vue.prototype.whrite = function (arr, staff) {
+    Vue.prototype.whrite = function(arr, staff) {
       arr.staff = staff;
       this.$ipcRenderer.send("writeFile", arr);
     };
     // 接收写入文件信息状态
-    Vue.prototype.writeFileEvent = function () {
+    Vue.prototype.writeFileEvent = function() {
       return new Promise((reslove) => {
-        this.$ipcRenderer.on("writeFileEvent", function (event, arg) {
+        this.$ipcRenderer.on("writeFileEvent", function(event, arg) {
           reslove(arg);
         });
       });
     };
     // 读取文件
-    Vue.prototype.readFile = function (staff, id) {
+    Vue.prototype.readFile = function(staff, id) {
       this.$ipcRenderer.send("readFile", {
         taskId: id,
         staffPhone: staff.staffPhone,
       });
     };
     // 接收读取文件信息状态
-    Vue.prototype.readFileEvent = function () {
+    Vue.prototype.readFileEvent = function() {
       return new Promise((resolve) => {
-        this.$ipcRenderer.on("readFileEvent", function (event, arg) {
+        this.$ipcRenderer.on("readFileEvent", function(event, arg) {
           resolve(arg);
         });
       });
     };
     // 读取文件夹
-    Vue.prototype.readDir = function (staff) {
+    Vue.prototype.readDir = function(staff) {
       this.$ipcRenderer.send("readDir", { staffPhone: staff.staffPhone });
     };
     // 接收读取文件夹状态
-    Vue.prototype.readDirEvent = function () {
+    Vue.prototype.readDirEvent = function() {
       return new Promise((resolve) => {
-        this.$ipcRenderer.on("readDirEvent", function (event, arg) {
+        this.$ipcRenderer.on("readDirEvent", function(event, arg) {
           resolve(arg);
         });
       });
     };
-    Vue.prototype.delDir = function () {
+    Vue.prototype.delDir = function() {
       this.$ipcRenderer.send("delDir");
     };
     // 删除文件
-    Vue.prototype.delFile = function (id, staff) {
+    Vue.prototype.delFile = function(id, staff) {
       this.$ipcRenderer.send("delFile", {
         taskId: id,
         staffPhone: staff.staffPhone,
@@ -286,7 +286,7 @@ export default {
 
     let _this = this;
     // _this.userIsLogin();
-    Array.prototype.flat = function () {
+    Array.prototype.flat = function() {
       let arr = [];
 
       //定义hanle函数方便递归
@@ -347,7 +347,7 @@ export default {
 
     //=============================END
 
-    Number.prototype.toFixed46 = function (
+    Number.prototype.toFixed46 = function(
       decimalPlaces,
       Judge = false,
       revision = false
@@ -403,7 +403,7 @@ export default {
     };
 
     // 100 以上转科学计数法
-    Number.prototype.num2e = function () {
+    Number.prototype.num2e = function() {
       let p = Math.floor(Math.log(this) / Math.LN10);
       let n = this * Math.pow(10, -p);
       let subArr = ["⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"];
@@ -417,12 +417,11 @@ export default {
     };
 
     // 微生物使用，小于检出值
-    Number.prototype.checkValue = function (value) {
-      console.log("微生物使用，小于检出值", this, value);
+    Number.prototype.checkValue = function(value) {
       return this < value ? "<" + value : this;
     };
 
-    Date.prototype.format = function (fmt) {
+    Date.prototype.format = function(fmt) {
       //author: meizz
       var o = {
         "M+": this.getMonth() + 1, //月份
@@ -453,12 +452,11 @@ export default {
     window.sampleNum2 = "";
     window.sampleNum3 = "";
     window.sampleNum4 = "";
-    JSON.myParse = function (value) {
-     
+    JSON.myParse = function(value) {
       //  console.log(value)
       // .replace(/\\/g, "/");
       try {
-         value = value.replace(/[\r\n]/g, "")
+        value = value.replace(/[\r\n]/g, "");
         let obj = this.parse(value);
         // if (typeof obj === "string") {
         //   JSON.myParse(obj);
@@ -489,7 +487,7 @@ export default {
 }
 </style>
 
-<style >
+<style>
 .viewer-button {
   right: 50px;
   top: 50px;
