@@ -15,7 +15,7 @@
         :type="1"
         @change="
           (val) => {
-            data.valueData.unit = val;
+            data.valueData.unit = val
           }
         "
       ></CurveUnit>
@@ -56,86 +56,94 @@
 </template>
 
 <script>
-import bus from "@/utils/bus.js";
+import bus from '@/utils/bus.js'
 export default {
-  props: ["data", "jsonString", "onlyRead"],
+  props: ['data', 'jsonString', 'onlyRead'],
   data() {
     return {
       num: [],
-      formula: "",
-    };
+      formula: '',
+      dataType: '',
+    }
   },
   watch: {
-    "data.valueData.point": function() {
-      this.init();
+    'data.valueData.point': function() {
+      this.init()
     },
   },
   methods: {
     init() {
       this.jsonString.forEach((item) => {
-        item.to === "curve_cby" && (this.formula = item.data.valueData.formula);
-      });
-      let headPoint = this.__getPoint(this.jsonString, "curve_head");
-      this.num = this.data.valueData.point[0].num;
+        if (item.to === 'curve_cby') {
+          this.dataType = item.data.valueData
+          this.formula = item.data.valueData.formula
+        }
+      })
+      let headPoint = this.__getPoint(this.jsonString, 'curve_head')
+      this.num = this.data.valueData.point[0].num
       if (!this.num) {
-        return;
+        return
       }
       // 所有的取用量并得到最大值：针对于臭氧===============
-      let Dosage = 0;
-      console.log(this.formula);
-      if (this.formula === "臭氧") {
+      let Dosage = 0
+      if (this.formula === '臭氧') {
         let DosageArr = this.__getPoint(
           this.jsonString,
-          "curve_cby"
-        ).map((item) => Number(item.Dosage));
-        Dosage = Math.max(...DosageArr);
+          'curve_cby'
+        ).map((item) => Number(item.Dosage))
+        Dosage = Math.max(...DosageArr)
       }
       // ===================================================
 
       this.data.valueData.point.forEach((item, index) => {
-        item.rows = [];
+        item.rows = []
         item.num.forEach((a, b) => {
-          let num = "";
+          if (this.dataType === '目标物含量') {
+            a.constantVolume = 1
+          }
+          let num = ''
           if (
-            a.materialNum.includes("TVOC") &&
+            a.materialNum.includes('TVOC') &&
             a.materialNum === headPoint[0].materialName &&
-            this.formula === "TVOC50325"
+            this.formula === 'TVOC50325'
           ) {
             num = (
               ((item.standardValue * a.Dosage) / a.constantVolume) *
               a.count
-            ).toFixed46(2);
-          } else if (this.formula !== "臭氧") {
+            ).toFixed46(2)
+          } else if (!['TVOC18883', '臭氧'].includes(this.formula)) {
             num = (
               ((item.concentration * a.Dosage) / a.constantVolume) *
               a.count
-            ).toFixed46(2);
-          } else if (this.formula === "臭氧") {
+            ).toFixed46(2)
+          } else if (this.formula === '臭氧') {
             num = (
               ((item.concentration * (Dosage - a.Dosage)) / a.constantVolume) *
               a.count
-            ).toFixed46(2);
+            ).toFixed46(2)
+          } else if (this.formula === 'TVOC18883') {
+            num = (item.concentration * a.Dosage * a.count).toFixed46(2)
           }
-          item.rows.push(this.IntegerAdd2(num));
-        });
-      });
+          item.rows.push(this.IntegerAdd2(num))
+        })
+      })
     },
     add(data, index) {
-      this.data.valueData.point.push(data);
-      bus.$emit("reset");
+      this.data.valueData.point.push(data)
+      bus.$emit('reset')
     },
     del(data, index) {
-      let cbyndPoint = this.__getPoint(this.jsonString, "curve_cbynd");
+      let cbyndPoint = this.__getPoint(this.jsonString, 'curve_cbynd')
       if (cbyndPoint.length <= 1) {
-        this.$message.error("再删除就没有了");
-        return;
+        this.$message.error('再删除就没有了')
+        return
       }
-      this.data.valueData.point.splice(index, 1);
-      bus.$emit("reset");
+      this.data.valueData.point.splice(index, 1)
+      bus.$emit('reset')
     },
   },
   mounted() {
-    this.init();
+    this.init()
   },
-};
+}
 </script>

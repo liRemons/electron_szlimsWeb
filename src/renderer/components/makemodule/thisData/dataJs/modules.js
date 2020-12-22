@@ -1357,7 +1357,8 @@ export default [
       testProject: "curve_cby",
       volUnit: "mL",
       DosageUnit: "μL",
-      formula:"",
+      formula: "",
+      dataType:"标准溶液浓度",
       point: [
         {
           id: "",
