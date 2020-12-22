@@ -416,16 +416,16 @@
 </template>
 
 <script>
-import bus from "@/utils/bus.js";
+import bus from '@/utils/bus.js'
 
-import store from "@/store";
-import ShowTemplate from "./components/ShowTemplate";
-import ShowLaboratoryTemplate from "./components/ShowLaboratoryTemplate.vue";
-import ShowCurveTemplate from "./components/ShowCurveTemplate";
-import showReviewTemplate from "./components/showReviewTemplate.vue";
-import fingerprint from "../components/upload/Upload";
-import signature from "../components/signature/index";
-import { getTaskById } from "@/api/entering";
+import store from '@/store'
+import ShowTemplate from './components/ShowTemplate'
+import ShowLaboratoryTemplate from './components/ShowLaboratoryTemplate.vue'
+import ShowCurveTemplate from './components/ShowCurveTemplate'
+import showReviewTemplate from './components/showReviewTemplate.vue'
+import fingerprint from '../components/upload/Upload'
+import signature from '../components/signature/index'
+import { getTaskById } from '@/api/entering'
 import {
   addGwCyTaskData,
   updateTask,
@@ -440,13 +440,13 @@ import {
   getAllMan,
   generateMeasure,
   updateUnitGenerateTime,
-} from "@/api/local";
+} from '@/api/local'
 import {
   updateSampleData,
   toTemporaryStorageSampleData,
   updateSolution,
   querySysSampleData,
-} from "@/api/laboratory";
+} from '@/api/laboratory'
 import {
   receiveSample,
   toSongShen,
@@ -455,73 +455,73 @@ import {
   updateSampleStateFinger,
   updateSampleStaffCheck,
   updateSampleStaff,
-} from "@/api/laboratory";
-import { getToken } from "@/utils/auth";
+} from '@/api/laboratory'
+import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
       inputFlag: true,
-      solutionNum: "",
+      solutionNum: '',
       inputFile: true,
-      deviceMainId: "",
+      deviceMainId: '',
       tasksArrCheck: [],
-      copyText: "",
+      copyText: '',
       copyDialog: false,
-      signatureTimeDialog: "",
+      signatureTimeDialog: '',
       tasks: [],
       currentTab: 0,
       tabArray: [],
       ids: [],
       taskDatas: [],
       showFingerprint: false,
-      isSelect: "",
-      android: "hide",
+      isSelect: '',
+      android: 'hide',
       target: 0, //0是现场
       samples: [],
       allPerson: [],
-      nowAnalysis: "",
+      nowAnalysis: '',
       showConfigPage: false,
       sampleDatas: [],
-      templateContent: "",
+      templateContent: '',
       showSaveLog: false,
       templateArr: [],
       showSignature: false,
       showFingerprintTwo: false,
       showFingerprintNopass: false,
-      imgBase64: "",
-      imgBase64Two: "",
+      imgBase64: '',
+      imgBase64Two: '',
       nowTask: [],
-      entryId: "",
-      reason: "",
-      sysAtlasUrl: "",
+      entryId: '',
+      reason: '',
+      sysAtlasUrl: '',
       deleteArr: [],
       notPassedBox: false,
-      checkId: "",
+      checkId: '',
       showBookValue: false,
       numObj: {},
-      imgBase64Three: "",
-      delRowReasonText: "",
+      imgBase64Three: '',
+      delRowReasonText: '',
       sampleObj: {},
       showFingerprintThree: false,
       showFingerprintFour: false,
-      imgData: "",
-      timerId: "",
+      imgData: '',
+      timerId: '',
       addYuanShiObj: {},
       solutionPreparationData: {},
-      selectedCurve: "",
-      selectedResult: "",
+      selectedCurve: '',
+      selectedResult: '',
       selectedResults: [],
       selectedResults2: [],
-      entryStartTime: "",
-      entryEndTime: "",
-      checkTime: "",
-      uploadTime: "",
+      entryStartTime: '',
+      entryEndTime: '',
+      checkTime: '',
+      uploadTime: '',
       curveArr: [],
       taskState: [],
       delRowReason: false,
       delRowReasonArr: [],
-      AllFeng: "",
-      allFengGoal: "",
+      AllFeng: '',
+      allFengGoal: '',
       AllFengFlag: {
         flag: false,
       },
@@ -530,10 +530,10 @@ export default {
       deleteData: [],
       historyEdit: [],
       deleteDialog: false,
-      staffName: "",
+      staffName: '',
       unitInvalidDuration: 0.5,
-      unitTime: "",
-    };
+      unitTime: '',
+    }
   },
 
   components: {
@@ -547,49 +547,49 @@ export default {
   methods: {
     end() {
       const time = () => {
-        this.entryEndTime = this.$utils.dateFormat();
-        let modules = ["project_jbxx", "project_dc_jcxx", "project_dc_gpjcxx"];
+        this.entryEndTime = this.$utils.dateFormat()
+        let modules = ['project_jbxx', 'project_dc_jcxx', 'project_dc_gpjcxx']
         this.$nextTick(() => {
-          this.importData.tasks.tasks[0].endTime = this.entryEndTime;
+          this.importData.tasks.tasks[0].endTime = this.entryEndTime
           this.taskDatas[0].showing.forEach((item) => {
             item.forEach((a) => {
               if (modules.includes(a.to)) {
-                a.data.valueData.endTime = this.entryEndTime;
+                a.data.valueData.endTime = this.entryEndTime
               }
-            });
-          });
-          this.$message.success("结束时间生成成功");
-        });
-      };
+            })
+          })
+          this.$message.success('结束时间生成成功')
+        })
+      }
       if (this.entryEndTime) {
-        this.$confirm("已有结束时间，确认结束?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+        this.$confirm('已有结束时间，确认结束?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }).then(() => {
-          time();
-        });
+          time()
+        })
       } else {
-        this.$confirm("确认结束?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+        this.$confirm('确认结束?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }).then(() => {
-          time();
-        });
+          time()
+        })
       }
     },
     getHistoryEdit() {
-      this.readFile(JSON.parse(getToken()), "noPass");
+      this.readFile(JSON.parse(getToken()), 'noPass')
       this.readFileEvent().then((res) => {
-        let data;
-        let staffId = JSON.parse(res).staff.id;
+        let data
+        let staffId = JSON.parse(res).staff.id
         JSON.parse(res).list.forEach((item) => {
           if (item.taskId == this.$route.params.ids) {
-            data = item;
+            data = item
           }
-        });
-        let historyEdit = [];
+        })
+        let historyEdit = []
         // 判断是否修改过值
         data &&
           this.getHistory().forEach((item, index) => {
@@ -603,194 +603,193 @@ export default {
                       value: b.value,
                       staffId: staffId,
                       editValue: item.values[index].value,
-                    });
+                    })
                   }
-                });
+                })
               }
-            });
-          });
+            })
+          })
         historyEdit.forEach((item) => {
-          item.taskId = this.$route.params.ids;
-          item.createTime = this.$utils.dateFormat();
-          item.explain = `将 ${item.project} 模块中的 ${item.title} 的值由 ${item.value} 更改为 ${item.editValue}`;
-        });
-        this.historyEdit = historyEdit;
-      });
+          item.taskId = this.$route.params.ids
+          item.createTime = this.$utils.dateFormat()
+          item.explain = `将 ${item.project} 模块中的 ${item.title} 的值由 ${item.value} 更改为 ${item.editValue}`
+        })
+        this.historyEdit = historyEdit
+      })
     },
+    // 计算本底
     bdInit() {
-      let showing = this.taskDatas[0].showing.flat();
-      let bd = showing.filter((item) => item.to === "project_fh_bd")[0];
-      if (!bd) return;
+      let showing = this.taskDatas[0].showing.flat()
+      let bd = showing.filter((item) => item.to === 'project_fh_bd')[0]
+      if (!bd) return
       let bdMax = bd.data.valueData.point[2].row[6],
         bdAverage = bd.data.valueData.point[1].row[6],
         purposeDetection = bd.data.valueData.purposeDetection,
-        remark = ["无法到达", "不适用"],
-        factor = "",
-        to = "";
+        remark = ['无法到达', '不适用'],
+        factor = '',
+        to = ''
       showing.forEach((item) => {
-        if (item.to === "projcet_jgysnr" || item.to === "projcet_jcbnr") {
-          if (purposeDetection === "验收检测") {
-            to = "projcet_jcbt";
+        if (item.to === 'projcet_jgysnr' || item.to === 'projcet_jcbnr') {
+          if (purposeDetection === '验收检测') {
+            to = 'projcet_jcbt'
           } else {
-            to = "projcet_jgyst";
+            // to = 'projcet_jgyst'
+            to = 'projcet_jcbt'
           }
 
-          let arr = showing.filter(
-            (el) =>
+          let arr = showing.filter((el) =>
               el.to === to &&
               el.data.valueData.multipleId === item.data.valueData.multipleId
-          );
+          )
           if (arr.length) {
-            factor = arr[0].data.valueData.calibrationFactor;
+            factor = arr[0].data.valueData.calibrationFactor
           }
-
           item.data.valueData.point.forEach((a) => {
             if (!remark.includes(a.rows[6])) {
               a.avg =
-                (Number(a.rows[3]) + Number(a.rows[4]) + Number(a.rows[5])) / 3;
+                (Number(a.rows[3]) + Number(a.rows[4]) + Number(a.rows[5])) / 3
             }
+            // 备注为'无法到达', '不适用'
             if (remark.includes(a.rows[6])) {
-              a.bd = a.rows[6];
+              a.bd = a.rows[6]
             } else if (a.avg <= bdMax * 2) {
-              a.bd = a.avg && "≤" + bdMax * 2;
+              a.bd = a.avg && '≤' + bdMax * 2
             } else {
               a.bd = this.IntegerAdd2(
                 ((a.avg - bdAverage) * factor).toFixed46(2)
-              );
+              )
             }
-          });
+          })
         }
-      });
+      })
     },
     submitSongshen() {
-      this.bdInit();
-      this.deleteData = [];
+      this.bdInit()
+      this.deleteData = []
       if (this.tasks[0].docPass == 1) {
-        this.getHistoryEdit();
+        this.getHistoryEdit()
       }
       this.$confirm(
-        "请确认未录入数据的检测参数，现场检测条件不适用时，必须选择删除模块！！！",
-        "提示",
+        '请确认未录入数据的检测参数，现场检测条件不适用时，必须选择删除模块！！！',
+        '提示',
         {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       ).then(() => {
         if (!this.entryEndTime) {
-          this.$message.error("请点击检测结束");
-          return;
+          this.$message.error('请点击检测结束')
+          return
         }
         let data = this.taskDatas[0].showing
           .flat()
-          .filter((item) => item.to == "project_deleteReason");
+          .filter((item) => item.to == 'project_deleteReason')
         if (data.length) {
-          this.deleteData = data
-            .map((item) => item.data.valueData.point)
-            .flat();
+          this.deleteData = data.map((item) => item.data.valueData.point).flat()
         } else {
-          this.deleteData = [];
+          this.deleteData = []
         }
 
         if (this.deleteData.length) {
-          this.deleteDialog = true;
+          this.deleteDialog = true
         } else {
-          this.confirmDelete();
+          this.confirmDelete()
         }
-      });
+      })
     },
     confirmDelete() {
-      this.deleteDialog = false;
-      this.showFingerprint = true;
-      this.getTaskPerson();
+      this.deleteDialog = false
+      this.showFingerprint = true
+      this.getTaskPerson()
     },
     goBack() {
-      this.$confirm("点击此处返回可能会导致数据丢失, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "error",
+      this.$confirm('点击此处返回可能会导致数据丢失, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error',
       })
         .then(() => {
-          window.history.back();
+          window.history.back()
           // sessionStorage.clear();
         })
         .catch(() => {
-          history.pushState(null, null, document.URL);
-        });
+          history.pushState(null, null, document.URL)
+        })
     },
     // 离线录入
     enteringData(arg, ids, target) {
-      let promiseArr = [];
+      let promiseArr = []
       if (target == 0) {
-        this.importData = JSON.parse(arg);
-        this.entryEndTime = this.importData.tasks.tasks[0].endTime;
+        this.importData = JSON.parse(arg)
+        this.entryEndTime = this.importData.tasks.tasks[0].endTime
         let p1 = new Promise((resolve, reject) => {
-          resolve();
-        }).then((res) => JSON.parse(arg).tasks);
-        promiseArr = [p1];
+          resolve()
+        }).then((res) => JSON.parse(arg).tasks)
+        promiseArr = [p1]
       } else {
         for (let i = 0; i < ids.length; i++) {
-          promiseArr.push(getTaskById(ids[i]));
-          updateIsDone(ids[i]);
+          promiseArr.push(getTaskById(ids[i]))
+          updateIsDone(ids[i])
         }
       }
       Promise.all(promiseArr).then((values) => {
-        this.tasksArrCheck = values;
-        this.numObj.sampleNum_lh = values[0].sampleNum_lh;
-        this.numObj.sampleNum_wsw = values[0].sampleNum_wsw;
-        this.numObj.sampleNum_xczd = values[0].sampleNum_xczd;
-        this.numObj.sampleNum_kb = values[0].sampleNum_kb;
-        sessionStorage.setItem("numObj", JSON.stringify(this.numObj));
-        sessionStorage.setItem("projectNum", values[0].tasks[0].projectNum);
+        this.tasksArrCheck = values
+        this.numObj.sampleNum_lh = values[0].sampleNum_lh
+        this.numObj.sampleNum_wsw = values[0].sampleNum_wsw
+        this.numObj.sampleNum_xczd = values[0].sampleNum_xczd
+        this.numObj.sampleNum_kb = values[0].sampleNum_kb
+        sessionStorage.setItem('numObj', JSON.stringify(this.numObj))
+        sessionStorage.setItem('projectNum', values[0].tasks[0].projectNum)
         sessionStorage.setItem(
-          "checkUnitName",
+          'checkUnitName',
           values[0].tasks[0].checkUnitName
-        );
+        )
         values.forEach((resItem) => {
           this.unitUrl.push({
             id: resItem.tasks[0].id,
             unitUrl: resItem.tasks[0].unitUrl,
-          });
-          this.unitTime = resItem.tasks[0].unitTime;
-          this.tasks.push(resItem.tasks[0]);
+          })
+          this.unitTime = resItem.tasks[0].unitTime
+          this.tasks.push(resItem.tasks[0])
           this.taskDatas.push({
-            id: "",
-            disWs: "",
+            id: '',
+            disWs: '',
             showing: [],
-          });
-        });
+          })
+        })
         let taskState = this.tasks.map((item) => {
-          if (item.monitorType === "验收检测") {
-            return 1;
-          } else if (item.monitorType === "状态检测") {
-            return 2;
+          if (item.monitorType === '验收检测') {
+            return 1
+          } else if (item.monitorType === '状态检测') {
+            return 2
           } else {
-            return "";
+            return ''
           }
-        });
-        this.nowTask = this.tasks[0];
+        })
+        this.nowTask = this.tasks[0]
         if (Number(target)) {
-          this.getTaskPerson();
+          this.getTaskPerson()
         }
-        this.deviceMainId = this.nowTask.deviceMainId;
-        this.taskState = taskState;
-        this.$store.dispatch("actionsTestingState", this.taskState[0]);
-      });
+        this.deviceMainId = this.nowTask.deviceMainId
+        this.taskState = taskState
+        this.$store.dispatch('actionsTestingState', this.taskState[0])
+      })
     },
     // 获取现场模板数据
     initTasks(ids) {
       if (this.$route.params.target == 0) {
-        this.readFile(JSON.parse(getToken()), this.$route.params.ids);
+        this.readFile(JSON.parse(getToken()), this.$route.params.ids)
         this.readFileEvent().then((res) => {
-          this.enteringData(res, ids, this.$route.params.target);
-        });
+          this.enteringData(res, ids, this.$route.params.target)
+        })
       } else {
-        this.enteringData("", ids, this.$route.params.target);
+        this.enteringData('', ids, this.$route.params.target)
       }
     },
 
     temporaryData() {
-      this.$eventBus.$emit("temporaryData");
+      this.$eventBus.$emit('temporaryData')
     },
 
     //查看配置记录
@@ -798,205 +797,205 @@ export default {
       if (this.changeHasReviewData) {
         this.templateContent = this.changeHasReviewData.map(
           (item) => item.testProject
-        );
+        )
 
-        this.showConfigPage = true;
+        this.showConfigPage = true
         setTimeout(() => {
-          bus.$emit("changOnlyRead", this.changeHasReviewData, true);
-        }, 50);
+          bus.$emit('changOnlyRead', this.changeHasReviewData, true)
+        }, 50)
       } else {
         this.$notify({
-          message: "没有该配置记录！",
-          type: "warning",
-        });
+          message: '没有该配置记录！',
+          type: 'warning',
+        })
       }
     },
 
     showModuleOption() {
-      bus.$emit("showModuleOption");
+      bus.$emit('showModuleOption')
     },
 
     // 获取实验室模板数据
     initSamples() {
       for (let i = 0; i < this.labtemplate.length; i++) {
         this.sampleDatas.push({
-          id: "",
+          id: '',
           showing: [],
-        });
+        })
       }
     },
 
     // 切换tab 选项卡
     switchTab(key) {
       if (this.target == 4) {
-        let sampleNums = this.tasks[key].value.map((item) => item.sysSampleId);
+        let sampleNums = this.tasks[key].value.map((item) => item.sysSampleId)
         querySysSampleData(sampleNums).then((res) => {
           if (res.success) {
-            store.dispatch("TemplateAction", "update");
-            store.dispatch("ChangeHasReviewData", res);
-            store.dispatch("UpdateLabTemplate", this.template);
+            store.dispatch('TemplateAction', 'update')
+            store.dispatch('ChangeHasReviewData', res)
+            store.dispatch('UpdateLabTemplate', this.template)
           }
           res.samples.forEach((item) => {
             try {
-              item.myBlankSample = JSON.parse(item.blankSampleArr);
+              item.myBlankSample = JSON.parse(item.blankSampleArr)
             } catch (e) {
-              item.myBlankSample = [];
+              item.myBlankSample = []
             }
-          });
-          this.sampleDatas = [];
-          this.initSamples();
-          this.nowTask = this.tasks[key];
-          this.currentTab = key;
-          this.getTaskPerson();
-          this.$store.dispatch("actionsTestingState", this.taskState[key]);
-        });
+          })
+          this.sampleDatas = []
+          this.initSamples()
+          this.nowTask = this.tasks[key]
+          this.currentTab = key
+          this.getTaskPerson()
+          this.$store.dispatch('actionsTestingState', this.taskState[key])
+        })
       } else {
-        this.nowTask = this.tasks[key];
-        this.currentTab = key;
-        this.getTaskPerson();
-        this.$store.dispatch("actionsTestingState", this.taskState[key]);
+        this.nowTask = this.tasks[key]
+        this.currentTab = key
+        this.getTaskPerson()
+        this.$store.dispatch('actionsTestingState', this.taskState[key])
       }
     },
 
     // 切换背景色显示
     setTabClore(key) {
-      return key == this.currentTab ? "current-tab" : "";
+      return key == this.currentTab ? 'current-tab' : ''
     },
 
     getTaskPerson() {
       getAllMan(this.nowTask.id).then((res) => {
         if (res.success) {
-          this.allPerson = res.data;
+          this.allPerson = res.data
         } else {
           this.$notify({
-            type: "warning",
-            message: "查询该任务绑定人员失败！",
-          });
+            type: 'warning',
+            message: '查询该任务绑定人员失败！',
+          })
         }
-      });
+      })
     },
     // 返回录入列表页面
     back() {
-      this.templateArr = [];
+      this.templateArr = []
       if (this.target == 5 && !this.showSave) {
-        this.$router.push("/laboratory/curve");
-        return;
+        this.$router.push('/laboratory/curve')
+        return
       }
       if (this.target == 3) {
-        this.$router.push("/local/upload");
-        return;
+        this.$router.push('/local/upload')
+        return
       }
       if (this.target == 2) {
-        this.$router.push("/local/review");
-        return;
+        this.$router.push('/local/review')
+        return
       }
       if (this.target == 4) {
-        let now = sessionStorage.getItem("analysis");
-        if (now !== "已分析") {
-          this.$router.push("/laboratory/upload");
+        let now = sessionStorage.getItem('analysis')
+        if (now !== '已分析') {
+          this.$router.push('/laboratory/upload')
         } else {
-          this.$router.push("/laboratory/analysis");
+          this.$router.push('/laboratory/analysis')
         }
-        return;
+        return
       }
-      this.$confirm("确定退出吗?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+      this.$confirm('确定退出吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
       }).then(() => {
-        let taskLen = this.taskDatas.length;
-        let taskArr = [];
-        let arr = {};
-        let that = this;
+        let taskLen = this.taskDatas.length
+        let taskArr = []
+        let arr = {}
+        let that = this
         if (that.target == 1) {
-          this.TemporaryStorage(true);
-          return;
+          this.TemporaryStorage(true)
+          return
         }
         if (that.target == 2) {
-          that.$router.push("/local/review");
-          return;
+          that.$router.push('/local/review')
+          return
         }
         if (that.target == 3) {
-          that.$router.push("/local/upload");
-          return;
+          that.$router.push('/local/upload')
+          return
         }
         if (that.target == 4) {
-          if (this.nowAnalysis !== "已分析") {
-            that.$router.push("/laboratory/upload");
-            return;
+          if (this.nowAnalysis !== '已分析') {
+            that.$router.push('/laboratory/upload')
+            return
           } else {
-            that.$router.push("/laboratory/analysis");
-            return;
+            that.$router.push('/laboratory/analysis')
+            return
           }
         }
         if (that.target == 5) {
-          that.$router.push("/laboratory/curve");
-          return;
+          that.$router.push('/laboratory/curve')
+          return
         }
-        arr = JSON.parse(JSON.stringify(this.importData));
+        arr = JSON.parse(JSON.stringify(this.importData))
         for (let i = 0; i < taskLen; i++) {
           this.taskDatas[i].showing.flat().forEach((item, index) => {
-            this.templateArr.push(item.data.valueData);
-          });
-          arr.tasks.tasks[0].data = JSON.stringify(this.templateArr);
-          this.readFile(JSON.parse(getToken()), "enteringList");
+            this.templateArr.push(item.data.valueData)
+          })
+          arr.tasks.tasks[0].data = JSON.stringify(this.templateArr)
+          this.readFile(JSON.parse(getToken()), 'enteringList')
           this.readFileEvent().then((res) => {
-            let arrList = JSON.parse(res);
+            let arrList = JSON.parse(res)
             arrList.list.map((item) => {
               item.taskId == arr.taskId
                 ? (item.data = JSON.stringify(this.templateArr))
-                : "";
-            });
-            this.whrite(arrList, JSON.parse(getToken()));
-          });
-          this.whrite(arr, JSON.parse(getToken()));
+                : ''
+            })
+            this.whrite(arrList, JSON.parse(getToken()))
+          })
+          this.whrite(arr, JSON.parse(getToken()))
           this.writeFileEvent().then((res) => {
             if (res) {
               if (that.target == 0) {
-                that.entryStartTime = "";
-                that.$router.push("/local/entering");
+                that.entryStartTime = ''
+                that.$router.push('/local/entering')
               }
             }
-          });
+          })
         }
-      });
+      })
     },
 
     // 录入
     toEntry(result, id, staffName) {
       if (result) {
-        this.entryId = id;
-        this.staffName = staffName;
+        this.entryId = id
+        this.staffName = staffName
         getStaffImg_x(id).then((res) => {
-          this.imgBase64 = res.staffImgs;
+          this.imgBase64 = res.staffImgs
           this.taskDatas.forEach((item) => {
-            this.uploadTemplate(item, 3);
-          });
-        });
+            this.uploadTemplate(item, 3)
+          })
+        })
       } else {
         this.$notify({
-          message: "指纹匹配失败",
-          type: "warning",
-        });
+          message: '指纹匹配失败',
+          type: 'warning',
+        })
       }
     },
 
     // 现场审核
     toReview(result, checkId, staffName) {
-      this.staffName = staffName;
+      this.staffName = staffName
       if (result) {
         getStaffImg(checkId).then((res) => {
-          this.imgBase64Two = res;
-          this.showFingerprintTwo = false;
+          this.imgBase64Two = res
+          this.showFingerprintTwo = false
           this.taskDatas.forEach((item) => {
-            this.toUpdateTaskData(item, 2);
-          });
+            this.toUpdateTaskData(item, 2)
+          })
           this.$notify({
-            type: "success",
-            message: "审核成功",
-          });
-          this.$router.push("/local/review");
-        });
+            type: 'success',
+            message: '审核成功',
+          })
+          this.$router.push('/local/review')
+        })
         winUpdateTaskState(
           this.ids.toString(),
           2,
@@ -1007,79 +1006,79 @@ export default {
           JSON.myParse(getToken()).id
         ).then((res) => {
           this.$notify({
-            message: "审核成功",
-            type: "success",
-          });
+            message: '审核成功',
+            type: 'success',
+          })
           updateSampleStaffCheck(this.ids.toString(), checkId, 2).then(
             (response) => {
               if (response.success) {
                 this.$notify({
                   message: response.msg,
                   duration: 1000,
-                  type: "success",
-                });
+                  type: 'success',
+                })
               } else {
                 this.$notify({
                   message: response.msg,
                   duration: 1000,
                   type: error,
-                });
+                })
               }
             }
-          );
-          this.showFingerprintTwo = false;
-        });
+          )
+          this.showFingerprintTwo = false
+        })
       } else {
         this.$notify({
-          message: "指纹匹配失败",
-          type: "warning",
-        });
+          message: '指纹匹配失败',
+          type: 'warning',
+        })
       }
     },
     //实验室审核
     toShiYanReview(result, id) {
-      let labPickSampleStaffId = JSON.myParse(getToken()).id;
+      let labPickSampleStaffId = JSON.myParse(getToken()).id
       updateSampleStateFinger(this.ids.toString(), 7, id[0]).then((res) => {
         if (res.success) {
           this.$notify({
-            type: "success",
+            type: 'success',
             message: res.msg,
-          });
+          })
         } else {
           this.$notify({
-            type: "error",
+            type: 'error',
             message: res.msg,
-          });
+          })
         }
-      });
+      })
       getStaffImg(id[0])
         .then((res) => {
-          this.imgBase64 = res;
-          this.showFingerprintFour = false;
-          this.$router.push("/laboratory/upload");
+          this.imgBase64 = res
+          this.showFingerprintFour = false
+          this.$router.push('/laboratory/upload')
         })
         .catch((error) => {
-          console.log("进入了错误", error);
-        });
+          console.log('进入了错误', error)
+        })
     },
 
     //送审
     toSongshen(result, id) {
-      let that = this;
+      let that = this
       if (that.timerId) {
-        clearInterval(that.timerId);
+        clearInterval(that.timerId)
       }
       if (result) {
         getStaffImg(id[0]).then((res) => {
-          this.imgBase64 = res;
-          this.toUpdateSampleData(false, id[0]);
-        });
+          this.imgBase64 = res
+          this.toUpdateSampleData(false, id[0])
+        })
       } else {
         this.$notify({
-          message: "指纹匹配失败",
+          message: '指纹匹配失败',
           duration: 1000,
           type: error,
-        });
+        })
       }
     },
     longSignature() {
@@ -1087,11 +1086,11 @@ export default {
         this.ids[0],
         this.$refs.templateHTML[0].$el.innerHTML
       ).then((res) => {
-        this.signatureTimeDialog = false;
+        this.signatureTimeDialog = false
         this.copyText = encodeURI(
-          this.hostUrl + "/signature?url=" + res.url + "&id=" + this.tasks[0].id
-        );
-        this.copyDialog = true;
+          this.hostUrl + '/signature?url=' + res.url + '&id=' + this.tasks[0].id
+        )
+        this.copyDialog = true
 
         updateUnitGenerateTime(
           this.tasks[0].id,
@@ -1100,21 +1099,21 @@ export default {
           if (response.success) {
             this.$message.success(
               `链接生成成功，有效时间 ${this.unitInvalidDuration} 小时`
-            );
+            )
           } else {
-            this.$message.error(response.msg);
+            this.$message.error(response.msg)
           }
-        });
-      });
+        })
+      })
     },
     copy() {
-      document.getElementById("copy").select();
-      document.execCommand("Copy");
-      this.$message.success("复制成功");
-      this.copyDialog = false;
+      document.getElementById('copy').select()
+      document.execCommand('Copy')
+      this.$message.success('复制成功')
+      this.copyDialog = false
     },
     againCreateHtml() {
-      generateMeasure(this.ids[0], this.$refs.templateHTML[0].$el.innerHTML);
+      generateMeasure(this.ids[0], this.$refs.templateHTML[0].$el.innerHTML)
     },
     //上传
 
@@ -1122,32 +1121,32 @@ export default {
       this.taskDatas.forEach((item) => {
         item.showing.forEach((a) => {
           a.forEach((b) => {
-            if (b.to === "project_jbxx") {
-              b.data.valueData.detectionBasis = this.tasks[0].staffName;
+            if (b.to === 'project_jbxx') {
+              b.data.valueData.detectionBasis = this.tasks[0].staffName
             }
-          });
-        });
-      });
-      let flag = false;
+          })
+        })
+      })
+      let flag = false
       // 点位图
-      let result = this.tasks.some((item) => item.pointUrl);
+      let result = this.tasks.some((item) => item.pointUrl)
       // 签名
-      let result2 = this.tasks.some((item) => item.unitUrl);
+      let result2 = this.tasks.some((item) => item.unitUrl)
       this.tasks.forEach((item) => {
         // isDocImg   0是报告不需要图，1是报告需要图，2是报告需要现场上传的图
-        item.isDocImg ? (flag = true) : "";
-      });
+        item.isDocImg ? (flag = true) : ''
+      })
       if (!result2) {
-        this.$message.warning("请上传受检单位签名照");
-        return;
+        this.$message.warning('请上传受检单位签名照')
+        return
       }
       if (flag) {
         if (!result) {
-          this.$message.warning("请上传点位图");
-          return;
+          this.$message.warning('请上传点位图')
+          return
         }
       }
-      let uploadStaffId = JSON.myParse(getToken()).id;
+      let uploadStaffId = JSON.myParse(getToken()).id
       setTimeout(() => {
         generateMeasure(
           this.ids[0],
@@ -1157,105 +1156,105 @@ export default {
             (response) => {
               if (response.success) {
                 this.$notify({
-                  type: "success",
+                  type: 'success',
                   message: response.msg,
-                });
+                })
                 // 平台打回的历史记录
                 if (this.tasks[0].docPass == 1) {
-                  this.readFile(JSON.parse(getToken()), "noPass");
+                  this.readFile(JSON.parse(getToken()), 'noPass')
                   this.readFileEvent().then((reson) => {
-                    let noPass = JSON.parse(reson);
+                    let noPass = JSON.parse(reson)
                     if (noPass) {
                       noPass.list.forEach((item, index) => {
                         if (item.taskId == this.ids[0]) {
-                          noPass.list.splice(index, 1);
+                          noPass.list.splice(index, 1)
                         }
-                      });
+                      })
                       let dataList = {
-                        taskId: "noPass",
+                        taskId: 'noPass',
                         list: noPass.list,
-                      };
-                      this.whrite(dataList, JSON.parse(getToken()));
+                      }
+                      this.whrite(dataList, JSON.parse(getToken()))
                     }
-                  });
+                  })
                 }
 
-                this.delFile(JSON.parse(getToken()), this.ids.toString());
-                this.$router.push("/local/upload");
+                this.delFile(JSON.parse(getToken()), this.ids.toString())
+                this.$router.push('/local/upload')
               } else {
                 this.$notify({
-                  type: "error",
+                  type: 'error',
                   message: res.msg,
-                });
+                })
               }
             }
-          );
-        });
+          )
+        })
 
-        this.showSignature = false;
+        this.showSignature = false
         this.taskDatas.forEach((item) => {
-          this.toUpdateTaskData(item, 1);
-        });
-      }, 200);
+          this.toUpdateTaskData(item, 1)
+        })
+      }, 200)
     },
 
     //获取签名图片的formdata
     uploadImg(taskid, type, blob) {
-      const formData = new FormData();
-      formData.append("taskId", taskid);
-      formData.append("type", type);
-      formData.append("file", blob);
-      return formData;
+      const formData = new FormData()
+      formData.append('taskId', taskid)
+      formData.append('type', type)
+      formData.append('file', blob)
+      return formData
     },
 
     //上传现场数据模板
     uploadTemplate(tasktemp, flag) {
-      let showing = tasktemp.showing;
-      this.templateArr = [];
+      let showing = tasktemp.showing
+      this.templateArr = []
       showing.forEach((item) => {
         item.forEach((a) => {
-          if (a.to == "project_ct_cjcgpc") {
-            a.data.valueData.remark = "";
-            let remark = [];
-            let point = a.data.valueData.point;
-            let s1 = point.filter((b) => b.scope == "s<1mm").length;
-            let s2 = point.filter((b) => b.scope == "2mm≥s≥1mm").length;
-            let s3 = point.filter((b) => b.scope == "s＞2mm").length;
-            s1 == 0 && remark.push(" 无 s<1mm 的层厚范围 ");
-            s2 == 0 && remark.push(" 无 2mm≥s≥1mm 的层厚范围 ");
-            s3 == 0 && remark.push(" 无 s＞2mm 的层厚范围 ");
-            a.data.valueData.remark = remark.join(",");
+          if (a.to == 'project_ct_cjcgpc') {
+            a.data.valueData.remark = ''
+            let remark = []
+            let point = a.data.valueData.point
+            let s1 = point.filter((b) => b.scope == 's<1mm').length
+            let s2 = point.filter((b) => b.scope == '2mm≥s≥1mm').length
+            let s3 = point.filter((b) => b.scope == 's＞2mm').length
+            s1 == 0 && remark.push(' 无 s<1mm 的层厚范围 ')
+            s2 == 0 && remark.push(' 无 2mm≥s≥1mm 的层厚范围 ')
+            s3 == 0 && remark.push(' 无 s＞2mm 的层厚范围 ')
+            a.data.valueData.remark = remark.join(',')
           }
           if (a.data.height._normal.carried === true) {
             if (a.data.isHead) {
               //签名存在头模块里面
-              a.data.valueData.delRowReasonArr = this.delRowReasonArr;
-              a.data.valueData.deleteArr = this.deleteArr;
+              a.data.valueData.delRowReasonArr = this.delRowReasonArr
+              a.data.valueData.deleteArr = this.deleteArr
               if (flag == 2) {
-                a.data.valueData.imgBase64Two = this.imgBase64Two;
+                a.data.valueData.imgBase64Two = this.imgBase64Two
               } else if (flag == 1) {
               } else {
-                a.data.valueData.imgBase64 = this.imgBase64;
+                a.data.valueData.imgBase64 = this.imgBase64
               }
             }
-            this.templateArr.push(a.data.valueData);
+            this.templateArr.push(a.data.valueData)
           }
-        });
-      });
+        })
+      })
       // 平台打回修改的历史记录
       if (this.tasks[0].docPass == 1) {
         let historyEdit = this.templateArr.filter(
-          (item) => item.testProject == "historyEdit"
-        );
+          (item) => item.testProject == 'historyEdit'
+        )
         if (historyEdit.length == 0 && this.historyEdit.length) {
           this.templateArr.push({
-            testProject: "historyEdit",
+            testProject: 'historyEdit',
             data: this.historyEdit,
-          });
+          })
         }
       }
 
-      if (tasktemp.disWs == "4") {
+      if (tasktemp.disWs == '4') {
         addGwCyTaskData(
           tasktemp.id,
           tasktemp.startTime,
@@ -1264,27 +1263,27 @@ export default {
         )
           .then((res) => {
             if (res.success) {
-              this.readFile(JSON.parse(getToken()), "enteringList");
+              this.readFile(JSON.parse(getToken()), 'enteringList')
               this.readFileEvent().then((a) => {
-                let arr = JSON.parse(a);
+                let arr = JSON.parse(a)
                 arr.list.map((item, index) => {
-                  item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
-                });
-                this.whrite(arr, JSON.parse(getToken()));
-              });
+                  item.taskId == tasktemp.id ? arr.list.splice(index, 1) : ''
+                })
+                this.whrite(arr, JSON.parse(getToken()))
+              })
               this.$notify({
                 message: res.msg,
-                type: "success",
-              });
-              this.toChangeState();
+                type: 'success',
+              })
+              this.toChangeState()
             } else {
               this.$notify({
                 message: res.msg,
-                type: "error",
-              });
+                type: 'error',
+              })
             }
           })
-          .catch((error) => {});
+          .catch((error) => {})
       } else {
         updateTask(
           tasktemp.id,
@@ -1293,85 +1292,83 @@ export default {
           JSON.stringify(this.templateArr)
         ).then((res) => {
           if (res.success) {
-            this.readFile(JSON.parse(getToken()), "enteringList");
+            this.readFile(JSON.parse(getToken()), 'enteringList')
             this.readFileEvent().then((a) => {
-              let arr = JSON.parse(a);
+              let arr = JSON.parse(a)
               arr.list.map((item, index) => {
-                item.taskId == tasktemp.id ? arr.list.splice(index, 1) : "";
-              });
-              this.whrite(arr, JSON.parse(getToken()));
-            });
-            this.$message.success(res.msg);
-            this.toChangeState();
+                item.taskId == tasktemp.id ? arr.list.splice(index, 1) : ''
+              })
+              this.whrite(arr, JSON.parse(getToken()))
+            })
+            this.$message.success(res.msg)
+            this.toChangeState()
           } else {
-            this.$message.error(res.msg);
+            this.$message.error(res.msg)
           }
-        });
+        })
       }
     },
     //实验室更新data数据
     toUpdateSampleData(isReview = false, id) {
-      let valueDatas = [];
+      let valueDatas = []
       this.sampleDatas.forEach((item) => {
-        let showing = item.showing;
-        if (this.imgBase64 != "" && isReview == false) {
-          item.showing[0][0].data.valueData.shiYanJianCe = this.imgBase64;
+        let showing = item.showing
+        if (this.imgBase64 != '' && isReview == false) {
+          item.showing[0][0].data.valueData.shiYanJianCe = this.imgBase64
         }
-        if (this.imgBase64 != "" && isReview == true) {
-          item.showing[0][0].data.valueData.shiShenHe = this.imgBase64;
+        if (this.imgBase64 != '' && isReview == true) {
+          item.showing[0][0].data.valueData.shiShenHe = this.imgBase64
         }
         showing.forEach((item) => {
           item.forEach((item, index) => {
             this.selectedResults.forEach((sel) => {
-              item.data.valueData.checkBox2[sel.index] = sel.result;
-            });
+              item.data.valueData.checkBox2[sel.index] = sel.result
+            })
             this.selectedResults2.forEach((sel) => {
-              item.data.valueData.checkBox[sel.index] = sel.result;
-            });
-            valueDatas.push(item.data.valueData); //遍历出sampleDatas中所有的valueData,放在valueDatas中
-          });
-        });
-      });
-      let result = this.checkMustWriter(valueDatas);
+              item.data.valueData.checkBox[sel.index] = sel.result
+            })
+            valueDatas.push(item.data.valueData) //遍历出sampleDatas中所有的valueData,放在valueDatas中
+          })
+        })
+      })
+      let result = this.checkMustWriter(valueDatas)
       if (!result) {
         this.$notify({
-          message: "有必填项未填写",
-          type: "warning",
-        });
-        return;
+          message: '有必填项未填写',
+          type: 'warning',
+        })
+        return
       }
 
-      if (valueDatas[0].testProject == "project_systvoc") {
-        valueDatas[0].point = [];
+      if (valueDatas[0].testProject == 'project_systvoc') {
+        valueDatas[0].point = []
 
         valueDatas.forEach((item, index) => {
           if (index != 0) {
-            valueDatas[0].point.push(item);
-            valueDatas = valueDatas.slice(0, 1);
+            valueDatas[0].point.push(item)
+            valueDatas = valueDatas.slice(0, 1)
           }
           if (item.hasAll) {
             if (item.allPoint.length > 10) {
-              item.sysReport =
-                item.allPoint[item.allPoint.length - 2].sysReport;
+              item.sysReport = item.allPoint[item.allPoint.length - 2].sysReport
               item.sysDifference =
-                item.allPoint[item.allPoint.length - 2].sysDifference;
+                item.allPoint[item.allPoint.length - 2].sysDifference
             } else {
-              item.sysReport =
-                item.allPoint[item.allPoint.length - 1].sysReport;
-              item.sysDifference = "";
+              item.sysReport = item.allPoint[item.allPoint.length - 1].sysReport
+              item.sysDifference = ''
             }
           } else {
-            item.sysReport = "";
-            item.sysDifference = "";
+            item.sysReport = ''
+            item.sysDifference = ''
           }
-        });
+        })
       }
       valueDatas.forEach((item) => {
         item.testDeviceCheckBox.length &&
           Object.prototype.toString.call(item.testDeviceCheckBox[0]) ===
-            "[object Object]" &&
-          (item.testDeviceCheckBox = item.testDeviceCheckBox.map((a) => a.id));
-      });
+            '[object Object]' &&
+          (item.testDeviceCheckBox = item.testDeviceCheckBox.map((a) => a.id))
+      })
       // console.log("序列化后", JSON.myParse(JSON.stringify(valueDatas)));
       updateSampleData(
         JSON.stringify(valueDatas),
@@ -1383,180 +1380,180 @@ export default {
           if (res.success) {
             this.$notify({
               message: res.msg,
-              type: "success",
-            });
-            let labPickSampleStaffId = JSON.myParse(getToken()).id;
+              type: 'success',
+            })
+            let labPickSampleStaffId = JSON.myParse(getToken()).id
             updateSampleStaff(this.ids.toString(), id, 1).then((res) => {
               if (res.success) {
                 this.$notify({
                   message: res.msg,
                   duration: 1000,
-                  type: "success",
-                });
+                  type: 'success',
+                })
               } else {
                 this.$notify({
                   message: res.msg,
                   duration: 1000,
                   type: error,
-                });
+                })
               }
-            });
+            })
             toSongShen(labPickSampleStaffId, this.ids.toString())
               .then((res) => {
                 if (res.success) {
                   this.$notify({
                     message: res.msg,
                     duration: 1000,
-                    type: "success",
-                  });
-                  this.showFingerprintThree = false;
-                  this.$router.push("/laboratory/analysis");
+                    type: 'success',
+                  })
+                  this.showFingerprintThree = false
+                  this.$router.push('/laboratory/analysis')
                 } else {
                   this.$notify({
                     message: res.msg,
                     duration: 1000,
                     type: error,
-                  });
+                  })
                 }
               })
               .catch((error) => {
-                console.log(error);
-              });
+                console.log(error)
+              })
           } else {
             this.$notify({
               message: res.msg,
-              type: "error",
-            });
+              type: 'error',
+            })
           }
         })
         .catch((error) => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
 
     addRow(index) {
-      this.solutionPreparationData.biaoZhunArr.splice(index + 1, 0, {});
+      this.solutionPreparationData.biaoZhunArr.splice(index + 1, 0, {})
     },
 
     //分析还原上次暂存数据
     reductionData() {
-      bus.$emit("reductionData", this.$store.getters.analysisData);
+      bus.$emit('reductionData', this.$store.getters.analysisData)
     },
 
     showBook() {
-      this.showBookValue = !this.showBookValue;
-      bus.$emit("showBook", this.showBookValue);
+      this.showBookValue = !this.showBookValue
+      bus.$emit('showBook', this.showBookValue)
     },
 
     delRow(index) {
-      let length = this.solutionPreparationData.biaoZhunArr;
+      let length = this.solutionPreparationData.biaoZhunArr
       if (length <= 0) {
         this.$notify({
-          type: "warning",
-          message: "没有可删除行",
-        });
-        return;
+          type: 'warning',
+          message: '没有可删除行',
+        })
+        return
       }
 
-      let id = this.solutionPreparationData.biaoZhunArr[index].id;
+      let id = this.solutionPreparationData.biaoZhunArr[index].id
       let delIndex = this.solutionPreparationData.biaoZhunDownArr.findIndex(
         (item) => {
-          return item.materialNameId == id;
+          return item.materialNameId == id
         }
-      );
+      )
 
       if (delIndex != -1) {
-        this.solutionPreparationData.biaoZhunDownArr.splice(delIndex, 1);
+        this.solutionPreparationData.biaoZhunDownArr.splice(delIndex, 1)
       } else {
-        console.log("没找到删除的id");
+        console.log('没找到删除的id')
       }
-      this.solutionPreparationData.biaoZhunArr.splice(index, 1);
+      this.solutionPreparationData.biaoZhunArr.splice(index, 1)
     },
 
     //检查是否有必填项未填
     checkMustWriter(valueDatas) {
-      let result = true;
+      let result = true
       valueDatas.forEach((item) => {
-        let mustWrite = item.mustWrite;
+        let mustWrite = item.mustWrite
         if (mustWrite) {
           mustWrite.forEach((fieldName) => {
             if (item.hasOwnProperty(fieldName)) {
-              if (item[fieldName] === "" || item[fieldName] === null) {
-                result = false;
+              if (item[fieldName] === '' || item[fieldName] === null) {
+                result = false
               } else if (
                 [fieldName] instanceof Array &&
                 item[fieldName].length <= 0
               ) {
-                result = false;
+                result = false
               }
-            } else if (item["point"][0].hasOwnProperty(fieldName)) {
-              item["point"].forEach((item) => {
-                if (item[fieldName] === "" || item[fieldName] === null) {
-                  result = false;
+            } else if (item['point'][0].hasOwnProperty(fieldName)) {
+              item['point'].forEach((item) => {
+                if (item[fieldName] === '' || item[fieldName] === null) {
+                  result = false
                 } else if (
                   [fieldName] instanceof Array &&
                   item[fieldName].length <= 0
                 ) {
-                  result = false;
+                  result = false
                 }
-              });
+              })
             }
-          });
+          })
         }
-      });
-      return result;
+      })
+      return result
     },
 
     addRowTemplateDwon(index) {
       this.solutionPreparationData.biaoZhunDownArr.splice(index + 1, 0, {
-        materialName: "",
-      });
+        materialName: '',
+      })
     },
 
     delRowTemplateDown(index) {
-      let length = this.solutionPreparationData.biaoZhunDownArr.length;
+      let length = this.solutionPreparationData.biaoZhunDownArr.length
       if (length <= 0) {
         this.$notify({
-          type: "warning",
-          message: "没有可删除行",
-        });
-        return;
+          type: 'warning',
+          message: '没有可删除行',
+        })
+        return
       }
       let id = this.solutionPreparationData.biaoZhunDownArr[index]
-        .materialNameId;
+        .materialNameId
 
       let delIndex = this.solutionPreparationData.biaoZhunArr.findIndex(
         (item) => {
-          return item.id == id;
+          return item.id == id
         }
-      );
+      )
       if (delIndex != -1) {
         this.$notify({
-          type: "warning",
-          message: "该行为自动生成,无法删除!",
-        });
+          type: 'warning',
+          message: '该行为自动生成,无法删除!',
+        })
       } else {
-        this.solutionPreparationData.biaoZhunDownArr.splice(index, 1);
+        this.solutionPreparationData.biaoZhunDownArr.splice(index, 1)
       }
     },
 
     selectChange(arr) {
-      let name = arr[0];
-      let index = arr[1];
-      let materialList = this.solutionPreparationData.materialList;
-      let selectedMater = "";
+      let name = arr[0]
+      let index = arr[1]
+      let materialList = this.solutionPreparationData.materialList
+      let selectedMater = ''
       materialList.forEach((item) => {
         if (item.id == name) {
-          item = JSON.myParse(JSON.stringify(item));
-          selectedMater = item;
+          item = JSON.myParse(JSON.stringify(item))
+          selectedMater = item
         }
-      });
-      if (selectedMater == "") {
-        return;
+      })
+      if (selectedMater == '') {
+        return
       }
-      this.solutionPreparationData.biaoZhunArr[index] = selectedMater;
+      this.solutionPreparationData.biaoZhunArr[index] = selectedMater
       if (this.solutionPreparationData.biaoZhunDownArr.length - 1 < index) {
-        index = this.solutionPreparationData.biaoZhunDownArr.length;
+        index = this.solutionPreparationData.biaoZhunDownArr.length
       }
       if (
         this.solutionPreparationData.biaoZhunDownArr[index] &&
@@ -1564,37 +1561,37 @@ export default {
         this.solutionPreparationData.biaoZhunDownArr[index].materialNameId ==
           selectedMater.id
       ) {
-        return;
+        return
       }
       this.solutionPreparationData.biaoZhunDownArr[index] = {
         materialName: selectedMater.materialName,
         materialNameId: selectedMater.id,
-      };
+      }
     },
 
     entryYuanShi() {
-      let jsonString = this.$refs["curveTemplate"].jsonString;
-      let valueData = jsonString.map((item) => item.data.valueData);
+      let jsonString = this.$refs['curveTemplate'].jsonString
+      let valueData = jsonString.map((item) => item.data.valueData)
       let materialNames = jsonString
-        .filter((item) => item.to === "curve_cbynd")
+        .filter((item) => item.to === 'curve_cbynd')
         .map((item) => item.data.valueData.point)
         .flat()
-        .map((item) => item.materialName);
+        .map((item) => item.materialName)
       if (materialNames.length !== [...new Set(materialNames)].length) {
-        this.$message.warning("标准工作液浓度名称不能重复");
-        return;
+        this.$message.warning('标准工作液浓度名称不能重复')
+        return
       }
 
-      let labPickSampleStaffId = JSON.myParse(getToken()).id;
+      let labPickSampleStaffId = JSON.myParse(getToken()).id
       if (this.$route.query.isEdit == true) {
         if (this.$route.query.copy) {
           this.copyCurve(
             labPickSampleStaffId,
             this.$route.query.solutionId,
             valueData
-          );
+          )
         } else {
-          let solutionId = this.$route.query.solutionId;
+          let solutionId = this.$route.query.solutionId
           updateSolution(
             labPickSampleStaffId,
             JSON.stringify(valueData),
@@ -1603,27 +1600,27 @@ export default {
           ).then((res) => {
             if (res.success) {
               this.$notify({
-                type: "success",
+                type: 'success',
                 message: res.msg,
-              });
-              this.$router.push("/laboratory/curve");
+              })
+              this.$router.push('/laboratory/curve')
             } else {
               this.$notify({
-                type: "error",
+                type: 'error',
                 message: res.msg,
-              });
+              })
             }
-          });
+          })
         }
       } else {
-        this.updateCurve(labPickSampleStaffId, valueData);
+        this.updateCurve(labPickSampleStaffId, valueData)
       }
     },
 
     updateCurve(labPickSampleStaffId, valueData) {
       if (!this.solutionNum) {
-        this.$message.warning("请输入记录编号");
-        return;
+        this.$message.warning('请输入记录编号')
+        return
       }
       updateCurveSolutionPreparationData(
         labPickSampleStaffId,
@@ -1632,21 +1629,21 @@ export default {
       ).then((res) => {
         if (res.success) {
           this.$notify({
-            type: "success",
+            type: 'success',
             message: res.msg,
-          });
-          this.$router.push("/laboratory/curve");
+          })
+          this.$router.push('/laboratory/curve')
         } else {
           this.$notify({
-            type: "error",
+            type: 'error',
             message: res.msg,
-          });
+          })
         }
-      });
+      })
     },
 
     copyCurve(labPickSampleStaffId, beCopySolutionId, valueData) {
-      console.log(this.$route.query.solutionNum);
+      console.log(this.$route.query.solutionNum)
       copySolution(
         labPickSampleStaffId,
         beCopySolutionId,
@@ -1655,93 +1652,91 @@ export default {
       ).then((res) => {
         if (res.success) {
           this.$notify({
-            type: "success",
+            type: 'success',
             message: res.msg,
-          });
-          this.$router.push("/laboratory/curve");
+          })
+          this.$router.push('/laboratory/curve')
         } else {
           this.$notify({
-            type: "error",
+            type: 'error',
             message: res.msg,
-          });
+          })
         }
-      });
+      })
     },
 
     //暂存数据
     TemporaryStorage(isbut = false, isReview) {
-      let valueDatas = [];
-      let sysSampleTotalArea = "",
+      let valueDatas = []
+      let sysSampleTotalArea = '',
         sysBlankTotalArea,
-        sysBlankTargetTotalArea;
-      sysBlankTotalArea = this.AllFeng;
-      sysBlankTargetTotalArea = this.allFengGoal;
+        sysBlankTargetTotalArea
+      sysBlankTotalArea = this.AllFeng
+      sysBlankTargetTotalArea = this.allFengGoal
       this.sampleDatas.forEach((item) => {
-        let showing = item.showing;
-        if (this.imgBase64 != "" && isReview == false) {
-          item.showing[0][0].data.valueData.shiYanJianCe = this.imgBase64;
+        let showing = item.showing
+        if (this.imgBase64 != '' && isReview == false) {
+          item.showing[0][0].data.valueData.shiYanJianCe = this.imgBase64
         }
-        if (this.imgBase64 != "" && isReview == true) {
-          item.showing[0][0].data.valueData.shiShenHe = this.imgBase64;
+        if (this.imgBase64 != '' && isReview == true) {
+          item.showing[0][0].data.valueData.shiShenHe = this.imgBase64
         }
         showing.forEach((item) => {
           item.forEach((item, index) => {
             this.selectedResults.forEach((sel) => {
-              item.data.valueData.checkBox2[sel.index] = sel.result;
-            });
+              item.data.valueData.checkBox2[sel.index] = sel.result
+            })
             this.selectedResults2.forEach((sel) => {
-              item.data.valueData.checkBox[sel.index] = sel.result;
-            });
-            valueDatas.push(item.data.valueData); //遍历出sampleDatas中所有的valueData,放在valueDatas中
-          });
-        });
-      });
+              item.data.valueData.checkBox[sel.index] = sel.result
+            })
+            valueDatas.push(item.data.valueData) //遍历出sampleDatas中所有的valueData,放在valueDatas中
+          })
+        })
+      })
       if (valueDatas.length <= 0) {
-        return;
+        return
       }
-      if (valueDatas[0].testProject == "project_systvoc") {
-        valueDatas[0].point = [];
+      if (valueDatas[0].testProject == 'project_systvoc') {
+        valueDatas[0].point = []
 
         valueDatas.forEach((item, index) => {
           if (index != 0) {
-            valueDatas[0].point.push(item);
-            valueDatas = valueDatas.slice(0, 1);
+            valueDatas[0].point.push(item)
+            valueDatas = valueDatas.slice(0, 1)
           }
 
           if (item.hasAll) {
             if (item.allPoint.length > 10) {
-              item.sysReport =
-                item.allPoint[item.allPoint.length - 2].sysReport;
+              item.sysReport = item.allPoint[item.allPoint.length - 2].sysReport
               item.sysDifference =
-                item.allPoint[item.allPoint.length - 2].sysDifference;
+                item.allPoint[item.allPoint.length - 2].sysDifference
             } else {
-              item.sysReport =
-                item.allPoint[item.allPoint.length - 1].sysReport;
-              item.sysDifference = "";
+              item.sysReport = item.allPoint[item.allPoint.length - 1].sysReport
+              item.sysDifference = ''
             }
           } else {
-            item.sysReport = "";
-            item.sysDifference = "";
+            item.sysReport = ''
+            item.sysDifference = ''
           }
-        });
+        })
         valueDatas[0].point[0] &&
           (sysSampleTotalArea =
-            valueDatas[0].point[0].point[0].parallelWindArea);
+            valueDatas[0].point[0].point[0].parallelWindArea)
       }
-      let taskDataStateId = window.uuid();
+      let taskDataStateId = window.uuid()
       valueDatas.forEach((item) => {
-        item.sysSampleTotalArea = sysSampleTotalArea;
-        item.sysBlankTotalArea = sysBlankTotalArea;
-        item.sysBlankTargetTotalArea = sysBlankTargetTotalArea;
+        item.sysSampleTotalArea = sysSampleTotalArea
+        item.sysBlankTotalArea = sysBlankTotalArea
+        item.sysBlankTargetTotalArea = sysBlankTargetTotalArea
         item.testDeviceCheckBox.length &&
           Object.prototype.toString.call(item.testDeviceCheckBox[0]) ===
-            "[object Object]" &&
-          (item.testDeviceCheckBox = item.testDeviceCheckBox.map((a) => a.id));
-        item.taskDataStateId = taskDataStateId;
+            '[object Object]' &&
+          (item.testDeviceCheckBox = item.testDeviceCheckBox.map((a) => a.id))
+        item.taskDataStateId = taskDataStateId
         item.point.forEach((a) => {
-          a.taskDataStateId = taskDataStateId;
-        });
-      });
+          a.taskDataStateId = taskDataStateId
+        })
+      })
       toTemporaryStorageSampleData(
         JSON.stringify(valueDatas),
         taskDataStateId,
@@ -1750,48 +1745,48 @@ export default {
       )
         .then((res) => {
           if (res.success) {
-            isbut && this.$router.push("/laboratory/analysis");
+            isbut && this.$router.push('/laboratory/analysis')
           } else {
             this.$notify({
-              type: "warning",
+              type: 'warning',
               message: res.msg,
-            });
+            })
           }
         })
-        .catch((error) => {});
+        .catch((error) => {})
     },
 
     toSelectedBox(item) {
       if (item.isCheckBox) {
-        this.selectedResults2.push(item);
+        this.selectedResults2.push(item)
       } else {
-        this.selectedResults.push(item);
+        this.selectedResults.push(item)
       }
     },
 
     toSelectedCurve(item) {
-      this.selectedCurve = item;
+      this.selectedCurve = item
     },
     changeAllFeng(data, boolean) {
-      this.AllFeng = data;
-      this.AllFengFlag.flag = boolean;
+      this.AllFeng = data
+      this.AllFengFlag.flag = boolean
     },
     changeAllFengGoal(data, boolean) {
-      this.allFengGoal = data;
-      this.AllFengFlag.flag = boolean;
+      this.allFengGoal = data
+      this.AllFengFlag.flag = boolean
     },
     reviewBack() {
-      this.$prompt("请输入不通过原因", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$prompt('请输入不通过原因', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
         modal: false,
         inputPattern: /^[\s\S]*.*[^\s][\s\S]*$/,
-        inputErrorMessage: "请填写原因",
-        inputType: "textarea",
+        inputErrorMessage: '请填写原因',
+        inputType: 'textarea',
       })
         .then(({ value }) => {
-          let reason = value;
-          let labPickSampleStaffId = JSON.myParse(getToken()).id;
+          let reason = value
+          let labPickSampleStaffId = JSON.myParse(getToken()).id
           updateSampleStateFinger(
             this.ids.toString(),
             6,
@@ -1800,52 +1795,52 @@ export default {
           ).then((res) => {
             if (res.success) {
               this.$notify({
-                type: "success",
+                type: 'success',
                 message: res.msg,
-              });
-              this.$router.push("/laboratory/upload");
+              })
+              this.$router.push('/laboratory/upload')
             } else {
               this.$notify({
-                type: "error",
+                type: 'error',
                 message: res.msg,
-              });
+              })
             }
-          });
+          })
         })
-        .catch(() => {});
+        .catch(() => {})
     },
 
     toCheckBox(resultObj) {
-      let isCheckBox = resultObj.isCheckBox;
-      let index = resultObj.index;
-      let result = resultObj.result;
-      this.solutionPreparationData.checkBoxArr[index] = result;
+      let isCheckBox = resultObj.isCheckBox
+      let index = resultObj.index
+      let result = resultObj.result
+      this.solutionPreparationData.checkBoxArr[index] = result
     },
 
     toShowSongShen() {
-      let meetTime = [];
+      let meetTime = []
       this.labtemplate.forEach((item, index) => {
         item.value.forEach((val, num) => {
           if (val.labPickSampleTime) {
-            let date = new Date(val.labPickSampleTime.replace("-", "/"));
-            meetTime.push(date.getTime());
+            let date = new Date(val.labPickSampleTime.replace('-', '/'))
+            meetTime.push(date.getTime())
           }
-        });
-      });
+        })
+      })
       let sysTestingTime = this.sampleDatas[0].showing[0][0].data.valueData.sysTestingTime.replace(
-        "-",
-        "/"
-      );
+        '-',
+        '/'
+      )
       let sysTestingEndTime = this.sampleDatas[0].showing[0][0].data.valueData.sysTestingEndTime.replace(
-        "-",
-        "/"
-      );
+        '-',
+        '/'
+      )
       let point = this.sampleDatas[0].showing[0][0].data.valueData.point.filter(
         (item) => item.sysAnalysisItem
-      );
+      )
       let sysAnalysisResult = point
-        .map((item) => item.sysAnalysisResult !== " " && item.sysAnalysisResult)
-        .filter((item) => item);
+        .map((item) => item.sysAnalysisResult !== ' ' && item.sysAnalysisResult)
+        .filter((item) => item)
       if (sysTestingTime) {
         if (Math.max(...meetTime) < new Date(sysTestingTime).getTime()) {
           if (
@@ -1853,79 +1848,79 @@ export default {
             new Date(sysTestingEndTime).getTime()
           ) {
             let allow = [
-              "project_sysjq",
-              "project_sysben_two",
-              "project_systvoc",
-            ];
-            let modelName = this.labtemplate[0].modelName;
-            let index = allow.findIndex((item) => item === modelName);
+              'project_sysjq',
+              'project_sysben_two',
+              'project_systvoc',
+            ]
+            let modelName = this.labtemplate[0].modelName
+            let index = allow.findIndex((item) => item === modelName)
             if (this.AllFengFlag.flag) {
               if (!this.AllFeng) {
                 this.$notify({
-                  type: "warning",
-                  message: "请填写空白峰面积",
-                });
-                return;
+                  type: 'warning',
+                  message: '请填写空白峰面积',
+                })
+                return
               }
             }
             if (!this.selectedCurve && index != -1) {
               this.$notify({
-                type: "warning",
-                message: "请选择曲线",
-              });
-              return;
+                type: 'warning',
+                message: '请选择曲线',
+              })
+              return
             }
             if (point.length > sysAnalysisResult.length) {
               this.$notify({
-                type: "warning",
-                message: "有分析结果未填写",
-              });
-              return;
+                type: 'warning',
+                message: '有分析结果未填写',
+              })
+              return
             }
-            this.showFingerprintThree = true;
+            this.showFingerprintThree = true
           } else {
             this.$notify({
-              type: "error",
-              message: "结束时间必须大于开始时间",
-            });
+              type: 'error',
+              message: '结束时间必须大于开始时间',
+            })
           }
         } else {
-          let date = new Date(Math.max(...meetTime));
-          let Y = date.getFullYear() + "-";
+          let date = new Date(Math.max(...meetTime))
+          let Y = date.getFullYear() + '-'
           let M =
             (date.getMonth() + 1 < 10
-              ? "0" + (date.getMonth() + 1)
-              : date.getMonth() + 1) + "-";
-          let D = date.getDate() + " ";
-          let h = date.getHours() + ":";
-          let m = date.getMinutes() + ":";
-          let s = date.getSeconds();
+              ? '0' + (date.getMonth() + 1)
+              : date.getMonth() + 1) + '-'
+          let D = date.getDate() + ' '
+          let h = date.getHours() + ':'
+          let m = date.getMinutes() + ':'
+          let s = date.getSeconds()
           this.$notify({
-            type: "error",
-            message: "开始时间需大于接样时间 " + Y + M + D + h + m + s,
-          });
+            type: 'error',
+            message: '开始时间需大于接样时间 ' + Y + M + D + h + m + s,
+          })
         }
       } else {
         this.$notify({
-          type: "error",
-          message: "请选择检测时间",
-        });
+          type: 'error',
+          message: '请选择检测时间',
+        })
       }
     },
 
     toNoPass(result, id, staffName) {
-      this.staffName = staffName;
+      this.staffName = staffName
       if (result) {
-        this.checkId = id;
-        this.showFingerprintNopass = false;
-        this.notPassedBox = true;
+        this.checkId = id
+        this.showFingerprintNopass = false
+        this.notPassedBox = true
       }
     },
 
     decideNoPass() {
       if (!this.reason) {
-        this.$message.warning("请输入原因");
-        return;
+        this.$message.warning('请输入原因')
+        return
       }
       winUpdateTaskState(
         this.ids.toString(),
@@ -1938,47 +1933,47 @@ export default {
       ).then((res) => {
         if (res.success) {
           this.$notify({
-            type: "success",
+            type: 'success',
             message: res.msg,
-          });
-          this.notPassedBox = false;
+          })
+          this.notPassedBox = false
 
           if (this.target == 2) {
-            this.$router.push("/local/review");
+            this.$router.push('/local/review')
           } else {
-            this.$router.push("/local/upload");
+            this.$router.push('/local/upload')
           }
         } else {
           this.$notify({
-            type: "error",
+            type: 'error',
             message: res.msg,
-          });
+          })
         }
-      });
+      })
     },
 
     getChangeMyCurve(curveArr) {
-      this.curveArr = JSON.stringify(curveArr);
+      this.curveArr = JSON.stringify(curveArr)
     },
 
     //现场更新签名
     toUpdateTaskData(tasktemp, flag) {
-      let showing = tasktemp.showing;
-      this.templateArr = [];
+      let showing = tasktemp.showing
+      this.templateArr = []
       showing.forEach((item) => {
         item.forEach((item) => {
           if (item.data.isHead) {
             if (flag == 2) {
-              item.data.valueData.imgBase64Two = this.imgBase64Two;
+              item.data.valueData.imgBase64Two = this.imgBase64Two
             } else if (flag == 1) {
             } else {
-              item.data.valueData.imgBase64 = this.imgBase64;
+              item.data.valueData.imgBase64 = this.imgBase64
             }
           }
-          this.templateArr.push(item.data.valueData);
-        });
-      });
-      updateTaskData(tasktemp.id, JSON.stringify(this.templateArr));
+          this.templateArr.push(item.data.valueData)
+        })
+      })
+      updateTaskData(tasktemp.id, JSON.stringify(this.templateArr))
     },
 
     toChangeState() {
@@ -1991,121 +1986,121 @@ export default {
         this.staffName,
         JSON.myParse(getToken()).id
       ).then((res) => {
-        this.showFingerprint = false;
-        this.$router.push("/local/entering");
-      });
+        this.showFingerprint = false
+        this.$router.push('/local/entering')
+      })
     },
   },
 
   created() {
-    this.isSelect = sessionStorage.getItem("isSelect");
-    this.nowAnalysis = sessionStorage.getItem("analysis");
+    this.isSelect = sessionStorage.getItem('isSelect')
+    this.nowAnalysis = sessionStorage.getItem('analysis')
 
     // console.log('实验室选择的样品吧：', this.labtemplate)
 
-    this.target = this.$route.params.target;
+    this.target = this.$route.params.target
     /* 0 2 3 属于现场 */
     if (this.target == 0 || this.target == 2 || this.target == 3) {
       if (this.$route.params.ids) {
-        this.ids = this.$route.params.ids.split(",");
+        this.ids = this.$route.params.ids.split(',')
         // 获取任务数据
-        this.initTasks(this.ids);
+        this.initTasks(this.ids)
       }
       // 给tab 选项卡赋值
-      this.tabArray = this.tasks;
+      this.tabArray = this.tasks
     }
     /* 1 属于实验室分析 */
     if (this.target == 1) {
-      this.checkTime = _dateFormat("now", "Y-M-D h:m:s");
-      let labtemplate = this.labtemplate;
+      this.checkTime = _dateFormat('now', 'Y-M-D h:m:s')
+      let labtemplate = this.labtemplate
       for (let i = 0; i < labtemplate.length; i++) {
-        this.samples = this.samples.concat(labtemplate[i].value);
+        this.samples = this.samples.concat(labtemplate[i].value)
       }
-      this.initSamples();
-      this.ids = this.samples.map((item) => item.id);
+      this.initSamples()
+      this.ids = this.samples.map((item) => item.id)
       // 给tab 选项卡赋值
-      this.tabArray = this.labtemplate;
+      this.tabArray = this.labtemplate
 
       getMan(2).then((res) => {
-        this.allPerson = res.data;
-      });
+        this.allPerson = res.data
+      })
 
       /*有些检测项目数据是仪器导入的, 不需要暂存*/
-      let modelName = labtemplate[0].modelName;
+      let modelName = labtemplate[0].modelName
       let forbidArr = [
-        "project_systvoc",
-        "project_sysben",
-        "project_sysben_two",
-      ];
-      let index = forbidArr.findIndex((item) => item === modelName);
-      if (index === -1 && window.location.href.indexOf("localhost") === -1) {
+        'project_systvoc',
+        'project_sysben',
+        'project_sysben_two',
+      ]
+      let index = forbidArr.findIndex((item) => item === modelName)
+      if (index === -1 && window.location.href.indexOf('localhost') === -1) {
         this.$isUpdate
           ? (this.timerId = setInterval(() => {
-              this.TemporaryStorage();
+              this.TemporaryStorage()
             }, 10000))
-          : "";
+          : ''
       }
     }
 
     /* 实验室审核 */
     if (this.target == 4) {
-      let labtemplate = this.labtemplate;
+      let labtemplate = this.labtemplate
       for (let i = 0; i < labtemplate.length; i++) {
-        this.samples = this.samples.concat(labtemplate[i].value);
+        this.samples = this.samples.concat(labtemplate[i].value)
       }
 
-      this.initSamples();
+      this.initSamples()
       getMan(2).then((res) => {
-        this.allPerson = res.data;
-      });
-      this.ids = this.samples.map((item) => item.id);
-      this.tabArray = this.labtemplate;
-      this.tasks = this.tabArray;
+        this.allPerson = res.data
+      })
+      this.ids = this.samples.map((item) => item.id)
+      this.tabArray = this.labtemplate
+      this.tasks = this.tabArray
     }
 
     if (this.target == 5) {
       if (this.$route.query.isEdit) {
-        this.solutionNum = this.$route.query.solutionNum;
+        this.solutionNum = this.$route.query.solutionNum
       }
       this.templateContent = JSON.myParse(
-        sessionStorage.getItem("templateContent")
-      );
+        sessionStorage.getItem('templateContent')
+      )
     }
   },
 
   computed: {
     tempalteAction() {
-      let action = this.$store.state.app.templateAction;
-      if (action == "update") {
-        this.android = "hide";
+      let action = this.$store.state.app.templateAction
+      if (action == 'update') {
+        this.android = 'hide'
       } else {
-        this.android = "show";
+        this.android = 'show'
       }
-      return action;
+      return action
     },
     labtemplate() {
       if (this.$store.state.laboratory.labtemplate) {
         sessionStorage.setItem(
-          "labtemplate",
+          'labtemplate',
           JSON.stringify(this.$store.state.laboratory.labtemplate)
-        );
-        return this.$store.state.laboratory.labtemplate;
+        )
+        return this.$store.state.laboratory.labtemplate
       } else {
-        return JSON.parse(sessionStorage.getItem("labtemplate"));
+        return JSON.parse(sessionStorage.getItem('labtemplate'))
       }
     },
 
     showSave() {
-      return this.$route.query.solutionPass == 1 ? false : true;
+      return this.$route.query.solutionPass == 1 ? false : true
     },
 
     changeHasReviewData() {
       if (this.$store.getters.hasReviewData.solutionPreparationData) {
         return JSON.myParse(
           this.$store.getters.hasReviewData.solutionPreparationData
-        );
+        )
       } else {
-        return;
+        return
       }
     },
   },
@@ -2116,31 +2111,31 @@ export default {
     //   history.pushState(null, null, document.URL);
     //   window.addEventListener("popstate", this.goBack, false);
     // }
-    bus.$on("getReason", (data) => {
-      this.delRowReason = true;
-      this.delRowReasonArr.push(data);
-    });
-    bus.$on("showSave", (data) => {
-      this.showSaveLog = data;
-    });
-    bus.$on("getDeleteArr", (data) => {
-      this.deleteArr = data;
-    });
-    bus.$on("getTuPuUrl", (val) => {
-      this.sysAtlasUrl = val;
-    });
+    bus.$on('getReason', (data) => {
+      this.delRowReason = true
+      this.delRowReasonArr.push(data)
+    })
+    bus.$on('showSave', (data) => {
+      this.showSaveLog = data
+    })
+    bus.$on('getDeleteArr', (data) => {
+      this.deleteArr = data
+    })
+    bus.$on('getTuPuUrl', (val) => {
+      this.sysAtlasUrl = val
+    })
     // setTimeout(() => {
-    //   this.bdInit();
-    // }, 1000);
+    //   this.bdInit()
+    // }, 1000)
   },
 
   destroyed() {
     if (this.timerId) {
-      clearInterval(this.timerId);
+      clearInterval(this.timerId)
     }
     // window.removeEventListener("popstate", this.goBack, false);
   },
-};
+}
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
