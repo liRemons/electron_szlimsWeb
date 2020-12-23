@@ -107,10 +107,7 @@ export default {
             a.materialNum === headPoint[0].materialName &&
             this.formula === 'TVOC50325'
           ) {
-            num = (
-              ((item.standardValue * a.Dosage) / a.constantVolume) *
-              a.count
-            ).toFixed46(2)
+            num = (item.standardValue * a.Dosage * a.count).toFixed46(2)
           } else if (!['TVOC18883', '臭氧'].includes(this.formula)) {
             num = (
               ((item.concentration * a.Dosage) / a.constantVolume) *
