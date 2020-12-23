@@ -27,7 +27,7 @@ const winURL =
 
 let mainWindow
 
-// import { FingerAction } from "./finger";
+import { FingerAction } from "./finger";
 function createWindow() {
   /**
    * Initial window options
@@ -127,7 +127,7 @@ ipcMain.on('sigShowRightClickMenu', (event, arg) => {
 
 app.on('ready', () => {
   createWindow()
-  // FingerAction(mainWindow);
+  FingerAction(mainWindow);
   // 开发模式下注册快捷键
   if (process.env.NODE_ENV == 'development') {
     globalShortcut.register('CommandOrControl+F12', () => {
