@@ -899,7 +899,7 @@ export default {
               item.valueData.deviceList.forEach((a,b)=>{
                 if(a==='电场强度'){
                   item.valueData.deviceList.splice(b,1)
-                } 
+                }
               })
             }
             if (item.name === "project_dc_xcdc") {
@@ -1084,6 +1084,7 @@ export default {
           }
         });
       });
+      // console.log( this.jsonString,' this.jsonString');
       // ————————————————————————————————————
       // this.Reset();
     },

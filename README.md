@@ -68,7 +68,7 @@ Mac: [app release](https://github.com/PanJiaChen/electron-vue-admin/releases/tag
 finger 支持Node 32位版本，请将Node 安装32位版本，注意：打包命令 `npm run build` 会在dist文件夹下生成main.js文件，请在其他文件生成之前将main.js文件夹下的路径 `C:\\Users\\Administrator\\Desktop\\webApp\\src\\main\\finger\\finger.node` 改为 `.\\finger\\finger.node`（路径一般在main.js最后面）
 
 ### 关于打包正式版及测试版
-1. 正式版 
+1. 正式版
    1. 将 `package.json` 内的 `appId` 改为 `org.simulatedgreg.electron-vue`
    2. 将 `package.json` 内的 `productName` 改动
    3. 将 `package.json` 内的 `name` 改为 `szlims-winapp`
