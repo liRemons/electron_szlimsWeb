@@ -1,5 +1,5 @@
 {
-    "name": "szlims-winapp",
+    "name": "szlims-winapp_test",
     "version": "1.28.0",
     "author": "",
     "description": "杭州湘亭科技提供技术支持",
@@ -16,8 +16,8 @@
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js"
     },
     "build": {
-        "productName": "瑞达智能检验检测管理系统-检验检测平台",
-        "appId": "org.simulatedgreg.electron-vue",
+        "productName": "瑞达智能检验检测管理系统-检验检测平台测试版",
+        "appId": "org.simulatedgregTest.electron-vue",
         "directories": {
             "output": "build"
         },
