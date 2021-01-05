@@ -17,10 +17,16 @@
           </td>
         </tr>
         <tr>
-          <td colspan="9" style="text-align: left; padding-left: 10px">
-            <span style="white-space: normal; 20px !important">
-              头部模体：验收：与厂家说明书指标相差±15%内；
-              <br />状态：与厂家说明书指标相差±20%内,若无说明书技术指标参考，应≤50mGy；稳定性：与基线值相差±15%内。
+          <td
+            colspan="9"
+            style="
+              padding-left: 10px;
+              line-height: 20px;
+              text-align: left;
+            "
+          >
+            <span style="white-space: normal !important">
+              头部模体：验收：与厂家说明书指标相差±15%内；状态：与厂家说明书指标相差±20%内,若无说明书技术指标参考，应≤50mGy；稳定性：与基线值相差±15%内。
               <br />体部模体：验收：与厂家说明书指标相差±15%以内。
               腰椎：＜35mGy。腹部：＜25mGy。
             </span>
@@ -61,6 +67,7 @@
           </td>
         </tr>
       </table>
+
       <table
         class="myTable"
         v-for="(item, index) in data.valueData.point"
@@ -77,7 +84,9 @@
             ></myInput>
             kV
           </td>
-          <td>管电流</td>
+          <td style="font-size:12px">
+            {{ item.bunit === 'mAs' ? '管电流时间积' : '管电流' }}
+          </td>
           <td colspan="2">
             <myInput
               style="width: 50%"
@@ -127,22 +136,24 @@
               style="text-align: center; width: 70%"
               v-model="item.e"
               :defaultValue="item.e"
+              @change.native="changeNum(item, 'e', index)"
             ></myInput>
             mm
           </td>
           <td>厂家规定值</td>
           <td colspan="2">
             <el-checkbox
+              v-if="!purposeDetection.includes('验收')"
               v-model="item.checked"
             ></el-checkbox>
-              <myInput
-                v-if="item.checked"
-                style="width: 50%"
-                v-model="item.f"
-                @change.native="reset()"
-                :defaultValue="item.f"
-              ></myInput>
-              mGy
+            <myInput
+              v-if="item.checked"
+              style="width: 50%"
+              v-model="item.f"
+              @change.native="reset()"
+              :defaultValue="item.f"
+            ></myInput>
+            mGy
           </td>
           <td>CTDIw 显示值</td>
           <td>
@@ -216,12 +227,13 @@
           <td :rowspan="i == 0 ? 5 : 0" v-if="i == 0">{{ val.G }}</td>
         </tr>
         <tr v-if="data.valueData.options.includes(index)">
-          <td colspan="2">{{ index === 0 ? "头部" : "体部" }}检测结果（%）</td>
+          <td colspan="2">{{ index === 0 ? '头部' : '体部' }}检测结果（%）</td>
           <td colspan="7">
             <span>{{ item.result }}</span>
           </td>
         </tr>
       </table>
+
       <table class="myTable">
         <tr>
           <td colspan="2">备注</td>
@@ -235,78 +247,82 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
       showInput: false,
-    };
+    }
   },
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData",
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
   filters: {},
   methods: {
     returnVal(val, item, index) {
-      console.log("单位：", val, item, index);
-      item.bunit = val;
+      console.log('单位：', val, item, index)
+      item.bunit = val
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.item.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.item.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     isNumber(val) {
-      if (parseFloat(val).toString() == "NaN") {
-        return false;
+      if (parseFloat(val).toString() == 'NaN') {
+        return false
       } else {
-        return true;
+        return true
       }
     },
     changeNum(item, num, fuIndex) {
       switch (num) {
-        case "a":
-          if (item.a != "") {
+        case 'a':
+          if (Number(item.a) < 0 || isNaN(item.a)) {
+            item.a = ''
+            return
+          }
+          if (item.a != '') {
             if (
               this.isNumber(item.a) &&
               this.data.valueData.factorArr instanceof Array &&
               this.data.valueData.factorArr.length > 0
             ) {
-              item.h = this.getFactor(item.a, this.data.valueData.factorArr);
+              item.h = this.getFactor(item.a, this.data.valueData.factorArr)
             } else {
-              item.h = "";
+              item.h = ''
             }
           }
-          break;
-        case "D":
-          if (item.A != "" && item.B != "" && item.C != "") {
+          break
+        case 'D':
+          if (item.A != '' && item.B != '' && item.C != '') {
             item.D = (
               (Number(item.A) + Number(item.B) + Number(item.C)) /
               3
-            ).toFixed46(1);
+            ).toFixed46(1)
             item.E = (
               (item.D * 10) /
               Number(this.data.valueData.point[fuIndex].e)
-            ).toFixed46(1);
+            ).toFixed46(1)
             item.F = (
               item.E * Number(this.data.valueData.point[fuIndex].h)
-            ).toFixed46(1);
+            ).toFixed46(1)
           }
           if (
             this.data.valueData.point[fuIndex].datas.every((val, index) => {
@@ -314,50 +330,55 @@ export default {
                 this.isNumber(val.A) &&
                 this.isNumber(val.B) &&
                 this.isNumber(val.C)
-              );
+              )
             })
           ) {
             let garr = this.data.valueData.point[fuIndex].datas.map((i) =>
               isNaN(i.F) ? 0 : Number(i.F)
-            );
-            let temparr = this.data.valueData.point[fuIndex].datas;
+            )
+            let temparr = this.data.valueData.point[fuIndex].datas
             for (let i = 0; i < temparr.length; i++) {
               temparr[i].G = (
                 (1 / 3) * garr[0] +
                 (2 / 3) * ((garr[1] + garr[2] + garr[3] + garr[4]) / 4)
-              ).toFixed46(1);
+              ).toFixed46(1)
             }
-            let result = "";
-            let f = this.data.valueData.point[fuIndex].f;
-            if (this.purposeDetection.includes("验收")) {
+            let result = ''
+            let f = this.data.valueData.point[fuIndex].f
+            if (this.purposeDetection.includes('验收')) {
               if (this.isNumber(f)) {
-                result = ((temparr[0].G - f) * (100 / f)).toFixed46(1);
+                result = ((temparr[0].G - f) * (100 / f)).toFixed46(1)
               }
-            } else if (this.purposeDetection.includes("状态")) {
+            } else if (this.purposeDetection.includes('状态')) {
               if (this.isNumber(f)) {
-                result = ((temparr[0].G - f) * (100 / f)).toFixed46(1);
+                result = ((temparr[0].G - f) * (100 / f)).toFixed46(1)
               } else {
-                result = temparr[0].G;
+                result = temparr[0].G
               }
             }
-            this.data.valueData.point[fuIndex].result = result;
+            this.data.valueData.point[fuIndex].result = result
           } else {
             this.data.valueData.point[fuIndex].datas.forEach((val, index) => {
-              val.G = "";
-            });
-            this.data.valueData.point[fuIndex].result = "";
+              val.G = ''
+            })
+            this.data.valueData.point[fuIndex].result = ''
           }
-          break;
+          break
+        case 'e':
+          if (Number(item.e) < 0 || isNaN(item.e)) {
+            item.e = ''
+          }
+          break
         default:
-          break;
+          break
       }
     },
     reset() {
       this.data.valueData.point.forEach((item, index) => {
         item.datas.forEach((val, i) => {
-          this.changeNum(val, "D", index);
-        });
-      });
+          this.changeNum(val, 'D', index)
+        })
+      })
     },
   },
   computed: {
@@ -370,25 +391,22 @@ export default {
   watch: {
     deviceFactor(val) {
       if (val instanceof Array && val.length > 0) {
-        console.log("数据变没变");
-        this.data.valueData.factorArr = val;
+        console.log('数据变没变')
+        this.data.valueData.factorArr = val
       }
     },
     purposeDetection() {
-      this.reset();
+      this.reset()
     },
     sizeList(val) {
-      this.data.valueData.sizeList = val;
-      if (this.data.valueData.point[0].view === "") {
-        this.data.valueData.point[0].view = Math.max(...val.split(","));
+      this.data.valueData.sizeList = val
+      if (this.data.valueData.point[0].view === '') {
+        this.data.valueData.point[0].view = Math.max(...val.split(','))
       }
     },
   },
-  mounted() {
-    
-  },
-};
+  mounted() {},
+}
 </script>
 
-<style>
-</style>
+<style></style>

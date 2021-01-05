@@ -20,7 +20,7 @@
         <tr>
           <td colspan="9" style="text-align: left; padding-left: 10px">
             <span
-              >验收：±5HU内；状态：±6HU内；稳定性：与基线值相差±2HU内。</span
+              >常规算法:验收:>6.01pcm;状态:>5.01p/cm。高分辨力算法:验收:>111p/cm。</span
             >
           </td>
         </tr>
@@ -106,7 +106,7 @@
           <td style="white-space: normal">细节CT值（HU）</td>
           <td style="white-space: normal">背景CT值（HU）</td>
           <td>窗位</td>
-          <td style="white-space: normal">检测结果（lp/mm）</td>
+          <td style="white-space: normal">检测结果（Lp/mm）</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point" :key="index">
           <td colspan="2">
@@ -179,72 +179,70 @@ export default {
   data() {
     return {
       showInput: false,
-    };
+    }
   },
   computed: {},
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData",
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
   filters: {},
   methods: {
     returnVal(val, name, index) {
-      this.data.valueData.bunit = val;
+      this.data.valueData.bunit = val
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.data.valueData.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.data.valueData.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     err(msg) {
       this.$notify({
-        type: "error",
+        type: 'error',
         message: msg,
-      });
+      })
     },
     changeNum(item, num) {
       switch (num) {
-        case "d":
-          if (Number(item.d) > 50) this.err("大于50mGy");
-          break;
-        case "B":
-          if (Number(item.B) > 8) this.err("请使用薄层扫描");
-          break;
-        case "C":
-          if (Number(item.C) > 140) this.err("请使用小FOV 扫描");
-          break;
-        case "F":
-          if (item.D != "" && item.E != "");
-          {
-            item.F = (Number(item.D) + Number(item.E)) / 2;
+        case 'd':
+          if (Number(item.d) > 50) this.err('大于50mGy')
+          break
+        case 'B':
+          if (Number(item.B) > 8) this.err('请使用薄层扫描')
+          break
+        case 'C':
+          if (Number(item.C) > 140) this.err('请使用小FOV 扫描')
+          break
+        case 'F':
+          if (item.D != '' && item.E != '') {
+            item.F = (Number(item.D) + Number(item.E)) / 2
           }
-          break;
-        case "G":
-          if (Number(item.G) > 21) this.err("请确认检测结果");
+          break
+        case 'G':
+          if (Number(item.G) > 21) this.err('请确认检测结果')
 
-          break;
+          break
         default:
-          break;
+          break
       }
     },
   },
   mounted() {},
-};
+}
 </script>
 
-<style>
-</style>
+<style></style>

@@ -637,7 +637,8 @@ export default {
             to = 'projcet_jcbt'
           }
 
-          let arr = showing.filter((el) =>
+          let arr = showing.filter(
+            (el) =>
               el.to === to &&
               el.data.valueData.multipleId === item.data.valueData.multipleId
           )

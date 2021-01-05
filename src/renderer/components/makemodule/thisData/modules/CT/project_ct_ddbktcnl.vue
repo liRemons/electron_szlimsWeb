@@ -1,4 +1,4 @@
-//  低对比可探测能力
+// 低对比可探测能力
 
 <template>
   <div>
@@ -50,6 +50,7 @@
               style="text-align: center;width: 70%"
               v-model="data.valueData.a"
               :defaultValue="data.valueData.a"
+              @change.native="changeNum(data.valueData, 'a')"
             ></myInput>
             kV
           </td>
@@ -59,6 +60,7 @@
               style="text-align: center;width: 50%;"
               v-model="data.valueData.b"
               :defaultValue="data.valueData.b"
+              @change.native="changeNum(data.valueData, 'b')"
             ></myInput>
             <selectModel
               style="width: 50%;float: right;"
@@ -81,6 +83,7 @@
               style="text-align: center;width: 70%"
               v-model="data.valueData.c"
               :defaultValue="data.valueData.c"
+              @change.native="changeNum(data.valueData, 'c')"
             ></myInput>
             s
           </td>
@@ -92,6 +95,7 @@
               style="text-align: center;width: 70%"
               v-model="data.valueData.d"
               :defaultValue="data.valueData.d"
+              @change.native="changeNum(data.valueData, 'd')"
             ></myInput>
             mm
           </td>
@@ -161,7 +165,7 @@
           <td>
             <myInput
               :style="{
-                color: Number(item.A) < Number(item.C) ? 'red' : '#000'
+                color: Number(item.A) < Number(item.C) ? 'red' : '#000',
               }"
               style="text-align: center"
               @change.native="changeNum(item, 'E')"
@@ -207,7 +211,7 @@
             ></myInput>
           </td>
           <td v-if="index == 0" rowspan="3">
-            {{item.I}}
+            {{ item.I }}
             <!-- <myInput
               style="text-align: center"
               v-model="item.I"
@@ -224,99 +228,107 @@
 export default {
   data() {
     return {
-      showInput: false
-    };
+      showInput: false,
+    }
   },
   computed: {},
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData"
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
   filters: {},
   methods: {
     returnVal(val, name, index) {
-      this.data.valueData.bunit = val;
+      this.data.valueData.bunit = val
     },
     returnGVal(val, item, index) {
-      item.G = val;
+      item.G = val
       switch (item.contrast) {
-        case "1%":
-          item.H = item.G;
-          break;
-        case "0.5%":
-          item.H = (item.G * 0.5).toFixed46(2);
-          break;
-        case "0.3%":
-          item.H = (item.G * 0.3).toFixed46(2);
-          break;
+        case '1%':
+          item.H = item.G
+          break
+        case '0.5%':
+          item.H = (item.G * 0.5).toFixed46(2)
+          break
+        case '0.3%':
+          item.H = (item.G * 0.3).toFixed46(2)
+          break
         default:
-          break;
+          break
       }
       let harr = this.data.valueData.point
-        .map(o => o.H)
-        .filter(i => i != "")
-        .map(z => Number(z));
+        .map((o) => o.H)
+        .filter((i) => i != '')
+        .map((z) => Number(z))
       this.data.valueData.point.forEach(
-        i => (i.I =this.IntegerAdd2 ((eval(harr.join("+")) / 3).toFixed46(2)))
-      );
+        (i) => (i.I = this.IntegerAdd2((eval(harr.join('+')) / 3).toFixed46(2)))
+      )
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.data.valueData.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.data.valueData.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     err(msg) {
       this.$notify({
-        type: "error",
-        message: msg
-      });
+        type: 'error',
+        message: msg,
+      })
     },
     changeNum(item, num) {
+      if (['a', 'b', 'c', 'd', 'e', 'f'].includes(num)) {
+        if (isNaN(item[num])) {
+          item[num] = ''
+        }
+      }
       switch (num) {
-        case "f":
-          if (Number(item.f) > 50) this.err("大于50mGy");
-          break;
-        case "e":
-          if (Number(item.e) < 5) this.err("应尽量接近10");
+        case 'f':
+          if (Number(item.f) > 50) this.err('大于50mGy')
+          break
+        case 'e':
+          if (Number(item.e) < 5) this.err('应尽量接近10')
           if (Number(item.e < 5)) {
-            item.e = null;
+            item.e = null
           }
-          break;
-        case "E":
-          if (item.A != "" && item.B != "" && item.C != "" && item.D != "") {
-            item.E = (
-              Number(item.A) -
-              Number(item.C) +
-              5 * Math.max(Number(item.B), Number(item.D))
-            ).toFixed46(2);
-            item.F = ((Number(item.A) + Number(item.C)) / 2).toFixed46(2);
+          break
+        case 'E':
+          if (item.A != '' && item.B != '' && item.C != '' && item.D != '') {
+            item.E = this.IntegerAdd0(
+              (
+                Number(item.A) -
+                Number(item.C) +
+                5 * Math.max(Number(item.B), Number(item.D))
+              ).toFixed46(1)
+            )
+            item.F = this.IntegerAdd0(
+              ((Number(item.A) + Number(item.C)) / 2).toFixed46(1)
+            )
           }
           if (item.A < item.C) {
-            this.err("孔内值必须大于孔外值");
+            this.err('孔内值必须大于孔外值')
           }
-          break;
+          break
         default:
-          break;
+          break
       }
-    }
+    },
   },
-  mounted() {}
-};
+  mounted() {},
+}
 </script>
 
-<style>
-</style>
+<style></style>

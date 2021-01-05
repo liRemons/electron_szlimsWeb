@@ -144,7 +144,9 @@
               style="text-align: center;width: 70%"
               :style="{
                 color:
-                  data.valueData.e < 5 || data.valueData.e > 10 ? 'red' : '#000'
+                  data.valueData.e < 5 || data.valueData.e > 10
+                    ? 'red'
+                    : '#000',
               }"
               @change.native="changeNum(data.valueData, 'e')"
               v-model="data.valueData.e"
@@ -176,7 +178,7 @@
               v-model="data.valueData.valueOption"
               label="2"
             >
-              临床常用头部
+              临床常用体部
               <br />扫描条件
             </el-radio>
           </td>
@@ -247,7 +249,7 @@
             ></myInput>
             mm
           </td>
-          <td>CTDI 显示值</td>
+          <td>偏差</td>
           <td>
             <myInput
               v-if="data.valueData.valueOption == 2"
@@ -434,104 +436,102 @@ export default {
   data() {
     return {
       showInput: false,
-      zhezhao: ""
-    };
+      zhezhao: '',
+    }
   },
   computed: {},
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData"
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
-  watch: {
-  },
+  watch: {},
   filters: {},
   methods: {
     optionChangeValue(val) {
       if (val == 0 || val == 1) {
-        this.zhezhao = 1;
+        this.zhezhao = 1
       } else {
-        this.zhezhao = 2;
+        this.zhezhao = 2
       }
     },
     returnVal(val, item, index) {
-      item.bunit = val;
+      item.bunit = val
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.data.valueData.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.data.valueData.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     err(msg) {
       this.$notify({
-        type: "error",
-        message: msg
-      });
+        type: 'error',
+        message: msg,
+      })
     },
     changeNum(item, num) {
       switch (num) {
-        case "e":
-          if (Number(item.e) > 5) this.err("应尽量接近10");
+        case 'e':
+          if (Number(item.e) > 5) this.err('应尽量接近10')
           if (Number(item.e) < 5) {
-            item.e = null;
+            item.e = null
           }
-          break;
+          break
         // case "f":
         //   if (Number(item.f) > 50) this.err("大于50mGy");
         //   break;
-        case "E":
-          if (item.A != "") {
-            item.E = (120 - Number(item.A)).toFixed46(2);
+        case 'E':
+          if (item.A != '') {
+            item.E = (120 - Number(item.A)).toFixed46(2)
           }
-        case "F":
-          if (item.B != "") {
-            item.F = (-1000 - Number(item.B)).toFixed46(2);
+        case 'F':
+          if (item.B != '') {
+            item.F = (-1000 - Number(item.B)).toFixed46(2)
           }
-        case "G":
-          if (item.C != "") {
-            if (item.C == "/") {
-              item.G = "/";
+        case 'G':
+          if (item.C != '') {
+            if (item.C == '/') {
+              item.G = '/'
             } else {
-              item.G = (950 - Number(item.C)).toFixed46(2);
+              item.G = (950 - Number(item.C)).toFixed46(2)
             }
           }
-        case "H":
-          if (item.D != "") {
-            item.H = (-100 - Number(item.D)).toFixed46(2);
+        case 'H':
+          if (item.D != '') {
+            item.H = (-100 - Number(item.D)).toFixed46(2)
           }
-          break;
+          break
         default:
-          break;
+          break
       }
 
       let maxNum = Math.max(
         Math.abs(item.E),
         Math.abs(item.F),
-        Math.abs(item.G == "/" ? 0 : item.G),
+        Math.abs(item.G == '/' ? 0 : item.G),
         Math.abs(item.H)
-      );
+      )
       let maxResule = [item.E, item.F, item.G, item.H].find(
-        i => maxNum == Math.abs(i)
-      );
-      this.data.valueData.point.forEach(i => (i.I = maxResule));
-    }
+        (i) => maxNum == Math.abs(i)
+      )
+      this.data.valueData.point.forEach((i) => (i.I = maxResule))
+    },
   },
-  mounted() {}
-};
+  mounted() {},
+}
 </script>
 
-<style>
-</style>
+<style></style>

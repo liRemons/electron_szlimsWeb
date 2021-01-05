@@ -62,8 +62,8 @@
               style="text-align: center;width: 50%;"
               v-model="data.valueData.b"
               :defaultValue="data.valueData.b"
-              @change.native="changeNum(data.valueData, 'e')"
             ></myInput>
+            <!--  @change.native="changeNum(data.valueData, 'e')" -->
             <selectModel
               style="width: 50%;float: right;"
               @returnVal="returnVal"
@@ -85,8 +85,8 @@
               style="text-align: center;width: 70%"
               v-model="data.valueData.c"
               :defaultValue="data.valueData.c"
-              @change.native="changeNum(data.valueData, 'e')"
             ></myInput>
+            <!-- @change.native="changeNum(data.valueData, 'e')" -->
             s
           </td>
         </tr>
@@ -97,8 +97,8 @@
               style="text-align: center;width: 70%"
               v-model="data.valueData.d"
               :defaultValue="data.valueData.d"
-              @change.native="changeNum(data.valueData, 'e')"
             ></myInput>
+            <!--   @change.native="changeNum(data.valueData, 'e')" -->
             mm
           </td>
           <td>层厚</td>
@@ -106,7 +106,9 @@
             <myInput
               :style="{
                 color:
-                  data.valueData.e < 5 || data.valueData.e > 10 ? 'red' : '#000'
+                  data.valueData.e < 5 || data.valueData.e > 10
+                    ? 'red'
+                    : '#000',
               }"
               style="text-align: center;width: 70%"
               v-model="data.valueData.e"
@@ -147,69 +149,68 @@
 </template>
 
 <script>
-import bus from "@/utils/bus.js";
+import bus from '@/utils/bus.js'
 
 export default {
   data() {
     return {
-      showInput: false
-    };
+      showInput: false,
+    }
   },
   computed: {},
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData"
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
   filters: {},
   methods: {
     returnVal(val, item, index) {
-      item.bunit = val;
-      this.changeNum(item, null);
+      item.bunit = val
+      this.changeNum(item, null)
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.data.valueData.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.data.valueData.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     err(msg) {
       this.$notify({
-        type: "error",
-        message: msg
-      });
+        type: 'error',
+        message: msg,
+      })
     },
     changeNum(item, num) {
       switch (num) {
-        case "e":
+        case 'e':
           if (Number(item.e) < 5 || Number(item.e) > 10)
-						this.err("应尽量接近10");
-					if(Number(item.e)<5){
-						item.e=null
-					}
-          break;
-        case "f":
-          if (Number(item.f) > 50) this.err("CTDIW大于50mGy");
-          break;
+            this.err('应尽量接近10')
+          if (Number(item.e) < 5) {
+            item.e = null
+          }
+          break
+        case 'f':
+          if (Number(item.f) > 50) this.err('CTDIW大于50mGy')
+          break
       }
-      bus.$emit("resetCtData");
-    }
+      bus.$emit('resetCtData')
+    },
   },
-  mounted() {}
-};
+  mounted() {},
+}
 </script>
 
-<style>
-</style>
+<style></style>

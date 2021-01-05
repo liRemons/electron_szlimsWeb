@@ -125,9 +125,13 @@
           </td>
         </tr>
         <tr style="height: 38px">
-          <td>{{ data.valueData.Judge ? "准直宽度" : "照射野" }}</td>
+          <td>{{ data.valueData.Judge ? '准直宽度' : '照射野' }}</td>
           <td colspan="4" class="___relative">
-            <div class="___relative" style="width:80px;left:20px;">
+            <div
+              class="___relative"
+              style="width:80px;left:20px;"
+              v-if="!data.valueData.Judge"
+            >
               <el-radio v-model="data.valueData.radio" label="1">有</el-radio>
               <el-radio v-model="data.valueData.radio" label="2">无</el-radio>
             </div>
@@ -148,8 +152,8 @@
               <span
                 class="___absolute"
                 style="width: 50px; top: -15px;left: 65px;"
-                >mm*</span
-              >
+                >mm <i v-if="!data.valueData.Judge">*</i>
+              </span>
               <myInput
                 v-if="!data.valueData.Judge"
                 class="___absolute"
@@ -189,104 +193,119 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 
 export default {
   data() {
-    return {};
+    return {}
   },
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "target"
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'target',
   ],
   methods: {
     // 判断是否整数
     blurNum(val, type) {
+      let jcxx = this.jsonString.filter(
+        (item) => item.to === 'project_jcxcxx'
+      )[0]
+      if (
+        type === 'exposureParameterkV1' &&
+        val > jcxx.data.valueData.mainParameterkV
+      ) {
+        this.$message.warning('管电压超出主要参数')
+      }
+      if (
+        type === 'exposureParametermA' &&
+        val > jcxx.data.valueData.mainParametermA
+      ) {
+        this.$message.warning('管电流超出主要参数')
+      }
       if (Number(val) % 1 !== 0) {
         // this.$message.warning("请输入整数");
         // this.data.valueData[type] = "";
       }
     },
     isNumber(val) {
-      if (parseFloat(val).toString() == "NaN") {
-        return false;
+      if (parseFloat(val).toString() == 'NaN') {
+        return false
       } else {
-        return true;
+        return true
       }
     },
     changeNum(kv) {
       try {
-        let length, digit;
+        let length, digit
         if (this.deviceFactor[0].value) {
-          length = this.deviceFactor[0].value.split(".").length;
-          digit = this.deviceFactor[0].value.split(".")[length - 1].length;
+          length = this.deviceFactor[0].value.split('.').length
+          digit = this.deviceFactor[0].value.split('.')[length - 1].length
         }
 
         if (this.isNumber(kv)) {
           this.data.valueData.calibrationFactor = this.getFactor(
             kv,
             this.deviceFactor
-          ).toFixed46(digit !== "" ? digit : 2);
+          ).toFixed46(digit !== '' ? digit : 2)
         }
       } catch (e) {
-        this.data.valueData.calibrationFactor = "";
+        this.data.valueData.calibrationFactor = ''
       }
     },
     modularShow() {
       if (
-        this.purposeDetection === "豁免检测" ||
-        this.purposeDetection === "环保验收"
+        this.purposeDetection === '豁免检测' ||
+        this.purposeDetection === '环保验收'
       ) {
-        this.data.height._normal.carried = false;
-        this.data.valueData.isObtain = false;
-        return false;
+        this.data.height._normal.carried = false
+        this.data.valueData.isObtain = false
+        return false
       } else {
-        this.data.height._normal.carried = true;
-        this.data.valueData.isObtain = true;
-        return true;
+        this.data.height._normal.carried = true
+        this.data.valueData.isObtain = true
+        return true
       }
     },
     returnVal(val, name) {
-      this.data.valueData[name] = val;
-      if (this.data.valueData.unit2 === "/") {
-        this.data.valueData.exposureParameterms = "";
+      this.data.valueData[name] = val
+      if (this.data.valueData.unit2 === '/') {
+        this.data.valueData.exposureParameterms = ''
       }
     },
     judgeDevice() {
-      if (this.target === "0") {
+      if (this.target === '0') {
         if (
           this.jsonString.some((item, index) => {
-            return item.to.includes("_ct_");
+            return item.to.includes('_ct_')
           })
         ) {
-          this.data.valueData.Judge = true;
+          this.data.valueData.Judge = true
         }
       }
-    }
+    },
   },
   computed: {
     ...mapState({
-      purposeDetection: state => state.StomatologyLinkage.purposeDetection,
-      deviceFactor: state => state.StomatologyLinkage.deviceFactor2
-    })
+      purposeDetection: (state) => state.StomatologyLinkage.purposeDetection,
+      deviceFactor: (state) => state.StomatologyLinkage.deviceFactor2,
+    }),
   },
   watch: {
     purposeDetection() {
-      this.modularShow();
-    }
+      this.modularShow()
+    },
   },
   mounted() {
-    this.judgeDevice();
-  }
-};
+    this.judgeDevice()
+  },
+}
 </script>
 
 <style>

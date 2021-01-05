@@ -65,114 +65,112 @@
 </template>
 
 <script>
-import DCModules from "../../dataJs/sonModules/dc";
+import DCModules from '../../dataJs/sonModules/dc'
 export default {
-  props: ["data", "target", "jsonString"],
+  props: ['data', 'target', 'jsonString'],
   methods: {
     returnVal(a) {
       this.jsonString.forEach((item) => {
-        item.to === "project_dc_gpspjcdxxx" &&
-          (item.data.valueData.dataType = a);
-      });
+        item.to === 'project_dc_gpspjcdxxx' &&
+          (item.data.valueData.dataType = a)
+      })
     },
     add(data) {
-      let obj = Object.assign({}, data);
+      let obj = Object.assign({}, data)
       for (let keys in obj) {
-        obj[keys] = "";
+        obj[keys] = ''
       }
-      obj.id = uuid();
-      this.data.valueData.point.push(obj);
-      this.$emit("redefinition");
+      obj.id = uuid()
+      this.data.valueData.point.push(obj)
+      this.$emit('redefinition')
     },
     del(index) {
-      this.data.valueData.point.splice(index, 1);
+      this.data.valueData.point.splice(index, 1)
     },
     // 生成
     createPoint() {
       // 当前的有效点位
       let point = this.__getPoint(
         this.jsonString,
-        "project_dc_gpspjcdxxx"
-      ).filter((item) => item.deviceName && item.value);
+        'project_dc_gpspjcdxxx'
+      ).filter((item) => item.deviceName && item.value)
       if (!point.length) {
-        this.$message.warning("请将数据填写完整");
-        return;
+        this.$message.warning('请将数据填写完整')
+        return
       }
       // 找到检测结果的两个模板
       const searchModules = (name) => {
-        let data = DCModules.find((item) => item.name === name);
-        data.valueData.specifications = "工频";
+        let data = DCModules.find((item) => item.name === name)
+        data.valueData.specifications = '工频'
         return {
           to: name,
           type: null,
           data,
-        };
-      };
-      let GP = searchModules("project_dc_gpjcjg"); // 工频检测结果模块
-      let SP = searchModules("project_dc_dchjcl"); // 射频检测结果模块
+        }
+      }
+      let GP = searchModules('project_dc_gpjcjg') // 工频检测结果模块
+      let SP = searchModules('project_dc_dchjcl') // 射频检测结果模块
       let indexArr = [],
-        startIndex = "",
-        endIndex = "";
+        startIndex = '',
+        endIndex = ''
 
       // 将之前的此两个模块清空 ============   START
       this.jsonString.forEach((item, index) => {
-        if (["project_dc_gpjcjg", "project_dc_dchjcl"].includes(item.to)) {
-          indexArr.push(index);
+        if (['project_dc_gpjcjg', 'project_dc_dchjcl'].includes(item.to)) {
+          indexArr.push(index)
         }
-      });
+      })
       if (indexArr.length) {
-        indexArr = [...new Set(indexArr)];
-        startIndex = Math.min(...indexArr);
-        endIndex = Math.max(...indexArr);
-        this.jsonString.splice(startIndex, endIndex);
+        indexArr = [...new Set(indexArr)]
+        startIndex = Math.min(...indexArr)
+        endIndex = Math.max(...indexArr)
+        this.jsonString.splice(startIndex, endIndex)
       }
       // ======================================== END
       // 根据类型区分后的点位
-      let newPoint = [];
+      let newPoint = []
       point.forEach((item) => {
-        this.data.valueData.specifications.split("+").forEach((a) => {
+        this.data.valueData.specifications.split('+').forEach((a) => {
           newPoint.push({
             deviceName: item.deviceName,
             type: a,
             value: item.value,
-          });
-        });
-      });
-      let pointArr = [];
+          })
+        })
+      })
+      let pointArr = []
       const initPoint = (obj, id) => {
-        obj.data.valueData.multipleId = id;
-        obj.data.valueData.foreverId = id;
-        obj.data.valueData.pointId = id;
-        return obj;
-      };
+        obj.data.valueData.multipleId = id
+        obj.data.valueData.foreverId = id
+        obj.data.valueData.pointId = id
+        return obj
+      }
       newPoint.forEach((item) => {
-        if (item.type === "工频") {
-          let id = uuid();
-          GP.data.valueData.deviceName = item.deviceName;
-          GP.data.valueData.correct =
-            item.deviceName + item.type + "的检测结果";
-          GP = initPoint(GP, id);
-          pointArr.push(this.deepCopy(GP));
-        } else if (item.type === "射频") {
-          let id = uuid();
-          SP.data.valueData.deviceName = item.deviceName;
-          SP.data.valueData.correct =
-            item.deviceName + item.type + "的检测结果";
-          SP = initPoint(SP, id);
-          pointArr.push(this.deepCopy(SP));
+        if (item.type === '工频') {
+          let id = uuid()
+          GP.data.valueData.deviceName = item.deviceName
+          GP.data.valueData.correct = item.deviceName + item.type + '的检测结果'
+          GP = initPoint(GP, id)
+          pointArr.push(this.deepCopy(GP))
+        } else if (item.type === '射频') {
+          let id = uuid()
+          SP.data.valueData.deviceName = item.deviceName
+          SP.data.valueData.correct = item.deviceName + item.type + '的检测结果'
+          SP = initPoint(SP, id)
+          pointArr.push(this.deepCopy(SP))
         }
-      });
+      })
 
       let Index = this.jsonString.findIndex(
-        (item) => item.to === "project_deleteReason"
-      );
+        (item) => item.to === 'project_deleteReason'
+      )
       if (Index > 0) {
-        this.jsonString.splice(Index + 1, 0, ...pointArr);
+        this.jsonString.splice(Index + 1, 0, ...pointArr)
       } else {
-        this.jsonString.push(...pointArr);
+        this.jsonString.push(...pointArr)
       }
-      this.$emit("redefinition");
+      this.$emit('redefinition')
     },
   },
-};
+}
 </script>

@@ -36,8 +36,12 @@
             style="padding-left: 10px; line-height: 20px; text-indent: 2em"
           >
             <span style="white-space: normal"
-              >分别选择s＞2mm、2mm≥s≥1mm、和s＜1mm三种层厚，并选择合适的扫描条件扫描Catphan500体模的层厚模块中心，读取图像，调节至最小窗宽，测量最高窗位及背景CT值，调节窗位至半高宽（最高窗位与背景CT值的平均值），分别测量上、下、左、右四条标记物的影像长度，测量层厚=标记物影像长度平均值×0.42，偏差=（测量层厚-标称层厚）/标称层厚×100%。</span
-            >
+              >分别选择s＞2mm、2mm≥s≥1mm、和s＜1mm三种层厚，并选择合适的扫描条件扫描Catphan500体模的层厚模块中心，读取图像，调节至最小窗宽，测量最高窗位及背景CT值，调节窗位至半高宽（最高窗位与背景CT值的平均值），分别测量上、下、左、右四条标记物的影像长度，计算公式:测里层厚=标记物影像长度平均值×0.42。对于s>2mm和s
+              ＞ 1mm
+              的情况，偏差=测里层计算公式:测里层厚=标记物影像长度平均值×0.42。对于s>2mm和s
+              ＜ 1mm 的情况，偏差=测里层
+              厚-标称层厚。对于2mm≥s≥1mm的情况，偏差=(测里层厚-标称层厚)/标称层厚×100%。
+            </span>
           </td>
         </tr>
         <tr style="white-space: normal">
@@ -156,7 +160,7 @@
           <td>{{ item.J }}</td>
           <td class="___relative">
             {{ item.K }}
-<!-- 
+            <!--
             <div class="___absolute leftBtn" style="top: 0; right: -100px">
               <div
                 class="rowOption"
@@ -199,34 +203,34 @@ export default {
   data() {
     return {
       showInput: false,
-      list: ["s<1mm", "2mm≥s≥1mm", "s＞2mm", "/"],
-      copyList: ["s<1mm", "2mm≥s≥1mm", "s＞2mm", "/"],
-    };
+      list: ['s<1mm', '2mm≥s≥1mm', 's＞2mm', '/'],
+      copyList: ['s<1mm', '2mm≥s≥1mm', 's＞2mm', '/'],
+    }
   },
   watch: {},
   computed: {},
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData",
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
   filters: {},
   methods: {
     addRow(index) {
       if (this.data.valueData.point.length >= 3) {
-        this.$message.warning("不能再添加了");
-        return;
+        this.$message.warning('不能再添加了')
+        return
       }
-      let scopeArr = this.data.valueData.point.map((item) => item.scope);
+      let scopeArr = this.data.valueData.point.map((item) => item.scope)
       this.$nextTick(() => {
         // let scope = "";
         // if (!scopeArr.includes("s<1mm")) {
@@ -240,131 +244,137 @@ export default {
         // }
         let obj = {
           scope: '/',
-          A: "",
+          A: '',
           AColor: false,
-          B: "",
-          C: "",
-          D: "",
-          E: "",
-          F: "",
-          G: "",
-          H: "",
-          I: "",
-          J: "",
-          K: "",
-        };
-        this.data.valueData.point.splice(index + 1, 0, obj);
-      });
+          B: '',
+          C: '',
+          D: '',
+          E: '',
+          F: '',
+          G: '',
+          H: '',
+          I: '',
+          J: '',
+          K: '',
+        }
+        this.data.valueData.point.splice(index + 1, 0, obj)
+      })
     },
     delRow(index) {
       if (this.data.valueData.point.length > 1) {
-        this.data.valueData.point.splice(index, 1);
+        this.data.valueData.point.splice(index, 1)
       } else {
-        this.$message.warning("不能再删除了");
+        this.$message.warning('不能再删除了')
       }
     },
     returnVal(val, name, modelIndex, index) {
       setTimeout(() => {
-        this.initModel();
-      }, 100);
+        this.initModel()
+      }, 100)
       if (this.data.valueData.point[index].scope)
         Object.keys(this.data.valueData.point[index]).forEach((item) => {
-          let data = ["scope", "AColor", "index"];
-          if (item == "scope") {
-            this.data.valueData.point[index].scope = val;
+          let data = ['scope', 'AColor', 'index']
+          if (item == 'scope') {
+            this.data.valueData.point[index].scope = val
           }
-          if (!data.includes(item) && val == "/") {
-            this.data.valueData.point[index][item] = "/";
-          } else if (!data.includes(item) && val !== "/") {
-            this.data.valueData.point[index][item] = "";
+          if (!data.includes(item) && val == '/') {
+            this.data.valueData.point[index][item] = '/'
+          } else if (!data.includes(item) && val !== '/') {
+            this.data.valueData.point[index][item] = ''
           }
-        });
-      this.$forceUpdate();
+        })
+      this.$forceUpdate()
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.data.valueData.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.data.valueData.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     err(msg) {
       this.$notify({
-        type: "error",
+        type: 'error',
         message: msg,
-      });
+      })
     },
     isNumber(val) {
-      if (parseFloat(val).toString() == "NaN") {
-        return false;
+      if (parseFloat(val).toString() == 'NaN') {
+        return false
       } else {
-        return true;
+        return true
       }
     },
     changeNum(item, index, num) {
       switch (num) {
-        case "A":
+        case 'A':
           switch (index) {
             case 0:
-              if (Number(item.A) >= 1) {
-                this.err("层厚应<1");
-                item.AColor = true;
+              if (Number(item.A) > 1) {
+                this.err('层厚应≤1')
+                item.AColor = true
               } else {
-                item.AColor = false;
+                item.AColor = false
               }
-              break;
+              break
             case 1:
               if (Number(item.A) < 1 || Number(item.A) > 2) {
-                this.err("1≤层厚≤2");
-                item.AColor = true;
+                this.err('1≤层厚≤2')
+                item.AColor = true
               } else {
-                item.AColor = false;
+                item.AColor = false
               }
-              break;
+              break
             case 2:
               if (Number(item.A) <= 2) {
-                this.err("2<层厚");
-                item.AColor = true;
+                this.err('2<层厚')
+                item.AColor = true
               } else {
-                item.AColor = false;
+                item.AColor = false
               }
-              break;
+              break
 
             default:
-              break;
+              break
           }
-          break;
-        case "B":
+          break
+        case 'B':
           if (Number(item.B) > 1) {
-            this.err("层厚应<1");
+            this.err('层厚应≤1')
           }
-          break;
-        case "E":
+          break
+        case 'E':
           if (this.isNumber(item.C) && this.isNumber(item.D)) {
             if (item.D <= item.C) {
-              this.err("最高窗位必须大于背景CT值");
+              this.err('最高窗位必须大于背景CT值')
             }
             item.E = ((Number(item.C) + Number(item.D)) / 2).toFixed46(
               this.size([item.C, item.D])
-            );
+            )
           }
-          break;
-        case "J":
+          break
+        case 'J':
           item.J =
             ((Number(item.F) +
               Number(item.G) +
               Number(item.H) +
               Number(item.I)) /
               4) *
-            0.42;
-          item.J = item.J.toFixed46(2);
-          item.K =
-            (
-              ((Number(item.J) - Number(item.A)) / Number(item.A)) *
-              100
-            ).toFixed46(2) + "%";
+            0.42
+          item.J = item.J.toFixed46(2)
+          let arr = ['s<1mm', 's＞2mm']
+          if (arr.includes(item.scope)) {
+            item.K = Number(item.J) - Number(item.A)
+          } else {
+            item.K =
+              (
+                ((Number(item.J) - Number(item.A)) / Number(item.A)) *
+                100
+              ).toFixed46(2) + '%'
+          }
+
           // switch (index) {
           //   case 0:
           //     item.K = (Number(item.J) - Number(item.A)).toFixed46(2);
@@ -383,30 +393,29 @@ export default {
           //   default:
           //     break;
           // }
-          break;
+          break
 
-        case "K":
-          console.log("走到K了吗", item.K);
+        case 'K':
+          console.log('走到K了吗', item.K)
 
-          break;
+          break
 
         default:
-          break;
+          break
       }
     },
     initModel() {
-      let list = this.data.valueData.point.map((item) => item.scope);
+      let list = this.data.valueData.point.map((item) => item.scope)
       this.list = this.copyList.filter((item) => {
-        return !list.includes(item);
-      });
-      this.list.includes("/") ? "" : this.list.push("/");
+        return !list.includes(item)
+      })
+      this.list.includes('/') ? '' : this.list.push('/')
     },
   },
   mounted() {
-    this.initModel();
+    this.initModel()
   },
-};
+}
 </script>
 
-<style>
-</style>
+<style></style>
