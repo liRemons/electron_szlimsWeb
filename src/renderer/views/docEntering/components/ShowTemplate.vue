@@ -87,6 +87,8 @@
               <div v-if="componentFlag">
                 <component
                   :is="moduleJson.to"
+                  :testContentArray="testContentArray"
+                  :control="control"
                   :id="moduleJson.data.valueData.positionId"
                   :data="moduleJson.data"
                   v-if="moduleJson.data.height._normal.carried"
@@ -1216,14 +1218,13 @@ export default {
               } else {
                 modelName = [obj.name]
               }
-              console.log(obj, 'obj')
               if (obj.testProjectName === 'project_dc') {
                 modelName = modelName.filter((item) => {
                   return cancel.includes(item)
                 })
               }
               if (obj.testProjectName === 'project_dc_gp') {
-                modelName = ['project_dc_gpspjcdxxx', 'project_dc_gpjcjg']
+                modelName = ['project_dc_gpjcjg']
                 // modelName = modelName.filter((item) => {
                 //   return arr.includes(item)
                 // })

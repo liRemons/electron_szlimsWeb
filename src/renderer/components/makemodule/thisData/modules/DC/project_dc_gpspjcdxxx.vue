@@ -67,7 +67,7 @@
 <script>
 import DCModules from '../../dataJs/sonModules/dc'
 export default {
-  props: ['data', 'target', 'jsonString'],
+  props: ['data', 'target', 'jsonString', 'testContentArray', 'control'],
   methods: {
     returnVal(a) {
       this.jsonString.forEach((item) => {
@@ -89,6 +89,12 @@ export default {
     },
     // 生成
     createPoint() {
+      this.testContentArray.forEach((item, index) => {
+        this.testContentArray[index].show = this.control[index]
+      })
+      let chexkArr = this.testContentArray
+        .filter((item) => item.show && item.testProjectName)
+        .map((item) => item.testProjectName)
       // 当前的有效点位
       let point = this.__getPoint(
         this.jsonString,
@@ -151,13 +157,17 @@ export default {
           GP.data.valueData.deviceName = item.deviceName
           GP.data.valueData.correct = item.deviceName + item.type + '的检测结果'
           GP = initPoint(GP, id)
-          pointArr.push(this.deepCopy(GP))
+          if (chexkArr.includes('project_dc_gp')) {
+            pointArr.push(this.deepCopy(GP))
+          }
         } else if (item.type === '射频') {
           let id = uuid()
           SP.data.valueData.deviceName = item.deviceName
           SP.data.valueData.correct = item.deviceName + item.type + '的检测结果'
           SP = initPoint(SP, id)
-          pointArr.push(this.deepCopy(SP))
+          if (chexkArr.includes('project_dc')) {
+            pointArr.push(this.deepCopy(SP))
+          }
         }
       })
 
