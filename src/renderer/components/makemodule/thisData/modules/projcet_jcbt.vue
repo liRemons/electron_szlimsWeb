@@ -280,15 +280,20 @@ export default {
       }
     },
     judgeDevice() {
-      if (this.target === '0') {
+      if (this.target == 0) {
         if (
           this.jsonString.some((item, index) => {
-            return item.to.includes('_ct_')
+            return (
+              item.to.includes('_ct_') ||
+              (item.to === 'project_jbxx' &&
+                item.data.valueData.detectionObjects.includes('CT'))
+            )
           })
         ) {
           this.data.valueData.Judge = true
         }
       }
+      this.$forceUpdate()
     },
   },
   computed: {
