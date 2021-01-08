@@ -27,14 +27,14 @@ const winURL =
 
 let mainWindow
 
-// import { FingerAction } from "./finger";
+import { FingerAction } from "./finger";
 function createWindow() {
   /**
    * Initial window options
    */
-  BrowserWindow.addDevToolsExtension(
-    'C:/Users/remember/AppData/Local/Google/Chrome/User Data/Profile 1/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/5.3.3_0'
-  )
+  // BrowserWindow.addDevToolsExtension(
+  //   'C:/Users/remember/AppData/Local/Google/Chrome/User Data/Profile 1/Extensions/nhdogjmejiglipccpnnnanhbledajbpd/5.3.3_0'
+  // )
   mainWindow = new BrowserWindow({
     show: false,
     frame: false,
@@ -129,7 +129,7 @@ ipcMain.on('sigShowRightClickMenu', (event, arg) => {
 
 app.on('ready', () => {
   createWindow()
-  // FingerAction(mainWindow);
+  FingerAction(mainWindow);
   // 开发模式下注册快捷键
   if (process.env.NODE_ENV == 'development') {
     globalShortcut.register('CommandOrControl+F12', () => {

@@ -1,8 +1,8 @@
 directories:
   output: build
   buildResources: build
-productName: 瑞达智能检验检测管理系统-检验检测平台测试版
-appId: org.simulatedgregTest.electron-vue
+productName: 瑞达智能检验检测管理系统-检验检测平台
+appId: org.simulatedgreg.electron-vue
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
