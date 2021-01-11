@@ -286,7 +286,7 @@ export default {
             return (
               item.to.includes('_ct_') ||
               (item.to === 'project_jbxx' &&
-                item.data.valueData.detectionObjects.includes('CT'))
+                item.data.valueData.detectionObjects === 'CT')
             )
           })
         ) {
