@@ -45,10 +45,8 @@
           ><br />
           <el-tag type="danger" class="el_tag"
             ><i class="el-icon-warning"></i>
-            重要提醒：安装包已下载完成，请在安装前务必将本地数据同步上传，否则数据有丢失风险！！！</el-tag
-          >
-          <el-tag type="danger" class="el_tag"
-            ><i class="el-icon-warning"></i> 为保证正常使用，请安装时选择
+            重要提醒：安装包已下载完成，请在安装前务必将本地数据同步上传，否则数据有丢失风险！！！<br />
+            <i class="el-icon-warning"></i> 为保证正常使用，请安装时选择
             以管理员身份运行！！！</el-tag
           >
           <el-button type="primary" round @click="dialogVisible = false"

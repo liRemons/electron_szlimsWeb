@@ -315,14 +315,14 @@ export default {
             item.D = (
               (Number(item.A) + Number(item.B) + Number(item.C)) /
               3
-            ).toFixed46(1)
+            ).toFixed46(3)
             item.E = (
               (item.D * 10) /
               Number(this.data.valueData.point[fuIndex].e)
-            ).toFixed46(1)
+            ).toFixed46(3)
             item.F = (
               item.E * Number(this.data.valueData.point[fuIndex].h)
-            ).toFixed46(1)
+            ).toFixed46(2)
           }
           if (
             this.data.valueData.point[fuIndex].datas.every((val, index) => {
@@ -341,7 +341,7 @@ export default {
               temparr[i].G = (
                 (1 / 3) * garr[0] +
                 (2 / 3) * ((garr[1] + garr[2] + garr[3] + garr[4]) / 4)
-              ).toFixed46(1)
+              ).toFixed46(2)
             }
             let result = ''
             let f = this.data.valueData.point[fuIndex].f

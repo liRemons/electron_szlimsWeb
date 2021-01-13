@@ -38,9 +38,9 @@
             <span style="white-space: normal"
               >分别选择s＞2mm、2mm≥s≥1mm、和s＜1mm三种层厚，并选择合适的扫描条件扫描Catphan500体模的层厚模块中心，读取图像，调节至最小窗宽，测量最高窗位及背景CT值，调节窗位至半高宽（最高窗位与背景CT值的平均值），分别测量上、下、左、右四条标记物的影像长度，计算公式:测里层厚=标记物影像长度平均值×0.42。对于s>2mm和s
               ＞ 1mm
-              的情况，偏差=测里层计算公式:测里层厚=标记物影像长度平均值×0.42。对于s>2mm和s
-              ＜ 1mm 的情况，偏差=测里层
-              厚-标称层厚。对于2mm≥s≥1mm的情况，偏差=(测里层厚-标称层厚)/标称层厚×100%。
+              的情况，偏差=测里层计算公式:测量层厚=标记物影像长度平均值×0.42。对于s>2mm和s
+              ＜ 1mm
+              的情况，偏差=测量层厚-标称层厚。对于2mm≥s≥1mm的情况，偏差=(测里层厚-标称层厚)/标称层厚×100%。
             </span>
           </td>
         </tr>
@@ -366,7 +366,7 @@ export default {
           item.J = item.J.toFixed46(2)
           let arr = ['s<1mm', 's＞2mm']
           if (arr.includes(item.scope)) {
-            item.K = Number(item.J) - Number(item.A)
+            item.K = (Number(item.J) - Number(item.A)).toFixed46(2)
           } else {
             item.K =
               (

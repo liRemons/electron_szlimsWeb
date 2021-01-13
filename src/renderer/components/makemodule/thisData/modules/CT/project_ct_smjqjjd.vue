@@ -110,7 +110,7 @@
                   data.valueData.A > 20 || data.valueData.A < 15
                     ? 'red'
                     : '#000',
-                textAlign: 'center'
+                textAlign: 'center',
               }"
               v-model="data.valueData.A"
               :defaultValue="data.valueData.A"
@@ -170,7 +170,7 @@
                   Number(data.valueData.E) <= Number(data.valueData.D)
                     ? 'red'
                     : '#000',
-                textAlign: 'center'
+                textAlign: 'center',
               }"
               v-model="data.valueData.E"
               :defaultValue="data.valueData.E"
@@ -190,11 +190,14 @@
               :defaultValue="data.valueData.F"
               @change.native="changeNum(data.valueData, 'F')"
             ></myInput>
-            <span v-if="
+            <span
+              v-if="
                 data.valueData.isIncline === '是' &&
                   data.valueData.isInclineOk === '是' &&
                   data.valueData.option !== '斜率指示器法'
-              ">{{data.valueData.F}}</span>
+              "
+              >{{ data.valueData.F }}</span
+            >
             <span
               v-if="
                 data.valueData.isIncline === '否' ||
@@ -217,11 +220,14 @@
               :defaultValue="data.valueData.G"
               @change.native="changeNum(data.valueData, 'G')"
             ></myInput>
-            <span v-if="
+            <span
+              v-if="
                 data.valueData.isIncline === '是' &&
                   data.valueData.isInclineOk === '是' &&
                   data.valueData.option !== '斜率指示器法'
-              ">{{data.valueData.G}}</span>
+              "
+              >{{ data.valueData.G }}</span
+            >
             <span
               v-if="
                 data.valueData.isIncline === '否' ||
@@ -242,98 +248,97 @@
 export default {
   data() {
     return {
-      showInput: false
-    };
+      showInput: false,
+    }
   },
   computed: {},
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "deviceData"
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'deviceData',
   ],
   filters: {},
   methods: {
     changeXlzsq(data) {
-      this.data.valueData.B = "/";
-      this.data.valueData.C = "/";
-      this.data.valueData.D = "/";
-      this.data.valueData.E = "/";
+      this.data.valueData.B = '/'
+      this.data.valueData.C = '/'
+      this.data.valueData.D = '/'
+      this.data.valueData.E = '/'
     },
     changeMtjcf(data) {
-      this.data.valueData.B = null;
-      this.data.valueData.C = null;
-      this.data.valueData.D = null;
-      this.data.valueData.E = null;
+      this.data.valueData.B = null
+      this.data.valueData.C = null
+      this.data.valueData.D = null
+      this.data.valueData.E = null
     },
     returnVal(val, name, index) {
-      if (val !== "自定义") {
-        this.data.valueData.deviceType = val;
+      if (val !== '自定义') {
+        this.data.valueData.deviceType = val
       } else {
-        this.showInput = true;
-        this.data.valueData.deviceType = " ";
-        this.$forceUpdate();
+        this.showInput = true
+        this.data.valueData.deviceType = ' '
+        this.$forceUpdate()
       }
     },
     noShowInput(el, index) {
-      el.target.value = el.target.value.replace(" ", "");
-      let val = el.target.value;
-      this.data.valueData.deviceType = val;
-      if (val === "") {
-        this.showInput = false;
+      el.target.value = el.target.value.replace(' ', '')
+      let val = el.target.value
+      this.data.valueData.deviceType = val
+      if (val === '') {
+        this.showInput = false
       }
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
     err(msg) {
       this.$notify({
-        type: "error",
-        message: msg
-      });
+        type: 'error',
+        message: msg,
+      })
     },
     isNumber(val) {
-      if (parseFloat(val).toString() == "NaN") {
-        return false;
+      if (parseFloat(val).toString() == 'NaN') {
+        return false
       } else {
-        return true;
+        return true
       }
     },
     changeNum(item, num) {
       switch (num) {
-        case "A":
+        case 'A':
           if (Number(item.A) < 15 || Number(item.A) > 20) {
-            this.err("角度应在15~20°内");
+            this.err('角度应在15~20°内')
           }
           if (this.isNumber(item.F) && this.isNumber(item.A)) {
-            item.G = (item.A - item.F).toFixed46(1);
+            item.G = (Number(item.F) - Number(item.A)).toFixed46(1)
           }
-          break;
-        case "E":
-          if (item.D != "" && item.E != "") {
+          break
+        case 'E':
+          if (item.D != '' && item.E != '') {
             if (Number(item.D) >= Number(item.E)) {
-              this.err("L2应大于L1");
+              this.err('L2应大于L1')
             } else {
               item.F = (
                 (Math.acos(Number(item.D) / Number(item.E)) * 180) /
                 Math.PI
-              ).toFixed46(1);
-              item.G = (Number(item.F) - Number(item.A)).toFixed46(1);
+              ).toFixed46(1)
+              item.G = (Number(item.F) - Number(item.A)).toFixed46(1)
             }
           }
-          break;
+          break
       }
-    }
+    },
   },
-  mounted() {}
-};
+  mounted() {},
+}
 </script>
 
-<style>
-</style>
+<style></style>
