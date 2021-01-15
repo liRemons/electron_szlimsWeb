@@ -180,7 +180,7 @@
             >
               <div
                 style="
-                  line-height: 8px;
+                  line-height: 14px;
                   word-break: break-all;
                   white-space: pre-wrap;
                   font-size: 12px;
@@ -343,33 +343,33 @@
 </template>
 
 <script>
-import { queryListType } from "@/api/local";
-import { mapState } from "vuex";
+import { queryListType } from '@/api/local'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      index_jsonString: function () {
+      index_jsonString: function() {
         // 获取当前模块在jsonString中的索引
-        let result = this.thisPageIndex;
+        let result = this.thisPageIndex
         for (let i = 0; i < this.pageNumber; i++) {
-          result += this.showing[i].length;
+          result += this.showing[i].length
         }
-        return result;
+        return result
       },
       objectiveList: [
-        "环保验收",
-        "卫生验收",
-        "状态",
-        "监督",
-        "比对",
-        "科研",
-        "豁免检测",
-        "新标准首次检测",
+        '环保验收',
+        '卫生验收',
+        '状态',
+        '监督',
+        '比对',
+        '科研',
+        '豁免检测',
+        '新标准首次检测',
       ],
       devices: [],
-      nowItem: "",
+      nowItem: '',
       showDevice: false,
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -377,26 +377,26 @@ export default {
     }),
   },
   props: [
-    "ipdTemplate",
-    "pageNumber",
-    "data",
-    "thisPageIndex",
-    "jsonString",
-    "showing",
-    "importData",
-    "watchSign",
-    "isTemplate",
-    "ableInput",
-    "task",
-    "target",
-    "headInput",
+    'ipdTemplate',
+    'pageNumber',
+    'data',
+    'thisPageIndex',
+    'jsonString',
+    'showing',
+    'importData',
+    'watchSign',
+    'isTemplate',
+    'ableInput',
+    'task',
+    'target',
+    'headInput',
   ],
   filters: {
     filterTime(time) {
       try {
-        return time.split(" ")[0];
+        return time.split(' ')[0]
       } catch (e) {
-        return "";
+        return ''
       }
     },
   },
@@ -405,151 +405,151 @@ export default {
     increase() {
       // let obj={};
       // this.data.valueData.point.push(obj);
-      this.$emit("update:data");
+      this.$emit('update:data')
     },
     returnVal(val, obj, special) {
       if (special == 1) {
-        this.data.valueData.point[this.patternIndex][obj] = val;
+        this.data.valueData.point[this.patternIndex][obj] = val
       } else {
-        this.data.valueData[obj] = val;
+        this.data.valueData[obj] = val
       }
-      this.$store.dispatch("actionsPurposeDetection", val);
-      this.$emit("redefinition");
+      this.$store.dispatch('actionsPurposeDetection', val)
+      this.$emit('redefinition')
     },
 
     getStanard(string) {
-      let arr = string.split(",");
-      let str = "";
+      let arr = string.split(',')
+      let str = ''
 
       for (let i = 0; i < arr.length; i++) {
-        str += `<p>${arr[i]}</p>`;
+        str += `<p>${arr[i]}</p>`
       }
-      return str;
+      return str
     },
     getLocalDevice(queryString, cb) {
-      let res = this.importData.device;
+      let res = this.importData.device
       if (this.devices.length >= 0) {
-        this.devices = this.$utils.removeArrRepeat(res.data, "id");
+        this.devices = this.$utils.removeArrRepeat(res.data, 'id')
         let results = queryString
           ? this.devices.filter(
               (item) => item.deviceNum.indexOf(queryString) !== -1
             )
-          : this.devices;
-        cb(results);
+          : this.devices
+        cb(results)
       } else {
         this.$notify({
-          type: "warning",
-          message: "未绑定仪器",
-        });
+          type: 'warning',
+          message: '未绑定仪器',
+        })
       }
     },
 
     changeItemDevice(rowObj) {
-      let purpose = rowObj.purpose;
-      if (purpose === "性能" || purpose === "防护") {
+      let purpose = rowObj.purpose
+      if (purpose === '性能' || purpose === '防护') {
         let result = this.data.valueData.point.some((item) => {
           if (item.deviceObj) {
-            return item.deviceObj.purpose === purpose;
+            return item.deviceObj.purpose === purpose
           } else {
-            return false;
+            return false
           }
-        });
+        })
         if (result) {
           this.$notify({
-            type: "warning",
-            message: "只能选择一台" + purpose + "设备！",
-          });
-          return;
+            type: 'warning',
+            message: '只能选择一台' + purpose + '设备！',
+          })
+          return
         }
 
-        if (purpose === "性能") {
-          this.$store.dispatch("actionsDeviceFactor", rowObj.deviceFactor);
-          this.$store.dispatch("actionsDeviceFactorObj", rowObj);
-        } else if (purpose === "防护") {
-          this.$store.commit("changePurposeFH", "防护");
-          this.$store.commit("saveDeviceFactorObj2", rowObj);
-          this.$store.dispatch("actionsDeviceFactor2", rowObj.deviceFactor);
+        if (purpose === '性能') {
+          this.$store.dispatch('actionsDeviceFactor', rowObj.deviceFactor)
+          this.$store.dispatch('actionsDeviceFactorObj', rowObj)
+        } else if (purpose === '防护') {
+          this.$store.commit('changePurposeFH', '防护')
+          this.$store.commit('saveDeviceFactorObj2', rowObj)
+          this.$store.dispatch('actionsDeviceFactor2', rowObj.deviceFactor)
         }
       }
-      this.nowItem.purpose = purpose;
-      this.nowItem.rows[0] = rowObj.deviceName;
-      this.nowItem.rows[1] = rowObj.deviceModel;
-      this.nowItem.rows[2] = [rowObj.probeNum, rowObj.deviceNum];
-      this.nowItem.rows[3] = [rowObj.correctNum, rowObj.correctNum1];
+      this.nowItem.purpose = purpose
+      this.nowItem.rows[0] = rowObj.deviceName
+      this.nowItem.rows[1] = rowObj.deviceModel
+      this.nowItem.rows[2] = [rowObj.probeNum, rowObj.deviceNum]
+      this.nowItem.rows[3] = [rowObj.correctNum, rowObj.correctNum1]
       this.nowItem.rows[4] = [
-        rowObj.correctTime && rowObj.correctTime.split(" ")[0],
-        rowObj.correctTime1 && rowObj.correctTime1.split(" ")[0],
-      ];
-      this.nowItem.rows[5] = rowObj.id;
-      this.nowItem.deviceFactor = rowObj.deviceFactor;
-      this.nowItem.deviceObj = rowObj;
-      this.$forceUpdate();
+        rowObj.correctTime && rowObj.correctTime.split(' ')[0],
+        rowObj.correctTime1 && rowObj.correctTime1.split(' ')[0],
+      ]
+      this.nowItem.rows[5] = rowObj.id
+      this.nowItem.deviceFactor = rowObj.deviceFactor
+      this.nowItem.deviceObj = rowObj
+      this.$forceUpdate()
     },
     showDel(item) {
       if (
-        item.rows[0] !== "" ||
-        item.rows[1] !== "" ||
-        item.rows[2] !== "" ||
-        item.rows[3] !== "" ||
-        item.rows[4] !== ""
+        item.rows[0] !== '' ||
+        item.rows[1] !== '' ||
+        item.rows[2] !== '' ||
+        item.rows[3] !== '' ||
+        item.rows[4] !== ''
       ) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
     setFontSize(flag) {
       if (flag === 0) {
-        this.data.valueData.fontSize += 1;
+        this.data.valueData.fontSize += 1
       } else {
-        this.data.valueData.fontSize -= 1;
+        this.data.valueData.fontSize -= 1
       }
     },
     clearRow(item) {
-      if (item.deviceObj.purpose == "性能") {
-        this.$store.dispatch("actionsDeviceFactor", "");
-        this.$store.dispatch("actionsDeviceFactorObj", "");
-      } else if (item.deviceObj.purpose == "防护") {
-        this.$store.commit("changePurposeFH", "");
-        this.$store.dispatch("actionsDeviceFactor2", "");
-        this.$store.commit("saveDeviceFactorObj2", "");
+      if (item.deviceObj.purpose == '性能') {
+        this.$store.dispatch('actionsDeviceFactor', '')
+        this.$store.dispatch('actionsDeviceFactorObj', '')
+      } else if (item.deviceObj.purpose == '防护') {
+        this.$store.commit('changePurposeFH', '')
+        this.$store.dispatch('actionsDeviceFactor2', '')
+        this.$store.commit('saveDeviceFactorObj2', '')
       }
 
-      item.rows[0] = "";
-      item.rows[1] = "";
-      item.rows[2] = "";
-      item.rows[3] = "";
-      item.rows[4] = "";
-      item.deviceObj = {};
+      item.rows[0] = ''
+      item.rows[1] = ''
+      item.rows[2] = ''
+      item.rows[3] = ''
+      item.rows[4] = ''
+      item.deviceObj = {}
 
-      this.$forceUpdate();
+      this.$forceUpdate()
     },
   },
   mounted() {
     this.$store.dispatch(
-      "actionsPurposeDetection",
+      'actionsPurposeDetection',
       this.data.valueData.purposeDetection
-    );
+    )
 
     let xnArr = this.data.valueData.point.filter(
-      (item) => item.purpose == "性能"
-    );
+      (item) => item.purpose == '性能'
+    )
     if (xnArr.length) {
       // this.$store.dispatch("actionsDeviceFactor", xnArr[0].deviceFactor);
-      this.$store.commit("saveDeviceFactor", xnArr[0].deviceFactor);
-      this.$store.commit("saveDeviceFactorObj", xnArr[0].deviceObj);
+      this.$store.commit('saveDeviceFactor', xnArr[0].deviceFactor)
+      this.$store.commit('saveDeviceFactorObj', xnArr[0].deviceObj)
       // this.$store.dispatch("actionsDeviceFactorObj",  xnArr[0].deviceObj);
     }
     let fhArr = this.data.valueData.point.filter(
-      (item) => item.purpose == "防护"
-    );
+      (item) => item.purpose == '防护'
+    )
     if (fhArr.length) {
-      this.$store.commit("changePurposeFH", "防护");
-      this.$store.commit("saveDeviceFactor2", fhArr[0].deviceFactor);
-      this.$store.commit("saveDeviceFactorObj2", fhArr[0].deviceObj);
+      this.$store.commit('changePurposeFH', '防护')
+      this.$store.commit('saveDeviceFactor2', fhArr[0].deviceFactor)
+      this.$store.commit('saveDeviceFactorObj2', fhArr[0].deviceObj)
     }
   },
-};
+}
 </script>
 
 <style>
