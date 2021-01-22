@@ -15,6 +15,19 @@ export function getLocalData(phone, pwd) {
     },
   });
 }
+// 新的获取现场列表数据
+export function getLocalDataNew(staffId, pageIndex, pageType) {
+  return service({
+    url: "/queryAllTaskByStaffId",
+    method: "post",
+    data: {
+      staffId,
+      pageIndex:Number(pageIndex),
+      pageType,
+      pageSize: 10,
+    },
+  });
+}
 
 export function getAlarmList(listQuery) {
   return service({

@@ -14,7 +14,7 @@ import { ipcRenderer, remote } from "electron";
 import "viewerjs/dist/viewer.css";
 import axios from "./utils/request";
 import Viewer from "v-viewer";
-import $utils from "methods-remons";
+import $utils from "methods-r";
 var pjson = require("../../package.json");
 Vue.use(Viewer, {
   defaultOptions: {

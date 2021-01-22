@@ -106,7 +106,7 @@
           <td style="white-space: normal">细节CT值（HU）</td>
           <td style="white-space: normal">背景CT值（HU）</td>
           <td>窗位</td>
-          <td style="white-space: normal">检测结果（Lp/mm）</td>
+          <td style="white-space: normal">检测结果（Lp/cm）</td>
         </tr>
         <tr v-for="(item, index) in data.valueData.point" :key="index">
           <td colspan="2">

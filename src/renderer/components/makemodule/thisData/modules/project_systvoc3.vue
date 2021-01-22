@@ -306,7 +306,7 @@ export default {
         )
         .map((item) => Number(item.peakArea));
       let allValueTwo =
-        Number(computers[0].parallelWindArea) - this.$utils.arrSUM(computers2);
+        Number(computers[0].parallelWindArea) - this.$utils.SUM(computers2);
       if (isNaN(allValueTwo)) allValueTwo = 0;
       return [allValueTwo];
     },
@@ -402,7 +402,7 @@ export default {
       this.data.valueData.point.forEach((item) => {
         if (!this.showXieGan3(item)) {
           item.sysConcentration = this.$utils
-            .arrSUM(sysConcentration)
+            .SUM(sysConcentration)
             .toFixed46(5);
         }
       });

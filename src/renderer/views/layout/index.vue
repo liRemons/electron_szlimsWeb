@@ -173,6 +173,8 @@ export default {
       this.$forceUpdate();
     },
     handleSelect(data, path) {
+      console.log(111);
+      sessionStorage.setItem("page", 1);
       sessionStorage.setItem("TolocalNo", 1);
       sessionStorage.removeItem("analysisInitial_index");
       sessionStorage.removeItem("laboratoryUpload_initialIndex");

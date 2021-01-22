@@ -124,7 +124,7 @@ export default {
       numArr = numArr.map((item) => Number(item));
       this.data.valueData.point[index].rows[rowsIndex][6] = this[
         "IntegerAdd" + n
-      ]((this.$utils.arrSUM(numArr) / 5).toFixed46(n == 0 ? 1 : n));
+      ]((this.$utils.SUM(numArr) / 5).toFixed46(n == 0 ? 1 : n));
     },
   },
 };

@@ -1,19 +1,19 @@
 <template>
   <el-card id="imgTooles">
-    <div style="text-align: left; padding-left: 10px; margin: 10px 0;">
+    <div style="text-align: left; padding-left: 10px; margin: 10px 0">
       <el-radio-group v-model="flag" @change="getNewData">
         <el-radio-button :label="0">未上传</el-radio-button>
         <el-radio-button :label="1">已上传</el-radio-button>
       </el-radio-group>
     </div>
-    <div style="min-height: 60vh;">
+    <div style="min-height: 60vh">
       <el-table
         v-loading="listLoading"
         ref="multipleTable"
-        :data="localDataFenYe[nowShowPage]"
+        :data="tableData"
         @row-dblclick="goOneTemplate"
         tooltip-effect="dark"
-        style="width: 100%;"
+        style="width: 100%"
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"></el-table-column>
@@ -60,7 +60,7 @@
               :images="[hostUrl + scope.row.unitUrl]"
             >
               <img
-                style="display: inline-block; height: 50px;"
+                style="display: inline-block; height: 50px"
                 v-for="item in [hostUrl + scope.row.unitUrl]"
                 :src="item"
                 :key="item.index"
@@ -102,7 +102,7 @@
               :images="[hostUrl + scope.row.pointUrl]"
             >
               <img
-                style="display: inline-block; height: 50px;"
+                style="display: inline-block; height: 50px"
                 v-for="item in [hostUrl + scope.row.pointUrl]"
                 :src="item"
                 :key="item.index"
@@ -124,14 +124,13 @@
       </el-table>
     </div>
 
-    <div style="margin-bottom: 10vh; margin-top: 10px;">
+    <div style="margin-bottom: 10vh; margin-top: 10px">
       <el-pagination
+        v-if="total"
         @current-change="changeCurrentPage"
-        @size-change="handleSizeChange"
-        :page-size="pageSize"
-        :page-sizes="[10, 20, 50, 100]"
-        layout="total, prev, pager, next, sizes"
-        :total="pageCount"
+        :total="total"
+        :current-page="pageIndex"
+        background
       >
       </el-pagination>
     </div>
@@ -145,7 +144,7 @@
       <signature @download="toUpload" v-if="showSignature"></signature>
     </el-dialog>
     <el-dialog :visible.sync="uploadDianWeiFlag" :modal="false">
-      <div style="min-height: 300px;">
+      <div style="min-height: 300px">
         <el-upload
           :limit="1"
           :action="hostUrl + '/upload_image'"
@@ -156,9 +155,7 @@
           :on-exceed="handleExceed"
         >
           <el-button size="small" type="primary">选择点位图</el-button>
-          <div style="margin: 20px 0;">
-            请按报告出具的方向上传图片
-          </div>
+          <div style="margin: 20px 0">请按报告出具的方向上传图片</div>
         </el-upload>
       </div>
     </el-dialog>
@@ -173,7 +170,7 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { getLocalData, toUpdateIsDocImg, uploadImg } from "@/api/local";
+import { toUpdateIsDocImg, uploadImg, getLocalDataNew } from "@/api/local";
 import store from "@/store";
 import Viewer from "viewerjs";
 import signature from "../../../components/signature/index";
@@ -185,11 +182,9 @@ export default {
       imgArr: [],
       url: "",
       showViewer: false,
-      localData: [],
+      tableData: [],
       multipleSelection: [],
       listLoading: false,
-      localDataFenYe: [],
-      nowShowPage: 0,
       nowRow: "",
       pageSize: 10,
       showSignature: false,
@@ -209,6 +204,9 @@ export default {
           label: "现场照片(可以直接放入检测报告的图片)",
         },
       ],
+      pageIndex: 1,
+      pageType: 3,
+      total: 0,
     };
   },
   components: {
@@ -255,34 +253,23 @@ export default {
     checkImg(data) {
       this.imgArr = [this.hostUrl + data.pointUrl];
     },
-    getList() {
+    async getList() {
+      this.total = 0
+      this.tableData = [];
       this.listLoading = true;
-      let staffPhone = JSON.myParse(getToken()).staffPhone;
-      getLocalData(staffPhone).then((response) => {
-        let localData = response.data.filter((task) => {
-          return task.pass == "通过";
-        });
-
-        let localData2 = response.data.filter((task) => {
-          return task.pass == "已上传";
-        });
-        if (this.flag === 0) {
-          this.localData = localData;
-        } else {
-          this.localData = localData2;
-        }
-        this.localDataFenYe = this.toTwoArr(this.localData, this.pageSize);
-        this.listLoading = false;
-      });
+      let staffId = JSON.myParse(getToken()).id;
+      let { pageIndex, pageType, flag } = this;
+      pageType = this.flag ? 4 : 3;
+      let res = await getLocalDataNew(staffId, pageIndex, pageType);
+      this.total = res.total;
+      this.tableData = res.data;
+      this.listLoading = false;
     },
     getNewData() {
-      this.getList();
-      this.localDataFenYe = [];
-    },
-    handleSizeChange(val) {
-      this.pageSize = val;
+      this.pageIndex = 1;
       this.getList();
     },
+
     // 切换选中状态 或取消选择
     toggleSelection(rows) {
       if (rows) {
@@ -395,9 +382,10 @@ export default {
       }
       this.$router.push(`/local/doc-entering/3/${ids.toString()}`);
     },
-
     changeCurrentPage(nowPage) {
-      this.nowShowPage = nowPage - 1;
+      sessionStorage.setItem("page", nowPage);
+      this.pageIndex = nowPage;
+      this.getList();
     },
     toTwoArr(arr, num) {
       let baseArray = arr;
@@ -474,38 +462,30 @@ export default {
       this.uploadDianWeiFlag = true;
     },
     changeIsDocImg(row) {
-      toUpdateIsDocImg(row.projectId, row.isDocImg)
-        .then((res) => {
-          if (res.success) {
-            this.showSignature = false;
-            this.$notify({
-              type: "success",
-              message: res.msg,
-            });
-            this.getList();
-          } else {
-            this.$notify({
-              type: "error",
-              message: res.msg,
-            });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      toUpdateIsDocImg(row.projectId, row.isDocImg).then((res) => {
+        if (res.success) {
+          this.showSignature = false;
+          this.$notify({
+            type: "success",
+            message: res.msg,
+          });
+          this.getList();
+        } else {
+          this.$notify({
+            type: "error",
+            message: res.msg,
+          });
+        }
+      });
     },
   },
   mounted() {
     if (sessionStorage.getItem("flag")) {
       this.flag = Number(sessionStorage.getItem("flag"));
     }
-  },
-  computed: {
-    pageCount() {
-      return this.localData.length;
-    },
-  },
-  created() {
+    let pageIndex = Number(sessionStorage.getItem("page"));
+    pageIndex && (this.pageIndex = pageIndex);
+
     this.getList();
   },
 };

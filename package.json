@@ -1,6 +1,6 @@
 {
     "name": "szlims-winapp",
-    "version": "1.31.0",
+    "version": "1.32.0",
     "author": "",
     "description": "杭州湘亭科技提供技术支持",
     "license": "MIT",
@@ -34,7 +34,8 @@
             "dist/electron/**/*"
         ],
         "dmg": {
-            "contents": [{
+            "contents": [
+                {
                     "x": 410,
                     "y": 150,
                     "type": "link",
@@ -76,13 +77,10 @@
         "js-cookie": "^2.2.1",
         "js-md5": "^0.7.3",
         "lrz": "^4.9.40",
-        "methods-remons": "^1.0.4",
-        "mockjs": "1.0.1-beta3",
+        "methods-r": "^1.1.9",
         "moment": "^2.22.2",
-        "node-stream-zip": "^1.11.2",
         "normalize.css": "8.0.1",
         "nprogress": "0.2.0",
-        "unzip": "^0.1.11",
         "v-viewer": "^1.5.1",
         "vue": "2.6.11",
         "vue-electron": "^1.0.6",

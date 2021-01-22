@@ -243,7 +243,7 @@ export default {
       });
       newPoint.forEach((item) => {
         item.resultAverage = item.resultArr.length
-          ? this.$utils.arrSUM(item.resultArr) / item.resultArr.length
+          ? this.$utils.SUM(item.resultArr) / item.resultArr.length
           : "";
       });
       this.data.valueData.point.forEach((item) => {

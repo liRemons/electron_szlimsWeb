@@ -64,8 +64,13 @@ Mac: [app release](https://github.com/PanJiaChen/electron-vue-admin/releases/tag
 ### 在windows下如果上述命令遇到了问题，尝试这个：
 .\node_modules\.bin\electron-rebuild.cmd
 
-### 有指纹验证
-finger 支持Node 32位版本，请将Node 安装32位版本，注意：打包命令 `npm run build` 会在dist文件夹下生成main.js文件，请在其他文件生成之前将main.js文件夹下的路径 `C:\\Users\\Administrator\\Desktop\\webApp\\src\\main\\finger\\finger.node` 改为 `.\\finger\\finger.node`（路径一般在main.js最后面）
+### 有指纹验证   
+finger 支持Node 32位版本，请将Node 安装32位版本，此电脑已安装nvm，具体切换如下：
+1. 以管理员身份运行 cmd
+2. nvm list 查看当前版本
+3. nvm use 版本号 32
+注意：打包命令 `npm run build` 会在dist文件夹下生成main.js文件，请在其他文件生成之前将main.js文件夹下的路径 `C:\\Users\\Administrator\\Desktop\\webApp\\src\\main\\finger\\finger.node` 改为 `.\\finger\\finger.node`（路径一般在main.js最后面）
+
 
 ### 关于打包正式版及测试版
 1. 正式版

@@ -1,10 +1,10 @@
 <template>
   <el-card>
-    <div style="min-height:60vh;">
+    <div style="min-height: 60vh">
       <el-table
         v-loading="listLoading"
         ref="multipleTable"
-        :data="localDataFenYe[nowShowPage]"
+        :data="tableData"
         @row-dblclick="goOneTemplate"
         tooltip-effect="dark"
         @selection-change="handleSelectionChange"
@@ -49,14 +49,13 @@
         ></el-table-column>
       </el-table>
     </div>
-    <div style="margin-bottom: 10vh;margin-top: 10px;">
+    <div style="margin-bottom: 10vh; margin-top: 10px">
       <el-pagination
         @current-change="changeCurrentPage"
-        @size-change="handleSizeChange"
-        :page-size="pageSize"
-        :page-sizes="[10, 20, 50, 100]"
-        layout="total, prev, pager, next, sizes"
-        :total="pageCount"
+        :total="total"
+        v-if="total"
+        background
+        :current-page="pageIndex"
       >
       </el-pagination>
     </div>
@@ -69,26 +68,21 @@
 
 <script>
 import { getToken } from "@/utils/auth";
-import { getLocalData } from "@/api/local";
+import { getLocalDataNew } from "@/api/local";
 import { winUpdateTaskState } from "@/api/local";
 import store from "@/store";
 
 export default {
   data() {
     return {
-      localData: [],
       multipleSelection: [],
       listLoading: false,
-      localDataFenYe: [],
-      pageSize: 10,
-      nowShowPage: 0
+      pageIndex: 1,
+      tableData: [],
+      total: 0,
     };
   },
-  computed: {
-    pageCount() {
-      return this.localData.length;
-    }
-  },
+
   filters: {
     getTime(time) {
       try {
@@ -98,28 +92,24 @@ export default {
       } catch (e) {
         return "";
       }
-    }
+    },
   },
   methods: {
-    getList() {
+    async getList() {
+      this.total = 0
+      this.tableData = [];
       this.listLoading = true;
-      let staffPhone = JSON.myParse(getToken()).staffPhone;
-      getLocalData(staffPhone).then(response => {
-        this.localData = response.data.filter(task => {
-          return task.pass == "未审核";
-        });
-        this.localDataFenYe = this.toTwoArr(this.localData, this.pageSize);
-        this.listLoading = false;
-      });
+      let staffId = JSON.myParse(getToken()).id;
+      let res = await getLocalDataNew(staffId, this.pageIndex, 2);
+      this.total = res.total;
+      this.tableData = res.data;
+      this.listLoading = false;
     },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.getList();
-    },
+
     // 切换选中状态 或取消选择
     toggleSelection(rows) {
       if (rows) {
-        rows.forEach(row => {
+        rows.forEach((row) => {
           this.$refs.multipleTable.toggleRowSelection(row);
         });
       } else {
@@ -129,7 +119,7 @@ export default {
     handleSelectionChange(val) {
       if (val.length > 1) {
         // this.$refs.multipleTable.toggleRowSelection(val[0]);
-        this.multipleSelection =val;
+        this.multipleSelection = val;
       } else {
         this.multipleSelection = [val[0]];
       }
@@ -142,14 +132,14 @@ export default {
     // 多个跳转到模板页面
     toReview() {
       if (this.multipleSelection.length > 0) {
-        let ids = this.multipleSelection.map(item => {
+        let ids = this.multipleSelection.map((item) => {
           return item.taskId;
         });
         this.$router.push(`/local/doc-entering/2/${ids.toString()}`);
       } else {
         this.$notify({
           type: "warning",
-          message: "请选择"
+          message: "请选择",
         });
       }
     },
@@ -180,12 +170,19 @@ export default {
       return res;
     },
     changeCurrentPage(nowPage) {
-      this.nowShowPage = nowPage - 1;
-    }
+      this.pageIndex = nowPage;
+      sessionStorage.setItem("page", this.pageIndex);
+      this.getList();
+    },
   },
-  created() {
+  mounted() {
+    if (sessionStorage.getItem("page")) {
+      this.pageIndex = sessionStorage.getItem("page");
+    }
+    let pageIndex = Number(sessionStorage.getItem("page"));
+    pageIndex && (this.pageIndex = pageIndex);
     this.getList();
-  }
+  },
 };
 </script>
 
