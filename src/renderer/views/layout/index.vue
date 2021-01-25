@@ -86,21 +86,38 @@ export default {
         { name: "录入", path: "entering", type: 0 },
         { name: "审核", path: "review", type: 0 },
         { name: "上传", path: "upload", type: 0 },
-        { name: "接样", path: "pickUp", type: 1, role: ["接样人"] },
-        { name: "配标", path: "curve", type: 1, role: ["理化检验员"] },
+        { name: "接样", path: "pickUp", type: 1, role: ["实验室接样人"] },
+        {
+          name: "配标",
+          path: "curve",
+          type: 1,
+          role: ["理化检验员", "理化检验审核员"],
+        },
         {
           name: "分析项管理",
           path: "analysisItem",
           type: 1,
-          role: ["微生物检验员"],
+          role: ["微生物检验员", "微生物检验审核员"],
         },
         {
           name: "分析",
           path: "analysis",
           type: 1,
-          role: ["放射检验员", "理化检验员", "微生物检验员"],
+          role: [
+            "放射检验员",
+            "理化检验员",
+            "微生物检验员",
+            "放射检验审核员",
+            "理化检验审核员",
+            "微生物检验审核员",
+          ],
         },
-        { name: "审核", path: "upload", type: 1, role: ["实验室审核员"] },
+        {
+          name: "审核",
+          path: "upload",
+          type: 1,
+          role: ["放射检验审核员", "理化检验审核员", "微生物检验审核员"],
+        },
       ],
     };
   },
@@ -173,7 +190,6 @@ export default {
       this.$forceUpdate();
     },
     handleSelect(data, path) {
-      console.log(111);
       sessionStorage.setItem("page", 1);
       sessionStorage.setItem("TolocalNo", 1);
       sessionStorage.removeItem("analysisInitial_index");

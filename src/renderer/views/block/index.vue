@@ -59,24 +59,44 @@ export default {
         sessionStorage.setItem("ToggleBlock", "laboratory");
         sessionStorage.setItem("nowRouter", "pickUp");
         this.$router.push(`/laboratory`);
+
         if (power) {
-          if (power.includes("接样人")) {
+          const powerFlag = (arr) => {
+            return power.filter((item) => arr.includes(item)).length;
+          };
+          // 接样
+          if (powerFlag(["实验室接样人"])) {
             this.$router.push(`/laboratory/pickUp`);
             return;
           }
-          if (power.includes("理化检验员")) {
+          // 配标
+          if (powerFlag(["理化检验员", "理化检验审核员"])) {
             this.$router.push(`/laboratory/curve`);
             return;
           }
-          if (power.includes("微生物检验员")) {
+          // 分析项管理
+          if (powerFlag(["微生物检验员", "微生物检验审核员"])) {
             this.$router.push(`/laboratory/analysisItem`);
             return;
           }
-          if (power.includes("放射检验员")) {
+          // 分析
+          if (
+            powerFlag([
+              "放射检验员",
+              "理化检验员",
+              "微生物检验员",
+              "放射检验审核员",
+              "理化检验审核员",
+              "微生物检验审核员",
+            ])
+          ) {
             this.$router.push(`/laboratory/analysis`);
             return;
           }
-          if (power.includes("实验室审核员")) {
+          // 审核
+          if (
+            powerFlag(["放射检验审核员", "理化检验审核员", "微生物检验审核员"])
+          ) {
             this.$router.push(`/laboratory/upload`);
             return;
           }

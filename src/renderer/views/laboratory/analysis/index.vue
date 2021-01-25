@@ -4,7 +4,7 @@
       <el-radio-group
         v-model="nowPage"
         @change="getNewData"
-        style="width: 400px; text-align: left;margin:10px 0"
+        style="width: 400px; text-align: left; margin: 10px 0"
       >
         <el-radio-button label="待分析"></el-radio-button>
         <el-radio-button label="正在分析"></el-radio-button>
@@ -19,8 +19,7 @@
         @change="changeCarousel"
         :initial-index="analysisInitial_index"
       >
-        <el-carousel-item :key="1" label="理化">
-          <!--  v-if="power.includes('理化检验员')" -->
+        <el-carousel-item :key="1" label="理化"  v-if="power.includes('理化检验员')">
           <div style="margin-bottom: 10px; height: 100%; overflow-y: auto">
             <my-table
               ref="myt"
@@ -30,8 +29,7 @@
             ></my-table>
           </div>
         </el-carousel-item>
-        <el-carousel-item :key="2" label="放射">
-          <!--  v-if="power.includes('放射检验员')" -->
+        <el-carousel-item :key="2" label="放射"  v-if="power.includes('放射检验员')">
           <div style="margin-bottom: 20px; height: 100%; overflow-y: auto">
             <my-table
               :data="dataFangshe"
@@ -40,8 +38,7 @@
             ></my-table>
           </div>
         </el-carousel-item>
-        <el-carousel-item :key="3" label="微生物">
-           <!-- v-if="power.includes('微生物检验员')" -->
+        <el-carousel-item :key="3" label="微生物" v-if="power.includes('微生物检验员')">
           <div style="margin-bottom: 20px; height: 100%; overflow-y: auto">
             <my-table
               :data="dataWeishenghu"
@@ -213,7 +210,7 @@ import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
-      power:JSON.parse(getToken()).modList.split(","),
+      power: JSON.parse(getToken()).modList.split(","),
       labelIndex: "",
       analysisInitial_index: 0,
       template: [], //检测项目数组
@@ -589,7 +586,6 @@ export default {
         if (this.testProjectName == "project_systvoc") {
           let result = true;
           this.template[0].value.forEach((item) => {
-            
             if (item.isParallel) {
               if (!(item.parallelWindArea1 || item.parallelWindArea1)) {
                 result = false;
@@ -601,16 +597,16 @@ export default {
               }
             }
           });
-          this.template[0].value.forEach(item=>{
+          this.template[0].value.forEach((item) => {
             item.sysBlankTotalArea = "";
-            item.sysTestingTime=''
-            item.sysTestingEndTime=''
+            item.sysTestingTime = "";
+            item.sysTestingEndTime = "";
             item.sysTemperature = "";
             item.sysHumidity = "";
             item.sysSampleState = "";
             item.sysSampleStateDetail = "";
             item.sysBlankTargetTotalArea = "";
-          })
+          });
           if (result) {
             store.dispatch("TemplateAction", "update");
             store.dispatch("UpdateLabTemplate", this.template);

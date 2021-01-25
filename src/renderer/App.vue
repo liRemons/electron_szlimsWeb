@@ -216,7 +216,6 @@ export default {
       if (getToken()) {
         this.staffName = JSON.parse(getToken()).staffName;
       }
-      
       sessionStorage.setItem("routerPath", this.$route.path);
     },
   },

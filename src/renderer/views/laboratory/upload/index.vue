@@ -4,13 +4,13 @@
       <el-radio-group
         v-model="nowPage"
         @change="getNewData"
-        style="width: 400px; text-align: left;margin-top:10px"
+        style="width: 400px; text-align: left; margin-top: 10px"
       >
         <el-radio-button label="待审核"></el-radio-button>
         <el-radio-button label="已审核"></el-radio-button>
       </el-radio-group>
     </div>
-    <div style="min-height: 70vh;">
+    <div style="min-height: 70vh">
       <el-carousel
         trigger="click"
         indicator-position="outside"
@@ -18,38 +18,50 @@
         @change="changeCarousel"
         :initial-index="laboratoryUpload_initialIndex"
       >
-        <el-carousel-item :key="1" label="理化">
-          <div style="margin-bottom: 10px; height: 66vh; overflow-y: auto;">
+        <el-carousel-item
+          :key="1"
+          label="理化"
+          v-if="power.includes('理化检验审核员')"
+        >
+          <div style="margin-bottom: 10px; height: 66vh; overflow-y: auto">
             <my-table
               ref="myt"
-              style="min-height: 65vh;"
+              style="min-height: 65vh"
               :data="dataLihua"
               :single="true"
               :title="'理化'"
             ></my-table>
           </div>
         </el-carousel-item>
-        <el-carousel-item :key="2" label="放射">
-          <div style="margin-bottom: 20px; height: 66vh; overflow-y: auto;">
+        <el-carousel-item
+          :key="2"
+          label="放射"
+          v-if="power.includes('放射检验审核员')"
+        >
+          <div style="margin-bottom: 20px; height: 66vh; overflow-y: auto">
             <my-table
               :data="dataFangshe"
-              style="min-height: 65vh;"
+              style="min-height: 65vh"
               :title="'放射'"
             ></my-table>
           </div>
         </el-carousel-item>
-        <el-carousel-item :key="3" label="微生物">
-          <div style="margin-bottom: 20px; height: 66vh; overflow-y: auto;">
+        <el-carousel-item
+          :key="3"
+          label="微生物"
+          v-if="power.includes('微生物检验审核员')"
+        >
+          <div style="margin-bottom: 20px; height: 66vh; overflow-y: auto">
             <my-table
               :data="dataWeishenghu"
-              style="min-height: 65vh;"
+              style="min-height: 65vh"
               :title="'微生物'"
             ></my-table>
           </div>
         </el-carousel-item>
       </el-carousel>
     </div>
-    <div style="position: fixed; right: 3vw; top: 90vh;z-index:2001">
+    <div style="position: fixed; right: 3vw; top: 90vh; z-index: 2001">
       <el-button @click="clearSelected">取消选择</el-button>
       <el-button type="primary" @click="entry">{{
         nowPage === "待审核" ? "审核" : "查看"
@@ -62,7 +74,7 @@
 import { querySubmittedSample, querySysSampleData } from "@/api/laboratory";
 import myTable from "@/views/components/myTable";
 import store from "@/store";
-
+import { getToken } from "@/utils/auth";
 export default {
   data() {
     return {
@@ -76,34 +88,35 @@ export default {
       select: [],
       defaultProps: {
         children: "value",
-        label: "name"
-      }
+        label: "name",
+      },
+      power: JSON.parse(getToken()).modList.split(","),
     };
   },
   components: {
-    myTable
+    myTable,
   },
   mounted() {
-      sessionStorage.getItem('laboratoryUploadTab')
-        ? (this.nowPage = sessionStorage.getItem('laboratoryUploadTab'))
-        : "";
-      this.getNewData(this.nowPage);
-      sessionStorage.getItem('laboratoryUpload_initialIndex')
-        ? (this.laboratoryUpload_initialIndex = Number(
-            sessionStorage.getItem('laboratoryUpload_initialIndex')
-          ))
-        : "";
+    sessionStorage.getItem("laboratoryUploadTab")
+      ? (this.nowPage = sessionStorage.getItem("laboratoryUploadTab"))
+      : "";
+    this.getNewData(this.nowPage);
+    sessionStorage.getItem("laboratoryUpload_initialIndex")
+      ? (this.laboratoryUpload_initialIndex = Number(
+          sessionStorage.getItem("laboratoryUpload_initialIndex")
+        ))
+      : "";
   },
   updata() {
     that.$refs["tree"].filter(val);
   },
   methods: {
     changeCarousel(index) {
-      sessionStorage.setItem('laboratoryUpload_initialIndex',index) ;
+      sessionStorage.setItem("laboratoryUpload_initialIndex", index);
     },
     //获取所有树的数据
     toQuerySubmittedSample(sampleState) {
-      querySubmittedSample(sampleState).then(res => {
+      querySubmittedSample(sampleState).then((res) => {
         if (res.dataWeishenghu) this.dataWeishenghu = res.dataWeishenghu;
         if (res.dataFangshe) this.dataFangshe = res.dataFangshe;
         if (res.dataLihua) this.dataLihua = res.dataLihua;
@@ -121,11 +134,11 @@ export default {
         ) {
           let selectedNodes = this.$refs[arr[j]].getCheckedNodes();
           let select = selectedNodes.filter(
-            item => item.testProjectId != undefined
+            (item) => item.testProjectId != undefined
           );
           this.select = this.select.concat(select);
           let template = selectedNodes.filter(
-            item => item.hasOwnProperty("id") && item.hasOwnProperty("value")
+            (item) => item.hasOwnProperty("id") && item.hasOwnProperty("value")
           );
           for (let i = 0; i < template.length; i++) {
             this.template.push(template[i]);
@@ -141,7 +154,7 @@ export default {
       this.template = [];
       let arr = ["dataWeishenghu", "dataFangshe", "dataLihua"];
       for (let i = 0; i < arr.length; i++) {
-        this[arr[i]].forEach(item => {
+        this[arr[i]].forEach((item) => {
           if (item.isSelected) {
             this.template.push(item);
           }
@@ -150,40 +163,40 @@ export default {
       if (this.template.length == 0) {
         this.$notify({
           type: "warning",
-          message: "请选择分析样品"
+          message: "请选择分析样品",
         });
       }
 
       for (let i = 0; i < this.template.length; i++) {
         let id = this.template[i].id;
-        let result = this.template.every(item => {
+        let result = this.template.every((item) => {
           return id === item.id;
         });
         if (!result) {
           let msg = "请选择相同检测项目";
           this.$notify({
             type: "warning",
-            message: msg
+            message: msg,
           });
           return;
         }
       }
 
       /*=====================================================*/
-      let sampleNums = this.template[0].value.map(item => item.sysSampleId);
-    //   let sampleNumsz = [];
-    //   this.template.map(item=>{
-    //     item.value.map(a=>{
-    //       sampleNumsz.push(a.sysSampleId)
-    //     })
-    //   })
-    //  sampleNums=[sampleNumsz[3]]
-      querySysSampleData(sampleNums).then(res => {
+      let sampleNums = this.template[0].value.map((item) => item.sysSampleId);
+      //   let sampleNumsz = [];
+      //   this.template.map(item=>{
+      //     item.value.map(a=>{
+      //       sampleNumsz.push(a.sysSampleId)
+      //     })
+      //   })
+      //  sampleNums=[sampleNumsz[3]]
+      querySysSampleData(sampleNums).then((res) => {
         if (res.success) {
           store.dispatch("TemplateAction", "update");
           store.dispatch("ChangeHasReviewData", res);
           store.dispatch("UpdateLabTemplate", this.template);
-          res.samples.forEach(item => {
+          res.samples.forEach((item) => {
             try {
               item.myBlankSample = JSON.parse(item.blankSampleArr);
             } catch (e) {
@@ -199,7 +212,7 @@ export default {
         } else {
           this.$notify({
             type: "warning",
-            message: "获取数据失败!"
+            message: "获取数据失败!",
           });
         }
       });
@@ -208,7 +221,7 @@ export default {
     },
     getNewData(newVal) {
       console.log(newVal);
-      sessionStorage.setItem('laboratoryUploadTab',newVal) 
+      sessionStorage.setItem("laboratoryUploadTab", newVal);
       if (newVal === "待审核") {
         this.$store.dispatch("ClearSelect", true);
         this.toQuerySubmittedSample(4);
@@ -216,8 +229,8 @@ export default {
         this.$store.dispatch("ClearSelect", true);
         this.toQuerySubmittedSample(5);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
