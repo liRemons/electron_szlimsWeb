@@ -150,7 +150,7 @@ export default {
             item.C = ''
           }
           if (Number(item.C) != '' || Number(item.B) != '')
-            item.D = ((Number(item.C) * Number(item.B)) / 10).toFixed46(1)
+            item.D = ((Number(item.C) * Number(item.B)) / 10).toFixed46(2)
           break
       }
     },

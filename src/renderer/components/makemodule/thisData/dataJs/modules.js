@@ -1058,8 +1058,8 @@ export default [
           sysConcentration: "", //浓度
           sysReport: "", //报告值
           sysDifference: "", //相对差值
-          sysFxsqyp:"",//分析时取样品
-          sysCysxhy:"" // 采样时吸收液
+          sysFxsqyp: "", //分析时取样品
+          sysCysxhy: "", // 采样时吸收液
         },
       ],
     },
@@ -1358,7 +1358,7 @@ export default [
       volUnit: "mL",
       DosageUnit: "μL",
       formula: "",
-      dataType:"标准溶液浓度",
+      dataType: "标准溶液浓度",
       point: [
         {
           id: "",
@@ -2497,7 +2497,7 @@ export default [
       remarks: "",
       point: [
         {
-          rows: ["", "", "", "", "", ""],
+          rows: ["", "", "", "", "", "", ""],
         },
       ],
     },
@@ -2596,7 +2596,7 @@ export default [
       multipleId: 0,
       point: [
         {
-          rows: ["", ""],
+          rows: ["", "", ""],
         },
       ],
     },

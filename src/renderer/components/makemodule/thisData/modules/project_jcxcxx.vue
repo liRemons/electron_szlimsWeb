@@ -44,7 +44,7 @@
           >
             <divModel
               v-model="data.valueData.deviceModel"
-              style="width: 100%; text-align: center"
+              style="width: 100%; text-align: center;font-size: 12px; line-height: 16px"
               class="Full warp2 rowsInput2 hide focusBg editHistoryValue"
             ></divModel>
           </div>

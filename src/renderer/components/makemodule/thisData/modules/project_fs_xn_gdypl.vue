@@ -28,7 +28,9 @@
         <th colspan="7" class="tc">检测结果</th>
       </tr>
       <tr>
-        <td rowspan="2" align="center" colspan="2">预设电压/kV</td>
+        <td rowspan="2" align="center">曝光模式</td>
+        <td rowspan="2" align="center">预设电压/kV</td>
+
         <td colspan="3" align="center">管电压测量值/kV</td>
         <td rowspan="2" align="center">校准平均值 /kV</td>
         <td rowspan="2" align="center">相对偏差/%</td>
@@ -39,7 +41,23 @@
         <td align="center">3</td>
       </tr>
       <tr v-for="(item, index) in data.valueData.point">
-        <td colspan="2">
+        <td>
+          <selectModel
+            @returnVal="(a) => change(a, item)"
+            :Judge="true"
+            class="___absolute"
+            style="top: 0px"
+            :special="1"
+            :receive="''"
+            :single="true"
+            :rows="false"
+            :transmitText="item.rows[6]"
+            :list="resolvingPower"
+            :Obj="''"
+          >
+          </selectModel>
+        </td>
+        <td>
           <divModel
             v-model="item.rows[0]"
             style="width: 100%; text-align: center"
@@ -180,6 +198,10 @@ export default {
     "target",
   ],
   methods: {
+    // 曝光模式
+    change(a, b) {
+      b.rows[6] = a;
+    },
     isNumber(val) {
       if (parseFloat(val).toString() == "NaN") {
         return false;
@@ -278,6 +300,7 @@ export default {
   },
   computed: {
     ...mapState({
+      resolvingPower: (state) => state.StomatologyLinkage.resolvingPower,
       deviceFactor: (state) => state.StomatologyLinkage.deviceFactor,
       deviceFactorObj: (state) => state.StomatologyLinkage.deviceFactorObj,
     }),
