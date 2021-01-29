@@ -217,7 +217,7 @@ export default {
         width: 40%;
         padding: 0 5%;
         .form_right {
-          margin-top: 100px;
+          margin-top: 50px;
         }
       }
     }

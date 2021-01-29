@@ -16,7 +16,7 @@
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js"
     },
     "build": {
-        "productName": "瑞达智能检验检测管理系统-检验检测平台",
+        "productName": "瑞达智能检验检测管理系统检验检测平台",
         "appId": "org.simulatedgreg.electron-vue",
         "directories": {
             "output": "build"

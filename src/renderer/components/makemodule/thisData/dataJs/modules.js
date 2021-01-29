@@ -2527,6 +2527,7 @@ export default [
       testProject: "project_fs_xn_scl",
       multipleId: 0,
       remarks: "",
+      unit:"K/mGy",
       point: [
         {
           rows: ["", "", "", "", "", ""],
