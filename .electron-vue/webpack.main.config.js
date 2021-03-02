@@ -22,7 +22,7 @@ let mainConfig = {
       },
       {
         test: /\.node$/,
-        use: "node-loader",
+        use: "native-ext-loader",
       },
     ],
   },
